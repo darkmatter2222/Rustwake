@@ -1,0 +1,80 @@
+{
+  "method": "zlib full-frame PNG decode, distinct RGB colours + luminance stddev (no vision)",
+  "minDistinctColors": 500,
+  "minLuminanceStddev": 5,
+  "results": [
+    {
+      "file": "docs\\evidence\\344-cam-08\\desktop-cam08-ghost-negative.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 22898,
+      "luminanceMean": 102.38,
+      "luminanceStddev": 41.532
+    },
+    {
+      "file": "docs\\evidence\\344-cam-08\\desktop-cam08-home.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 24417,
+      "luminanceMean": 105.802,
+      "luminanceStddev": 41.597
+    },
+    {
+      "file": "docs\\evidence\\344-cam-08\\desktop-cam08-lostcapture-negative.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 23346,
+      "luminanceMean": 103.713,
+      "luminanceStddev": 42.024
+    },
+    {
+      "file": "docs\\evidence\\344-cam-08\\desktop-cam08-outofwindow.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 24314,
+      "luminanceMean": 102.673,
+      "luminanceStddev": 41.131
+    },
+    {
+      "file": "docs\\evidence\\344-cam-08\\desktop-cam08-pan.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 22602,
+      "luminanceMean": 103.962,
+      "luminanceStddev": 41.507
+    },
+    {
+      "file": "docs\\evidence\\344-cam-08\\phone-cam08-cancel-negative.png",
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 14528,
+      "luminanceMean": 76.436,
+      "luminanceStddev": 44.966
+    },
+    {
+      "file": "docs\\evidence\\344-cam-08\\phone-cam08-home.png",
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 23888,
+      "luminanceMean": 110.638,
+      "luminanceStddev": 47.527
+    },
+    {
+      "file": "docs\\evidence\\344-cam-08\\phone-cam08-pinch-lift.png",
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 16843,
+      "luminanceMean": 109.71,
+      "luminanceStddev": 45.223
+    },
+    {
+      "file": "docs\\evidence\\344-cam-08\\phone-cam08-tap-once.png",
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 18665,
+      "luminanceMean": 105.94,
+      "luminanceStddev": 46.69
+    }
+  ],
+  "allNonblank": true
+}

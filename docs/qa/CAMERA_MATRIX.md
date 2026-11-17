@@ -57,3 +57,36 @@ Evidence (at capture source SHA): `docs/evidence/339-cam-03/report.json` (status
 
 ## Re-run recipe
 `npm test` (117 tests at CAM-03 head: prior 109 + 8 cameraZoomAnchor) then `npm run build && node scripts/capture-cam03.mjs` (CAM-03 zoom-anchor trace) and `node scripts/capture-v2.mjs` (CAM-01 gesture matrix). Numeric capture is a floor, not G1 visual acceptance; sponsor still reviews real screenshots/motion per docs/qa/QUALITY_GATES.md.
+
+## CAM-08 pointer-ownership matrix — tests/cameraInput.test.mjs (node --test, 22 tests)
+Real controller through a fake canvas + synthetic PointerEvents; contract: stale tracks never ghost-drag/stick/duplicate/jump/purchase; survivors rebase ≤1 CSS px with zero target jump.
+
+| Case family | Coverage | Result |
+|---|---|---|
+| Anchor-exact drag, no tap | mouse left-drag, single touch, stylus contact, captured out-of-canvas release (≤1px) | PASS |
+| Tap-once semantics | mouse tap, touch tap, stylus tap; pen barrel never taps; stationary second finger keeps own tap | PASS |
+| Orbit / wheel | right-drag, shift+left-drag (yaw changes, no tap, capture freed); wheel anchor ≤1px; deltaMode lines/pages exact | PASS |
+| Two-finger transform | pinch+twist centroid anchored; lift rebases survivor without target jump; cancel-of-one-finger rebases survivor and blocks its purchase | PASS |
+| NEGATIVE ghost-drag (fails pre-fix) | hover after out-of-window release: target step 0 (pre-fix slip 191.049732 px) | PASS |
+| NEGATIVE lost capture (fails pre-fix) | lostpointercapture mid-drag purges stuck track: target step 0 (pre-fix slip 372.021505 px) | PASS |
+| NEGATIVE cancel purchase (fails pre-fix) | touchcancel + late pointerup for cancelled id submits NO build | PASS |
+| Capture hygiene | pointerout purges only when uncaptured; captured pointerout keeps drag; setPointerCapture NotFoundError swallowed; buttons===0 purge | PASS |
+| Dispose | removes every listener, releases capture, inert afterwards; idempotent with no active pointers | PASS |
+
+Negative proof: 11 of 22 FAIL against the pre-fix src/cameraInput.js, 22/22 PASS against the fix. Full suite at CAM-08 head: **239** (217 main baseline + 22 new; zero existing tests deleted/skipped/weakened).
+
+## CAM-08 browser matrix — scripts/capture-cam08.mjs (production preview, Chromium/SwiftShader)
+Desktop 1440×900 + EMULATED phone 390×844 dpr2; poses read from synchronous canvas dataset stamps; phone multi-touch via CDP Input.dispatchTouchEvent with per-step delivery assertion.
+
+- Desktop pan (600,400)→(760,520), out-of-window release (1300,450)→(1500,490), cursor wheel (1140,450): anchor error **0 px** each; capture freed; hover inert; structures 6→6.
+- Ghost-drag negative: actual target step **0** vs computed pre-fix legacy drift **300 px**. Lost-capture negative: capturedBefore true → capturedAfter false, actual step **0** vs legacy stuck drift **356.089876 px**.
+- Phone pinch+twist about centroid (234,422): max centroid error **6.12e-15 px**, zoom 1→2.333333; finger lift target step **0**; survivor rebase error **1.79e-14 px**; event log shows exactly one continuing pointermove (id 3) and **no fresh pointerdown**.
+- Touch-cancel negative (build mode, canvas-verified press point (195,295)): structures **6→6**, lastSiteOk **null**, late synthetic pointerup for cancelled id 4 inert.
+- Tap-once: projected building cell (13,9) tapped at (387,467) → inspector populated, status **"Online"**; second identical tap keeps one selection; select mode never purchases (structures 6).
+- Both views: zero page errors, zero failed requests, documentScroll false, webglContextCount 1, yaw 45 / elevation 35.264 preserved.
+
+Harness root-cause note: the earlier SURVIVOR_REBASE_DRIFT 50.000000000000014 px FAIL was a harness artifact — CDP touchMove events queue until the next compositor frame/next dispatch, so the old capture measured the pre-move pose (50 px == hypot(40,30), the full unapplied move). Page.startScreencast forces frames; every step asserts delivery via the canvas pointer-event log before measuring; touchEnd lists RELEASED points; touchCancel carries empty points and ends the sequence (late-up case uses a synthetic PointerEvent with the cancelled id — documented limitation). No gate widened; src/cameraInput.js unchanged for this case.
+
+Evidence (at capture source SHA 314a14476f59628677598196b49509b889997ebc, direct parent of the evidence commit): `docs/evidence/344-cam-08/report.json` (PASS_NUMERIC_ONLY) + `desktop-cam08-{home,pan,ghost-negative,lostcapture-negative,outofwindow}.png` + `phone-cam08-{home,pinch-lift,cancel-negative,tap-once}.png` + `nonblank.json` (full-frame zlib decode: 14471–24399 distinct colours, luminance stddev 41.1–47.5).
+
+CAM-08 re-run: `pnpm test` (239) then `pnpm build && GITHUB_SHA=<head> node scripts/capture-cam08.mjs`. Phone is EMULATED (#268/#275); G1 visual acceptance (#276) sponsor-reserved — numeric capture is a floor, not visual approval.
