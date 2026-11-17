@@ -299,14 +299,27 @@ try{
    const expectedCommitted=BLUEPRINTS.furnace.cost.iron||0;
    if(committed!==expectedCommitted)throw Error(`Committed iron ${committed} != assembling blueprint cost ${expectedCommitted}`);
    const depot=await detailNum(page,"ledger-depot");
-   if(depot!==(PROCESSING.save.bank.iron||0))throw Error("Processing depot must mirror the post-buildAt bank");
+   const machines=await detailNum(page,"ledger-machines");
+   const reserved=await detailNum(page,"ledger-reserved");
+   const total=await detailNum(page,"ledger-total");
+   // The live sim may legitimately dispatch resupply (take()s depot iron) or
+   // complete a cycle (consumes machine iron) between seed and read. Prove
+   // conservation instead of a frozen mirror: no iron producer exists, so
+   // depot iron only shrinks, and yard iron never exceeds the seeded bags.
+   const seedBank=PROCESSING.save.bank.iron||0;
+   const seedMachines=PROCESSING.save.buildings.reduce((a,b)=>a+(b.inventory?.iron||0),0);
+   if(depot>seedBank)throw Error(`Processing depot ${depot} exceeds post-buildAt bank ${seedBank} — ghost iron`);
+   if(total!==depot+machines+reserved)throw Error("Processing yard total must conserve depot+machines+transit: "+JSON.stringify({total,depot,machines,reserved}));
+   if(total>seedBank+seedMachines)throw Error(`Processing yard iron ${total} exceeds seeded ${seedBank+seedMachines} — fabricated stock`);
    const toggle=page.locator('[data-testid="ledger-toggle"]');
    if(await toggle.getAttribute("aria-expanded")==="true"){await toggle.click();} // normalize (fresh context starts collapsed anyway)
    await toggle.click();
    await page.locator('[data-testid="ledger-entries"]').waitFor({state:"visible",timeout:5000});
    const entryTxt=await page.locator('[data-testid="ledger-entries"] .ledger-entry[data-kind="build"]').first().innerText();
    if(!/furnace/i.test(entryTxt))throw Error("Ledger must show the real BUILD transaction: "+entryTxt);
-   view.proof.processing={committedIron:committed,depotAfterSpend:depot,ledgerEntry:entryTxt.replace(/\s+/g," "),
+   view.proof.processing={committedIron:committed,depotAfterSpend:depot,machines,reserved,total,seedBankIron:seedBank,seedMachineIron:seedMachines,
+    conservation:"depot<=seedBank && total==depot+machines+reserved && total<=seedBank+seedMachines (live sim may dispatch/consume)",
+    ledgerEntry:entryTxt.replace(/\s+/g," "),
     note:"committed cost is already spent by buildAt; cancel refunds it in full (unit-tested)"};
    await shot(page,"ledger-processing");
    await ctx.close();
@@ -317,12 +330,31 @@ try{
    const {ctx,page}=await newPage(JSON.stringify(poorSave()));
    // Open the ledger first — rows only exist inside the panel.
    await openLedger(page,null);
-   const rows=await page.evaluate(()=>[...document.querySelectorAll(".ledger-row")].map(el=>({id:el.dataset.resource,state:el.dataset.state})));
-   const nonLocked=rows.filter(r=>!LOCKED_RESOURCES.includes(r.id));
-   if(nonLocked.some(r=>r.state!=="empty"&&r.state!=="critical"))throw Error("Poor save must read empty/critical, never fabricated stock: "+JSON.stringify(rows));
+   // The live sim legitimately produces trace water/data/copper in the first
+   // seconds, so "ok" rows are honest — prove NO GHOST STOCK instead: every
+   // row's painted state must agree with its own painted numbers, credits
+   // (never produced) must mirror the poor save exactly, and the starving
+   // furnace inputs must stay CRITICAL with zero depot.
+   const rows=await page.evaluate(()=>[...document.querySelectorAll(".ledger-row")].map(el=>{
+    const num=s=>Number(String(s).replace(/[^0-9.-]/g,""))||0;
+    const totalTxt=el.querySelector(".ledger-row__nums small")?.textContent||"";
+    return {id:el.dataset.resource,state:el.dataset.state,depot:num(el.querySelector(".ledger-row__nums strong")?.textContent),
+     total:num(totalTxt.split("Σ")[1]||"0"),locked:!!el.querySelector("em")};
+   }));
+   const nonLocked=rows.filter(r=>!r.locked);
+   for(const r of nonLocked){
+    if(r.state==="empty"&&(r.depot!==0||r.total!==0))throw Error("Empty row paints stock: "+JSON.stringify(r));
+    if(r.state==="ok"&&r.total<=0)throw Error("OK row has zero yard total (ghost state): "+JSON.stringify(r));
+    if(r.depot>r.total)throw Error("Depot exceeds yard total (ghost balance): "+JSON.stringify(r));
+   }
+   const byId=Object.fromEntries(rows.map(r=>[r.id,r]));
+   if(byId.iron.state!=="critical"||byId.iron.depot!==0)throw Error("Poor-save iron must be CRITICAL with zero depot: "+JSON.stringify(byId.iron));
+   if(byId.fuel.state!=="critical"||byId.fuel.depot!==0)throw Error("Poor-save fuel must be CRITICAL with zero depot: "+JSON.stringify(byId.fuel));
    const creditsChip=await chipValue(page,"credits");
    if(creditsChip!==3)throw Error("Credits chip must mirror the poor save exactly: "+creditsChip);
-   view.proof.empty={creditsChip,rows:rows.length,emptyOrCritical:nonLocked.length,locked:rows.length-nonLocked.length};
+   if(byId.credits.depot!==3)throw Error("Credits ledger row must mirror the poor save: "+JSON.stringify(byId.credits));
+   view.proof.empty={creditsChip,rows:rows.length,nonLocked:nonLocked.length,locked:rows.length-nonLocked.length,
+    states:Object.fromEntries(rows.map(r=>[r.id,r.state])),note:"live sim may produce trace outputs; no row paints stock it does not hold"};
    await shot(page,"empty");
    await ctx.close();
   }

@@ -129,12 +129,8 @@ function DrawPanel({mode,g,selectedId,setSelectedId,buildId,setBuildId,buildRot,
     <div className="stat-grid">
      <div><small>Depot</small><strong data-testid="ledger-depot">{amount(focus.depot)} {focus.unit}</strong></div>
      <div><small>In machines</small><strong data-testid="ledger-machines">{amount(focus.machines)} {focus.unit}</strong></div>
-    </div>
-    <div className="stat-grid">
      <div><small>Reserved · transit</small><strong data-testid="ledger-reserved">{amount(focus.reserved)} {focus.unit}</strong></div>
      <div><small>Committed · assembly</small><strong data-testid="ledger-committed">{amount(focus.committed)} {focus.unit}</strong></div>
-    </div>
-    <div className="stat-grid">
      <div><small>Yard total</small><strong data-testid="ledger-total">{amount(focus.total)} {focus.unit}</strong></div>
      <div><small>Capacity</small><strong data-testid="ledger-capacity">No cap</strong></div>
     </div>
@@ -157,7 +153,7 @@ function DrawPanel({mode,g,selectedId,setSelectedId,buildId,setBuildId,buildRot,
       <em>{e.cost?"−"+toMoney(e.cost):e.refund?"+"+toMoney(e.refund):""}</em>
      </div>):<p className="panel-sub">No transactions recorded yet.</p>}
    </div>}
-   <div className="panel-footnote">Totals mirror the authoritative simulation: depot + machine cargo + truck cargo. Assembly materials are already spent and refund in full on cancel. Depot storage is uncapped in the current simulation — no capacity ledger is exposed yet.</div>
+   <div className="panel-footnote">Totals = depot + machine cargo + truck cargo, mirrored live from the simulation. Assembly cost is spent up front and refunds in full on cancel. Depot storage is uncapped.</div>
   </Card>;
  }
  return null;
