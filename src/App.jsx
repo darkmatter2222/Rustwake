@@ -6,6 +6,7 @@ import {RESOURCES,RESOURCE_BY_ID,BUILDINGS,BLUEPRINTS,RESEARCH,TIERS,CELL,WORLD_
 import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,cancelConstruction,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt,checkSite,buildingAt,footprintDims,facingName} from "./simulation.js";
 import {inspectorState,machineScreenRect,panelPlacement,frameSelection,readUxSettings,writeUxSettings} from "./inspector.js";
 import {resourceStripState,readStripSettings,writeStripSettings} from "./resourceStrip.js";
+import {classifyViewport,dockBottomOffset,sheetMaxHeight,readDockSettings,writeDockSettings} from "./dock.js";
 import "./styles.css";
 
 const cap=(n)=>Math.max(0,Math.floor(n||0));
@@ -266,10 +267,16 @@ export default function App(){
  // UX-01 (#359): persisted strip disclosure prefs (separate key from ux-settings).
  const [stripPrefs,setStripPrefs]=useState(()=>readStripSettings(typeof window!=="undefined"?window.localStorage:null));
  const [ledgerFocus,setLedgerFocus]=useState(null);
+ // UX-07 (#365): persisted sheet collapse pref (separate key from ux/strip/save)
+ // + compact-mode detection for the center hint. Collapsing NEVER touches the
+ // camera ref or selection — it only hides the sheet body in place.
+ const [dockPrefs,setDockPrefs]=useState(()=>readDockSettings(typeof window!=="undefined"?window.localStorage:null));
+ const [compact,setCompact]=useState(()=>typeof window!=="undefined"&&window.matchMedia("(max-width:770px),(max-height:600px)").matches);
+ const sheetCollapsed=dockPrefs.sheetCollapsed;
  const [confirmId,setConfirmId]=useState(null);
  const [panelSide,setPanelSide]=useState("left");
  const [obscured,setObscured]=useState(false);
- const panelHostRef=useRef(null),openBtnRef=useRef(null),confirmBtnRef=useRef(null);
+ const panelHostRef=useRef(null),openBtnRef=useRef(null),confirmBtnRef=useRef(null),sheetToggleRef=useRef(null);
  const uxRef=useRef(ux),confirmRef=useRef(confirmId),selectedRef=useRef(selectedId);
  const camera=useRef({yaw:45,elevation:35.264,zoom:typeof window!=="undefined"&&window.innerWidth>=960?1.15:1,x:0,z:0});
 
@@ -284,6 +291,23 @@ export default function App(){
  const choose=useCallback(id=>{setMode(id);setPreview(null);setRoadStart(null);setConfirmId(null);if(id!=="build")setSelectedId(null);},[]);
  const openLedger=useCallback((id=null)=>{choose("inventory");setLedgerFocus(id);},[choose]);
  const onStripPrefs=useCallback(patch=>{setStripPrefs(writeStripSettings(window.localStorage,patch));},[]);
+ const onDockPrefs=useCallback(patch=>{setDockPrefs(writeDockSettings(window.localStorage,patch));},[]);
+ useEffect(()=>{
+  const mq=window.matchMedia("(max-width:770px),(max-height:600px)");
+  const onChange=e=>setCompact(e.matches);
+  mq.addEventListener("change",onChange);setCompact(mq.matches);
+  return ()=>mq.removeEventListener("change",onChange);
+ },[]);
+ const toggleSheet=useCallback(()=>{
+  // If focus lives inside the body we are about to hide, return it to the
+  // toggle so keyboard users never lose their place. Camera + selection stay.
+  if(!sheetCollapsed){
+   const body=document.getElementById("context-sheet-body");
+   if(body&&body.contains(document.activeElement))sheetToggleRef.current?.focus();
+  }
+  onDockPrefs({sheetCollapsed:!sheetCollapsed});
+ },[sheetCollapsed,onDockPrefs]);
+ const closeSheet=useCallback(()=>{setSelectedId(null);choose("select");},[choose]);
  /* Non-obscuring placement: pure geometry from src/inspector.js decides which
     half hosts the sheet; the camera is only ever moved through the existing
     setView/applyCamera public API (camera invariants #307 untouched). */
@@ -298,9 +322,14 @@ export default function App(){
   const isPhone=viewport.width<=770;
   const hr=panelHostRef.current?.getBoundingClientRect();
   const panelSize=hr&&hr.width>0&&hr.height>0?{width:hr.width,height:hr.height}
-   :{width:Math.min(356,viewport.width-28),height:Math.min(viewport.height*(isPhone?0.46:0.63),isPhone?400:650)};
+   :{width:isPhone?viewport.width-12:Math.min(356,viewport.width-28),height:sheetMaxHeight(viewport)||120};
+  // UX-07 (#365): reserve the ACTUAL dock band (measured, safe-area aware) so
+  // the sheet never covers the dock; fall back to the pure dock.js mirror.
+  const dockRect=document.querySelector(".tool-dock")?.getBoundingClientRect();
+  const bottomOffset=dockRect&&dockRect.top>0?Math.max(0,viewport.height-dockRect.top)+6
+   :dockBottomOffset(classifyViewport(viewport));
   const place=panelPlacement({machineRect:machineScreenRect(camera.current,b,viewport),viewport,panelSize,
-   isPhone,preference:uxRef.current.panelSide,bottomOffset:isPhone?95:133});
+   isPhone,preference:uxRef.current.panelSide,bottomOffset});
   if(!isPhone)setPanelSide(s=>s===place.side?s:place.side);
   setObscured(o=>o===place.obscured?o:place.obscured);
   if(frame&&place.obscured&&(force||uxRef.current.autoFrame)){
@@ -422,6 +451,10 @@ export default function App(){
  },[]);
  const power=powerStatus(data);
  const stripState=resourceStripState(data);
+ const sheetTitle=mode==="inspect"
+  ?(selectedId!=null?(BLUEPRINTS[data.buildings.find(b=>b.id===selectedId)?.type]?.name||"Inspector"):"Inspector")
+  :mode==="build"?"Build catalog":mode==="road"?"Road engineer":mode==="fleet"?"Active fleet"
+  :mode==="research"?"Research & industry":mode==="market"?"Trade exchange":"Freight ledger";
  const criticalCount=stripState.kind==="ready"?stripState.shortages.filter(s=>s.state==="critical").length:0;
  useEffect(()=>{
   const world=worldRef.current;
@@ -479,7 +512,7 @@ export default function App(){
    <div className="activity-card"><div className="eyebrow">YARD ACTIVITY</div><Log events={data.log}/></div>
   </aside>
   {intro&&<IntroPrompt onDismiss={()=>{setIntro(false);try{localStorage.setItem("rustwake:v2:intro","1");}catch{}}}/>}
-  <div className="center-hint" aria-hidden="true">{mode==="road"?(roadStart?"TAP A DESTINATION CELL":"TAP A START CELL"):mode==="build"?"TAP THE GROUND TO CONSTRUCT · R ROTATES THE FOOTPRINT":null}</div>
+  {(mode==="road"||mode==="build")&&(!compact||sheetCollapsed)&&<div className="center-hint" aria-hidden="true">{mode==="road"?(roadStart?"TAP A DESTINATION CELL":"TAP A START CELL"):"TAP THE GROUND TO CONSTRUCT · R ROTATES THE FOOTPRINT"}</div>}
   <nav className="tool-dock" aria-label="Construction and world controls">
     {TOOLBAR.map(item=><button key={item.id} data-tool={item.id}
       className={mode===item.id||item.id==="select"&&mode==="inspect"?"tool-dock__item is-active":"tool-dock__item"}
@@ -488,16 +521,31 @@ export default function App(){
     </button>)}
   </nav>
   {["build","road","fleet","research","market","inventory","inspect"].includes(mode)&&<div
-    className={"panel-host"+(mode==="inspect"&&panelSide==="right"?" panel-host--right":"")} ref={panelHostRef}>
-    {mode==="inspect"
-     ?<InspectorPanel g={data} selectedId={selectedId} ux={ux} onUx={onUx}
-       confirmId={confirmId} setConfirmId={setConfirmId} openBtnRef={openBtnRef} confirmBtnRef={confirmBtnRef}
-       obscured={obscured} onFocus={()=>updatePlacement(true,true)} openBuild={()=>choose("build")}
-       onRemove={onRemove} onCancel={onCancel} onClose={()=>{setSelectedId(null);choose("select");}}/>
-     :<DrawPanel mode={mode} g={data} selectedId={selectedId} setSelectedId={setSelectedId}
-       buildId={buildId} setBuildId={setBuildId} buildRot={buildRot} setBuildRot={setBuildRot}
-       notify={notify} onSell={onSell} onResearch={onResearch} onRemove={onRemove} onCancel={onCancel} close={()=>choose("select")}
-       strip={stripState} stripPrefs={stripPrefs} onStripPrefs={onStripPrefs} ledgerFocus={ledgerFocus} setLedgerFocus={setLedgerFocus}/>}
+    className={"panel-host"+(mode==="inspect"&&panelSide==="right"?" panel-host--right":"")+(sheetCollapsed?" panel-host--collapsed":"")}
+    data-testid="panel-host" data-collapsed={String(sheetCollapsed)} ref={panelHostRef}>
+    {/* UX-07 (#365): persistent sheet bar — collapse/expand keeps the panel
+       mounted (scroll position, confirm dialog and focus survive) and never
+       moves the camera or clears the selection. */}
+    <div className="sheet-bar">
+     <span className="sheet-grip" aria-hidden="true"/>
+     <strong data-testid="sheet-title">{sheetTitle}</strong>
+     <button type="button" ref={sheetToggleRef} className="sheet-toggle" data-testid="sheet-toggle"
+      aria-expanded={!sheetCollapsed} aria-controls="context-sheet-body"
+      aria-label={(sheetCollapsed?"Expand ":"Collapse ")+sheetTitle+" sheet"}
+      onClick={toggleSheet}><span aria-hidden="true">{sheetCollapsed?"▴":"▾"}</span></button>
+     <button type="button" className="plain-icon" data-testid="sheet-close" aria-label={"Close "+sheetTitle} onClick={closeSheet}>×</button>
+    </div>
+    <div className="sheet-body" id="context-sheet-body" hidden={sheetCollapsed}>
+     {mode==="inspect"
+      ?<InspectorPanel g={data} selectedId={selectedId} ux={ux} onUx={onUx}
+        confirmId={confirmId} setConfirmId={setConfirmId} openBtnRef={openBtnRef} confirmBtnRef={confirmBtnRef}
+        obscured={obscured} onFocus={()=>updatePlacement(true,true)} openBuild={()=>choose("build")}
+        onRemove={onRemove} onCancel={onCancel} onClose={()=>{setSelectedId(null);choose("select");}}/>
+      :<DrawPanel mode={mode} g={data} selectedId={selectedId} setSelectedId={setSelectedId}
+        buildId={buildId} setBuildId={setBuildId} buildRot={buildRot} setBuildRot={setBuildRot}
+        notify={notify} onSell={onSell} onResearch={onResearch} onRemove={onRemove} onCancel={onCancel} close={()=>choose("select")}
+        strip={stripState} stripPrefs={stripPrefs} onStripPrefs={onStripPrefs} ledgerFocus={ledgerFocus} setLedgerFocus={setLedgerFocus}/>}
+    </div>
    </div>}
   <div className="footline"><span>RUSTWAKE / V2 FOUNDATION</span><span>SIM {Math.floor(data.elapsed)}s</span><span>{data.buildings.length} STRUCTURES · {data.roads.length} ROAD CELLS</span></div>
   {toast&&<div key={toast+Math.floor(data.elapsed/7)} className="toast" role="status" onClick={()=>setToast("")}><b>NOTICE</b><span>{toast}</span><button aria-label="Dismiss notice" onClick={()=>setToast("")}>×</button></div>}
