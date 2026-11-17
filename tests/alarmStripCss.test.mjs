@@ -62,3 +62,18 @@ test("#559 strip controls keep 44px touch targets once swiped into view", () => 
   const collapse = rule(css, ".alarm-collapse");
   assert.match(collapse, /min-height:\s*44px/, "collapse button is a 44px target");
 });
+
+test("#559 phone HUD cannot wrap over the alarm strip: strip-alert hidden at <=770px by a rule that WINS the cascade", () => {
+  // Measured defect at 667x375 (probe before the fix): the base
+  // .strip-alert{display:flex} sits later in styles.css than the phone
+  // display:none overrides, so the alert button rendered, wrapped the
+  // resources grid to a second 44px row, and the centred 92px HUD overflow
+  // covered the alarm strip — elementFromPoint(chip centre) hit
+  // resources-strip. A display:none override only works if it comes AFTER
+  // the base flex rule (media queries add no specificity).
+  const flexAt = css.indexOf(".strip-alert{display:flex");
+  assert.ok(flexAt >= 0, "base .strip-alert display:flex rule exists");
+  const blocks = [...css.matchAll(/@media\(max-width:770px\)\s*\{([\s\S]*?)\n\}/g)];
+  assert.ok(blocks.some(b => b.index > flexAt && /\.strip-alert\s*\{\s*display:\s*none/.test(b[1])),
+    "a <=770px .strip-alert{display:none} override must follow the base display:flex rule");
+});

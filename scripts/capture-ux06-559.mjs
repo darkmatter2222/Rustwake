@@ -96,6 +96,10 @@ try{
    return {tag:el.tagName,cls:String(el.className).slice(0,80),testid:el.getAttribute("data-testid"),isCanvas:el.classList.contains("world-canvas")};
   },[x,y]);
   const rect=sel=>page.evaluate(s=>{const el=document.querySelector(s);if(!el)return null;const r=el.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};},sel);
+  // The warnings testid rides the 16px checkbox INPUT; the thumb target is its
+  // 44px parent LABEL (styles.css .alarm-controls label min-height:44px), and
+  // a real tap on the label natively activates the checkbox.
+  const warnRect=()=>page.evaluate(()=>{const el=document.querySelector('[data-testid="alarm-setting-warnings"]')?.closest("label");if(!el)return null;const r=el.getBoundingClientRect();return {x:r.x,y:r.y,width:r.width,height:r.height};});
   // Methodology gate: elementFromPoint FIRST, THROW if the centre is not
   // CANVAS (mirrors capture-ux06.mjs:119/:210). A pretty PNG of an overlay is
   // worthless.
@@ -121,8 +125,8 @@ try{
   };
   // Real CDP touch TAP (start+end at one point => synthesized click). Used
   // ONLY on controls already measured inside the viewport — never auto-scroll.
-  const touchTap=async(sel)=>{
-   const b=await rect(sel);
+  const touchTap=async(sel,box)=>{
+   const b=box||await rect(sel);
    if(!b)throw Error("tap target missing: "+sel);
    if(b.x<0||b.y<0||b.x+b.width>v.viewport.width+0.5||b.y+b.height>v.viewport.height+0.5)
     throw Error("refusing to tap off-viewport control (that would repeat the auto-scroll cheat): "+sel+" "+JSON.stringify(b));
@@ -171,9 +175,9 @@ try{
    const stripY=railBox.y+railBox.height/2;
    const scrollLeft=()=>page.evaluate(()=>document.querySelector('[data-testid="alarm-rail"]').scrollLeft);
    const inViewport=b=>b&&b.x>=0&&b.y>=0&&b.x+b.width<=v.viewport.width+0.5&&b.y+b.height<=v.viewport.height+0.5;
-   const warnBefore=await rect('[data-testid="alarm-setting-warnings"]');
+   const warnBefore=await warnRect();
    const collapseBefore=await rect('[data-testid="alarm-collapse"]');
-   view.proof.controls_before={warningsBox:warnBefore,collapseBox:collapseBefore,scrollLeft:await scrollLeft()};
+   view.proof.controls_before={warningsLabelBox:warnBefore,warningsInputBox:await rect('[data-testid="alarm-setting-warnings"]'),collapseBox:collapseBefore,scrollLeft:await scrollLeft()};
    if(!(warnBefore.x>v.viewport.width&&collapseBefore.x>v.viewport.width))
     throw Error("debt precondition not met — controls are not off-viewport: "+JSON.stringify({warnBefore,collapseBefore}));
    await shot(page,"strip-before-swipe");
@@ -193,7 +197,7 @@ try{
    const swipeUntilVisible=async(label)=>{
     const swipes=[];
     for(let i=0;i<12;i++){
-     const w=await rect('[data-testid="alarm-setting-warnings"]');
+     const w=await warnRect();
      const c=await rect('[data-testid="alarm-collapse"]');
      if(inViewport(w)&&inViewport(c))return {swipes,warningsBox:w,collapseBox:c};
      const maxScroll=await page.evaluate(()=>{const el=document.querySelector('[data-testid="alarm-rail"]');return el.scrollWidth-el.clientWidth;});
@@ -205,9 +209,9 @@ try{
    };
    const reached=await swipeUntilVisible("initial reach");
    view.proof.swipes=reached.swipes;
-   view.proof.controls_after={warningsBox:reached.warningsBox,collapseBox:reached.collapseBox,scrollLeft:await scrollLeft()};
+   view.proof.controls_after={warningsLabelBox:reached.warningsBox,collapseBox:reached.collapseBox,scrollLeft:await scrollLeft()};
    if(reached.collapseBox.height<44)throw Error("collapse control below 44px: "+JSON.stringify(reached.collapseBox));
-   if(reached.warningsBox.height<44)throw Error("warnings toggle below 44px: "+JSON.stringify(reached.warningsBox));
+   if(reached.warningsBox.height<44)throw Error("warnings toggle LABEL below 44px: "+JSON.stringify(reached.warningsBox));
    await shot(page,"strip-after-swipe");
    // REAL taps (CDP touch, no auto-scroll) on BOTH controls.
    view.proof.collapse_tap=await touchTap('[data-testid="alarm-collapse"]');
@@ -221,9 +225,9 @@ try{
    // Warnings toggle: swipe back into view if re-expansion moved it, then tap.
    const warnReach=await swipeUntilVisible("warnings reach");
    view.proof.warnings_swipes=warnReach.swipes;
-   view.proof.warnings_tap_1=await touchTap('[data-testid="alarm-setting-warnings"]');
+   view.proof.warnings_tap_1=await touchTap('[data-testid="alarm-setting-warnings"]',warnReach.warningsBox);
    await page.waitForFunction(()=>{try{return JSON.parse(localStorage.getItem("rustwake:v2:alarm-settings")).showWarnings===false;}catch{return false;}},null,{timeout:5000});
-   view.proof.warnings_tap_2=await touchTap('[data-testid="alarm-setting-warnings"]');
+   view.proof.warnings_tap_2=await touchTap('[data-testid="alarm-setting-warnings"]',await warnRect());
    await page.waitForFunction(()=>{try{return JSON.parse(localStorage.getItem("rustwake:v2:alarm-settings")).showWarnings===true;}catch{return false;}},null,{timeout:5000});
    view.proof.warnings_toggle_persisted=true;
    view.proof.tap_method="CDP Input.dispatchTouchEvent touchStart+touchEnd (no locator.click / scrollIntoViewIfNeeded on any strip control)";
