@@ -1,0 +1,177 @@
+{
+  "version": 1,
+  "max_model_sessions": 5,
+  "primary": "coordinator",
+  "max_children": 4,
+  "browser_policy": "one Chromium process on hosted runner per deployed SHA; roles review artifacts",
+  "roles": [
+    {
+      "id": "coordinator",
+      "effort_intent": "low",
+      "mission": "Single accountable primary, issue DAG, agent leases and dispatch; never implement/merge.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "product-owner",
+      "effort_intent": "medium",
+      "mission": "Own strategic game requirements, currency sources/sinks and player outcomes.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "project-manager",
+      "effort_intent": "low",
+      "mission": "Milestones, blockers, risk register and delivery sequencing.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "technical-architect",
+      "effort_intent": "high",
+      "mission": "Module boundaries, ADRs, security and save/migration architecture.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "ui-ux",
+      "effort_intent": "medium",
+      "mission": "World-first desktop/mobile UX, discoverability, focus and touch behavior.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "art-director",
+      "effort_intent": "medium",
+      "mission": "Approval reference, visual proportions, material/lighting and motion fidelity.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "developer",
+      "effort_intent": "high",
+      "mission": "Scoped isolated code, tests, evidentiary PR and reproducible handoff.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "gameplay-engineer",
+      "effort_intent": "high",
+      "mission": "Simulation, deterministic economy, construction and idle mechanics.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "fleet-engineer",
+      "effort_intent": "high",
+      "mission": "Road topology, loading sockets, pathfinding and conserved cargo.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "economy-analyst",
+      "effort_intent": "medium",
+      "mission": "17 currency source/sink ledger, pacing and non-exploit progression.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "backend-engineer",
+      "effort_intent": "high",
+      "mission": "Authoritative multiplayer identity, trade, raid and idempotency.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "qa-reviewer",
+      "effort_intent": "medium",
+      "mission": "Independent PR head reproduction, negative tests and explicit verdict.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "accessibility-tester",
+      "effort_intent": "medium",
+      "mission": "Keyboard, 200% text, 44px touch, reduced motion and real-device checks.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "player-tester",
+      "effort_intent": "low",
+      "mission": "Fresh player, optimizer and returning player scenario walkthroughs.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "security-reviewer",
+      "effort_intent": "high",
+      "mission": "Server trust, injection, privileges, escrow replay and anti-collusion.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "performance-analyst",
+      "effort_intent": "medium",
+      "mission": "Cold load, FPS, P95, GPU memory and device-specific performance.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "telemetry-bi",
+      "effort_intent": "medium",
+      "mission": "Meaningful event taxonomy, consent-aware metrics and data quality.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "documentation-steward",
+      "effort_intent": "low",
+      "mission": "Maintain source-linked contracts, diagrams, ADRs, runbooks and gap ledger.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "release-engineer",
+      "effort_intent": "low",
+      "mission": "Merge accepted PR to main; watch CI/CD and exact SHA deployment.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "live-verifier",
+      "effort_intent": "low",
+      "mission": "One preexisting browser artifact, live source verification and runtime defects.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "cicd-engineer",
+      "effort_intent": "medium",
+      "mission": "Maintain GitHub-hosted builds, tests, artifact provenance and trusted runner boundaries without deploying unreviewed code.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "production-release-manager",
+      "effort_intent": "low",
+      "mission": "Coordinate approved releases, go/no-go and incidents; release engineer remains sole merge integrator.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "staging-verifier",
+      "effort_intent": "medium",
+      "mission": "Independently validate PR preview built source, desktop/phone screenshots, functional regressions and environment parity.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    },
+    {
+      "id": "site-reliability-engineer",
+      "effort_intent": "medium",
+      "mission": "Observe live health, deployment provenance, rollback readiness and incidents without privileged improvisation.",
+      "spawned_by": "coordinator",
+      "concurrent_slot_cost": 1
+    }
+  ]
+}
