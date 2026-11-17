@@ -207,7 +207,8 @@ try{
    name:d.querySelector("span").textContent,source:d.querySelector("em").textContent,
    amount:Number(d.querySelector("strong").textContent.replace(/[^0-9.-]/g,""))})));
   const assertRows=(rows,expected,label)=>{
-   if(JSON.stringify(rows)!==JSON.stringify(expected))throw Error(label+" dialog rows != authoritative refund: "+JSON.stringify({rows,expected}));
+   const norm=rs=>rs.map(r=>[r.name,r.source,r.amount]);
+   if(JSON.stringify(norm(rows))!==JSON.stringify(norm(expected)))throw Error(label+" dialog rows != authoritative refund: "+JSON.stringify({rows,expected}));
   };
   const openConfirm=async(page,refund,type,label)=>{
    await page.locator('[data-testid="dismantle-open"]').waitFor({state:"visible",timeout:5000});
