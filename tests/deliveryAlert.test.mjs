@@ -260,6 +260,7 @@ test("delivery-alert.yml text contract: isolation, runner, timeout, permissions,
   assert.match(yml, /dry_run:[\s\S]*?default: true/, "dispatch dry_run defaults to true");
   assert.ok(yml.includes("GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}"));
   assert.ok(yml.includes("node scripts/delivery-alert.mjs"), "logic lives in the testable script");
+  assert.match(yml, /checkout@v4[\s\S]*?ref: main/, "checkout pinned to main so a pre-merge head_sha payload still finds the script");
 });
 
 // --- 7. Zero-diff guard: existing workflows byte-identical to base main -------

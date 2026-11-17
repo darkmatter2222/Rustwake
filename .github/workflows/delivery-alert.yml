@@ -48,6 +48,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          # Pin to main: a workflow_run payload's head_sha can predate the
+          # merge that introduced this script (CI queued before merge,
+          # completed after). The alert logic reads the run payload, not the
+          # checkout, so main HEAD is always the correct script source.
+          ref: main
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:

@@ -16,7 +16,7 @@ Triggers:
 
 `!= 'success'` is load-bearing. The real incident (CI run 44063235910, main `ec64143340891d4c9fe1829560243d17e753b506`) was reported `cancelled`, not `failure`; a failure-only comparison would have missed it. The guard covers `cancelled`, `timed_out`, `failure`, `action_required`, `stale`, `skipped` and any unknown future non-success value.
 
-Isolation: own concurrency group `rustwake-delivery-alert` (`cancel-in-progress: false`) — an alert never queues behind or blocks `rustwake-databrick-delivery`. `ubuntu-latest`, `timeout-minutes: 5`, never the self-hosted deploy runner, never a browser. Workflow-level permissions stay `contents: read`; the job alone gets `issues: write` + `actions: read`.
+Isolation: own concurrency group `rustwake-delivery-alert` (`cancel-in-progress: false`) — an alert never queues behind or blocks `rustwake-databrick-delivery`. `ubuntu-latest`, `timeout-minutes: 5`, never the self-hosted deploy runner, never a browser. Workflow-level permissions stay `contents: read`; the job alone gets `issues: write` + `actions: read`. Checkout is pinned to `ref: main` because a `workflow_run` payload's head SHA can predate the merge that introduced the script (CI queued before merge, completed after); the alert reads the run payload, not the checkout.
 
 ## What it says
 
