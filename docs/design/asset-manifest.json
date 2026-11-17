@@ -5,6 +5,18 @@
   "supplemental_style": "public/reference/asset-style-sheet.png",
   "recipes": "docs/asset-kit/kit.json",
   "import_policy": "Reference-only until integrated, tested and vision-reviewed; do not assume old blockouts are production art",
+  "geometry_schema": {
+    "id": "rustwake.voxel.geometry.v1",
+    "source": "src/voxelSchema.js",
+    "docs": "docs/design/VOXEL_GEOMETRY.md",
+    "issue": 347,
+    "provenance": "Describes the original procedural geometry in src/world.js (PR #307 baseline 006b5e8) against public/reference/approved-yard.png and docs/design/tokens.json; validated by tests/voxelSchema.test.mjs and scripts/capture-art.mjs",
+    "parcel": {"cells": [24, 24], "worldUnitsPerCell": 3.5},
+    "footprint_contract": "Logical footprints mirror src/content.js footprintOf() (#370, main e8240a87); crane 2x3, others 1x1. Geometry fields are authored local space; world group scaled by base w/d at the footprint center.",
+    "scale_references": {"workerHeight": 1.7, "truck": {"length": 2.05, "width": 1.2, "height": 1.35}},
+    "performance_limits": {"maxMeshesPerMachine": 60, "maxTrianglesPerMachine": 1600, "maxMachinesInitialScene": 6, "maxTrucksInitialScene": 3, "cylinderRadialSegments": 8, "shadowMapSize": 2048, "deviceDPRMax": 2, "pointLightsMax": 4},
+    "stage": "live geometry contract; numeric validation only, not automatically production-approved art parity (G1 #276)"
+  },
   "assets": [
     {
       "id": "crane",

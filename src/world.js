@@ -3,6 +3,7 @@ import {CAMERA_LIMITS,normalizeCamera} from "./camera.js";
 import {CELL,WORLD_SIZE,BLUEPRINTS} from "./content.js";
 import {cellOf,key} from "./simulation.js";
 import {worldFootprint} from "./gridOccupancy.js";
+import {SCHEMA_ID,machineDescriptor,cellCenter} from "./voxelSchema.js";
 
 const EDGE=WORLD_SIZE*CELL;
 const origin=(i)=>(i-WORLD_SIZE/2+.5)*CELL;
@@ -16,6 +17,10 @@ const mats={
  sand:mat("#8d7b5d"),wood:mat("#80644d"),black:mat("#151d23",.1)
 };
 const geo=new THREE.BoxGeometry(1,1,1);
+// ART-01 (#347): invisible full-cell pick volume owned by the voxel schema.
+// material.visible=false never renders; the mesh gives mesh-based ray picking an
+// accessible target that encloses the whole silhouette, not just thin greebles.
+const pickMat=new THREE.MeshBasicMaterial({visible:false});
 function box(parent,x,y,z,w,h,d,material){
  const mesh=new THREE.Mesh(geo,typeof material==="string"?mats[material]:material);
  mesh.position.set(x,y,z);mesh.scale.set(w,h,d);mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;
@@ -38,7 +43,7 @@ function textPanel(parent,label,x,y,z,size=2.2){
 function beam(parent,x,y,z,length,axis="x",material="steel"){
  return box(parent,x,y,z,axis==="x"?length:.21,.23,axis==="z"?length:.21,material);
 }
-function makeBuilding(b,time){
+export function makeBuilding(b,time){
  const group=new THREE.Group();
  // Exact footprint pivot (#370): anchor cell is the min corner; the group sits
  // at the footprint center, scaled to base w×d cells, rotated rot*90° about Y.
@@ -63,7 +68,7 @@ function makeBuilding(b,time){
   cylinder(arm,0,.25,0,.55,.45,"dark");
   box(arm,0,.35,-1.3,.42,.32,2.7,"orange");
   box(arm,0,.08,-2.5,.8,.25,.25,"steel");
-  group.add(arm);parts.push({kind:"rocker",node:arm});
+  arm.name="pivot:rocker";group.add(arm);parts.push({kind:"rocker",node:arm});
  } else if(kind==="depot"||kind==="market"){
   add(0,1.48,0,2.95,2.14,2.65,kind==="depot"?"body":"wood");
   add(0,2.67,0,3.13,.4,2.88,"roof");
@@ -71,14 +76,14 @@ function makeBuilding(b,time){
   add(.9,1.6,1.42,.23,1.15,.14,"orange");
   add(-1.18,1.6,1.42,.12,1.2,.15,"orange");
   for(let i=-1;i<=1;i++)add(i*.82,2.72,-.12,.45,.06,.9,"steel");
-  textPanel(group,kind==="depot"?"FREIGHT":"EXCHANGE",0,2.2,1.44,1.1);
+  textPanel(group,kind==="depot"?"FREIGHT":"EXCHANGE",0,2.2,1.44,.95);
  } else if(kind==="generator"){
   add(0,1.02,0,2.75,.95,2.8,"body");
   add(0,1.75,0,2.8,.45,2.8,"dark");
   const fan=new THREE.Group();fan.position.set(0,1.9,0);
   cylinder(fan,0,.1,0,.65,.35,"steel");
   for(let i=0;i<5;i++){const a=i*Math.PI*2/5;const s=box(fan,Math.cos(a)*.84,.1,Math.sin(a)*.84,.95,.14,.28,"orange");s.rotation.y=a;}
-  group.add(fan);parts.push({kind:"spin",node:fan});
+  fan.name="pivot:spin";group.add(fan);parts.push({kind:"spin",node:fan});
   add(-.95,1.4,-.95,.25,1.15,.25,"orange");
   add(.95,1.4,.95,.25,1.15,.25,"lights");
  } else if(kind==="furnace"||kind==="foundry"){
@@ -104,14 +109,14 @@ function makeBuilding(b,time){
   box(boom,4.35,-1.18,0,.14,2.4,.14,"steel");
   box(boom,4.35,-2.38,0,.85,.45,.75,"rust");
   box(boom,-1.45,-.15,0,1.5,.7,1.6,"dark");
-  group.add(boom);parts.push({kind:"crane",node:boom});
+  boom.name="pivot:crane";group.add(boom);parts.push({kind:"crane",node:boom});
  } else if(kind==="turret"){
   add(0,1.4,0,1.5,2.2,1.6,"dark");
   cylinder(group,0,2.7,0,.98,.4,"steel");
   const head=new THREE.Group();head.position.set(0,2.95,0);
   add(0,3.18,0,1.55,.48,1.2,"roof");
   box(head,0,0,-1,.38,.32,2.45,"orange");
-  group.add(head);parts.push({kind:"rotate",node:head});
+  head.name="pivot:rotate";group.add(head);parts.push({kind:"rotate",node:head});
  } else {
   add(0,1.4,0,2.75,2,2.65,"body");
   add(0,2.55,0,3,.3,2.8,"roof");
@@ -123,26 +128,51 @@ function makeBuilding(b,time){
   if(kind==="fabricator")for(let i=-1;i<=1;i++)add(i*.76,2.8,0,.4,.5,.6,"orange");
  }
  // Each building has a ground-projected loading bay and luminous status marker.
- add(0,.11,CELL*.37,1.22,.08,.42,"orange");
- add(1.28,.95,1.25,.25,.25,.25,"lights");
+ // ART-01 (#347): named port/status nodes + schema ownership metadata + pick volume.
+ const bay=add(0,.11,CELL*.37,1.22,.08,.42,"orange");bay.name="port:loading-bay";
+ const status=add(1.28,.95,1.25,.25,.25,.25,"lights");status.name="status:light";
+ const desc=machineDescriptor(kind);
+ if(desc){
+  group.userData.voxel={schema:SCHEMA_ID,type:kind,footprint:desc.footprint,frontage:desc.frontage,
+   pick:desc.pick,pivots:desc.pivots.map(p=>p.node),bounds:desc.bounds};
+  const pick=new THREE.Mesh(geo,pickMat);
+  pick.name="pick:volume";pick.scale.set(...desc.pick.size);pick.position.set(...desc.pick.center);
+  group.add(pick);
+ }
  if(has){ // foundation + staged frame, never a pop-in balloon.
   const ratio=Math.max(0,1-b.remaining/5);
-  for(const child of [...group.children])if(child!==foot)child.visible=ratio>=.25;
-  if(ratio<.65){for(const child of group.children)if(child!==foot)child.visible=child.position.y<1.4||ratio>.35;}
+  for(const child of [...group.children])if(child!==foot&&child.name!=="pick:volume")child.visible=ratio>=.25;
+  if(ratio<.65){for(const child of group.children)if(child!==foot&&child.name!=="pick:volume")child.visible=child.position.y<1.4||ratio>.35;}
  }
  return {group,parts};
 }
-function createTruck(i){
+export function createTruck(i){
  const g=new THREE.Group();
+ g.name="vehicle:truck";
  const paint=i%3===0?"rust":i%3===1?"orange":"body";
  box(g,0,.62,0,1.1,.67,1.55,paint);
  box(g,0,.91,-.48,1.12,.78,.7,"dark");
  box(g,0,1.05,-.86,.95,.39,.09,"glass");
  box(g,0,.38,.62,1.2,.54,.96,"steel");
- for(const x of [-.53,.53])for(const z of [-.58,.58])cylinder(g,x,.25,z,.3,.2,"black",true);
+ for(const x of [-.5,.5])for(const z of [-.58,.58])cylinder(g,x,.25,z,.3,.2,"black",true);
  box(g,-.38,.67,-.91,.23,.16,.08,"lights");
  box(g,.38,.67,-.91,.23,.16,.08,"lights");
  g.userData.vehicle=true;
+ g.userData.scaleReference="truck";
+ return g;
+}
+// ART-01 (#347): canonical 1.7-world-unit worker as a visible human scale reference.
+// Decorative only — never presented as economic transport or crew simulation (#274).
+export function createWorker(){
+ const g=new THREE.Group();g.name="scale:worker";
+ box(g,-.12,.39,0,.2,.78,.22,"dark");
+ box(g,.12,.39,0,.2,.78,.22,"dark");
+ box(g,0,1.09,0,.56,.62,.3,"orange");
+ box(g,-.25,1.05,0,.12,.5,.16,"rust");
+ box(g,.25,1.05,0,.12,.5,.16,"rust");
+ box(g,0,1.5,0,.28,.28,.28,"sand");
+ box(g,0,1.64,0,.34,.12,.34,"orange");
+ g.userData.scaleReference="worker";
  return g;
 }
 function seeded(seed){let s=seed>>>0;return ()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296;};}
@@ -234,6 +264,10 @@ export class LivingWorld{
    if(x*x+z*z<450)continue;
    const p=box(this.scenery,x,.48,z,1.5,.8,1.4,i%2?"rust":"dark");p.rotation.y=rand()*Math.PI;
   }
+  // Human scale references beside starter loading bays (1.7 units tall vs 3.5-unit cells).
+  for(const [cx,cz,dx,dz,ry] of [[13,9,-1.0,2.1,.4],[15,18,1.05,2.0,-.7],[7,9,1.2,1.9,2.2]]){
+   const w=createWorker();w.position.set(cellCenter(cx)+dx,0,cellCenter(cz)+dz);w.rotation.y=ry;this.scenery.add(w);
+  }
   // Warm floodlights define the site; no bloom or photoreal assets.
   for(const [x,z] of [[-EDGE/2+5,-EDGE/2+5],[EDGE/2-5,-EDGE/2+5],[-EDGE/2+5,EDGE/2-5],[EDGE/2-5,EDGE/2-5]]){
    cylinder(this.scenery,x,4,z,.16,8,"dark");
@@ -292,6 +326,9 @@ export class LivingWorld{
    if((x+z)%2===0)box(this.roadGroup,wx,.205,wz,.11,.012,.7,"line").castShadow=false;
   }
   for(const b of g.buildings){const built=makeBuilding(b,g.elapsed);this.built.set(b.id,built);this.buildingGroup.add(built.group);}
+  // ART-01 observability: schema identity + machine count, separate from camera stamps.
+  const d=this.renderer.domElement.dataset;
+  d.voxelSchema=SCHEMA_ID;d.machineCount=String(g.buildings.length);
  }
  drawGhost(mode,cell,valid,start,footprint){
   this.ghost.clear();if(!cell||cell.x<0||cell.z<0||cell.x>=WORLD_SIZE||cell.z>=WORLD_SIZE)return;
