@@ -185,6 +185,14 @@ try {
     await page.locator(`[data-tool="${tool}"]`).click();
     await page.waitForFunction(t => document.querySelector('[data-tool="' + t + '"]')?.getAttribute("aria-pressed") === "true", tool, {timeout: 5000});
   };
+  // A build commit raises a NOTICE toast that floats over the world band. It is
+  // a real, dismissible UI element (aria-label "Dismiss notice"); dismissing it
+  // is a player action, not a gate relaxation. Wait until it is actually gone.
+  const dismissToast = async page => {
+    const btn = page.locator('[aria-label="Dismiss notice"]');
+    if (await btn.count()) await btn.first().click();
+    await page.waitForFunction(() => !document.querySelector(".toast"), null, {timeout: 5000});
+  };
   // Wait for the UI snapshot (270ms cadence) to reflect a transaction.
   const waitCounts = async (page, before, want) => {
     await page.waitForFunction(w => {
@@ -566,7 +574,8 @@ try {
     // (the compact build sheet / HUD must not swallow a finger). Verify the
     // twist + pinch + survivor extremes at candidate heights before driving.
     const bareGestureZone = async () => {
-      for (const fy of [0.3, 0.25, 0.35, 0.2]) {
+      const zoneDiag = [];
+      for (const fy of [0.3, 0.25, 0.35, 0.2, 0.4, 0.15]) {
         const lc = {x: box.width * 0.5, y: box.height * fy};
         const c = {x: box.left + lc.x, y: box.top + lc.y};
         const pts = [];
@@ -576,10 +585,16 @@ try {
         }
         for (const h of [50, 68, 86, 104, 120]) pts.push({x: c.x - h, y: c.y}, {x: c.x + h, y: c.y});
         pts.push({x: c.x + 120 - 35, y: c.y + 25});
-        const ok = await page.evaluate(ps => ps.every(p => document.elementFromPoint(p.x, p.y) === document.querySelector(".world-canvas")), pts);
-        if (ok) return {local: lc, css: c, heightFraction: fy};
+        const diag = await page.evaluate(ps => {
+          const c = document.querySelector(".world-canvas");
+          const bad = [];
+          for (const p of ps) {const el = document.elementFromPoint(p.x, p.y); if (el !== c) bad.push({p, cover: el ? (el.className && String(el.className).slice(0, 60) || el.tagName) : "null"});}
+          return bad;
+        }, pts);
+        if (!diag.length) return {local: lc, css: c, heightFraction: fy};
+        zoneDiag.push({fy, bad: diag.slice(0, 4)});
       }
-      throw Error("NO_BARE_GESTURE_ZONE: every candidate centroid has a covered sweep pixel");
+      throw Error("NO_BARE_GESTURE_ZONE: " + JSON.stringify(zoneDiag));
     };
     // Phone build-mode sheet can cover the canvas center: restrict sites to the
     // upper band and verify elementFromPoint (findSite already does).
@@ -639,6 +654,7 @@ try {
 
     // ---- (P3) BUILD mode two-finger turn (twist): orbits, NEVER spends ----
     await goHome(page); await setMode(page, "build"); await clearSite(page);
+    await dismissToast(page);
     const beforeP3 = await snap(page);
     const camP3 = await pose(page);
     const zone3 = await bareGestureZone();
@@ -671,6 +687,7 @@ try {
 
     // ---- (P4) BUILD mode pinch + finger lift + survivor: NEVER spends ----
     await goHome(page); await setMode(page, "build"); await clearSite(page);
+    await dismissToast(page);
     const beforeP4 = await snap(page);
     const camP4 = await pose(page);
     const zone4 = await bareGestureZone();
