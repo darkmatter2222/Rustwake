@@ -46,6 +46,46 @@ const cargoRefund=(b)=>{
  return out;
 };
 const sourceBagOf=(g,j)=>bagOfBuilding(g,g.buildings.find(b=>b.id===j?.sourceId));
+// ---- Dispatch cooldown (#558, BLD-08 follow-up) ----
+// advanceGame re-runs assignJob for every idle truck EVERY substep, so after a
+// player cancelFreight the dispatcher used to re-reserve the same cargo on the
+// very next tick (cancelling RESTORES the source inventory that made it a
+// candidate) — the cancel->dismantle window was not normally winnable. Remedy
+// (issue #558 option (a)): a successful player cancel records an ABSOLUTE
+// SIM-TIME expiry for the cancelled source+resource PAIR in g.dispatchCooldowns
+// ({"<sourceId>:<resource>": untilElapsed}); deliveryCandidates skips cooled
+// pairs until g.elapsed passes the expiry, then normal dispatch resumes. The
+// window is 15 sim seconds — the midpoint of the issue's 10-20s range: long
+// enough for the deliberate two-step dismantle confirm on desktop AND phone
+// (panel navigation + dialog), short enough that a cancelled haul resumes
+// promptly when the player keeps the machine. Sim time (never wall clock) keeps
+// it deterministic, replay-safe and correctly consumed by offline catch-up;
+// the registry is part of the save, so reload cannot bypass it. readGame
+// sanitizes hostile entries and clamps far-future expiries to ONE window so a
+// tampered save can never permanently lock dispatch. The RESERVED hard block
+// and exactly-once cancellation/conservation are NOT weakened: the cooldown
+// only suppresses NEW reservations, it never touches live jobs or ledgers.
+export const DISPATCH_COOLDOWN_SECONDS=15;
+const cooldownKey=(sourceId,resource)=>sourceId+":"+resource;
+const cooldownUntil=(g,sourceId,resource)=>{
+ const until=g?.dispatchCooldowns?.[cooldownKey(sourceId,resource)];
+ return Number.isFinite(until)?until:0;
+};
+// Read-only remaining window (sim seconds) for UI/tests; 0 when not cooled.
+export function dispatchCooldownRemaining(g,sourceId,resource){
+ return Math.max(0,cooldownUntil(g,sourceId,resource)-(g?.elapsed||0));
+}
+const sanitizeCooldowns=(raw,elapsed)=>{
+ const out={};
+ if(!raw||typeof raw!=="object"||Array.isArray(raw))return out;
+ for(const [k,v] of Object.entries(raw)){
+  if(!/^\d+:[a-z]+$/.test(k))continue;
+  const n=Number(v);
+  if(!Number.isFinite(n)||n<=elapsed)continue;
+  out[k]=Math.min(n,elapsed+DISPATCH_COOLDOWN_SECONDS);
+ }
+ return out;
+};
 // ---- Construction transaction authority (#373 BLD-04) ----
 // Durable refund provenance: every committed building carries the EXACT cost it
 // paid (b.paid), independent of the 64-row ledger cap and of later blueprint
@@ -97,7 +137,7 @@ export function createGame(){
  ];
  return {version:2,seed:4073,createdAt:Date.now(),lastSavedAt:Date.now(),elapsed:0,
   nextId:10,bank:{...INITIAL_BANK},buildings,roads:[...INITIAL_ROADS],vehicles,
-  research:[],discovered:["cinders"],tier:0,world:"Cinder Basin",sector:1,ledger:[],freightLedger:[],commands:[],
+  research:[],discovered:["cinders"],tier:0,world:"Cinder Basin",sector:1,ledger:[],freightLedger:[],commands:[],dispatchCooldowns:{},
   view:{yaw:45,elevation:35.264,zoom:1},stats:{produced:0,delivered:0,shipments:0,sold:0,builds:0},
   log:[{id:0,time:0,message:"Cinder Yard established. Roads and freight trucks are operational."}],
   notices:[]
@@ -120,6 +160,9 @@ export function readGame(){
  g.freightLedger=Array.isArray(g.freightLedger)?g.freightLedger.filter(e=>e&&typeof e==="object").slice(-128):[];
  // #373: replay protection survives reload; malformed registry entries drop.
  g.commands=Array.isArray(g.commands)?g.commands.filter(c=>c&&typeof c==="object"&&typeof c.id==="string"&&c.id).slice(-COMMAND_CAP):[];
+ // #558: dispatch cooldowns survive reload (absolute sim-time expiry). Malformed
+ // and expired entries drop; tampered far-future expiries clamp to ONE window.
+ g.dispatchCooldowns=sanitizeCooldowns(data.dispatchCooldowns,g.elapsed);
   g.roads=[...new Set(g.roads.filter(k=>typeof k==="string"&&inside(...cellOf(k))))];
   // #384: reconcile reserved/onboard ledgers BEFORE offline catch-up so a reload
   // can never count the same units twice; cap the fleet without losing freight.
@@ -351,18 +394,23 @@ export function connectedToRoad(g,b){return !!nearestRoad(g,b.x,b.z);}
 function deliveryCandidates(g){
  const bank=g.buildings.find(b=>b.type==="depot"&&b.remaining<=0);
  if(!bank)return [];
+ // #558: prune expired cooldowns so the registry stays bounded by LIVE pairs.
+ if(g.dispatchCooldowns&&typeof g.dispatchCooldowns==="object")
+  for(const [k,until] of Object.entries(g.dispatchCooldowns))
+   if(!(Number.isFinite(until)&&until>g.elapsed))delete g.dispatchCooldowns[k];
+ const cooled=(sourceId,resource)=>cooldownUntil(g,sourceId,resource)>g.elapsed;
  const candidates=[];
  for(const b of g.buildings){
   if(b.remaining>0||b.id===bank.id)continue;
   const def=BLUEPRINTS[b.type];if(!def)continue;
   for(const [id,amount] of Object.entries(b.inventory||{})){
-   if(amount>=3 && !g.vehicles.some(v=>v.job?.sourceId===b.id&&v.job?.resource===id)){
+   if(amount>=3 && !cooled(b.id,id) && !g.vehicles.some(v=>v.job?.sourceId===b.id&&v.job?.resource===id)){
     candidates.push({source:b,dest:bank,resource:id,amount:Math.min(15,Math.floor(amount)),priority:1});
    }
   }
   for(const [id,n] of Object.entries(def.inputs)){
    const have=stock(b.inventory,id);
-   if(have<n*2 && stock(g.bank,id)>=n*2 &&
+   if(have<n*2 && stock(g.bank,id)>=n*2 && !cooled(bank.id,id) &&
       !g.vehicles.some(v=>v.job?.destId===b.id&&v.job?.resource===id)){
     candidates.push({source:bank,dest:b,resource:id,amount:Math.min(stock(g.bank,id),n*3),priority:3});
    }
@@ -429,12 +477,22 @@ function returnFreight(g,v,reason){
  return {ok:true,resource:load.resource,amount:load.amount};
 }
 // Player command: cancel a truck's freight job. Reserved or onboard units go
-// back to the source exactly once; a second cancel is a no-op (IDLE).
+// back to the source exactly once; a second cancel is a no-op (IDLE). A
+// successful cancel ALSO arms the #558 dispatch cooldown for the cancelled
+// source+resource pair, so the dispatcher cannot immediately re-reserve the
+// very cargo the player just returned — the cancel->dismantle window is now
+// genuinely winnable. Automatic returns (route blockage, reload repair, fleet
+// cap) do NOT arm it: only the deliberate player command suppresses dispatch.
 export function cancelFreight(g,vehicleId){
  const v=g.vehicles.find(v=>v.id===vehicleId);
  if(!v)return {ok:false,code:"MISSING",reason:"No truck selected"};
  if(!v.job&&!v.cargo)return {ok:false,code:"IDLE",reason:"Truck has no freight to cancel"};
+ const sourceId=v.job?.sourceId??null;
  const r=returnFreight(g,v,"CANCELLED");
+ if(r.ok&&sourceId!==null){
+  if(!g.dispatchCooldowns||typeof g.dispatchCooldowns!=="object"||Array.isArray(g.dispatchCooldowns))g.dispatchCooldowns={};
+  g.dispatchCooldowns[cooldownKey(sourceId,r.resource)]=g.elapsed+DISPATCH_COOLDOWN_SECONDS;
+ }
  return r.ok?{ok:true,code:"OK",resource:r.resource,amount:r.amount}:r;
 }
 // Save/reload reconciliation (#384): a v2 save must never count the same units

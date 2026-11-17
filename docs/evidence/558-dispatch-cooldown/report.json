@@ -1,0 +1,1098 @@
+{
+  "version": 1,
+  "issue": 558,
+  "task": "cancel->dismantle window winnable via per-source dispatch cooldown (no decoy seeds)",
+  "build": "production-preview",
+  "source_sha": "2cf35e6b55d00a479d335349d1c3e274acfa35d2",
+  "started": "2026-11-17T17:04:17.087Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "screenshots": [
+        "desktop-motion-a.png",
+        "desktop-motion-b.png",
+        "desktop-fleet-before-cancel.png",
+        "desktop-after-cancel-fleet.png",
+        "desktop-dismantle-dialog.png",
+        "desktop-after-dismantle.png"
+      ],
+      "proof": {
+        "seed": {
+          "site": {
+            "x": 10,
+            "z": 10
+          },
+          "speeds": [
+            {
+              "id": 1,
+              "speed": 2.25
+            },
+            {
+              "id": 2,
+              "speed": 2.6
+            },
+            {
+              "id": 3,
+              "speed": 2
+            }
+          ],
+          "starters": [
+            {
+              "id": 1,
+              "type": "salvager"
+            },
+            {
+              "id": 2,
+              "type": "depot"
+            },
+            {
+              "id": 3,
+              "type": "generator"
+            },
+            {
+              "id": 4,
+              "type": "furnace"
+            },
+            {
+              "id": 5,
+              "type": "crane"
+            },
+            {
+              "id": 6,
+              "type": "market"
+            }
+          ],
+          "buildingId": 10,
+          "bankId": 2
+        },
+        "job": {
+          "truckId": 1,
+          "resource": "iron",
+          "amount": 15,
+          "phase": "toDest",
+          "sourceId": 2,
+          "destId": 10,
+          "motion": [
+            {
+              "id": 1,
+              "x": 11,
+              "z": 8.774925,
+              "phase": "toDest"
+            },
+            {
+              "id": 1,
+              "x": 11,
+              "z": 9.989925000000001,
+              "phase": "toDest"
+            },
+            {
+              "id": 1,
+              "x": 11,
+              "z": 9.40015,
+              "phase": "toSource"
+            }
+          ]
+        },
+        "cancels": [
+          {
+            "round": 0,
+            "probe": {
+              "id": 3,
+              "ok": true,
+              "code": "OK",
+              "amount": 15,
+              "resource": "iron",
+              "sourceId": 2,
+              "phase": "toDest",
+              "bagBefore": 37,
+              "bagAfter": 52,
+              "before": {
+                "reserved": 19,
+                "onboard": 15,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              },
+              "after": {
+                "reserved": 19,
+                "onboard": 0,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              }
+            }
+          },
+          {
+            "round": 1,
+            "probe": {
+              "id": 3,
+              "ok": true,
+              "code": "OK",
+              "amount": 6,
+              "resource": "fuel",
+              "sourceId": 2,
+              "phase": "toSource",
+              "bagBefore": 99,
+              "bagAfter": 105,
+              "before": {
+                "reserved": 25,
+                "onboard": 0,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              },
+              "after": {
+                "reserved": 19,
+                "onboard": 0,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              }
+            }
+          }
+        ],
+        "cooldownSuppression": {
+          "stamps": 6,
+          "windowSeconds": 15,
+          "cancelledPairs": [
+            "2:iron",
+            "2:fuel"
+          ]
+        },
+        "preReloadSave": {
+          "has": true,
+          "elapsed": 19.145900000000008,
+          "dispatchCooldowns": {
+            "2:iron": 32.24960000000001,
+            "2:fuel": 32.92960000000001
+          }
+        },
+        "reload": {
+          "persistedCooldowns": {
+            "2:iron": {
+              "until": 32.24960000000001,
+              "elapsed": 20.87540000000001
+            },
+            "2:fuel": {
+              "until": 32.92960000000001,
+              "elapsed": 20.87540000000001
+            }
+          },
+          "stamps": 5
+        },
+        "selection": {
+          "attempts": [
+            {
+              "h": 1.2,
+              "px": 720,
+              "py": 382,
+              "top": "CANVAS.world-canvas",
+              "ok": true
+            }
+          ],
+          "px": 720,
+          "py": 382
+        },
+        "dialog": {
+          "rows": [
+            {
+              "name": "Credits",
+              "source": "40% recovery",
+              "amount": 144
+            },
+            {
+              "name": "Ferrous ore",
+              "source": "40% recovery",
+              "amount": 9
+            },
+            {
+              "name": "Scrap",
+              "source": "40% recovery",
+              "amount": 20
+            },
+            {
+              "name": "Aggregate",
+              "source": "40% recovery",
+              "amount": 8
+            },
+            {
+              "name": "Steel",
+              "source": "cargo return",
+              "amount": 12
+            }
+          ],
+          "p1Bag": {
+            "iron": 0,
+            "fuel": 0,
+            "steel": 12
+          },
+          "p2Bag": {
+            "iron": 0,
+            "fuel": 0,
+            "steel": 12
+          }
+        },
+        "dismantle": {
+          "toast": "Machine dismantled — +144 CR, +9 FE, +20 SC, +8 AG, +12 ST returned to depot",
+          "refund": {
+            "credits": 144,
+            "iron": 9,
+            "scrap": 20,
+            "stone": 8,
+            "steel": 12
+          },
+          "bankBefore": {
+            "credits": 1440,
+            "scrap": 200,
+            "iron": 52,
+            "copper": 49,
+            "stone": 200,
+            "fuel": 105,
+            "water": 90,
+            "steel": 20,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 15,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          },
+          "bankAfter": {
+            "credits": 1584,
+            "scrap": 220,
+            "iron": 67,
+            "copper": 49,
+            "stone": 208,
+            "fuel": 105,
+            "water": 90,
+            "steel": 32,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 15,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          },
+          "bankDelta": {
+            "credits": 144,
+            "scrap": 20,
+            "iron": 15,
+            "copper": 0,
+            "stone": 8,
+            "fuel": 0,
+            "water": 0,
+            "steel": 12,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 0,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          },
+          "totalsDelta": {
+            "credits": 144,
+            "scrap": 20,
+            "iron": 9,
+            "copper": 0,
+            "stone": 8,
+            "fuel": 0,
+            "water": 0,
+            "steel": 0,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 0,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          },
+          "bagBefore": {
+            "iron": 0,
+            "fuel": 0,
+            "steel": 12
+          },
+          "buildingsBefore": 7,
+          "buildingsAfter": 6,
+          "haulDelta": {
+            "credits": 0,
+            "scrap": 0,
+            "iron": 6,
+            "copper": 0,
+            "stone": 0,
+            "fuel": 0,
+            "water": 0,
+            "steel": 0,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 0,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          },
+          "netProduction": {
+            "credits": 0,
+            "scrap": 0,
+            "iron": 0,
+            "copper": 0,
+            "stone": 0,
+            "fuel": 0,
+            "water": 0,
+            "steel": 0,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 0,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          },
+          "beforeVehicles": [
+            {
+              "id": 1,
+              "x": 7.187050000000003,
+              "z": 8,
+              "speed": 2.25,
+              "job": {
+                "phase": "toDest",
+                "amount": 15,
+                "resource": "scrap",
+                "segment": 0,
+                "progress": 0.18705000000000277,
+                "routeLen": 7,
+                "toSourceLen": 7,
+                "toDestLen": 7,
+                "sourceId": 1,
+                "destId": 2
+              },
+              "cargo": {
+                "amount": 15,
+                "resource": "scrap"
+              }
+            },
+            {
+              "id": 2,
+              "x": 11,
+              "z": 8.695160000000003,
+              "speed": 2.6,
+              "job": {
+                "phase": "toSource",
+                "amount": 5,
+                "resource": "iron",
+                "segment": 2,
+                "progress": 0.6951600000000034,
+                "routeLen": 12,
+                "toSourceLen": 12,
+                "toDestLen": 12,
+                "sourceId": 4,
+                "destId": 2
+              },
+              "cargo": null
+            },
+            {
+              "id": 3,
+              "x": 12.851400000000002,
+              "z": 8,
+              "speed": 2,
+              "job": {
+                "phase": "toDest",
+                "amount": 6,
+                "resource": "iron",
+                "segment": 5,
+                "progress": 0.8514000000000023,
+                "routeLen": 7,
+                "toSourceLen": 6,
+                "toDestLen": 7,
+                "sourceId": 1,
+                "destId": 2
+              },
+              "cargo": {
+                "amount": 6,
+                "resource": "iron"
+              }
+            }
+          ],
+          "afterVehicles": [
+            {
+              "id": 1,
+              "x": 8.139250000000002,
+              "z": 8,
+              "speed": 2.25,
+              "job": {
+                "phase": "toDest",
+                "amount": 15,
+                "resource": "scrap",
+                "segment": 1,
+                "progress": 0.13925000000000237,
+                "routeLen": 7,
+                "toSourceLen": 7,
+                "toDestLen": 7,
+                "sourceId": 1,
+                "destId": 2
+              },
+              "cargo": {
+                "amount": 15,
+                "resource": "scrap"
+              }
+            },
+            {
+              "id": 2,
+              "x": 11,
+              "z": 9.795480000000003,
+              "speed": 2.6,
+              "job": {
+                "phase": "toSource",
+                "amount": 5,
+                "resource": "iron",
+                "segment": 3,
+                "progress": 0.7954800000000031,
+                "routeLen": 12,
+                "toSourceLen": 12,
+                "toDestLen": 12,
+                "sourceId": 4,
+                "destId": 2
+              },
+              "cargo": null
+            },
+            {
+              "id": 3,
+              "x": 12.427,
+              "z": 8,
+              "speed": 2,
+              "job": {
+                "phase": "toSource",
+                "amount": 6,
+                "resource": "iron",
+                "segment": 0,
+                "progress": 0.5730000000000001,
+                "routeLen": 7,
+                "toSourceLen": 7,
+                "toDestLen": 7,
+                "sourceId": 1,
+                "destId": 2
+              },
+              "cargo": null
+            }
+          ]
+        },
+        "probeWaitMs": {
+          "count": 39,
+          "max": 343,
+          "avg": 290
+        }
+      },
+      "status": "PASS_NUMERIC_ONLY",
+      "errors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "screenshots": [
+        "phone-motion-a.png",
+        "phone-motion-b.png",
+        "phone-fleet-before-cancel.png",
+        "phone-after-cancel-fleet.png",
+        "phone-dismantle-dialog.png",
+        "phone-after-dismantle.png"
+      ],
+      "proof": {
+        "seed": {
+          "site": {
+            "x": 10,
+            "z": 10
+          },
+          "speeds": [
+            {
+              "id": 1,
+              "speed": 2.25
+            },
+            {
+              "id": 2,
+              "speed": 2.6
+            },
+            {
+              "id": 3,
+              "speed": 2
+            }
+          ],
+          "starters": [
+            {
+              "id": 1,
+              "type": "salvager"
+            },
+            {
+              "id": 2,
+              "type": "depot"
+            },
+            {
+              "id": 3,
+              "type": "generator"
+            },
+            {
+              "id": 4,
+              "type": "furnace"
+            },
+            {
+              "id": 5,
+              "type": "crane"
+            },
+            {
+              "id": 6,
+              "type": "market"
+            }
+          ],
+          "buildingId": 10,
+          "bankId": 2
+        },
+        "job": {
+          "truckId": 1,
+          "resource": "iron",
+          "amount": 15,
+          "phase": "toDest",
+          "sourceId": 2,
+          "destId": 10,
+          "motion": [
+            {
+              "id": 1,
+              "x": 11.117875,
+              "z": 8,
+              "phase": "toDest"
+            },
+            {
+              "id": 1,
+              "x": 11,
+              "z": 8.992275000000001,
+              "phase": "toDest"
+            },
+            {
+              "id": 1,
+              "x": 11,
+              "z": 9.749625000000002,
+              "phase": "toDest"
+            }
+          ]
+        },
+        "cancels": [
+          {
+            "round": 0,
+            "probe": {
+              "id": 3,
+              "ok": true,
+              "code": "OK",
+              "amount": 15,
+              "resource": "iron",
+              "sourceId": 2,
+              "phase": "toDest",
+              "bagBefore": 37,
+              "bagAfter": 52,
+              "before": {
+                "reserved": 19,
+                "onboard": 15,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              },
+              "after": {
+                "reserved": 19,
+                "onboard": 0,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              }
+            }
+          },
+          {
+            "round": 1,
+            "probe": {
+              "id": 3,
+              "ok": true,
+              "code": "OK",
+              "amount": 6,
+              "resource": "fuel",
+              "sourceId": 2,
+              "phase": "toSource",
+              "bagBefore": 99,
+              "bagAfter": 105,
+              "before": {
+                "reserved": 25,
+                "onboard": 0,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              },
+              "after": {
+                "reserved": 19,
+                "onboard": 0,
+                "totals": {
+                  "credits": 1440,
+                  "scrap": 206,
+                  "iron": 73,
+                  "copper": 49,
+                  "stone": 200,
+                  "fuel": 111,
+                  "water": 90,
+                  "steel": 32,
+                  "data": 15
+                }
+              }
+            }
+          }
+        ],
+        "cooldownSuppression": {
+          "stamps": 6,
+          "windowSeconds": 15,
+          "cancelledPairs": [
+            "2:iron",
+            "2:fuel"
+          ]
+        },
+        "preReloadSave": {
+          "has": true,
+          "elapsed": 19.09669999999999,
+          "dispatchCooldowns": {
+            "2:iron": 32.1798,
+            "2:fuel": 32.8664
+          }
+        },
+        "reload": {
+          "persistedCooldowns": {
+            "2:iron": {
+              "until": 32.1798,
+              "elapsed": 20.083199999999984
+            },
+            "2:fuel": {
+              "until": 32.8664,
+              "elapsed": 20.083199999999984
+            }
+          },
+          "stamps": 5
+        },
+        "selection": {
+          "attempts": [
+            {
+              "h": 1.2,
+              "px": 195,
+              "py": 366,
+              "top": "CANVAS.world-canvas",
+              "ok": true
+            }
+          ],
+          "px": 195,
+          "py": 366
+        },
+        "dialog": {
+          "rows": [
+            {
+              "name": "Credits",
+              "source": "40% recovery",
+              "amount": 144
+            },
+            {
+              "name": "Ferrous ore",
+              "source": "40% recovery",
+              "amount": 9
+            },
+            {
+              "name": "Scrap",
+              "source": "40% recovery",
+              "amount": 20
+            },
+            {
+              "name": "Aggregate",
+              "source": "40% recovery",
+              "amount": 8
+            },
+            {
+              "name": "Steel",
+              "source": "cargo return",
+              "amount": 12
+            }
+          ],
+          "p1Bag": {
+            "iron": 0,
+            "fuel": 0,
+            "steel": 12
+          },
+          "p2Bag": {
+            "iron": 0,
+            "fuel": 0,
+            "steel": 12
+          }
+        },
+        "dismantle": {
+          "toast": "Machine dismantled — +144 CR, +9 FE, +20 SC, +8 AG, +12 ST returned to depot",
+          "refund": {
+            "credits": 144,
+            "iron": 9,
+            "scrap": 20,
+            "stone": 8,
+            "steel": 12
+          },
+          "bankBefore": {
+            "credits": 1440,
+            "scrap": 200,
+            "iron": 52,
+            "copper": 49,
+            "stone": 200,
+            "fuel": 105,
+            "water": 90,
+            "steel": 20,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 15,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          },
+          "bankAfter": {
+            "credits": 1584,
+            "scrap": 220,
+            "iron": 61,
+            "copper": 49,
+            "stone": 208,
+            "fuel": 105,
+            "water": 90,
+            "steel": 32,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 15,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          },
+          "bankDelta": {
+            "credits": 144,
+            "scrap": 20,
+            "iron": 9,
+            "copper": 0,
+            "stone": 8,
+            "fuel": 0,
+            "water": 0,
+            "steel": 12,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 0,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          },
+          "totalsDelta": {
+            "credits": 144,
+            "scrap": 20,
+            "iron": 9,
+            "copper": 0,
+            "stone": 8,
+            "fuel": 0,
+            "water": 0,
+            "steel": 0,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 0,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          },
+          "bagBefore": {
+            "iron": 0,
+            "fuel": 0,
+            "steel": 12
+          },
+          "buildingsBefore": 7,
+          "buildingsAfter": 6,
+          "haulDelta": {
+            "credits": 0,
+            "scrap": 0,
+            "iron": 0,
+            "copper": 0,
+            "stone": 0,
+            "fuel": 0,
+            "water": 0,
+            "steel": 0,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 0,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          },
+          "netProduction": {
+            "credits": 0,
+            "scrap": 0,
+            "iron": 0,
+            "copper": 0,
+            "stone": 0,
+            "fuel": 0,
+            "water": 0,
+            "steel": 0,
+            "alloy": 0,
+            "gears": 0,
+            "circuits": 0,
+            "data": 0,
+            "relics": 0,
+            "influence": 0,
+            "shards": 0,
+            "charters": 0,
+            "renown": 0
+          },
+          "beforeVehicles": [
+            {
+              "id": 1,
+              "x": 8.200299999999999,
+              "z": 8,
+              "speed": 2.25,
+              "job": {
+                "phase": "toSource",
+                "amount": 15,
+                "resource": "scrap",
+                "segment": 4,
+                "progress": 0.7997000000000012,
+                "routeLen": 7,
+                "toSourceLen": 7,
+                "toDestLen": 7,
+                "sourceId": 1,
+                "destId": 2
+              },
+              "cargo": null
+            },
+            {
+              "id": 2,
+              "x": 11.84742,
+              "z": 8,
+              "speed": 2.6,
+              "job": {
+                "phase": "toSource",
+                "amount": 5,
+                "resource": "iron",
+                "segment": 1,
+                "progress": 0.1525800000000005,
+                "routeLen": 12,
+                "toSourceLen": 12,
+                "toDestLen": 12,
+                "sourceId": 4,
+                "destId": 2
+              },
+              "cargo": null
+            },
+            {
+              "id": 3,
+              "x": 11.820199999999982,
+              "z": 8,
+              "speed": 2,
+              "job": {
+                "phase": "toDest",
+                "amount": 6,
+                "resource": "iron",
+                "segment": 4,
+                "progress": 0.8201999999999814,
+                "routeLen": 7,
+                "toSourceLen": 6,
+                "toDestLen": 7,
+                "sourceId": 1,
+                "destId": 2
+              },
+              "cargo": {
+                "amount": 6,
+                "resource": "iron"
+              }
+            }
+          ],
+          "afterVehicles": [
+            {
+              "id": 1,
+              "x": 7.134924999999999,
+              "z": 8,
+              "speed": 2.25,
+              "job": {
+                "phase": "toSource",
+                "amount": 15,
+                "resource": "scrap",
+                "segment": 5,
+                "progress": 0.8650750000000011,
+                "routeLen": 7,
+                "toSourceLen": 7,
+                "toDestLen": 7,
+                "sourceId": 1,
+                "destId": 2
+              },
+              "cargo": null
+            },
+            {
+              "id": 2,
+              "x": 11,
+              "z": 8.38368,
+              "speed": 2.6,
+              "job": {
+                "phase": "toSource",
+                "amount": 5,
+                "resource": "iron",
+                "segment": 2,
+                "progress": 0.38368000000000035,
+                "routeLen": 12,
+                "toSourceLen": 12,
+                "toDestLen": 12,
+                "sourceId": 4,
+                "destId": 2
+              },
+              "cargo": null
+            },
+            {
+              "id": 3,
+              "x": 12.767199999999981,
+              "z": 8,
+              "speed": 2,
+              "job": {
+                "phase": "toDest",
+                "amount": 6,
+                "resource": "iron",
+                "segment": 5,
+                "progress": 0.7671999999999813,
+                "routeLen": 7,
+                "toSourceLen": 6,
+                "toDestLen": 7,
+                "sourceId": 1,
+                "destId": 2
+              },
+              "cargo": {
+                "amount": 6,
+                "resource": "iron"
+              }
+            }
+          ]
+        },
+        "probeWaitMs": {
+          "count": 42,
+          "max": 411,
+          "avg": 276
+        }
+      },
+      "status": "PASS_NUMERIC_ONLY",
+      "errors": [],
+      "failedRequests": []
+    }
+  ],
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "raceControl": {
+    "method": "in-node: normal createGame + public buildAt furnace @(10,10) + advanceGame(8); loop 600x0.5s, cancel the first live job with destId===playerFurnace, advance 0.5s, check whether the SAME source+resource pair re-reserves onto the player furnace",
+    "base_6ebb7ff": {
+      "cancels": 513,
+      "samePairReReserveToPlayer": 495
+    },
+    "fix": {
+      "cancels": 32,
+      "samePairReReserveToPlayer": 0
+    },
+    "note": "fix also observed 16 pre-existing in-flight depot:iron jobs to the STARTER furnace (cooldown gates NEW dispatch, never returns in-flight freight) and 15 other-resource (fuel) jobs to the player furnace, which the capture cancels pair-by-pair"
+  },
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated 390x844 dpr2, not a physical device; no physical display",
+    "Numeric proofs do not certify visual fidelity — sponsor screenshot+motion review required at G1 (#276)",
+    "Local production preview only — the live hosted receipt is produced at release by the release engineer; this is NOT a release",
+    "NO DECOY SEEDS: normal createGame yard, all starters/generator intact, all three trucks at normal speed, no hand-stocked inventory. The single player furnace is built through the public buildAt API (normal cost deducted) at a legal road-adjacent site near yard center and assembled with 8s of normal simulation; live production and freight run throughout",
+    "Captured race variant is input-supply (depot->player furnace): the same #558 next-tick same-pair re-reservation, measured 495/513 on clean base vs 0/32 with the fix. The output-haul variant is proven deterministically in tests/dispatchCooldown.test.mjs c1-c4; a real-UI OUTPUT-side capture is blocked by a SEPARATE pre-existing dispatch-starvation defect (stable building-order sort always prefers starter output candidates; 0 player output jobs in 120s on BOTH base and fix) — filed as a follow-up with evidence on #567, NOT fixed here",
+    "Because the yard stays live, exact bank-delta assertions are made only for credits and stone (no other flow produces them). Grand-totals deltas minus the durable refund plus the cargo-return transfer (net creation) are bounded by the strict live-production envelope (at most one salvager cycle and one cycle per furnace inside the ~0.5s probe straddle) — hauls and the inventory->bank cargo return cancel out of totals. Bank deltas additionally satisfy the exact four-ledger manifest identity (bank + inventories + reserved + onboard === totals at both stamps) and a haul-term envelope: the bank moves by whole truck hauls (<=15 units accumulated over many cycles), so the bank delta minus the exact toast refund is bounded by cargo already headed to the depot in the before stamp plus one haul cap per truck. The toast carries the sim's exact transaction refund (including 100% cargo return) and is cross-checked against the straddling probes",
+    "Reload durability is proven here through the app's real pagehide persist + conditional seed (no re-seed over the live save) and deterministically in tests/dispatchCooldown.test.mjs (persist/readGame round-trip, hostile-expiry clamp, expiry boundary)",
+    "The 15s sim-time window, pair granularity, output+input coverage and exactly-once conservation under suppression are proven in tests/dispatchCooldown.test.mjs (7 tests); this capture proves the window is winnable through the real UI at normal fleet speed"
+  ],
+  "finished": "2026-11-17T17:04:56.181Z"
+}
