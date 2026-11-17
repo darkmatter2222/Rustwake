@@ -1,0 +1,50 @@
+{
+ "purpose": "Prove the new UX-06/#548 tests are load-bearing: they FAIL when the change is rolled back, and the tree restores byte-for-byte.",
+ "capture_sha": "ff53da030f34a585e723300bf6ef63e5060aa290",
+ "main_base": "b56fded0f0bbe6d038c353399d6f353419ceded4",
+ "performed_utc": "2026-11-17T14:26:50Z",
+ "rerun_note": "Re-run after the M2 rebase onto main b56fded0 (ART-03 #349/#553). main's App.jsx/styles.css/simulation.js are byte-identical between c5ad8dec and b56fded0, so outcomes match the M1 control at 0f310393.",
+ "controls": [
+  {
+   "rollback": "git show b56fded0f0bbe6d038c353399d6f353419ceded4:src/App.jsx > src/App.jsx (main's App.jsx, no alarm UI, old toast)",
+   "command": "node --test tests/alarmsWiring.test.mjs",
+   "result": {
+    "tests": 11,
+    "pass": 0,
+    "fail": 11
+   },
+   "expected": "all fail — main renders no alarm rail/detail/chips"
+  },
+  {
+   "rollback": "same main App.jsx (styles.css intentionally NOT rolled back — this control isolates App.jsx per the brief)",
+   "command": "node --test tests/noticeToast.test.mjs",
+   "result": {
+    "tests": 4,
+    "pass": 1,
+    "fail": 3
+   },
+   "note": "The single pass is the static styles.css pointer-events contract (styles.css still carries the fix). All three RUNTIME tests fail against main's App.jsx. Honest 1/4, not 0/4."
+  },
+  {
+   "rollback": "src/alarms.js removed from the tree",
+   "command": "node --test tests/alarms.test.mjs",
+   "result": {
+    "tests": 1,
+    "pass": 0,
+    "fail": 1
+   },
+   "expected": "module-load failure (ERR_MODULE_NOT_FOUND) — the 35-test read-model suite cannot run without src/alarms.js"
+  }
+ ],
+ "restoration": {
+  "method": "git show ff53da030f34a585e723300bf6ef63e5060aa290:src/App.jsx > src/App.jsx; src/alarms.js moved back into place",
+  "verify": "git diff ff53da030f34a585e723300bf6ef63e5060aa290 -- src scripts tests",
+  "diff_bytes": 0,
+  "post_restore_test": {
+   "command": "node --test tests/alarms.test.mjs",
+   "tests": 35,
+   "pass": 35,
+   "fail": 0
+  }
+ }
+}

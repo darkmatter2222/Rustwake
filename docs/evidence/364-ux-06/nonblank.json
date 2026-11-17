@@ -1,0 +1,128 @@
+[
+ {
+  "file": "desktop-after-close.png",
+  "w": 1440,
+  "h": 900,
+  "colorType": 2,
+  "distinctColours": 25630,
+  "lumMean": 102.86,
+  "lumSigma": 43.41
+ },
+ {
+  "file": "desktop-detail-open.png",
+  "w": 1440,
+  "h": 900,
+  "colorType": 2,
+  "distinctColours": 26143,
+  "lumMean": 106.3,
+  "lumSigma": 44.69
+ },
+ {
+  "file": "desktop-empty-nominal.png",
+  "w": 1440,
+  "h": 900,
+  "colorType": 2,
+  "distinctColours": 26438,
+  "lumMean": 105.58,
+  "lumSigma": 41.8
+ },
+ {
+  "file": "desktop-rail-only.png",
+  "w": 1440,
+  "h": 900,
+  "colorType": 2,
+  "distinctColours": 26455,
+  "lumMean": 108.89,
+  "lumSigma": 44.02
+ },
+ {
+  "file": "desktop-remedy-applied.png",
+  "w": 1440,
+  "h": 900,
+  "colorType": 2,
+  "distinctColours": 27826,
+  "lumMean": 101.31,
+  "lumSigma": 46.18
+ },
+ {
+  "file": "desktop-toast-straddle.png",
+  "w": 1440,
+  "h": 900,
+  "colorType": 2,
+  "distinctColours": 24290,
+  "lumMean": 100.71,
+  "lumSigma": 42.66
+ },
+ {
+  "file": "phone-after-close.png",
+  "w": 780,
+  "h": 1688,
+  "colorType": 2,
+  "distinctColours": 16680,
+  "lumMean": 96.69,
+  "lumSigma": 51.6
+ },
+ {
+  "file": "phone-alarm-cleared.png",
+  "w": 780,
+  "h": 1688,
+  "colorType": 2,
+  "distinctColours": 25960,
+  "lumMean": 111.2,
+  "lumSigma": 48.87
+ },
+ {
+  "file": "phone-alarm-processing.png",
+  "w": 780,
+  "h": 1688,
+  "colorType": 2,
+  "distinctColours": 25993,
+  "lumMean": 110.85,
+  "lumSigma": 48.72
+ },
+ {
+  "file": "phone-detail-open.png",
+  "w": 780,
+  "h": 1688,
+  "colorType": 2,
+  "distinctColours": 18491,
+  "lumMean": 86.11,
+  "lumSigma": 51.17
+ },
+ {
+  "file": "phone-empty-nominal.png",
+  "w": 780,
+  "h": 1688,
+  "colorType": 2,
+  "distinctColours": 24217,
+  "lumMean": 109.56,
+  "lumSigma": 48.46
+ },
+ {
+  "file": "phone-rail-only.png",
+  "w": 780,
+  "h": 1688,
+  "colorType": 2,
+  "distinctColours": 23448,
+  "lumMean": 116.24,
+  "lumSigma": 49.38
+ },
+ {
+  "file": "phone-remedy-applied.png",
+  "w": 780,
+  "h": 1688,
+  "colorType": 2,
+  "distinctColours": 17059,
+  "lumMean": 69.44,
+  "lumSigma": 43.55
+ },
+ {
+  "file": "phone-toast-straddle.png",
+  "w": 780,
+  "h": 1688,
+  "colorType": 2,
+  "distinctColours": 14088,
+  "lumMean": 89.76,
+  "lumSigma": 48.7
+ }
+]
