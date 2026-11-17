@@ -260,34 +260,27 @@ test("delivery-alert.yml text contract: isolation, runner, timeout, permissions,
   assert.match(yml, /dry_run:[\s\S]*?default: true/, "dispatch dry_run defaults to true");
   assert.ok(yml.includes("GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}"));
   assert.ok(yml.includes("node scripts/delivery-alert.mjs"), "logic lives in the testable script");
-  assert.match(yml, /checkout@v4[\s\S]*?ref: main/, "checkout pinned to main so a pre-merge head_sha payload still finds the script");
+  assert.match(yml, /checkout@[0-9a-f]{40} # v4[\s\S]*?ref: main/, "checkout SHA-pinned (OPS-12 #336) and pinned to main so a pre-merge head_sha payload still finds the script");
 });
 
-// --- 7. Zero-diff guard: existing workflows byte-identical to base main -------
-test("delivery.yml and ci.yml are byte-identical to base main 680c0156", () => {
-  // sha256 of the base-main blob content (git show <base>:<path>, LF as stored).
-  const baseHashes = {
-    ".github/workflows/delivery.yml": "a5f400bcfbd69fec918cbe54bf3d964353ba441c9ba666ce282a3b8526d5a5ca",
-    ".github/workflows/ci.yml": "5a042029e48816436c081c48e2610b67115a0b677477717a51dd8eaf24b8b126",
+// --- 7. Drift guard: workflows match the OPS-12 hardened baseline -----------
+// #549 froze delivery.yml/ci.yml byte-identical to base main 680c0156 (sha256
+// a5f400bc…/5a042029…). OPS-12 (#336) DELIBERATELY supersedes that freeze:
+// SHA-pinned actions + explicit least-privilege permissions, gate semantics
+// unchanged (proven by tests/workflowSupplyChain.test.mjs + dist byte-identity).
+// The guard keeps its substance — any UNAUDITED drift still fails CI — but is
+// re-baselined to the hardened content. The old git-diff-vs-680c0156 proof is
+// retired with the freeze it served; the sha256 pin binds content exactly.
+test("delivery.yml and ci.yml match the OPS-12 (#336) hardened baseline", () => {
+  // sha256 of the hardened LF-normalized content at rw/336-ops-12-supply-chain.
+  const hardenedHashes = {
+    ".github/workflows/delivery.yml": "675320f94e6085cd997b3179f3e7106c1ea56e653cacade952831211dbe964da",
+    ".github/workflows/ci.yml": "4212ae963e3c92645d216df0ad1bba0f4518fbdb70013647419a0a403550b55b",
   };
-  for (const [file, expected] of Object.entries(baseHashes)) {
+  for (const [file, expected] of Object.entries(hardenedHashes)) {
     // Normalize CRLF phantoms from autocrlf; git diff compares normalized bytes.
     const normalized = read(file).replace(/\r\n/g, "\n");
-    assert.equal(sha256(normalized), expected, `${file} differs from base main`);
-  }
-  // When the base object is reachable (full clone), also prove it via git diff.
-  let baseReachable = true;
-  try {
-    execFileSync("git", ["cat-file", "-e", `${BASE_MAIN}^{commit}`], { cwd: ROOT, stdio: "pipe" });
-  } catch {
-    baseReachable = false; // shallow CI checkout; the hash proof above still binds.
-  }
-  if (baseReachable) {
-    const diff = execFileSync(
-      "git", ["diff", BASE_MAIN, "HEAD", "--", ".github/workflows/delivery.yml", ".github/workflows/ci.yml"],
-      { cwd: ROOT, encoding: "utf8" }
-    );
-    assert.equal(diff, "", "git diff base..HEAD must be empty for both existing workflows");
+    assert.equal(sha256(normalized), expected, `${file} differs from the audited hardened baseline`);
   }
 });
 
