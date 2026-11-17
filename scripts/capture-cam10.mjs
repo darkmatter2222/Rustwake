@@ -6,9 +6,13 @@
 // What is measured (definitions in scripts/cam10-stats.mjs):
 //  - input-to-photon PROXY: synthetic gesture event.timeStamp -> first rAF
 //    callback that observes the camera dataset stamp changed by that input,
-//    paired by probe sequence number (never evaluation order). Drag and zoom
-//    are reported SEPARATELY (desktop: mouse drag + wheel; phone: touch drag
-//    + two-finger pinch via CDP Input.dispatchTouchEvent).
+//    paired by probe sequence number (never evaluation order): the first
+//    command of the gesture (smallest seq > seqBefore) of the expected kind.
+//    Single-command gestures (drag, wheel) are exactly seqBefore+1; a two-finger
+//    pinch emits one transform command per moving finger (up to 2) and is paired
+//    to its first observed command. Drag and zoom are reported SEPARATELY
+//    (desktop: mouse drag + wheel; phone: touch drag + two-finger pinch via CDP
+//    Input.dispatchTouchEvent).
 //  - frame-time P95 (nearest-rank), mean, max, FPS, jank (>50ms) and dropped
 //    frames over the whole 60s window, from an in-page rAF monitor.
 //  - browser + GPU provenance: unmasked renderer/vendor, SwiftShader flag,
@@ -70,7 +74,7 @@ const report = {
   definitions: {
     frameBudgetMs: 1000 / 60, jankThresholdMs: 50,
     droppedFrames: "sum(max(0, round(delta/16.667)-1))",
-    inputToPhoton: "PROXY: synthetic event.timeStamp -> max(first rAF timestamp observing the seq-paired camera stamp change, probe appliedAt). The max() corrects mid-frame CDP injection (rAF timestamps are frame START; observed raw delta -0.4ms): the presenting frame cannot precede camera application. Headless SwiftShader has no physical display; this is event-to-next-rendered-frame, not a physical photon measurement.",
+    inputToPhoton: "PROXY: synthetic event.timeStamp -> max(first rAF timestamp observing the seq-paired camera stamp change, probe appliedAt). Seq pairing = first command of the gesture (smallest observed seq > seqBefore) of the expected kind; single-command gestures (drag, wheel) are exactly seqBefore+1, a two-finger pinch emits one transform command per moving finger (up to 2) and pairs to its first observed command. The max() corrects mid-frame CDP injection (rAF timestamps are frame START; observed raw delta -0.4ms): the presenting frame cannot precede camera application. Headless SwiftShader has no physical display; this is event-to-next-rendered-frame, not a physical photon measurement.",
     percentile: "nearest-rank ascending"
   },
   views: [], status: "UNKNOWN", errors: [],
@@ -250,7 +254,19 @@ try {
   };
 
   // One measured gesture, seq-paired. Waits on the EXACT asserted condition:
-  // a change frame with the expected seq AND kind AND a finite eventTime.
+  // a change frame of the expected kind whose probe seq is the FIRST command
+  // of this gesture (seq > seqBefore) with a finite eventTime. Single-command
+  // gestures (mouse drag, wheel, one-finger touch drag) emit exactly one seq,
+  // so this is seq == seqBefore+1. A two-finger pinch emits ONE transform
+  // command PER MOVING FINGER (up to 2): both fingers move here, so the probe
+  // advances by 2 and the rAF monitor — which samples at frame granularity —
+  // may only observe the LAST seq of the gesture (the intermediate seq applied
+  // within the same frame). Pairing to the smallest observed seq > seqBefore of
+  // the expected kind therefore measures this gesture's first rendered command
+  // without depending on browser touch-coalescing behaviour. Gestures are paced
+  // 2s apart and each is the sole source of its kind, so seq > seqBefore + kind
+  // uniquely identifies this gesture's change (causal seq pairing, never
+  // evaluation order). Latency uses the paired command's own eventTime/appliedAt.
   const gestureSample = async (view, kind, contact, dir) => {
     const {page, cdp} = view;
     // Re-verify the contact reaches the canvas at the instant of the gesture;
@@ -258,7 +274,7 @@ try {
     await verifyContact(view, contact);
     const {x: cx, y: cy} = contact.point;
     const seqBefore = await page.evaluate(() => (window.__RW_PROBES__.cam10.stats && window.__RW_PROBES__.cam10.stats.seq) || 0);
-    const expected = seqBefore + 1;
+    const expectedMin = seqBefore + 1;
     const probeKind = kind === "drag" ? "drag" : view.cdp ? "pinch" : "zoom";
     if (kind === "drag" && !view.cdp) {
       await page.mouse.move(cx, cy);
@@ -270,7 +286,9 @@ try {
     } else if (kind === "drag" && view.cdp) {
       await cdp.send("Input.dispatchTouchEvent", {type: "touchStart", touchPoints: [{x: cx, y: cy, id: 1}]});
       await cdp.send("Input.dispatchTouchEvent", {type: "touchMove", touchPoints: [{x: cx + 50 * dir, y: cy + 30 * dir, id: 1}]});
-    } else { // phone zoom = two-finger pinch; one finger moves -> ONE pinch command
+    } else { // phone zoom = two-finger pinch; BOTH fingers move -> up to 2 transform
+      // commands (one per moving finger). gestureSample pairs to the first
+      // observed seq > seqBefore of kind "pinch" (see pairing note above).
       const from = dir > 0 ? 40 : 70, to = dir > 0 ? 70 : 40; // spread 40->70 / pinch 70->40
       await cdp.send("Input.dispatchTouchEvent", {type: "touchStart", touchPoints: [{x: cx - from, y: cy, id: 1}, {x: cx + from, y: cy, id: 2}]});
       await cdp.send("Input.dispatchTouchEvent", {type: "touchMove", touchPoints: [{x: cx - to, y: cy, id: 1}, {x: cx + to, y: cy, id: 2}]});
@@ -278,8 +296,8 @@ try {
     try {
       await page.waitForFunction(([seq, k]) => {
         const m = window.__cam10Mon;
-        return m.changes.some(c => c.seq === seq && c.kind === k && c.eventTime != null && Number.isFinite(c.eventTime));
-      }, [expected, probeKind], {timeout: 15000});
+        return m.changes.some(c => c.seq >= seq && c.kind === k && c.eventTime != null && Number.isFinite(c.eventTime));
+      }, [expectedMin, probeKind], {timeout: 15000});
     } catch (waitErr) {
       // Timeout diagnostics: elementFromPoint FIRST (overlay thief), then the
       // aggregate delivery counters, monitor progress, probe state and pose.
@@ -299,10 +317,14 @@ try {
           visualViewport: window.visualViewport ? {scale: window.visualViewport.scale, offsetTop: window.visualViewport.offsetTop} : null
         };
       }, [cx, cy]).catch(e => ({diagError: String(e)}));
-      throw new Error(`${kind}: seq-paired change wait timed out (expected seq ${expected} kind ${probeKind}): ${String(waitErr).slice(0, 120)} | DIAGNOSTICS ${JSON.stringify(diag)}`);
+      throw new Error(`${kind}: seq-paired change wait timed out (expected seq >= ${expectedMin} kind ${probeKind}): ${String(waitErr).slice(0, 120)} | DIAGNOSTICS ${JSON.stringify(diag)}`);
     }
     const sample = await page.evaluate(([seq, k]) => {
-      const c = window.__cam10Mon.changes.find(c => c.seq === seq && c.kind === k);
+      // First command of THIS gesture: smallest observed seq > seqBefore of the
+      // expected kind (a two-finger pinch may emit 2; the monitor may only have
+      // observed the last). Single-command gestures yield exactly seqBefore+1.
+      const matches = window.__cam10Mon.changes.filter(c => c.seq >= seq && c.kind === k && c.eventTime != null && Number.isFinite(c.eventTime));
+      const c = matches.reduce((a, b) => (a == null || b.seq < a.seq ? b : a), null);
       const st = window.__RW_PROBES__.cam10.stats;
       // The rAF timestamp is the frame START; CDP-injected input can arrive
       // mid-frame before that frame's callbacks run (observed: -0.4ms). The
@@ -311,9 +333,9 @@ try {
       // This never shrinks the injected-stall margin (appliedAt >= event+delay).
       const photonT = Math.max(c.t, c.appliedAt);
       return {latencyMs: photonT - c.eventTime, frameStartDeltaMs: c.t - c.eventTime, handlerMs: st.last.handlerMs, seq: c.seq, kind: c.kind};
-    }, [expected, probeKind]);
+    }, [expectedMin, probeKind]);
     if (!(sample.latencyMs >= 0)) throw new Error(`${kind}: negative latency ${sample.latencyMs}`);
-    if (sample.seq !== expected || sample.kind !== probeKind) throw new Error(`${kind}: seq/kind mismatch ${JSON.stringify(sample)}`);
+    if (!(sample.seq >= expectedMin) || sample.kind !== probeKind) throw new Error(`${kind}: seq/kind mismatch (need seq >= ${expectedMin} kind ${probeKind}) ${JSON.stringify(sample)}`);
     if (kind === "drag" && !view.cdp) await page.mouse.up();
     else if (view.cdp) await cdp.send("Input.dispatchTouchEvent", {type: "touchEnd", touchPoints: []});
     return sample;
