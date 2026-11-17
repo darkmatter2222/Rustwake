@@ -249,3 +249,16 @@ button:focus-visible{outline:2px solid var(--amber);outline-offset:3px}
   .center-hint {bottom:95px;white-space:normal;text-align:center;max-width:calc(100vw - 40px)}
   .footline {background:#0c1c24b9}
 }
+
+
+/* Camera affordances: zoom in/out are core interactions, not hidden debug UI.
+   Minimum 44 CSS px touch surfaces at EVERY viewport; world drag remains direct. */
+.rail-controls button {
+  min-width:44px;
+  min-height:44px;
+  justify-content:center;
+}
+@media (max-width:770px) {
+  .rail-controls {flex-wrap:wrap;max-width:220px;gap:5px}
+  .rail-controls button {min-width:44px;min-height:44px;padding:8px}
+}

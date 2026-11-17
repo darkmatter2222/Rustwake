@@ -1,5 +1,7 @@
 import React,{useCallback,useEffect,useRef,useState} from "react";
 import {LivingWorld} from "./world.js";
+import {createCameraInput} from "./cameraInput.js";
+import {zoomAtPixel} from "./camera.js";
 import {RESOURCES,RESOURCE_BY_ID,BUILDINGS,BLUEPRINTS,RESEARCH,TIERS,CELL,WORLD_SIZE,amount} from "./content.js";
 import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt} from "./simulation.js";
 import "./styles.css";
@@ -109,7 +111,7 @@ export default function App(){
  const [showLegend,setShowLegend]=useState(false);
  const [gridVisible,setGridVisible]=useState(false);
  const camera=useRef({yaw:45,elevation:35.264,zoom:typeof window!=="undefined"&&window.innerWidth>=960?1.15:1,x:0,z:0});
- const input=useRef({pointers:new Map(),dragged:false,right:false,gesture:null});
+
  const modeRef=useRef({mode,buildId,roadStart});
  useEffect(()=>{modeRef.current={mode,buildId,roadStart};},[mode,buildId,roadStart]);
  const notify=useCallback((text)=>{setToast(text);},[]);
@@ -119,6 +121,16 @@ export default function App(){
  const onResearch=useCallback((id)=>{const r=researchAt(gameRef.current,id);notify(r.ok?"Research completed":r.reason);refresh();},[notify,refresh]);
  const onRemove=useCallback((id)=>{const r=removeBuilding(gameRef.current,id);notify(r.ok?"Machine dismantled":r.reason);if(r.ok)setSelectedId(null);refresh();},[notify,refresh]);
  const resetCam=useCallback(()=>{camera.current={yaw:45,elevation:35.264,zoom:window.innerWidth>=960?1.15:1,x:0,z:0};setToast("Camera reset to isometric overview");},[]);
+ const zoomControl=useCallback((factor)=>{
+  const world=worldRef.current,cv=world?.renderer.domElement;
+  document.body.dataset.lastZoomRequested=String(factor);
+  if(!world||!cv){document.body.dataset.lastZoomError="world-missing";return;}
+  const rect=cv.getBoundingClientRect(),size={width:rect.width,height:rect.height};
+  camera.current=zoomAtPixel(camera.current,camera.current.zoom*factor,
+    {x:size.width/2,y:size.height/2},size);
+  world.setView(camera.current);world.applyCamera();
+  document.body.dataset.lastZoomApplied=String(camera.current.zoom);
+ },[]);
  useEffect(()=>{
   if(!sceneHost.current)return;
   const world=new LivingWorld(sceneHost.current);worldRef.current=world;world.setView(camera.current);
@@ -135,73 +147,35 @@ export default function App(){
   raf=requestAnimationFrame(loop);
   const save=()=>persist(gameRef.current);
   window.addEventListener("pagehide",save);
-  const cv=world.renderer.domElement;
-  const cellAt=(e)=>world.screenToCell(e.clientX,e.clientY);
-  const onContext=(e)=>e.preventDefault();
-  const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
-  const rotate=(dx,dy)=>{camera.current.yaw=(camera.current.yaw-dx*.42+720)%360;camera.current.elevation=clamp(camera.current.elevation+dy*.23,20,80);};
-  const pan=(dx,dy)=>{
-   const c=camera.current,a=c.yaw*Math.PI/180;
-   const s=80/(c.zoom*Math.max(1,world.height));
-   c.x=clamp(c.x-s*(Math.cos(a)*dx-Math.sin(a)*dy),-EDGE_LIMIT,EDGE_LIMIT);
-   c.z=clamp(c.z-s*(-Math.sin(a)*dx-Math.cos(a)*dy),-EDGE_LIMIT,EDGE_LIMIT);
-  };
-  const onDown=(e)=>{
-   cv.setPointerCapture(e.pointerId);
-   input.current.pointers.set(e.pointerId,{x:e.clientX,y:e.clientY,downX:e.clientX,downY:e.clientY,button:e.button});
-   input.current.dragged=false;
-   if(input.current.pointers.size>=2)input.current.gesture=null;
-  };
-  const onMove=(e)=>{
-   const track=input.current.pointers.get(e.pointerId);
-   const c=cellAt(e);
-   if(c&&c.x>=0&&c.x<WORLD_SIZE&&c.z>=0&&c.z<WORLD_SIZE)setPreview(p=>p?.x===c.x&&p?.z===c.z?p:{x:c.x,z:c.z});
-   if(!track)return;
-   const dx=e.clientX-track.x,dy=e.clientY-track.y;
-   const moved=Math.hypot(e.clientX-track.downX,e.clientY-track.downY);
-   if(moved>7)input.current.dragged=true;
-   track.x=e.clientX;track.y=e.clientY;
-   const pointers=[...input.current.pointers.values()];
-   if(pointers.length===1){
-    if(e.buttons===2||track.button===2||e.shiftKey)rotate(dx,dy);
-    else pan(dx,dy);
-   }else if(pointers.length===2){
-    const [a,b]=pointers,dist=Math.hypot(a.x-b.x,a.y-b.y),angle=Math.atan2(b.y-a.y,b.x-a.x);
-    const center={x:(a.x+b.x)/2,y:(a.y+b.y)/2};
-    const old=input.current.gesture;
-    if(old){
-     camera.current.zoom=clamp(camera.current.zoom*dist/Math.max(old.dist,1),.42,3.4);
-     const angleDelta=((angle-old.angle+Math.PI*3)%(Math.PI*2)-Math.PI)*180/Math.PI;
-     camera.current.yaw=(camera.current.y+angleDelta+360)%360;
-     pan(center.x-old.center.x,center.y-old.center.y);
+  // The camera controller alone owns pointer/gesture events. React owns
+  // gameplay dispatch. A dragged/orbiting finger NEVER submits a transaction.
+  const controller=createCameraInput({
+   canvas:world.renderer.domElement,
+   world,cameraRef:camera,
+   onHover:c=>{
+    if(c&&c.x>=0&&c.x<WORLD_SIZE&&c.z>=0&&c.z<WORLD_SIZE)
+     setPreview(p=>p?.x===c.x&&p?.z===c.z?p:{x:c.x,z:c.z});
+   },
+   onTap:c=>{
+    if(!c||c.x<0||c.x>=WORLD_SIZE||c.z<0||c.z>=WORLD_SIZE)return;
+    const g=gameRef.current,tool=modeRef.current.mode;
+    if(tool==="build"){
+     const r=buildAt(g,modeRef.current.buildId,c.x,c.z);
+     notify(r.ok?"Construction underway — "+BLUEPRINTS[modeRef.current.buildId].name:r.reason);
+     if(r.ok){setSelectedId(r.building.id);setMode("inspect");}
+    }else if(tool==="road"){
+     const first=modeRef.current.roadStart;
+     if(!first){setRoadStart({x:c.x,z:c.z});notify("Now select the road destination");}
+     else {const r=roadLine(g,first,{x:c.x,z:c.z});notify(r.ok?r.cells+" road segments connected":r.reason);setRoadStart(null);}
+    }else{
+     const hit=g.buildings.find(b=>b.x===c.x&&b.z===c.z);
+     if(hit){setSelectedId(hit.id);setMode("inspect");notify(BLUEPRINTS[hit.type].name+" selected");}
+     else {setSelectedId(null);if(tool==="inspect")setMode("select");}
     }
-    input.current.gesture={dist,angle,center};input.current.dragged=true;
+    refresh();
    }
-  };
-  const onUp=(e)=>{
-   const pt=input.current.pointers.get(e.pointerId);
-   const multi=input.current.pointers.size>1;
-   input.current.pointers.delete(e.pointerId);input.current.gesture=null;
-   if(!pt||multi||input.current.dragged||pt.button===2||e.button===2)return;
-   const c=cellAt(e);if(!c||c.x<0||c.x>=WORLD_SIZE||c.z<0||c.z>=WORLD_SIZE)return;
-   const g=gameRef.current,tool=modeRef.current.mode;
-   if(tool==="build"){
-    const r=buildAt(g,modeRef.current.buildId,c.x,c.z);
-    notify(r.ok?"Construction underway — "+BLUEPRINTS[modeRef.current.buildId].name:r.reason);
-    if(r.ok){setSelectedId(r.building.id);setMode("inspect");}
-   }else if(tool==="road"){
-    const first=modeRef.current.roadStart;
-    if(!first){setRoadStart({x:c.x,z:c.z});notify("Now select the road destination");}
-    else {const r=roadLine(g,first,{x:c.x,z:c.z});notify(r.ok?r.cells+" road segments connected":r.reason);setRoadStart(null);}
-   }else {
-    const hit=g.buildings.find(b=>b.x===c.x&&b.z===c.z);
-    if(hit){setSelectedId(hit.id);setMode("inspect");notify(BLUEPRINTS[hit.type].name+" selected");}
-    else {setSelectedId(null);if(tool==="inspect")setMode("select");}
-   }
-   refresh();
-  };
-  const onCancel=(e)=>{input.current.pointers.delete(e.pointerId);input.current.dragged=true;input.current.gesture=null;};
-  const onWheel=(e)=>{e.preventDefault();camera.current.zoom=clamp(camera.current.zoom*Math.exp(-e.deltaY*.001),.42,3.4);};
+  });
+  const {rotate,keyboardPan}=controller;
   const onKey=(e)=>{
    if(["INPUT","TEXTAREA","SELECT"].includes(document.activeElement?.tagName))return;
    if(e.key==="q"||e.key==="Q")rotate(-24,0);
@@ -211,21 +185,14 @@ export default function App(){
    if(["1","2","3","4","5","6"].includes(e.key))choose(TOOLBAR[Number(e.key)-1].id);
    if(e.key==="g"||e.key==="G")setGridVisible(v=>!v);
    if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key)){
-    pan(e.key==="ArrowLeft"?-35:e.key==="ArrowRight"?35:0,e.key==="ArrowUp"?-35:e.key==="ArrowDown"?35:0);
+    e.preventDefault();
+    keyboardPan(e.key==="ArrowLeft"?-35:e.key==="ArrowRight"?35:0,e.key==="ArrowUp"?-35:e.key==="ArrowDown"?35:0);
    }
   };
-  cv.addEventListener("pointerdown",onDown);
-  cv.addEventListener("pointermove",onMove);
-  cv.addEventListener("pointerup",onUp);
-  cv.addEventListener("pointercancel",onCancel);
-  cv.addEventListener("wheel",onWheel,{passive:false});
-  cv.addEventListener("contextmenu",onContext);
   window.addEventListener("keydown",onKey);
   const observer=new ResizeObserver(()=>world.resize());observer.observe(sceneHost.current);
   return ()=>{alive=false;cancelAnimationFrame(raf);observer.disconnect();persist(gameRef.current);
-   cv.removeEventListener("pointerdown",onDown);cv.removeEventListener("pointermove",onMove);
-   cv.removeEventListener("pointerup",onUp);cv.removeEventListener("pointercancel",onCancel);
-   cv.removeEventListener("wheel",onWheel);cv.removeEventListener("contextmenu",onContext);
+   controller.dispose();
    window.removeEventListener("keydown",onKey);window.removeEventListener("pagehide",save);world.dispose();worldRef.current=null;
   };
  },[]);
@@ -256,9 +223,11 @@ export default function App(){
    <div className="rail-controls">
     <button onClick={resetCam} title="Fit isometric world (Home)">⌖ <span>Recenter</span></button>
     <button onClick={()=>{camera.current.yaw=(camera.current.yaw+45)%360}} title="Orbit camera right">⤾ <span>Orbit</span></button>
+    <button aria-label="Zoom in" onClick={()=>zoomControl(1.55)} title="Zoom in (up to 12×)">＋ <span>Zoom in</span></button>
+    <button aria-label="Zoom out" onClick={()=>zoomControl(1/1.55)} title="Zoom out (down to 0.20×)">− <span>Zoom out</span></button>
     <button onClick={()=>setShowLegend(v=>!v)} title="Controls and help">? <span>Controls</span></button>
    </div>
-   {showLegend&&<div className="controls-card"><b>Explore your world</b><p>Drag to pan · right-drag to orbit · wheel to zoom · Q/E rotate · Home reset. Mobile: one finger pans, pinch zooms, two fingers twist.</p><p>Select a building to inspect it. Construct machinery or lay roads from the tool dock.</p><button onClick={()=>setShowLegend(false)}>Close</button></div>}
+   {showLegend&&<div className="controls-card"><b>Explore your world</b><p>Drag to pan with cursor-locked grip · right-drag to orbit · wheel to zoom (0.20×–12×) · Q/E rotate · Home reset. Mobile: one finger pans, pinch zooms, two fingers twist.</p><p>Select a building to inspect it. Construct machinery or lay roads from the tool dock.</p><button onClick={()=>setShowLegend(false)}>Close</button></div>}
   </aside>
   <aside className="right-rail">
    <div className="vitals-card">

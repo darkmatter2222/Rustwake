@@ -1,6 +1,7 @@
 // G0/G1 production-preview visual smoke: one Chromium instance, sequential contexts.
 // This does not certify visual beauty or a physical phone; the sponsor still reviews screenshots.
 import {chromium} from "playwright-core";
+import {groundAtScreen} from "../src/camera.js";
 import {spawn} from "node:child_process";
 import {mkdir,writeFile} from "node:fs/promises";
 import {resolve} from "node:path";
@@ -44,7 +45,65 @@ try{
    };
   });
   const filename=v.name+"-world.png";await page.screenshot({path:resolve(OUT,filename),fullPage:false,animations:"disabled"});
-  report.views.push({name:v.name,viewport:v.viewport,...actual,pageErrors:errs,failedRequests:failed,screenshot:filename});
+  // Use the SAME browser instance after the initial visual reference capture.
+  // The first 3D screenshot remains the pristine landing scene. Camera checks
+  // are runtime measurements, not visual-fidelity approval.
+  const pose=()=>page.locator(".world-canvas").evaluate(c=>({
+    yaw:Number(c.dataset.cameraYaw),elevation:Number(c.dataset.cameraElevation),
+    zoom:Number(c.dataset.cameraZoom),x:Number(c.dataset.cameraX),z:Number(c.dataset.cameraZ)
+  }));
+  const bodyTrace=()=>page.evaluate(()=>({...document.body.dataset}));
+  // Bounded observation instead of a fixed sleep: wait for the canvas stamp
+  // (written synchronously by world.applyCamera) to prove the camera moved.
+  // A timeout still FAILS the capture honestly if zoom/pan truly never apply.
+  const waitForStamp=async(pred,arg,label)=>{
+   try{await page.waitForFunction(pred,arg,{timeout:8000,polling:50});}
+   catch{throw Error(label+" — stamp never updated within 8000ms: pose="+JSON.stringify(await pose())+", bodyTrace="+JSON.stringify(await bodyTrace())+", jsErrors="+errs.join(";"));}
+  };
+  const waitZoomAbove=(prev,label)=>waitForStamp(
+    p=>{const c=document.querySelector(".world-canvas");return !!c&&Number(c.dataset.cameraZoom)>p;},
+    prev,label);
+  let gripProof=null;
+  if(v.name==="desktop"){
+    const start={x:v.viewport.width*.53,y:v.viewport.height*.53};
+    const end={x:start.x+74,y:start.y+43};
+    const first=await pose(),firstWorld=groundAtScreen(first,start,v.viewport);
+    await page.mouse.move(start.x,start.y);await page.mouse.down();
+    await page.mouse.move(end.x,end.y,{steps:10});await page.mouse.up();
+    await waitForStamp(p=>{const c=document.querySelector(".world-canvas");
+      return !!c&&(Number(c.dataset.cameraX)!==p.x||Number(c.dataset.cameraZ)!==p.z);},
+      {x:first.x,z:first.z},"ISOMETRIC_GRIP_DRIFT: pan never applied");
+    const dragged=await pose(),afterDragWorld=groundAtScreen(dragged,end,v.viewport);
+    const dragError=Math.hypot(firstWorld.x-afterDragWorld.x,firstWorld.z-afterDragWorld.z);
+    if(dragError>.12)throw Error("ISOMETRIC_GRIP_DRIFT: ground moved "+dragError+" world units under cursor.");
+    const zoomCursor={x:v.viewport.width*.61,y:v.viewport.height*.44};
+    const beforeZoom=await pose(),zoomWorld=groundAtScreen(beforeZoom,zoomCursor,v.viewport);
+    await page.mouse.move(zoomCursor.x,zoomCursor.y);
+    await page.mouse.wheel(0,-640);
+    await waitZoomAbove(beforeZoom.zoom,"Wheel-up did not increase camera zoom");
+    const zoomed=await pose(),afterZoomWorld=groundAtScreen(zoomed,zoomCursor,v.viewport);
+    const zoomError=Math.hypot(zoomWorld.x-afterZoomWorld.x,zoomWorld.z-afterZoomWorld.z);
+    if(zoomError>.12)throw Error("ZOOM_ANCHOR_DRIFT: ground moved "+zoomError+" world units under cursor.");
+    if(zoomed.zoom<=beforeZoom.zoom)throw Error("Wheel-up did not increase camera zoom");
+    gripProof={dragWorldError:dragError,wheelWorldError:zoomError,
+      initialZoom:first.zoom,afterWheel:zoomed.zoom,
+      expected:"ground coordinate remains directly beneath moving cursor"};
+  }
+  // The visible Zoom in control must work at EVERY viewport (44px touch
+  // surface), and the canvas stamp must equal the applied zoom synchronously.
+  const beforeButton=await pose();
+  await page.getByRole("button",{name:"Zoom in"}).click();
+  await waitZoomAbove(beforeButton.zoom,"Visible Zoom in control did not work");
+  const buttonZoom=await pose(),trace=await bodyTrace();
+  if(buttonZoom.zoom<=beforeButton.zoom)throw Error("Visible Zoom in control did not work: before="+beforeButton.zoom+", button="+buttonZoom.zoom+", clickTrace="+JSON.stringify(trace)+", jsErrors="+errs.join(";"));
+  const appliedZoom=Number(trace.lastZoomApplied);
+  if(!Number.isFinite(appliedZoom)||Math.abs(buttonZoom.zoom-appliedZoom)>1e-6)
+   throw Error("CAMERA_STAMP_DESYNC: canvas cameraZoom="+buttonZoom.zoom+" but applied zoom="+trace.lastZoomApplied+", clickTrace="+JSON.stringify(trace)+", jsErrors="+errs.join(";"));
+  gripProof={...(gripProof||{}),beforeZoomButton:beforeButton.zoom,afterZoomButton:buttonZoom.zoom,
+    stampMatchesApplied:true,
+    expected:(gripProof?gripProof.expected+"; ":"")+"zoom button stamp equals applied camera zoom"};
+
+  report.views.push({name:v.name,viewport:v.viewport,...actual,pageErrors:errs,failedRequests:failed,screenshot:filename,gripProof});
   if(actual.world3d!=="ready"||actual.shell!=="v2"||!Number.isFinite(actual.yaw)||Math.abs(actual.yaw-45)>.5||Math.abs(actual.elevation-35.264)>.5||actual.documentScroll||errs.length||failed.length)throw Error("Preview smoke failure at "+v.name+": "+JSON.stringify(actual)+" errors="+errs.join(";"));
   await ctx.close();
  }

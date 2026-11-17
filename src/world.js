@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import {CAMERA_LIMITS,normalizeCamera} from "./camera.js";
 import {CELL,WORLD_SIZE,BLUEPRINTS} from "./content.js";
 import {cellOf,key} from "./simulation.js";
 
@@ -236,8 +237,7 @@ export class LivingWorld{
  }
  setView(view){
   Object.assign(this.view,view);
-  this.view.zoom=THREE.MathUtils.clamp(this.view.zoom,.42,3.4);
-  this.view.elevation=THREE.MathUtils.clamp(this.view.elevation,20,80);
+  this.view=normalizeCamera(this.view);
  }
  resize(){
   const w=Math.max(1,this.host.clientWidth),h=Math.max(1,this.host.clientHeight);
@@ -246,13 +246,26 @@ export class LivingWorld{
  }
  applyCamera(){
   const {yaw,elevation,zoom,x,z}=this.view;
-  const aspect=this.width/this.height,half=40/zoom;
+  const aspect=this.width/this.height,half=CAMERA_LIMITS.frustumHeight/(2*zoom);
   this.camera.left=-half*aspect;this.camera.right=half*aspect;
   this.camera.top=half;this.camera.bottom=-half;
   const y=THREE.MathUtils.degToRad(elevation),t=THREE.MathUtils.degToRad(yaw);
   const dist=150,cos=Math.cos(y);
   this.camera.position.set(x+dist*cos*Math.sin(t),dist*Math.sin(y),z+dist*cos*Math.cos(t));
-  this.camera.lookAt(new THREE.Vector3(x,0,z));this.camera.updateProjectionMatrix();
+  this.camera.lookAt(new THREE.Vector3(x,0,z));this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld(true);
+  this.stampCamera();
+ }
+ // Observability contract: the canvas dataset must reflect the APPLIED camera
+ // synchronously on every path (pointer input, UI zoom buttons, render loop).
+ // Stamping only after renderer.render() let slow software-WebGL frames leave
+ // a stale cameraZoom visible to UI/tests even though the camera had moved.
+ stampCamera(){
+  const d=this.renderer.domElement.dataset;
+  d.cameraYaw=String(this.view.yaw);
+  d.cameraElevation=String(this.view.elevation);
+  d.cameraZoom=String(this.view.zoom);
+  d.cameraX=String(this.view.x);
+  d.cameraZ=String(this.view.z);
  }
  screenToCell(cx,cy){
   const rect=this.renderer.domElement.getBoundingClientRect();
@@ -320,9 +333,9 @@ export class LivingWorld{
   }
   for(const [id,tr] of this.trucks)if(!alive.has(id)){this.vehicleGroup.remove(tr);this.trucks.delete(id);}
   this.renderer.render(this.scene,this.camera);
+  // applyCamera() already stamped this frame's camera synchronously; only the
+  // rendered-ready flag belongs after the first successful render.
   this.renderer.domElement.dataset.world3d="ready";
-  this.renderer.domElement.dataset.cameraYaw=String(this.view.yaw);
-  this.renderer.domElement.dataset.cameraElevation=String(this.view.elevation);
  }
  dispose(){this.renderer.dispose();this.renderer.domElement.remove();this.scene.clear();}
 }
