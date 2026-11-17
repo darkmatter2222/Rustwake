@@ -2,8 +2,8 @@
   "issue": 384,
   "version": 2,
   "build": "production-preview",
-  "source_sha": "local",
-  "started": "2026-11-17T03:45:30.903Z",
+  "source_sha": "9355a6e8c7af8723a878b6fb26129c505d0dacdc",
+  "started": "2026-11-17T04:07:12.582Z",
   "views": [
     {
       "name": "desktop-onboard",
@@ -329,5 +329,5 @@
     "G1 visual review (#276) is sponsor-reserved; these artifacts are evidence for that review, not approval",
     "Fixtures freeze power (generator never completes) and slow the fleet so the mid-haul state is observable; they are measurement scenes, not a balance claim"
   ],
-  "completed": "2026-11-17T03:45:37.659Z"
+  "completed": "2026-11-17T04:07:22.681Z"
 }
