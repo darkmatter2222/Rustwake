@@ -53,7 +53,7 @@ const RUN_MS = 60000, PACE_MS = 2000, NEG_DELAY_MS = 120, NEG_COMMANDS = 16, NEG
 const report = {
   version: 1, issue: 346, task: "CAM-10 measurement slice — input-to-photon latency and camera smoothness",
   build: "production-preview", source_sha: SHA, started: new Date().toISOString(),
-  scope: "MEASUREMENT HALF ONLY of #346. Raycast/render optimization in src/world.js is leased (dev-349b ART-03) and deferred to a scoped follow-up issue.",
+  scope: "MEASUREMENT HALF ONLY of #346. Raycast/render optimization in src/world.js is leased (dev-349c ART-03) and deferred to a scoped follow-up issue.",
   quality: {
     tier: "default production — NO quality setting changed for this measurement",
     pixelRatio: "min(2, devicePixelRatio) as shipped in src/world.js",
@@ -72,7 +72,8 @@ const report = {
     "Input-to-photon is an event-to-next-rendered-frame proxy (no physical display in headless); GPU presentation/compositor latency is not included",
     "Local production preview only — the hosted-browser receipt at the deployed SHA is produced at release by the release engineer",
     "Verdict ceiling PASS_NUMERIC_ONLY; sponsor G1 visual acceptance (#276) is reserved and NOT granted by this capture",
-    "Optimization half of #346 (world.js raycast/render paths) NOT delivered here — scoped follow-up issue linked from #346"
+    "Optimization half of #346 (world.js raycast/render paths) NOT delivered here — scoped follow-up issue linked from #346",
+    "Runner load: shared host — other agents run browser captures concurrently and idle dev servers remain from earlier sessions, so latency/frame numbers INCLUDE that contention and are not quiet-host guarantees. An earlier in-flight run at the pre-fix-touch head failed the desktop recovery gate by 8.5 ms under heavier load (drag recovered P95 171 vs 162.5 envelope); the committed run passed every gate. No CPU-heavy work (tests, rollback control) was run by this harness during the capture."
   ]
 };
 
@@ -187,6 +188,18 @@ try {
       return d && d.world3d === "ready" && d.cameraZoom !== undefined && d.cameraYaw !== undefined;
     }, null, {timeout: 30000});
     const cdp = v.touch ? await ctx.newCDPSession(page) : null;
+    if (cdp) {
+      // CAM-08 harness lesson (docs/design/CAMERA.md CAM-08): CDP touchMove
+      // events are QUEUED until the next compositor frame or the next touch
+      // dispatch. Without forced BeginFrames the move can stay undelivered
+      // (observed here: phone baseline first drag timed out at the seq-paired
+      // change-frame wait). Page.startScreencast forces BeginFrames so queued
+      // moves deliver promptly — same mechanism as scripts/capture-cam08.mjs.
+      // The seq-paired waitForFunction in gestureSample remains the delivery
+      // assertion: it waits for the ACTUAL camera change, never a fixed sleep.
+      cdp.on("Page.screencastFrame", p => {cdp.send("Page.screencastFrameAck", {sessionId: p.sessionId}).catch(() => {});});
+      await cdp.send("Page.startScreencast", {format: "jpeg", quality: 20, everyNthFrame: 1});
+    }
     return {ctx, page, cdp, errs};
   };
 
