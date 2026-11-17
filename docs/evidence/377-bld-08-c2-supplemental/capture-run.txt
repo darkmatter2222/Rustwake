@@ -1,0 +1,11 @@
+BLD-08 dismantle capture: FAIL C:\Users\ryans\AppData\Local\Temp\rw-qwen\dev-568-c2\docs\evidence\377-bld-08-c2-supplemental
+[
+ {
+  "view": "desktop",
+  "shots": 10,
+  "errors": 0
+ }
+]
+Error: could not select building 10 (salvager @10,10): [{"h":1.2,"px":195,"py":141,"top":"EM.","skipped":"overlay"},{"h":0,"px":195,"py":151,"top":"BUTTON.alarm-chip alarm-chip--warning","skipped":"overlay"},{"h":3,"px":195,"py":125,"top":"STRONG.","skipped":"overlay"},{"h":5,"px":195,"py":108,"top":"DIV.resources-strip","skipped":"overlay"},{"h":7,"px":195,"py":91,"top":"DIV.resources-strip","skipped":"overlay"}]
+    at selectBuilding (file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-568-c2/scripts/capture-dismantle.mjs:210:10)
+    at async file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-568-c2/scripts/capture-dismantle.mjs:350:15
