@@ -560,12 +560,21 @@ try {
     await page.goto(HOST, {waitUntil: "domcontentloaded", timeout: 30000});
     await page.locator(".world-canvas").waitFor({state: "visible", timeout: 30000});
     await page.waitForFunction(() => document.querySelector(".world-canvas")?.dataset.world3d === "ready", null, {timeout: 20000});
+    // Landing readiness: the salvager IS in the yard, so its arm channel is live;
+    // the crusher's roller/screen channels legitimately stamp "none" until the
+    // crusher is really placed below (presence-aware stamps, see SALVAGE_MODELS).
     await page.waitForFunction(() => {
       const d = document.querySelector(".world-canvas")?.dataset;
-      return d && d.art02Reduced === "0" && d.art02Roller && d.art02Roller !== "none";
+      return d && d.art02Reduced === "0" && d.art02Arm && d.art02Arm !== "none";
     }, null, {timeout: 20000});
     await dismissIntro(page);
     await placeCrusher(page, false, "motion");
+    // With the crusher live, ALL three channels must be numeric (never "none")
+    // before any motion sampling — the timeline may not contain absent channels.
+    await page.waitForFunction(() => {
+      const d = document.querySelector(".world-canvas")?.dataset;
+      return d && ["art02Arm", "art02Roller", "art02Screen"].every(k => d[k] && d[k] !== "none" && Number.isFinite(Number(d[k])));
+    }, null, {timeout: 20000, polling: 50});
     await zoomToWorld(page, TRIO_MID, 2.8, .8);
 
     const motionStart = Date.now();
