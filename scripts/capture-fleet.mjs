@@ -60,7 +60,10 @@ const instrument=()=>{
   return c;
  };
 };
-const unit=id=>RESOURCE_BY_ID[id]?.unit||id;
+// Unit labels resolved in NODE scope and passed INTO browser predicates as
+// data — Playwright serializes page functions, so Node closures (unit,
+// RESOURCE_BY_ID) do not exist in the page. See PR #538 harness-bug note.
+const UNITS=Object.fromEntries(Object.keys(RESOURCE_BY_ID).map(id=>[id,RESOURCE_BY_ID[id]?.unit||id]));
 
 try{
  child=spawn(process.execPath,["node_modules/vite/bin/vite.js","preview","--port",String(PORT),"--strictPort","--host","127.0.0.1"],{stdio:["ignore","pipe","pipe"]});
@@ -150,8 +153,11 @@ try{
  // Atomic panel-vs-sim equality: expected values derived from the fleetProbe
  // stamp of the EXACT snapshot the panel rendered; poll until a consistent
  // tick, then record expected/actual pairs.
- const panelEquality=async(page,focusId,timeout=10000)=>{
-  const res=await page.waitForFunction((fid)=>{
+ const panelEquality=async(page,focusId,timeout=10000,requireDetail=false)=>{
+  const res=await page.waitForFunction(({fid,units,needDetail})=>{
+   // unit() must be defined INSIDE the page: this predicate is serialized
+   // and runs in the browser, where Node-scope helpers do not exist.
+   const unit=id=>units[id]||id;
    const p=JSON.parse(document.body.dataset.fleetProbe||"null");if(!p)return null;
    const txt=t=>document.querySelector('[data-testid="'+t+'"]')?.textContent?.trim()??null;
    const active=p.vehicles.filter(v=>v.job).length;
@@ -172,13 +178,18 @@ try{
     if(JSON.stringify(expD)!==JSON.stringify(actD))return null;
     out.detail={expected:expD,actual:actD,job:{phase:j.phase,amount:j.amount,resource:j.resource,segment:j.segment,progress:j.progress,routeLen:j.routeLen},speedFormula:"(speed||2.1)*(fleetResearch?1.18:1)"};
    }
+   // When a detail is being sought, never succeed on a totals-only tick.
+   if(needDetail&&!out.detail)return null;
    return out;
-  },focusId,{timeout,polling:60});
+  },{fid:focusId,units:UNITS,needDetail:requireDetail},{timeout,polling:60});
   return res.jsonValue();
  };
  // Focus a hauling truck with a long remaining route and capture a stable
  // detail equality + bay queue + state chip before it can deliver.
  const haulingDetail=async(page)=>{
+  // Every attempt's outcome is recorded (never silently swallowed) so a
+  // future failure is diagnosable from report.json alone.
+  const attempts=[];
   for(let attempt=0;attempt<6;attempt++){
    await page.waitForFunction(()=>!!document.querySelector('.fleet-row[data-state="hauling"]'),null,{timeout:45000,polling:150});
    const id=await page.evaluate(()=>{
@@ -189,24 +200,28 @@ try{
      if(rem>bestRem){bestRem=rem;best=v.id;}}
     return best;
    });
-   if(id==null)continue;
+   if(id==null){attempts.push({attempt,skip:"no toDest carrier in fleetProbe"});continue;}
    await page.locator('[data-testid="truck-'+id+'"]').click();
    try{
-    const eq=await panelEquality(page,id,4000);
-    if(!eq.detail)continue;
+    const eq=await panelEquality(page,id,4000,true);
+    if(!eq.detail){attempts.push({attempt,id,skip:"equality resolved without detail"});continue;}
     const chip=await page.locator('[data-testid="fleet-state"]').innerText();
-    if(!chip.includes("DELIVERING"))continue;
+    if(!chip.includes("DELIVERING")){attempts.push({attempt,id,skip:"state chip not DELIVERING: "+chip});continue;}
     const queue=await page.evaluate(()=>{
      const q=document.querySelector('[data-testid="fleet-bay-queue"]');if(!q)return null;
      return [...q.querySelectorAll(".fleet-queue__row")].map(r=>({vehicle:Number(r.dataset.vehicle),text:r.querySelector("em")?.textContent||""}));
     });
-    if(!queue)continue;
+    if(!queue){attempts.push({attempt,id,skip:"bay queue element absent"});continue;}
     const cells=queue.map(q=>q.text==="AT BAY"?0:Number(q.text.replace(" cells out","")));
     for(let i=1;i<cells.length;i++)if(cells[i]<cells[i-1])throw Error("bay queue not ordered by remaining cells: "+JSON.stringify(queue));
-    return {id,eq,chip,queue:{rows:queue,ordered:true}};
-   }catch(e){if(String(e).includes("bay queue not ordered"))throw e;}
+    attempts.push({attempt,id,ok:true});
+    return {id,eq,chip,queue:{rows:queue,ordered:true},attempts};
+   }catch(e){
+    if(String(e).includes("bay queue not ordered"))throw e;
+    attempts.push({attempt,id,error:String(e&&e.message||e).slice(0,400)});
+   }
   }
-  throw Error("could not capture a stable hauling detail with bay queue");
+  throw Error("could not capture a stable hauling detail with bay queue; attempts="+JSON.stringify(attempts));
  };
  // Tap a ground cell through the REAL pointer path, zooming out if the pixel
  // is off-canvas or covered by UI (capture-dock.mjs precedent).
@@ -248,6 +263,7 @@ try{
   view.proof.equality=haul.eq;
   view.proof.haulingChip=haul.chip;
   view.proof.bayQueue=haul.queue;
+  view.proof.haulingAttempts=haul.attempts;
   await shot(view,page,"fleet-hauling-detail");
   // Follow camera: pose preserved, truck pinned to the clear-zone focus pixel.
   const before=await pose(page);
@@ -321,9 +337,21 @@ try{
   if(!hint.includes("DESTINATION"))throw Error("road arming regressed on empty ground: "+hint);
   await page.keyboard.press("Escape");
   await page.waitForTimeout(250);
+  // Escape calls choose("select") (App.jsx onKey, unchanged from main): it
+  // clears roadStart AND exits road mode, so the center-hint unmounts.
+  // Assert the real contract: no DESTINATION hint remains, and re-entering
+  // road mode shows the START hint — proving the origin was truly cleared.
   const hint2=await page.locator(".center-hint").innerText().catch(()=> "");
-  if(!hint2.includes("START"))throw Error("Escape did not clear the road origin: "+hint2);
-  view.proof.roadArmingRegression={...arm,armed:true,escapeCleared:true};
+  if(hint2.includes("DESTINATION"))throw Error("Escape left a road origin armed: "+hint2);
+  const titleAfterEsc=await page.locator('[data-testid="sheet-title"]').innerText().catch(()=> "");
+  if(titleAfterEsc.toLowerCase()==="road engineer")throw Error("Escape did not exit road mode: "+titleAfterEsc);
+  await page.locator('[data-tool="road"]').click();
+  await page.waitForTimeout(300);
+  const hint3=await page.locator(".center-hint").innerText().catch(()=> "");
+  if(!hint3.includes("START"))throw Error("road origin survived Escape (START hint missing on re-entry): "+hint3);
+  await page.keyboard.press("Escape");
+  await page.waitForTimeout(250);
+  view.proof.roadArmingRegression={...arm,armed:true,escapeCleared:true,escapeReturnsToSelect:true,startHintOnReentry:hint3};
   // Motion + camera invariants + one WebGL context.
   const f1=await page.screenshot({animations:"disabled"});
   await page.waitForTimeout(1500);
