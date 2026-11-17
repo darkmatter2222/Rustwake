@@ -33,6 +33,11 @@ export const BUILDINGS = [
  {id:"depot",name:"Freight Depot",tag:"LOGISTICS",family:"logistics",description:"The shared material bank. Trucks load, unload and reserve cargo here.",cost:{credits:200,scrap:35,stone:24},cycle:0,inputs:{},outputs:{},power:0,color:"#718e95",accent:"#f1b577"},
  {id:"furnace",name:"Induction Furnace",tag:"PROCESS",family:"processing",description:"Smelts ferrous ore into premium steel. Needs diesel and truck deliveries.",cost:{credits:360,iron:24,scrap:50,stone:20},cycle:5.5,inputs:{iron:5,fuel:2},outputs:{steel:4},power:3,color:"#a2afb1",accent:"#e87b4e"},
  {id:"crusher",name:"Crusher",tag:"PROCESS",family:"processing",description:"Compacts scrap into high-value ferrous feedstock.",cost:{credits:260,scrap:46,stone:28},cycle:4,inputs:{scrap:10},outputs:{iron:6,stone:2},power:2,color:"#88959b",accent:"#d9a069"},
+ // #552: standalone Screening Plant — the ART-02 "sorter" outcome as its own buildable.
+ // A processing-family side-grade to the crusher: faster cycle, lower power, separates
+ // scrap into clean aggregate + recoverable copper fines (feeds roads + the alloy/circuit
+ // chain) instead of the crusher's ferrous feedstock. No new economy or currency.
+ {id:"screening",name:"Screening Plant",tag:"PROCESS",family:"processing",description:"Screens crushed salvage into clean aggregate and recoverable copper fines.",cost:{credits:230,scrap:42,stone:22},cycle:3.5,inputs:{scrap:8},outputs:{stone:5,copper:1},power:2,color:"#8a979c",accent:"#c9a06a"},
  {id:"refinery",name:"Fuel Refinery",tag:"PROCESS",family:"processing",description:"Refines recovered fuel from salvage; expands vehicle uptime.",cost:{credits:520,scrap:70,steel:10},cycle:7,inputs:{scrap:8,water:2},outputs:{fuel:6},power:3,color:"#738d91",accent:"#d8a56b"},
  {id:"generator",name:"Turbine Generator",tag:"POWER",family:"utility",description:"Provides power for all active machines; visible blades reflect plant load.",cost:{credits:240,scrap:44,iron:18},cycle:0,inputs:{},outputs:{},power:-12,color:"#899da0",accent:"#7ec3b7"},
  {id:"foundry",name:"Alloy Foundry",tag:"INDUSTRY",family:"processing",description:"Combines steel and copper into durable high-tier alloy.",cost:{credits:760,steel:34,copper:28},cycle:8,inputs:{steel:4,copper:3,fuel:1},outputs:{alloy:3},power:4,color:"#7d9095",accent:"#f0a469"},
@@ -71,7 +76,7 @@ export const ROAD_KINDS = [
   {id:"heavy",name:"Heavy haul",description:"Future high-capacity lane; currently uses road rules.",cost:{stone:5,credits:8}}
 ];
 export const TIERS = [
- {id:0,name:"CINDER YARD",needs:0,unlocks:["salvager","depot","furnace","crusher","generator","crane"]},
+ {id:0,name:"CINDER YARD",needs:0,unlocks:["salvager","depot","furnace","crusher","screening","generator","crane"]},
  {id:1,name:"INDUSTRIAL AGE",needs:60,unlocks:["refinery","market","foundry"]},
  {id:2,name:"MECHANICAL ERA",needs:175,unlocks:["fabricator","research","turret"]},
 ];

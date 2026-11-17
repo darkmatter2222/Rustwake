@@ -175,6 +175,9 @@ test("named pivots match schema offsets, axes and motion; animated reach is boun
   const expected = {salvager: ["rocker"], generator: ["spin", "turbine"],
     furnace: ["charge", "blower"], foundry: ["crucible", "fan"], refinery: ["pump", "valve"],
     crane: ["crane"], turret: ["rotate"], crusher: ["rollerA", "rollerB", "screen"],
+    // #552: the standalone Screening Plant binds to the SAME accepted ART-02 rig as
+    // the crusher (binding-only alias). Additive entry; crusher/ART-02/03 rows UNCHANGED.
+    screening: ["rollerA", "rollerB", "screen"],
     depot: ["door"], market: ["scale", "awning"], research: ["dish", "feed"],
     fabricator: ["gear", "pinion", "hammer"]};
   for (const b of BUILDINGS) {

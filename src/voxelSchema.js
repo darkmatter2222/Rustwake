@@ -417,6 +417,13 @@ const RAW_MACHINES = {
   })
 };
 
+// #552: buildable-id -> model binding ONLY (narrow additive world.js-lease exception).
+// The standalone Screening Plant reuses the EXISTING, already-accepted ART-02 crusher +
+// screening rig (oscillating pivot:screen deck + twin discharge chutes). This is a pure
+// descriptor alias — no new geometry, palette, primitive or budget. A distinct screening-
+// only silhouette is a serialized world.js geometry follow-up (see PR #552 / GAPS.md).
+RAW_MACHINES.screening = RAW_MACHINES.crusher;
+
 // #370 integration: logical footprints come from the content registry (crane is 2×3;
 // every other initial machine is 1×1). footprint.scale is the base w/d group scale
 // applied by world.js makeBuilding(); geometry fields stay in authored local space.
