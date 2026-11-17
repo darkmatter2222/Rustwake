@@ -421,7 +421,8 @@ const RAW_MACHINES = {
 // The standalone Screening Plant reuses the EXISTING, already-accepted ART-02 crusher +
 // screening rig (oscillating pivot:screen deck + twin discharge chutes). This is a pure
 // descriptor alias — no new geometry, palette, primitive or budget. A distinct screening-
-// only silhouette is a serialized world.js geometry follow-up (see PR #552 / GAPS.md).
+// only silhouette is a serialized world.js geometry follow-up (issue #552; geometry
+// follow-up #578 / GAPS.md).
 RAW_MACHINES.screening = RAW_MACHINES.crusher;
 
 // #370 integration: logical footprints come from the content registry (crane is 2×3;

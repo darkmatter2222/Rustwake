@@ -34,7 +34,8 @@ export const BUILDINGS = [
  {id:"furnace",name:"Induction Furnace",tag:"PROCESS",family:"processing",description:"Smelts ferrous ore into premium steel. Needs diesel and truck deliveries.",cost:{credits:360,iron:24,scrap:50,stone:20},cycle:5.5,inputs:{iron:5,fuel:2},outputs:{steel:4},power:3,color:"#a2afb1",accent:"#e87b4e"},
  {id:"crusher",name:"Crusher",tag:"PROCESS",family:"processing",description:"Compacts scrap into high-value ferrous feedstock.",cost:{credits:260,scrap:46,stone:28},cycle:4,inputs:{scrap:10},outputs:{iron:6,stone:2},power:2,color:"#88959b",accent:"#d9a069"},
  // #552: standalone Screening Plant — the ART-02 "sorter" outcome as its own buildable.
- // A processing-family side-grade to the crusher: faster cycle, lower power, separates
+ // A processing-family side-grade to the crusher: faster cycle, EQUAL power (both
+ // power:2 — the real differences are the 3.5s vs 4s cycle and the output pair), separates
  // scrap into clean aggregate + recoverable copper fines (feeds roads + the alloy/circuit
  // chain) instead of the crusher's ferrous feedstock. No new economy or currency.
  {id:"screening",name:"Screening Plant",tag:"PROCESS",family:"processing",description:"Screens crushed salvage into clean aggregate and recoverable copper fines.",cost:{credits:230,scrap:42,stone:22},cycle:3.5,inputs:{scrap:8},outputs:{stone:5,copper:1},power:2,color:"#8a979c",accent:"#c9a06a"},

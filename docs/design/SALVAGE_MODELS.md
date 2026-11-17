@@ -295,9 +295,55 @@ machine. Two explicit silhouette decisions were made and recorded here:
    blobs, pass 10/10 after. Exact bank deltas: build −230 cr / −42 sc / −22 st;
    one cycle −8 sc / +5 st / +1 cu (stats.produced +6, bank untouched); dismantle
    refund {credits:92,scrap:88,stone:13,copper:1}. 4 negative controls
-   (NC1 registry-removal 9 fail, NC2 recipe-mutation 1, NC3 power-mutation 1,
-   NC4 unlock-removal 4). One disclosed additive integration-test edit
+   (NC1 registry-removal 9 fail, NC2 world-binding revert 1, NC3 schema-alias
+   removal 1, NC4 outputs-emptied 4). One disclosed additive integration-test edit
    (`tests/voxelSchema.test.mjs` pivot-expectation map gains
    `screening: ["rollerA","rollerB","screen"]`; crusher/ART-02/03 rows UNCHANGED)
    flagged for reviewer ratification. Code head
    `0a0d88e95574aec2479261622c9038c12fe85beb` (PR #577 DRAFT).
+
+   **C1 economy gate (product condition on PR #577) — DISCHARGED,
+   PASS_NUMERIC_ONLY.** Harness: `scripts/measure-552-ab.mjs` (committed; the
+   dispatcher variant is a PARAMETER — `--dispatcher-sha <40-char SHA>`, default
+   `d8a492a68a8e7415021da431cc520a685041ad97` — so it re-runs unchanged at the
+   train turn on the genuinely rebased head). Fresh yard, fixed seed 4073, zero
+   player input beyond one public `buildAt("screening", 11, 1)` at t≈0 (first
+   road-connected legal site; building id 10; 5 s assembly); t=120 s in 0.5 s
+   substeps; delivered counts are real freight-ledger depot arrivals.
+
+   **SRC-PROVENANCE (mandatory disclosure):** variant (i) = this branch's
+   `content.js` + pre-#573 `simulation.js` at
+   `639c5ec39a24fe2eaab20d77cec4aa1095b05b9c`; variant (ii) = the SAME
+   `content.js` + #573's `simulation.js` at
+   `d8a492a68a8e7415021da431cc520a685041ad97` (#573 is unmerged and
+   CONFLICTING) — variant (ii) is **NOT a real merged tree**. The #573
+   dispatcher was applied in the WORKING TREE ONLY, never committed.
+   Byte-exact restore proof: `src/simulation.js` sha256
+   `c969a40b9e82ac3e6a259aa154e1b6fd38fe0de06f044d7f5ed0b22995e81f28`
+   before == after; `git diff --stat` and `--numstat` for that path both EMPTY.
+   The zero-`simulation.js`-diff property (mechanical #573 rebase) is preserved.
+   Every cell JSON carries the sha256 of the `simulation.js` bytes it imported
+   (post variant: `802879992d56dd006b22a0f299d5980e326de7abc06b8dfc22d7d5ba222f75d1`),
+   cross-checked by the orchestrator.
+
+   | dispatcher | screening | bank steel @120 s (gate > 20) | delivered by resource (depot arrivals, 0–120 s) | scrap flow (gate > 0) | screening stone/copper pair |
+   |---|---|---|---|---|---|
+   | pre-#573 | built t≈0 | 20 — pre-existing #567 starvation | scrap 240, iron 104, copper 29, fuel 7, stone 0, steel 0 | 240 (60 s windows [105, 135]) | not delivered (starved pre-#573) |
+   | pre-#573 | none (control) | 20 — pre-existing #567 starvation | scrap 252, iron 113, copper 28, fuel 7, stone 0, steel 0 | 252 ([117, 135]) | n/a |
+   | post-#573 | built t≈0 | **52 — PASS** | scrap 77, iron 84, copper 40, stone 45, steel 32, fuel 15 | 77 ([38, 39]) | **10:stone 45, 10:copper 15 — PASS** |
+   | post-#573 | none (control) | **48 — PASS** | scrap 90, iron 153, copper 29, steel 28, fuel 33, stone 0 | 90 ([45, 45]) | n/a |
+
+   Gate verdicts: post-#573 NO zero-delivery output pair in either row
+   (with screening: `1:scrap 45, 1:iron 39, 1:copper 25, 4:steel 32, 10:stone 45,
+   10:copper 15`); bank steel > 20 in both post-#573 rows; scrap flow > 0 in all
+   four rows. Pre-#573: screening does NOT worsen bank steel vs the no-screening
+   control (20 vs 20); the ≤ 20 pre-#573 rows are the known pre-existing #567
+   player-output starvation, not a #552 regression. Iron/fuel totals include the
+   furnace's starter input stock being collected as inventory (pre-existing
+   dispatcher behavior, identical in both variants). `stats.produced` /
+   `stats.delivered` are vanity metrics (ruling 6956801701 / 6956802181) —
+   reported by the harness, NEVER gated. No recipe re-tune was needed;
+   `src/content.js` economy values are unchanged. **C2 (desktop+phone captures
+   at the DEPLOYED SHA, crusher and screening adjacent in one frame) remains
+   OWED** — this session had no browser; all figures are PASS_NUMERIC_ONLY,
+   never PASS.
