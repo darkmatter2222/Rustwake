@@ -11,6 +11,12 @@
 //    (waitFor polls the real DOM/dataset state) with an explicit 15 s ceiling
 //    and a descriptive timeout error, so a loaded 2-core CI runner can never
 //    false-FAIL a mount race and a genuine regression fails loudly.
+//  - Every wait predicate IMPLIES the assertions that follow it (#545
+//    residual flake, CI runs 44067561867 / 44067793813): the bootstrap waits
+//    for the canvas AND an applied camera stamp, not the bare element —
+//    App.jsx mounts .world-canvas in the mount effect but the first pose
+//    publication lands later via the rAF update() -> applyCamera() path.
+//    Deterministic reproduction: CAM05_SLOW_STAMP_MS in the world stub.
 //  - Teardown (root.unmount + dom.window.close) lives in a guaranteed after()
 //    hook AND guards the top-level bootstrap, so no assertion failure can
 //    leave the React root + pretendToBeVisual jsdom window keeping the event
@@ -87,6 +93,9 @@ const tapCanvas = (x, y) => {
 };
 const sheetTitle = () => document.querySelector('[data-testid="sheet-title"]')?.textContent;
 const collapsed = () => document.querySelector('[data-testid="panel-host"]')?.dataset.collapsed;
+const execFileAsync = (cmd, args, opts) => new Promise((resolve, reject) => {
+  execFile(cmd, args, opts, (err, stdout, stderr) => err ? reject(Object.assign(err, { stdout, stderr })) : resolve({ stdout, stderr }));
+});
 
 const root = createRoot(document.getElementById("root"));
 root.render(React.createElement(App));
@@ -115,12 +124,21 @@ if (process.env.CAM05_TEARDOWN_PROBE === "1") {
   }
 }
 
+// #545 residual flake: waiting on the bare canvas element does NOT imply the
+// pose assertion below — the element mounts before the first applyCamera()
+// publishes data-camera-* (loaded 2-core runner: yaw undefined !== "45").
+// applyCamera writes all five fields in one synchronous pass, so a defined
+// yaw implies the full initial pose is published. The exact "45" expectation
+// stays a hard assertion, never folded into the wait.
+const bootstrapStarted = Date.now();
 try {
-  await waitFor(() => canvas(), { label: "world canvas mounted (.world-canvas)" });
+  await waitFor(() => canvas() && pose().yaw !== undefined,
+    { label: "world canvas mounted AND initial camera pose stamped (data-camera-yaw defined)" });
 } catch (err) {
   teardown();
   throw err;
 }
+const bootstrapMs = Date.now() - bootstrapStarted;
 
 test("CAM-05 wiring: intentional pose + real tap selects the Freight Depot", async () => {
   assert.ok(canvas(), "world canvas mounted");
@@ -211,9 +229,6 @@ test("CAM-05 wiring: teardown-on-failure — a sabotaged bootstrap exits non-zer
   // guaranteed teardown closes the React root + jsdom window. The child
   // throws at top level before registering any test, so there is no
   // recursion into this regression test.
-  const execFileAsync = (cmd, args, opts) => new Promise((resolve, reject) => {
-    execFile(cmd, args, opts, (err, stdout, stderr) => err ? reject(Object.assign(err, { stdout, stderr })) : resolve({ stdout, stderr }));
-  });
   const env = { ...process.env, CAM05_TEARDOWN_PROBE: "1" };
   delete env.NODE_TEST_CONTEXT; // grandchild must run as its own test runner
   const repoRoot = fileURLToPath(new URL("../", import.meta.url));
@@ -231,4 +246,38 @@ test("CAM-05 wiring: teardown-on-failure — a sabotaged bootstrap exits non-zer
   assert.ok(elapsed < 30000, `child exited in ${elapsed} ms, under the 30000 ms prompt-exit ceiling`);
   assert.match(String(failure.stdout) + String(failure.stderr), /world canvas mounted/,
     "child failed on the sabotaged bootstrap assertion, not on some unrelated error");
+});
+
+test("CAM-05 wiring: slow initial stamp — bootstrap waits for the pose, not the bare canvas (#545)", async () => {
+  // Deterministic reproduction of the residual CI flake (runs 44067561867 /
+  // 44067793813): the world stub defers the INITIAL data-camera-* stamp by
+  // 1200 ms after the canvas element mounts. The OLD bootstrap predicate
+  // (bare canvas) fails test 1 with `undefined !== '45'` under this switch;
+  // the strengthened predicate (canvas AND stamped yaw) must stay green.
+  const SLOW_MS = 1200;
+  if (process.env.CAM05_SLOW_STAMP_CHILD === "1") {
+    // Inside the delayed child: prove the bootstrap actually waited out the
+    // deferred stamp instead of racing it. No re-spawn here — the marker
+    // bounds recursion to exactly one delayed child per run.
+    assert.ok(bootstrapMs >= SLOW_MS,
+      `bootstrap waited ${bootstrapMs} ms >= the ${SLOW_MS} ms deferred stamp (waited, not raced)`);
+    const p = pose();
+    for (const key of ["yaw", "elevation", "zoom", "x", "z"])
+      assert.notEqual(p[key], undefined, `initial pose field ${key} published before first assertion`);
+    assert.equal(p.yaw, "45", "delayed initial stamp still publishes the approved isometric yaw");
+    return;
+  }
+  const env = { ...process.env, CAM05_SLOW_STAMP_MS: String(SLOW_MS), CAM05_SLOW_STAMP_CHILD: "1" };
+  delete env.NODE_TEST_CONTEXT; // child must run as its own test runner
+  delete env.CAM05_TEARDOWN_PROBE; // child must run the NORMAL (non-sabotaged) path
+  const repoRoot = fileURLToPath(new URL("../", import.meta.url));
+  const self = fileURLToPath(import.meta.url);
+  const started = Date.now();
+  const { stdout, stderr } = await execFileAsync(process.execPath, ["--test", self],
+    { cwd: repoRoot, env, timeout: 60000, windowsHide: true });
+  const elapsed = Date.now() - started;
+  const out = String(stdout) + String(stderr);
+  assert.match(out, /# pass 7/, "delayed-stamp child: all 7 tests in this file pass");
+  assert.match(out, /# fail 0/, "delayed-stamp child: zero failures (old bare-canvas predicate fails here)");
+  assert.ok(elapsed < 60000, `delayed-stamp child exited on its own in ${elapsed} ms (no hang, no timeout kill)`);
 });
