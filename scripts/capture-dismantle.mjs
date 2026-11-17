@@ -63,9 +63,15 @@ const clone=(x)=>JSON.parse(JSON.stringify(x));
 const delta=(after,before,keys)=>Object.fromEntries(keys.map(k=>[k,(after[k]||0)-(before[k]||0)]));
 const ZERO_DELTA=Object.fromEntries(BANK_KEYS.map(k=>[k,0]));
 function legalSite(g,type,rot=0){
+ // Prefer sites near the yard center (11,10): the first scan-order legal site
+ // (11,1) projects OUTSIDE the phone home frustum (px 456 > 390 viewport,
+ // elementFromPoint "none"), so a corner seed cannot be tapped on phone.
+ const sites=[];
  for(let z=1;z<WORLD_SIZE-1;z++)for(let x=1;x<WORLD_SIZE-1;x++)
-  if(checkSite(g,type,x,z,rot).ok&&nearestRoad(g,x,z))return {x,z};
- throw Error("no legal site for "+type);
+  if(checkSite(g,type,x,z,rot).ok&&nearestRoad(g,x,z))sites.push({x,z,d:Math.hypot(x-11,z-10)});
+ if(!sites.length)throw Error("no legal site for "+type);
+ sites.sort((a,b)=>a.d-b.d||a.z-b.z||a.x-b.x);
+ return {x:sites[0].x,z:sites[0].z};
 }
 function frozenGame(){
  const g=createGame();
