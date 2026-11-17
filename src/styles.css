@@ -291,8 +291,13 @@ button.fleet-row{width:100%;text-align:left;color:inherit;font:inherit;cursor:po
   justify-content:center;
 }
 @media (max-width:770px) {
-  .rail-controls {flex-wrap:wrap;max-width:220px;gap:5px}
-  .rail-controls button {min-width:44px;min-height:44px;padding:8px}
+  /* #564: a wrapped 2-row camera rail (220px cap) dropped its second row onto
+     the home-camera projection of the PROTECTED starter (x~143, y~256..316 at
+     390x844). One row of five 44px buttons + 4x5px gaps = 240px fits the phone
+     band; the later small-landscape/narrow blocks keep their own nowrap +
+     overflow-x:auto caps, so they are unaffected. */
+  .rail-controls {flex-wrap:nowrap;max-width:calc(100vw - 20px - var(--sal) - var(--sar));gap:5px}
+  .rail-controls button {min-width:44px;min-height:44px;padding:8px;flex:0 0 auto}
 }
 
 /* UX-04 (#362) building inspector: readable read-model sheet, two-step
@@ -481,6 +486,12 @@ button.fleet-row{width:100%;text-align:left;color:inherit;font:inherit;cursor:po
  .toast{bottom:calc(158px + var(--sab));right:calc(10px + var(--sar));padding:6px 8px;gap:6px;max-width:calc(100vw - 20px)}
  .toast b{display:none}
  .toast span{font-size:11px;line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+ /* #564: the chip is informational, not a control. Move it BELOW the camera
+    rail (order:1; alarm strip keeps order:-1) and make it pointer-transparent
+    (same pattern as the #548 toast body) so the home-camera projection of the
+    PROTECTED starter passes through it to the canvas. It stays fully VISIBLE
+    in normal flow — no information is hidden or dropped. */
+ .coordinate-chip{order:1;pointer-events:none}
  /* The coordinate chip is informational, not a control: yield its band to the
     notice while a sheet is open so rail + toast + sheet never stack. */
  .app-shell:has(.panel-host:not(.panel-host--collapsed)) .coordinate-chip{display:none}
