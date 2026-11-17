@@ -1,0 +1,65 @@
+name: delivery-alert
+# Issue #549: a cancelled main CI must never silently skip deployment again.
+# Real incident: CI run 44063235910 (main ec641433) timed out at 14 minutes and
+# GitHub reported `cancelled`, not `failure`; delivery.yml's success-only
+# package gate skipped all four delivery jobs (run 44065451074) with no
+# signal. This workflow is ADDITIVE: delivery.yml and ci.yml are
+# byte-identical to base main and must stay that way (review condition).
+# The guard below is a thin text mirror of shouldAlert() in
+# scripts/delivery-alert.mjs, which holds the unit-tested logic.
+# `!= 'success'` is load-bearing: a failure-only comparison would miss
+# `cancelled` and `timed_out`, which is exactly how the incident escaped.
+on:
+  workflow_run:
+    workflows: [ci]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      run_id:
+        description: Main CI run id to evaluate against the alert guard
+        required: true
+        type: string
+      dry_run:
+        description: Compose and print the alert without creating or commenting an issue
+        required: false
+        type: boolean
+        default: true
+permissions:
+  contents: read
+# Own concurrency group: an alert must never queue behind or block a deployment.
+concurrency:
+  group: rustwake-delivery-alert
+  cancel-in-progress: false
+jobs:
+  alert:
+    if: >-
+      (github.event_name == 'workflow_run' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main' &&
+      github.event.workflow_run.head_repository.full_name == github.repository &&
+      github.event.workflow_run.conclusion != 'success') ||
+      (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+      actions: read
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # All untrusted run metadata travels through environment variables and is
+      # read in Node (process.env); nothing is interpolated into a shell string.
+      - name: Evaluate guard, compose alert, dedupe and publish (unless dry-run)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          DELIVERY_ALERT_REPO: ${{ github.repository }}
+          DELIVERY_ALERT_EVENT: ${{ github.event_name }}
+          DELIVERY_ALERT_RUN_JSON: ${{ toJson(github.event.workflow_run) }}
+          DELIVERY_ALERT_RUN_ID: ${{ inputs.run_id }}
+          DELIVERY_ALERT_DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        run: node scripts/delivery-alert.mjs
