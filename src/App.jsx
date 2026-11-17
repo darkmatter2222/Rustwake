@@ -5,6 +5,7 @@ import {zoomAtPixel} from "./camera.js";
 import {RESOURCES,RESOURCE_BY_ID,BUILDINGS,BLUEPRINTS,RESEARCH,TIERS,CELL,WORLD_SIZE,amount} from "./content.js";
 import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,cancelConstruction,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt,checkSite,buildingAt,footprintDims,facingName} from "./simulation.js";
 import {inspectorState,machineScreenRect,panelPlacement,frameSelection,readUxSettings,writeUxSettings} from "./inspector.js";
+import {resourceStripState,readStripSettings,writeStripSettings} from "./resourceStrip.js";
 import "./styles.css";
 
 const cap=(n)=>Math.max(0,Math.floor(n||0));
@@ -20,11 +21,25 @@ const TOOLBAR=[
 ];
 function Icon({name}){return <span aria-hidden="true" className="tool-icon">{name}</span>;}
 function StatusDot({ok=true}){return <span className={"status-dot"+(ok?"":" status-dot--warn")}/>;}
-function Resource({id,value,onClick,compact=false}){
- const r=RESOURCE_BY_ID[id];
- return <button type="button" onClick={onClick} className={"resource "+(compact?"resource--compact":"")} title={r.name}>
+/* UX-01 (#359): every chip is a pure read-model row (src/resourceStrip.js)
+   over the authoritative bags — depot value, reserved truck cargo and an
+   actionable shortage flag. title/strong keep the capture contract: the
+   depot number is the source-of-truth bank value, never a ghost balance. */
+function ResourceChip({row,active,onOpen}){
+ const r=RESOURCE_BY_ID[row.id];
+ const bits=[r.name+": "+amount(row.depot)+" "+r.unit+" in depot"];
+ if(row.reserved>0)bits.push(amount(row.reserved)+" reserved in transit");
+ if(row.state==="critical")bits.push("critical shortage "+amount(row.need)+" "+r.unit);
+ else if(row.state==="warning")bits.push("shortage awaiting delivery");
+ if(row.locked)bits.push("locked until later progression");
+ return <button type="button" onClick={()=>onOpen(row.id)} title={r.name}
+  className={"resource resource--compact resource--"+row.state+(active?" is-active":"")}
+  data-resource={row.id} data-state={row.state} aria-pressed={active}
+  aria-label={bits.join(", ")+". Open freight ledger."}>
   <span className="resource__spark" style={{background:r.color}}/>
-  <span className="resource__name">{r.unit}</span><strong>{amount(value)}</strong>
+  <span className="resource__name">{r.unit}</span><strong>{amount(row.depot)}</strong>
+  {row.reserved>0&&<span className="resource__reserved">⇄{amount(row.reserved)}</span>}
+  {(row.state==="critical"||row.state==="warning")&&<span className={"resource__flag resource__flag--"+row.state} aria-hidden="true">{row.state==="critical"?"⚠":"◔"}</span>}
  </button>;
 }
 function Card({title,eyebrow,children,onClose,className=""}){
@@ -52,7 +67,7 @@ function BuildingCard({def,g,onChoose,selected}){
   <span className={"blueprint__cost"+(afford?"":" blueprint__cost--short")}>{locked?"LOCKED":def.cost.credits+" CR"}</span>
  </button>;
 }
-function DrawPanel({mode,g,selectedId,setSelectedId,buildId,setBuildId,buildRot,setBuildRot,notify,close,onSell,onResearch,onRemove,onCancel}){
+function DrawPanel({mode,g,selectedId,setSelectedId,buildId,setBuildId,buildRot,setBuildRot,notify,close,onSell,onResearch,onRemove,onCancel,strip,stripPrefs,onStripPrefs,ledgerFocus,setLedgerFocus}){
  const selected=g.buildings.find(b=>b.id===selectedId);
  if(mode==="build"){
   const fp=footprintDims(buildId,buildRot);
@@ -87,10 +102,60 @@ function DrawPanel({mode,g,selectedId,setSelectedId,buildId,setBuildId,buildRot,
   {["scrap","iron","copper","steel","alloy","gears","circuits","fuel"].map(id=><div className="trade-row" key={id}><div><strong>{RESOURCE_BY_ID[id].name}</strong><small>In depot: {amount(g.bank[id])}</small></div><button disabled={(g.bank[id]||0)<1} onClick={()=>onSell(id)}>Sell 10</button></div>)}
   <div className="hint-box">Relics · Influence · Echo shards · Charters are reserved for later progression phases, not fabricated multiplayer features.</div>
  </Card>;
- if(mode==="inventory")return <Card title="Freight ledger" eyebrow="INVENTORY / ECONOMY" onClose={close}>
-  <div className="inventory-list">{RESOURCES.map(r=><div key={r.id}><span className="resource__spark" style={{background:r.color}}/><strong>{r.name}</strong><span>{amount(g.bank[r.id]||0)}</span></div>)}</div>
-  <div className="panel-footnote">Material totals are depot inventory. Truck cargo and machine inventories are separate until delivery.</div>
- </Card>;
+ if(mode==="inventory"){
+  /* UX-01 (#359): actionable stock + shortages first; the full transaction
+     ledger stays hidden behind a persisted disclosure toggle. Every number
+     comes from the pure read model over the authoritative simulation. */
+  if(!strip||strip.kind!=="ready")return <Card title="Freight ledger" eyebrow="INVENTORY / LOADING" onClose={close} className="ledger-panel">
+   <div className="inspector-loading" aria-busy="true" data-testid="ledger-loading"><span className="spinner" aria-hidden="true"/><p className="panel-sub">Reading yard stock…</p></div>
+  </Card>;
+  const focus=strip.rows.find(r=>r.id===ledgerFocus)||null;
+  const entries=(g.ledger||[]).slice(-12).reverse();
+  const tone=focus?(focus.state==="critical"?"danger":focus.state==="warning"?"amber":focus.state==="locked"?"muted":"mint"):"mint";
+  const stateLabel=focus?(focus.state==="critical"?"CRITICAL":focus.state==="warning"?"AWAITING DELIVERY":focus.state==="locked"?"LOCKED":focus.state==="empty"?"EMPTY":"IN STOCK"):"";
+  return <Card title="Freight ledger" eyebrow="INVENTORY / SOURCE OF TRUTH" onClose={close} className="ledger-panel">
+   {!strip.power.available&&<div className="bay-line bay-line--warn" role="status" data-testid="ledger-brownout"><span aria-hidden="true">⚠</span><span>Grid brownout — machines are powerless; production resumes when supply meets demand.</span></div>}
+   {strip.shortages.length>0&&<><h3 className="panel-section">Shortages</h3>
+    <div className="ledger-shortages" data-testid="ledger-shortages">{strip.shortages.map(s=><button type="button" key={s.id}
+      className={"ledger-shortage ledger-shortage--"+s.state} data-testid={"shortage-"+s.id} data-state={s.state}
+      onClick={()=>setLedgerFocus(s.id)} aria-label={s.name+" shortage — show breakdown"}>
+      <span aria-hidden="true">{s.state==="critical"?"⚠":"◔"}</span>
+      <span className="ledger-shortage__body"><strong>{s.name} · {s.state==="critical"?"CRITICAL":"DELIVERY PENDING"}</strong><small>{s.detail}</small></span>
+     </button>)}</div></>}
+   {focus&&<div className="ledger-detail" data-testid="ledger-detail" data-resource={focus.id}>
+    <div className="selected-hero"><span className="selected-hero__mark" style={{background:focus.color}}>▤</span><div><strong>{focus.name.toUpperCase()}</strong>
+     <span className={"status-chip status-chip--"+tone} data-testid="ledger-state"><i aria-hidden="true"/>{stateLabel}</span></div></div>
+    {focus.detail&&<p className="panel-sub" data-testid="ledger-detail-note">{focus.detail}</p>}
+    <div className="stat-grid">
+     <div><small>Depot</small><strong data-testid="ledger-depot">{amount(focus.depot)} {focus.unit}</strong></div>
+     <div><small>In machines</small><strong data-testid="ledger-machines">{amount(focus.machines)} {focus.unit}</strong></div>
+     <div><small>Reserved · transit</small><strong data-testid="ledger-reserved">{amount(focus.reserved)} {focus.unit}</strong></div>
+     <div><small>Committed · assembly</small><strong data-testid="ledger-committed">{amount(focus.committed)} {focus.unit}</strong></div>
+     <div><small>Yard total</small><strong data-testid="ledger-total">{amount(focus.total)} {focus.unit}</strong></div>
+     <div><small>Capacity</small><strong data-testid="ledger-capacity">No cap</strong></div>
+    </div>
+   </div>}
+   <h3 className="panel-section">All materials</h3>
+   <div className="inventory-list ledger-list" data-testid="ledger-rows">{strip.rows.map(r=><button type="button" key={r.id}
+     className={"ledger-row"+(ledgerFocus===r.id?" is-active":"")+(r.locked?" ledger-row--locked":"")}
+     data-resource={r.id} data-state={r.state} onClick={()=>setLedgerFocus(r.id)} aria-pressed={ledgerFocus===r.id}
+     aria-label={r.name+": depot "+amount(r.depot)+" "+r.unit+", yard total "+amount(r.total)+" "+r.unit+(r.locked?", locked until later progression":"")}>
+     <span className="resource__spark" style={{background:r.color}}/>
+     <span className="ledger-row__name"><strong>{r.name}</strong>{r.locked&&<em>LOCKED</em>}</span>
+     <span className="ledger-row__nums"><strong>{amount(r.depot)}</strong><small>{r.reserved>0?"⇄"+amount(r.reserved)+" · ":""}Σ{amount(r.total)}</small></span>
+     {(r.state==="critical"||r.state==="warning")&&<span className={"resource__flag resource__flag--"+r.state} aria-hidden="true">{r.state==="critical"?"⚠":"◔"}</span>}
+    </button>)}</div>
+   <button type="button" className="ledger-toggle" data-testid="ledger-toggle" aria-expanded={stripPrefs.ledgerOpen}
+    onClick={()=>onStripPrefs({ledgerOpen:!stripPrefs.ledgerOpen})}>{stripPrefs.ledgerOpen?"Hide":"Show"} transaction ledger ({strip.ledgerCount})</button>
+   {stripPrefs.ledgerOpen&&<div className="ledger-entries" data-testid="ledger-entries">
+    {entries.length?entries.map(e=><div key={e.id} className="ledger-entry" data-kind={e.kind}>
+      <strong>{String(e.kind).toUpperCase()}</strong><span>{e.type||"yard"}</span>
+      <em>{e.cost?"−"+toMoney(e.cost):e.refund?"+"+toMoney(e.refund):""}</em>
+     </div>):<p className="panel-sub">No transactions recorded yet.</p>}
+   </div>}
+   <div className="panel-footnote">Totals = depot + machine cargo + truck cargo, mirrored live from the simulation. Assembly cost is spent up front and refunds in full on cancel. Depot storage is uncapped.</div>
+  </Card>;
+ }
  return null;
 }
 /* UX-04 (#362): the inspector is a pure read model over the authoritative
@@ -198,6 +263,9 @@ export default function App(){
  const [gridVisible,setGridVisible]=useState(false);
  // UX-04 (#362): persisted inspector preferences + two-step dismantle confirm.
  const [ux,setUx]=useState(()=>readUxSettings(typeof window!=="undefined"?window.localStorage:null));
+ // UX-01 (#359): persisted strip disclosure prefs (separate key from ux-settings).
+ const [stripPrefs,setStripPrefs]=useState(()=>readStripSettings(typeof window!=="undefined"?window.localStorage:null));
+ const [ledgerFocus,setLedgerFocus]=useState(null);
  const [confirmId,setConfirmId]=useState(null);
  const [panelSide,setPanelSide]=useState("left");
  const [obscured,setObscured]=useState(false);
@@ -214,6 +282,8 @@ export default function App(){
  useEffect(()=>{if(confirmId!=null)confirmBtnRef.current?.focus();},[confirmId]);
  const notify=useCallback((text)=>{setToast(text);},[]);
  const choose=useCallback(id=>{setMode(id);setPreview(null);setRoadStart(null);setConfirmId(null);if(id!=="build")setSelectedId(null);},[]);
+ const openLedger=useCallback((id=null)=>{choose("inventory");setLedgerFocus(id);},[choose]);
+ const onStripPrefs=useCallback(patch=>{setStripPrefs(writeStripSettings(window.localStorage,patch));},[]);
  /* Non-obscuring placement: pure geometry from src/inspector.js decides which
     half hosts the sheet; the camera is only ever moved through the existing
     setView/applyCamera public API (camera invariants #307 untouched). */
@@ -351,6 +421,8 @@ export default function App(){
   };
  },[]);
  const power=powerStatus(data);
+ const stripState=resourceStripState(data);
+ const criticalCount=stripState.kind==="ready"?stripState.shortages.filter(s=>s.state==="critical").length:0;
  useEffect(()=>{
   const world=worldRef.current;
   if(!world)return;
@@ -372,8 +444,15 @@ export default function App(){
     <div className="brand-mark"><span>R</span><i/></div>
     <div className="brand-type"><strong>RUSTWAKE<span className="brand-badge">V2</span></strong><small>LIVING INDUSTRIAL WORLD / 01</small></div>
    </div>
-   <div className="resources-strip" aria-label="Resources">{MAIN_RESOURCES.map(id=><Resource key={id} id={id} value={data.bank[id]||0} onClick={()=>choose("inventory")} compact={true}/>)}
-    <button className="resource-more" onClick={()=>choose("inventory")} title="Open full inventory">+ {RESOURCES.length-MAIN_RESOURCES.length}</button>
+   <div className="resources-strip" aria-label="Resources">
+    {stripState.kind==="ready"&&MAIN_RESOURCES.map(id=>{const row=stripState.rows.find(r=>r.id===id);
+     return row?<ResourceChip key={id} row={row} active={mode==="inventory"&&ledgerFocus===id} onOpen={openLedger}/>:null;})}
+    {stripState.kind==="ready"&&(criticalCount>0||!power.available)&&
+     <button type="button" className={"strip-alert"+(criticalCount>0?" strip-alert--critical":"")} data-testid="strip-alert"
+      onClick={()=>openLedger(null)} aria-label={criticalCount>0?criticalCount+" critical material shortages — open freight ledger":"Grid brownout — open freight ledger"}>
+      <span aria-hidden="true">⚠</span>{criticalCount>0?criticalCount+" SHORT":"GRID"}
+     </button>}
+    <button className="resource-more" onClick={()=>openLedger(null)} title="Open full inventory" aria-label="Open full freight ledger">+ {RESOURCES.length-MAIN_RESOURCES.length}</button>
    </div>
    <div className="session-info"><StatusDot ok={power.available}/><span>LOCAL YARD</span><small>SECTOR 01</small></div>
   </header>
@@ -417,7 +496,8 @@ export default function App(){
        onRemove={onRemove} onCancel={onCancel} onClose={()=>{setSelectedId(null);choose("select");}}/>
      :<DrawPanel mode={mode} g={data} selectedId={selectedId} setSelectedId={setSelectedId}
        buildId={buildId} setBuildId={setBuildId} buildRot={buildRot} setBuildRot={setBuildRot}
-       notify={notify} onSell={onSell} onResearch={onResearch} onRemove={onRemove} onCancel={onCancel} close={()=>choose("select")}/>}
+       notify={notify} onSell={onSell} onResearch={onResearch} onRemove={onRemove} onCancel={onCancel} close={()=>choose("select")}
+       strip={stripState} stripPrefs={stripPrefs} onStripPrefs={onStripPrefs} ledgerFocus={ledgerFocus} setLedgerFocus={setLedgerFocus}/>}
    </div>}
   <div className="footline"><span>RUSTWAKE / V2 FOUNDATION</span><span>SIM {Math.floor(data.elapsed)}s</span><span>{data.buildings.length} STRUCTURES · {data.roads.length} ROAD CELLS</span></div>
   {toast&&<div key={toast+Math.floor(data.elapsed/7)} className="toast" role="status" onClick={()=>setToast("")}><b>NOTICE</b><span>{toast}</span><button aria-label="Dismiss notice" onClick={()=>setToast("")}>×</button></div>}

@@ -1,0 +1,842 @@
+{
+  "version": 1,
+  "issue": 359,
+  "task": "UX-01 actionable resource strip",
+  "build": "production-preview",
+  "source_sha": "1566e50677b01134bd1985dd4c523e2717ffdaeb",
+  "started": "2026-11-17T04:35:54.133Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "screenshots": [
+        "desktop-critical.png",
+        "desktop-ledger-critical.png",
+        "desktop-ledger-locked.png",
+        "desktop-ledger-open.png",
+        "desktop-transit.png",
+        "desktop-ledger-processing.png",
+        "desktop-empty.png"
+      ],
+      "proof": {
+        "loadStamps": {
+          "world3d": "ready",
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15
+        },
+        "strip": {
+          "chips": [
+            {
+              "id": "credits",
+              "state": "ok",
+              "width": 93,
+              "height": 44,
+              "visible": true
+            },
+            {
+              "id": "scrap",
+              "state": "ok",
+              "width": 82,
+              "height": 44,
+              "visible": true
+            },
+            {
+              "id": "iron",
+              "state": "critical",
+              "width": 65,
+              "height": 44,
+              "visible": true
+            },
+            {
+              "id": "steel",
+              "state": "ok",
+              "width": 73,
+              "height": 44,
+              "visible": true
+            },
+            {
+              "id": "fuel",
+              "state": "critical",
+              "width": 66,
+              "height": 44,
+              "visible": true
+            },
+            {
+              "id": "data",
+              "state": "ok",
+              "width": 70,
+              "height": 44,
+              "visible": true
+            }
+          ],
+          "moreTarget": {
+            "width": 44,
+            "height": 44
+          }
+        },
+        "stripAlert": {
+          "text": "⚠ 2 SHORT",
+          "visible": true
+        },
+        "sourceOfTruth": {
+          "credits": {
+            "chip": 1800,
+            "save": 1800,
+            "exact": true
+          },
+          "iron": {
+            "chip": 0,
+            "save": 0,
+            "exact": true
+          },
+          "steel": {
+            "chip": 20,
+            "save": 20,
+            "exact": true
+          },
+          "fuel": {
+            "chip": 0,
+            "save": 0,
+            "exact": true
+          },
+          "data": {
+            "chip": 15,
+            "save": 15,
+            "exact": true
+          },
+          "scrap": {
+            "chip": 220,
+            "save": 220,
+            "monotonic": true
+          }
+        },
+        "ledgerCritical": {
+          "detail": {
+            "resource": "iron",
+            "state": "CRITICAL",
+            "depot": 0,
+            "machines": 0,
+            "reserved": 0,
+            "committed": 0,
+            "total": 0,
+            "capacity": "No cap"
+          },
+          "shortageRows": 2,
+          "shortageNote": "1 machine waiting for 5 FE; depot 0 + inbound 0 cannot cover it. Add supply or sell less."
+        },
+        "locked": {
+          "rows": [
+            {
+              "id": "relics",
+              "state": "locked",
+              "lockedBadge": true
+            },
+            {
+              "id": "influence",
+              "state": "locked",
+              "lockedBadge": true
+            },
+            {
+              "id": "shards",
+              "state": "locked",
+              "lockedBadge": true
+            },
+            {
+              "id": "charters",
+              "state": "locked",
+              "lockedBadge": true
+            },
+            {
+              "id": "renown",
+              "state": "locked",
+              "lockedBadge": true
+            }
+          ],
+          "detailState": "LOCKED",
+          "detailNote": "No source or sink in the simulation yet — reserved for later progression phases."
+        },
+        "disclosure": {
+          "startsCollapsed": true,
+          "emptyState": "No transactions recorded yet.",
+          "toggleTarget": {
+            "width": 320,
+            "height": 44
+          }
+        },
+        "worldCenter": {
+          "before": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1.15,
+            "x": 0,
+            "z": 0
+          },
+          "open": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1.15,
+            "x": 0,
+            "z": 0
+          },
+          "closed": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1.15,
+            "x": 0,
+            "z": 0
+          },
+          "preserved": true
+        },
+        "settingsPersistence": {
+          "key": "rustwake:v2:strip-settings",
+          "ledgerOpenAfterReload": true
+        },
+        "resizeWorldCenter": [
+          {
+            "viewport": {
+              "width": 1180,
+              "height": 820
+            },
+            "center": {
+              "x": 0,
+              "z": 0
+            },
+            "yaw": 45,
+            "elevation": 35.264
+          },
+          {
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "center": {
+              "x": 0,
+              "z": 0
+            },
+            "yaw": 45,
+            "elevation": 35.264
+          }
+        ],
+        "motion": {
+          "framesDiffer": true,
+          "note": "rAF simulation advances even with prefers-reduced-motion CSS"
+        },
+        "cameraInvariants": {
+          "beforeZoom": 1.15,
+          "afterZoom": 1.7825,
+          "stampMatchesApplied": true,
+          "world3d": "ready"
+        },
+        "documentScroll": false,
+        "transit": {
+          "ironJobs": 15,
+          "fuelJobs": 6,
+          "reservedBadge": "⇄15",
+          "depot": 75,
+          "chipState": "warning",
+          "ledger": {
+            "depot": 75,
+            "machines": 0,
+            "reserved": 15,
+            "total": 90
+          },
+          "conservation": true
+        },
+        "transitPickup": {
+          "freightOnboardStamp": 15,
+          "badgeAfter": 15,
+          "reservedAfter": 15,
+          "totalAfter": 90,
+          "conservedThroughPickup": true
+        },
+        "processing": {
+          "committedIron": 24,
+          "depotAfterSpend": 51,
+          "machines": 0,
+          "reserved": 25,
+          "total": 76,
+          "seedBankIron": 66,
+          "seedMachineIron": 10,
+          "conservation": "depot<=seedBank && total==depot+machines+reserved && total<=seedBank+seedMachines (live sim may dispatch/consume)",
+          "ledgerEntry": "BUILD Furnace −360 CR · 24 FE · 50 SC · 20 AG",
+          "note": "committed cost is already spent by buildAt; cancel refunds it in full (unit-tested)"
+        },
+        "empty": {
+          "creditsChip": 3,
+          "rows": 17,
+          "nonLocked": 12,
+          "locked": 5,
+          "states": {
+            "credits": "ok",
+            "scrap": "ok",
+            "iron": "critical",
+            "copper": "ok",
+            "stone": "empty",
+            "fuel": "critical",
+            "water": "ok",
+            "steel": "empty",
+            "alloy": "empty",
+            "gears": "empty",
+            "circuits": "empty",
+            "data": "ok",
+            "relics": "locked",
+            "influence": "locked",
+            "shards": "locked",
+            "charters": "locked",
+            "renown": "locked"
+          },
+          "note": "live sim may produce trace outputs; no row paints stock it does not hold"
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "screenshots": [
+        "phone-critical.png",
+        "phone-ledger-critical.png",
+        "phone-ledger-locked.png",
+        "phone-ledger-open.png",
+        "phone-transit.png",
+        "phone-ledger-processing.png",
+        "phone-empty.png"
+      ],
+      "proof": {
+        "loadStamps": {
+          "world3d": "ready",
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1
+        },
+        "strip": {
+          "chips": [
+            {
+              "id": "credits",
+              "state": "ok",
+              "width": 50,
+              "height": 44,
+              "visible": true
+            },
+            {
+              "id": "scrap",
+              "state": "ok",
+              "width": 50,
+              "height": 44,
+              "visible": true
+            },
+            {
+              "id": "iron",
+              "state": "critical",
+              "width": 50,
+              "height": 44,
+              "visible": true
+            },
+            {
+              "id": "steel",
+              "state": "ok",
+              "width": 50,
+              "height": 44,
+              "visible": true
+            },
+            {
+              "id": "fuel",
+              "state": "critical",
+              "width": 50,
+              "height": 44,
+              "visible": true
+            },
+            {
+              "id": "data",
+              "state": "ok",
+              "width": 50,
+              "height": 44,
+              "visible": true
+            }
+          ],
+          "moreTarget": {
+            "width": 50,
+            "height": 44
+          }
+        },
+        "stripAlert": {
+          "visible": false,
+          "note": "phone/compact: per-chip flags carry the signal"
+        },
+        "sourceOfTruth": {
+          "credits": {
+            "chip": 1800,
+            "save": 1800,
+            "exact": true
+          },
+          "iron": {
+            "chip": 0,
+            "save": 0,
+            "exact": true
+          },
+          "steel": {
+            "chip": 20,
+            "save": 20,
+            "exact": true
+          },
+          "fuel": {
+            "chip": 0,
+            "save": 0,
+            "exact": true
+          },
+          "data": {
+            "chip": 15,
+            "save": 15,
+            "exact": true
+          },
+          "scrap": {
+            "chip": 220,
+            "save": 220,
+            "monotonic": true
+          }
+        },
+        "ledgerCritical": {
+          "detail": {
+            "resource": "iron",
+            "state": "CRITICAL",
+            "depot": 0,
+            "machines": 0,
+            "reserved": 0,
+            "committed": 0,
+            "total": 0,
+            "capacity": "No cap"
+          },
+          "shortageRows": 2,
+          "shortageNote": "1 machine waiting for 5 FE; depot 0 + inbound 0 cannot cover it. Add supply or sell less."
+        },
+        "locked": {
+          "rows": [
+            {
+              "id": "relics",
+              "state": "locked",
+              "lockedBadge": true
+            },
+            {
+              "id": "influence",
+              "state": "locked",
+              "lockedBadge": true
+            },
+            {
+              "id": "shards",
+              "state": "locked",
+              "lockedBadge": true
+            },
+            {
+              "id": "charters",
+              "state": "locked",
+              "lockedBadge": true
+            },
+            {
+              "id": "renown",
+              "state": "locked",
+              "lockedBadge": true
+            }
+          ],
+          "detailState": "LOCKED",
+          "detailNote": "No source or sink in the simulation yet — reserved for later progression phases."
+        },
+        "disclosure": {
+          "startsCollapsed": true,
+          "emptyState": "No transactions recorded yet.",
+          "toggleTarget": {
+            "width": 350,
+            "height": 44
+          }
+        },
+        "worldCenter": {
+          "before": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1,
+            "x": 0,
+            "z": 0
+          },
+          "open": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1,
+            "x": 0,
+            "z": 0
+          },
+          "closed": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1,
+            "x": 0,
+            "z": 0
+          },
+          "preserved": true
+        },
+        "settingsPersistence": {
+          "key": "rustwake:v2:strip-settings",
+          "ledgerOpenAfterReload": true
+        },
+        "motion": {
+          "framesDiffer": true,
+          "note": "rAF simulation advances even with prefers-reduced-motion CSS"
+        },
+        "cameraInvariants": {
+          "beforeZoom": 1,
+          "afterZoom": 1.55,
+          "stampMatchesApplied": true,
+          "world3d": "ready"
+        },
+        "documentScroll": false,
+        "transit": {
+          "ironJobs": 15,
+          "fuelJobs": 6,
+          "reservedBadge": "⇄15",
+          "depot": 75,
+          "chipState": "warning",
+          "ledger": {
+            "depot": 75,
+            "machines": 0,
+            "reserved": 15,
+            "total": 90
+          },
+          "conservation": true
+        },
+        "transitPickup": {
+          "freightOnboardStamp": 15,
+          "badgeAfter": 15,
+          "reservedAfter": 15,
+          "totalAfter": 90,
+          "conservedThroughPickup": true
+        },
+        "processing": {
+          "committedIron": 24,
+          "depotAfterSpend": 51,
+          "machines": 0,
+          "reserved": 25,
+          "total": 76,
+          "seedBankIron": 66,
+          "seedMachineIron": 10,
+          "conservation": "depot<=seedBank && total==depot+machines+reserved && total<=seedBank+seedMachines (live sim may dispatch/consume)",
+          "ledgerEntry": "BUILD Furnace −360 CR · 24 FE · 50 SC · 20 AG",
+          "note": "committed cost is already spent by buildAt; cancel refunds it in full (unit-tested)"
+        },
+        "empty": {
+          "creditsChip": 3,
+          "rows": 17,
+          "nonLocked": 12,
+          "locked": 5,
+          "states": {
+            "credits": "ok",
+            "scrap": "ok",
+            "iron": "critical",
+            "copper": "ok",
+            "stone": "empty",
+            "fuel": "critical",
+            "water": "ok",
+            "steel": "empty",
+            "alloy": "empty",
+            "gears": "empty",
+            "circuits": "empty",
+            "data": "ok",
+            "relics": "locked",
+            "influence": "locked",
+            "shards": "locked",
+            "charters": "locked",
+            "renown": "locked"
+          },
+          "note": "live sim may produce trace outputs; no row paints stock it does not hold"
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "landscape",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "screenshots": [
+        "landscape-critical.png",
+        "landscape-ledger-critical.png",
+        "landscape-ledger-locked.png",
+        "landscape-ledger-open.png",
+        "landscape-transit.png",
+        "landscape-ledger-processing.png",
+        "landscape-empty.png"
+      ],
+      "proof": {
+        "loadStamps": {
+          "world3d": "ready",
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1
+        },
+        "strip": {
+          "chips": [
+            {
+              "id": "credits",
+              "state": "ok",
+              "width": 83,
+              "height": 44,
+              "visible": true
+            },
+            {
+              "id": "scrap",
+              "state": "ok",
+              "width": 72,
+              "height": 44,
+              "visible": true
+            },
+            {
+              "id": "iron",
+              "state": "critical",
+              "width": 55,
+              "height": 44,
+              "visible": true
+            },
+            {
+              "id": "steel",
+              "state": "ok",
+              "width": 63,
+              "height": 44,
+              "visible": true
+            },
+            {
+              "id": "fuel",
+              "state": "critical",
+              "width": 56,
+              "height": 44,
+              "visible": true
+            },
+            {
+              "id": "data",
+              "state": "ok",
+              "width": 60,
+              "height": 44,
+              "visible": true
+            }
+          ],
+          "moreTarget": {
+            "width": 44,
+            "height": 44
+          }
+        },
+        "stripAlert": {
+          "visible": false,
+          "note": "phone/compact: per-chip flags carry the signal"
+        },
+        "sourceOfTruth": {
+          "credits": {
+            "chip": 1800,
+            "save": 1800,
+            "exact": true
+          },
+          "iron": {
+            "chip": 0,
+            "save": 0,
+            "exact": true
+          },
+          "steel": {
+            "chip": 20,
+            "save": 20,
+            "exact": true
+          },
+          "fuel": {
+            "chip": 0,
+            "save": 0,
+            "exact": true
+          },
+          "data": {
+            "chip": 15,
+            "save": 15,
+            "exact": true
+          },
+          "scrap": {
+            "chip": 220,
+            "save": 220,
+            "monotonic": true
+          }
+        },
+        "ledgerCritical": {
+          "detail": {
+            "resource": "iron",
+            "state": "CRITICAL",
+            "depot": 0,
+            "machines": 0,
+            "reserved": 0,
+            "committed": 0,
+            "total": 0,
+            "capacity": "No cap"
+          },
+          "shortageRows": 2,
+          "shortageNote": "1 machine waiting for 5 FE; depot 0 + inbound 0 cannot cover it. Add supply or sell less."
+        },
+        "locked": {
+          "rows": [
+            {
+              "id": "relics",
+              "state": "locked",
+              "lockedBadge": true
+            },
+            {
+              "id": "influence",
+              "state": "locked",
+              "lockedBadge": true
+            },
+            {
+              "id": "shards",
+              "state": "locked",
+              "lockedBadge": true
+            },
+            {
+              "id": "charters",
+              "state": "locked",
+              "lockedBadge": true
+            },
+            {
+              "id": "renown",
+              "state": "locked",
+              "lockedBadge": true
+            }
+          ],
+          "detailState": "LOCKED",
+          "detailNote": "No source or sink in the simulation yet — reserved for later progression phases."
+        },
+        "disclosure": {
+          "startsCollapsed": true,
+          "emptyState": "No transactions recorded yet.",
+          "toggleTarget": {
+            "width": 320,
+            "height": 44
+          }
+        },
+        "worldCenter": {
+          "before": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1,
+            "x": 0,
+            "z": 0
+          },
+          "open": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1,
+            "x": 0,
+            "z": 0
+          },
+          "closed": {
+            "yaw": 45,
+            "elevation": 35.264,
+            "zoom": 1,
+            "x": 0,
+            "z": 0
+          },
+          "preserved": true
+        },
+        "settingsPersistence": {
+          "key": "rustwake:v2:strip-settings",
+          "ledgerOpenAfterReload": true
+        },
+        "motion": {
+          "framesDiffer": true,
+          "note": "rAF simulation advances even with prefers-reduced-motion CSS"
+        },
+        "cameraInvariants": {
+          "beforeZoom": 1,
+          "afterZoom": 1.55,
+          "stampMatchesApplied": true,
+          "world3d": "ready"
+        },
+        "documentScroll": false,
+        "transit": {
+          "ironJobs": 15,
+          "fuelJobs": 6,
+          "reservedBadge": "⇄15",
+          "depot": 75,
+          "chipState": "warning",
+          "ledger": {
+            "depot": 75,
+            "machines": 0,
+            "reserved": 15,
+            "total": 90
+          },
+          "conservation": true
+        },
+        "transitPickup": {
+          "freightOnboardStamp": 15,
+          "badgeAfter": 15,
+          "reservedAfter": 15,
+          "totalAfter": 90,
+          "conservedThroughPickup": true
+        },
+        "processing": {
+          "committedIron": 24,
+          "depotAfterSpend": 51,
+          "machines": 0,
+          "reserved": 25,
+          "total": 76,
+          "seedBankIron": 66,
+          "seedMachineIron": 10,
+          "conservation": "depot<=seedBank && total==depot+machines+reserved && total<=seedBank+seedMachines (live sim may dispatch/consume)",
+          "ledgerEntry": "BUILD Furnace −360 CR · 24 FE · 50 SC · 20 AG",
+          "note": "committed cost is already spent by buildAt; cancel refunds it in full (unit-tested)"
+        },
+        "empty": {
+          "creditsChip": 3,
+          "rows": 17,
+          "nonLocked": 12,
+          "locked": 5,
+          "states": {
+            "credits": "ok",
+            "scrap": "ok",
+            "iron": "critical",
+            "copper": "ok",
+            "stone": "empty",
+            "fuel": "critical",
+            "water": "ok",
+            "steel": "empty",
+            "alloy": "empty",
+            "gears": "empty",
+            "circuits": "empty",
+            "data": "ok",
+            "relics": "locked",
+            "influence": "locked",
+            "shards": "locked",
+            "charters": "locked",
+            "renown": "locked"
+          },
+          "note": "live sim may produce trace outputs; no row paints stock it does not hold"
+        }
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    }
+  ],
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone/landscape views are emulated, not physical devices",
+    "Numeric mirror proofs do not certify visual beauty — sponsor review required at G1 (#276)",
+    "Local preview only — the live hosted receipt is produced at release by the release engineer"
+  ],
+  "completed": "2026-11-17T04:36:45.015Z"
+}
