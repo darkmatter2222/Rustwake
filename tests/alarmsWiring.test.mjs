@@ -29,6 +29,9 @@ globalThis.requestAnimationFrame = dom.window.requestAnimationFrame.bind(dom.win
 globalThis.cancelAnimationFrame = dom.window.cancelAnimationFrame.bind(dom.window);
 globalThis.ResizeObserver = class { observe() {} unobserve() {} disconnect() {} };
 dom.window.matchMedia = () => ({ matches: false, addEventListener() {}, removeEventListener() {} });
+// UX-06 alarmProbe is test-gated in App.jsx (window.__RW_PROBES__); opt in here
+// so the wiring harness observes the same stamp the capture script does.
+dom.window.__RW_PROBES__ = true;
 globalThis.IS_REACT_ACT_ENVIRONMENT = false;
 // Timer-backed MessageChannel so react-dom's scheduler leaves no open handle.
 globalThis.MessageChannel = class {

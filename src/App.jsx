@@ -703,9 +703,13 @@ export default function App(){
       cargo:v.cargo?{amount:v.cargo.amount,resource:v.cargo.resource}:null}))});
     // UX-06 (#364) observability stamp: the SAME snapshot the alarm rail
     // renders, so captures prove chip ids/counts equal the pure read model
-    // over the sim (same pattern as fleetProbe). Read-only, never mutates.
-    const al=alarmsState(s);
-    document.body.dataset.alarmProbe=JSON.stringify({kind:al.kind,ids:(al.alarms||[]).map(a=>a.id),counts:al.counts||null,power:al.power||null});
+    // over the sim. Test-gated behind window.__RW_PROBES__ (wiring harness
+    // + capture script opt in) so production never grows the debug-probe
+    // family; registered in the probe debt ledger. Read-only, never mutates.
+    if(window.__RW_PROBES__){
+     const al=alarmsState(s);
+     document.body.dataset.alarmProbe=JSON.stringify({kind:al.kind,ids:(al.alarms||[]).map(a=>a.id),counts:al.counts||null,power:al.power||null});
+    }
     updatePlacement(false);uiLast=now;
    }
    if(now-saveLast>4200){persist(gameRef.current);saveLast=now;}
@@ -905,7 +909,10 @@ export default function App(){
     </div>
    </div>}
   <div className="footline"><span>RUSTWAKE / V2 FOUNDATION</span><span>SIM {Math.floor(data.elapsed)}s</span><span>{data.buildings.length} STRUCTURES · {data.roads.length} ROAD CELLS</span></div>
-  {toast&&<div key={toast+Math.floor(data.elapsed/7)} className="toast" role="status" onClick={()=>setToast("")}><b>NOTICE</b><span>{toast}</span><button aria-label="Dismiss notice" onClick={()=>setToast("")}>×</button></div>}
+  {/* #548: toast body is pointer-events:none (styles.css) so world gestures
+      pass through; only the 44px dismiss button is interactive. role=status
+      and the remount key are unchanged. */}
+  {toast&&<div key={toast+Math.floor(data.elapsed/7)} className="toast" role="status"><b>NOTICE</b><span>{toast}</span><button aria-label="Dismiss notice" onClick={()=>setToast("")}>×</button></div>}
  </div>;
 }
 const EDGE_LIMIT=70;
