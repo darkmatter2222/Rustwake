@@ -1,0 +1,125 @@
+{
+  "method": "zlib full-frame PNG decode, distinct RGB colours + luminance stddev (no vision)",
+  "minDistinctColors": 500,
+  "minLuminanceStddev": 5,
+  "allPass": true,
+  "results": [
+    {
+      "file": "desktop-dismantle-confirm-dialog.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 29919,
+      "luminanceMean": 92.409,
+      "luminanceStddev": 45.2,
+      "pass": true
+    },
+    {
+      "file": "desktop-dismantle-protected.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 28476,
+      "luminanceMean": 96.127,
+      "luminanceStddev": 44.79,
+      "pass": true
+    },
+    {
+      "file": "desktop-dismantle-refunded.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 27972,
+      "luminanceMean": 99.689,
+      "luminanceStddev": 44.314,
+      "pass": true
+    },
+    {
+      "file": "desktop-dismantle-repeat-missing.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 26671,
+      "luminanceMean": 104.543,
+      "luminanceStddev": 42.864,
+      "pass": true
+    },
+    {
+      "file": "desktop-dismantle-reserved.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 30204,
+      "luminanceMean": 93.165,
+      "luminanceStddev": 44.93,
+      "pass": true
+    },
+    {
+      "file": "desktop-fleet-reserved-detail.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 28708,
+      "luminanceMean": 94.555,
+      "luminanceStddev": 45.15,
+      "pass": true
+    },
+    {
+      "file": "desktop-freight-canceled.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 28761,
+      "luminanceMean": 93.614,
+      "luminanceStddev": 44.717,
+      "pass": true
+    },
+    {
+      "file": "desktop-replay-no-double-refund.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 26963,
+      "luminanceMean": 104.2,
+      "luminanceStddev": 42.153,
+      "pass": true
+    },
+    {
+      "file": "desktop-reserved-then-confirm-dialog.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 30734,
+      "luminanceMean": 91.359,
+      "luminanceStddev": 45.005,
+      "pass": true
+    },
+    {
+      "file": "desktop-reserved-then-dismantled.png",
+      "width": 1440,
+      "height": 900,
+      "distinctColors": 28614,
+      "luminanceMean": 99.041,
+      "luminanceStddev": 44.292,
+      "pass": true
+    },
+    {
+      "file": "phone-dismantle-confirm-dialog.png",
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 18593,
+      "luminanceMean": 65.574,
+      "luminanceStddev": 41.932,
+      "pass": true
+    },
+    {
+      "file": "phone-dismantle-refunded.png",
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 20412,
+      "luminanceMean": 81.076,
+      "luminanceStddev": 48.056,
+      "pass": true
+    },
+    {
+      "file": "phone-dismantle-repeat-missing.png",
+      "width": 780,
+      "height": 1688,
+      "distinctColors": 19497,
+      "luminanceMean": 95.169,
+      "luminanceStddev": 45.619,
+      "pass": true
+    }
+  ]
+}

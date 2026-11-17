@@ -1,0 +1,110 @@
+{
+  "checkedAt": "2026-11-17T15:06:53.510Z",
+  "port": 4184,
+  "results": [
+    {
+      "view": "phone",
+      "seed": "freshYard",
+      "point": {
+        "x": 195,
+        "y": 422
+      },
+      "centre": "CANVAS.world-canvas",
+      "isCanvas": true,
+      "chain": [
+        "CANVAS.world-canvas",
+        "DIV.world-container",
+        "DIV.app-shell",
+        "DIV",
+        "BODY",
+        "HTML"
+      ],
+      "alarmRail": {
+        "top": 112,
+        "bottom": 156,
+        "left": 10,
+        "right": 380,
+        "visible": true
+      },
+      "toast": null
+    },
+    {
+      "view": "phone",
+      "seed": "uiSeed",
+      "point": {
+        "x": 195,
+        "y": 422
+      },
+      "centre": "CANVAS.world-canvas",
+      "isCanvas": true,
+      "chain": [
+        "CANVAS.world-canvas",
+        "DIV.world-container",
+        "DIV.app-shell",
+        "DIV",
+        "BODY",
+        "HTML"
+      ],
+      "alarmRail": {
+        "top": 112,
+        "bottom": 156,
+        "left": 10,
+        "right": 307.296875,
+        "visible": true
+      },
+      "toast": null
+    },
+    {
+      "view": "desktop",
+      "seed": "freshYard",
+      "point": {
+        "x": 720,
+        "y": 450
+      },
+      "centre": "CANVAS.world-canvas",
+      "isCanvas": true,
+      "chain": [
+        "CANVAS.world-canvas",
+        "DIV.world-container",
+        "DIV.app-shell",
+        "DIV",
+        "BODY",
+        "HTML"
+      ],
+      "alarmRail": {
+        "top": 458,
+        "bottom": 602,
+        "left": 33.109375,
+        "right": 184.046875,
+        "visible": true
+      },
+      "toast": null
+    },
+    {
+      "view": "desktop",
+      "seed": "uiSeed",
+      "point": {
+        "x": 720,
+        "y": 450
+      },
+      "centre": "CANVAS.world-canvas",
+      "isCanvas": true,
+      "chain": [
+        "CANVAS.world-canvas",
+        "DIV.world-container",
+        "DIV.app-shell",
+        "DIV",
+        "BODY",
+        "HTML"
+      ],
+      "alarmRail": {
+        "top": 458,
+        "bottom": 552,
+        "left": 33.109375,
+        "right": 184.046875,
+        "visible": true
+      },
+      "toast": null
+    }
+  ]
+}
