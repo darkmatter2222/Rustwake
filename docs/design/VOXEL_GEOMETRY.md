@@ -62,13 +62,13 @@ Bounds are pad-inclusive static envelopes (W × H × D, local world units before
 
 | Machine | Footprint | Static bounds | Pick H | Pivot (motion, swingRadius) | Budget meshes/tris |
 |---|---|---|---|---|---|
-| salvager | 1×1 | 3.045 × 2.285 × 3.045 | 2.95 | rocker (oscillate, 2.95) | 24 / 400 |
+| salvager | 1×1 | 3.045 × 2.74 × 3.045 | 2.95 | rocker (oscillate 0.55/0.65, 2.95) | 32 / 560 (measured 29 / 408, ART-02) |
 | depot | 1×1 | 3.13 × 2.87 × 3.045 | 2.87 | static + FREIGHT signage | 24 / 400 |
 | market | 1×1 | 3.13 × 2.87 × 3.045 | 2.87 | static + EXCHANGE signage | 24 / 400 |
 | generator | 1×1 | 3.045 × 1.975 × 3.045 | 2.20 | spin (spin, 1.32) | 24 / 500 |
 | furnace | 1×1 | 3.045 × 4.55 × 3.045 | 4.55 | group pulse (amp 0.009, speed 5) | 24 / 500 |
 | foundry | 1×1 | 3.045 × 4.55 × 3.045 | 4.55 | group pulse (amp 0.009, speed 5) | 24 / 500 |
-| crusher | 1×1 | 3.045 × 2.34 × 3.045 | 2.34 | static | 24 / 500 |
+| crusher | 1×1 | 3.045 × 2.51 × 3.045 | 2.51 | rollerA (spin +1.75, 1.8) + rollerB (spin −1.75, 0.4) + screen (oscillate 0.04/3.4, 1.1) — ART-02 | 46 / 660 (measured 45 / 600) |
 | refinery | 1×1 | 3.045 × 2.34 × 3.045 | 2.34 | static | 24 / 500 |
 | crane | 2×3 | 3.045 × 5.09 × 3.045 | 5.60 | crane slew→trolley→hoist→hook (ART-06 lift cycle, 4.8) | 32 / 600 (measured 27 / 324) |
 | turret | 1×1 | 3.045 × 3.42 × 3.045 | 3.42 | rotate (spin, 2.3) | 20 / 400 |
@@ -121,6 +121,51 @@ The decorative endless sinusoidal slew (`rotation.y = sin(time*.24)*.34`) is rep
 
 - Tests: `tests/craneMotion.test.mjs` — 13 tests (hierarchy names/parentage, phase order + durations + periodicity, channel bounds, hook==cable-end coupling, no-cargo negatives, reduced-motion parked static, camera-hash guard). Full suite 168/168 on rebased main `d1e8dec4` (155 main + 13 crane).
 - Capture: `npm run build && node scripts/capture-crane.mjs` → `docs/evidence/352-art-06/` (desktop 1440×900 + phone 390×844 front/side/isometric stills, parked reduced-motion negative, selection proof, 10 distinct motion-stage frames over ≥60 s with a ≥120-sample timeline, phone motion frames, `report.json` citing the capture head SHA). Status `PASS_NUMERIC_ONLY` — numeric smoke only, not art parity, reviewer/product acceptance or sponsor G1 (#276).
+
+## ART-02 salvage structures (#348)
+
+The salvager and crusher branches of `makeBuilding` were rebuilt as distinct
+industrial structures (body/roof/side silhouettes, separate working parts, front
+loading bays). Full contract, provenance and the sorter mapping decision:
+`docs/design/SALVAGE_MODELS.md`. Summary:
+
+- **salvager**: stepped roof + vents, glazed cab, radiator fins, intake mouth +
+  discharge chute on +Z, exhaust stack (static top 2.74), rear counterweight;
+  `pivot:rocker` offset/axis/swingRadius unchanged, now with a 3-tooth grapple head.
+  Measured 29 meshes / 408 tris (budget 32/560).
+- **crusher**: open-front chamber (side/rear walls + floor, no front wall), stepped
+  hopper roof with rails (static top 2.51), twin discharge chutes with distinct
+  ferrous/aggregate rims, side ladder; three named axis-X pivots —
+  `pivot:rollerA` `[0,1.35,0.42]` spin +1.75 (shaft, 4 teeth, flywheel ON the rotation
+  axis at x −1.32), `pivot:rollerB` `[0,1.35,−0.18]` spin −1.75 (counter-rotating,
+  teeth intermesh), `pivot:screen` `[0,0.95,0.95]` oscillate 0.04/3.4 (deck + 5 bars).
+  Measured 45 meshes / 600 tris (budget 46/660).
+- **sorter mapping**: V2 has no buildable sorter registry entry (content/sim outside
+  the ART-02 lease); the crusher's real outputs `{iron:6, stone:2}` ARE mechanical
+  separation, delivered as the screen deck + twin chutes. Standalone buildable
+  sorter is a follow-up seam under #262.
+- **refinery seam**: the old shared branch was split; refinery geometry is
+  byte-for-byte the pre-ART-02 structure (10 meshes / 180 tris, zero pivots),
+  guarded by `tests/salvageModels.test.mjs`. ART-03 (#349) owns its rebuild.
+- Motion: pure `art02Pose(time, reducedMotion, id)` + frozen `ART02_MOTION` exported
+  from `src/world.js`, shared by runtime `update()` and tests (ART-06 pattern);
+  schema declarations mirror the constants exactly (drift-guarded). Reduced motion
+  parks ALL ART-02 channels at 0 (including the previously free-running rocker).
+  Additive stamps `art02Arm/art02Roller/art02Screen/art02Reduced`. Stamps are
+  presence-aware: a channel whose machine is not yet in the yard stamps `"none"`
+  (absent); a parked existing channel stamps exactly `"0.000"`. At landing the
+  crusher is absent, so `art02Roller`/`art02Screen` are `"none"` while the salvager
+  `art02Arm` is `"0.000"`; the capture's reduced-motion negative accepts
+  parked-or-absent at landing, then asserts strict `"0.000"` on all three channels
+  over a second 2 s real-clock window once the crusher is really placed (net
+  strengthening — see `SALVAGE_MODELS.md`).
+- Bay/status/pick/footprint/staging/save semantics unchanged; camera hashes
+  `f3afa5479a66b97e` / `691b3c0a3480e97b` guarded in tests and capture.
+- Evidence: `tests/salvageModels.test.mjs` (11 tests, full suite 282/282) +
+  `scripts/capture-art02.mjs` → `docs/evidence/348-art-02/` (PASS_NUMERIC_ONLY;
+  desktop + emulated phone front/side/iso, real placement + picking proof, 96px
+  silhouette metrics, motion timeline, invalid-site/reduced-motion/WebGL-failure
+  negatives). Numeric proofs are not visual acceptance (G1 #276).
 
 ## Performance limits
 

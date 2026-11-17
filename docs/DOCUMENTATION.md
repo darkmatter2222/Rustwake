@@ -9,7 +9,7 @@ This is the navigation and decision hierarchy for EVERY AI agent, independent of
 4. docs/design/tokens.json and PALETTE.md: exact palette, typography, lighting, spacing and semantic use.
 5. docs/design/CAMERA.md: pointer grip, ray/ground projection, zoom and orbit contract.
 6. docs/design/UI_DESIGN.md: complete game-first responsive interaction specification.
-7. docs/design/ASSETS.md: all primitive/rig families, import and LOD rules. docs/design/VOXEL_GEOMETRY.md: canonical voxel scale, pivot, pick and material schema (#347, rustwake.voxel.geometry.v1).
+7. docs/design/ASSETS.md: all primitive/rig families, import and LOD rules. docs/design/VOXEL_GEOMETRY.md: canonical voxel scale, pivot, pick and material schema (#347, rustwake.voxel.geometry.v1). docs/design/SALVAGE_MODELS.md: ART-02 salvage extractor / crusher / screening plant geometry, motion ownership, sorter mapping and capture evidence (#348).
 8. docs/engineering/ARCHITECTURE.md: runtime and module/data boundaries.
 9. docs/engineering/ECONOMY.md: inventory, currencies, production, physical shipping and missing sinks.
 10. docs/engineering/RELEASE.md: main CI/CD, trust boundaries, rollback and live evidence.

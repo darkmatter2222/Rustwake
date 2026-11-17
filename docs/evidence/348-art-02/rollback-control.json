@@ -1,0 +1,24 @@
+{
+  "control": "ART-02 rollback/negative control — proves tests/salvageModels.test.mjs is load-bearing, not tautological",
+  "method": "In the rw/v2-art-02-salvage-models worktree, src/world.js and src/voxelSchema.js were temporarily replaced with main ec64143340891d4c9fe1829560243d17e753b506 blobs (git show <sha>:<path>), node --test tests/salvageModels.test.mjs was run, then both files were explicitly restored from head 746f728ba4ceba7e22da197fe0e1d1bcffb11db3 blobs and git diff --quiet confirmed byte-identical restoration (no stash/reset/checkout used).",
+  "main_base_sha": "ec64143340891d4c9fe1829560243d17e753b506",
+  "restored_from_sha": "746f728ba4ceba7e22da197fe0e1d1bcffb11db3",
+  "against_main": {"tests": 11, "pass": 2, "fail": 9},
+  "against_head_after_restore": {"tests": 11, "pass": 11, "fail": 0},
+  "failed_against_main": [
+    "ART-02 pose: counter-rotating rollers, periodic rocker/screen, reduced-motion parks at zero",
+    "schema pivot declarations mirror ART02_MOTION exactly (no declaration drift)",
+    "salvager: distinct body/roof/side silhouette — stepped roof, glazed cab, stack, fins, intake+chute",
+    "salvager: rocker pivot keeps the ART-01 contract and gains a 3-tooth grapple head",
+    "crusher: open chamber, stepped hopper roof, twin discharge chutes, ladder and flywheel",
+    "crusher: three named working pivots — counter-rotating toothed rollers + oscillating screen deck",
+    "ART-03 seam: refinery geometry is EXACTLY the pre-ART-02 shared branch (no collateral change)",
+    "mid-build staging: crusher at 10% keeps foundation + low parts, hides hopper; salvager hides its high rocker",
+    "ART-02 budgets: measured mesh/triangle counts inside declared and global limits"
+  ],
+  "passed_against_main_as_expected": [
+    "crusher/salvager frontage: loading bay and status light are byte-exact to the ART-01 contract (continuity guard — must hold on main too)",
+    "camera invariants: applyCamera/stampCamera byte-identical to main (sha256-16 guard — must hold on main too)"
+  ],
+  "note": "The two survivors are deliberate continuity invariants, not weak assertions: they pin what ART-02 must NOT change. The nine geometry/motion/schema failures prove the new assertions detect the absence of the ART-02 implementation."
+}

@@ -102,6 +102,19 @@ export function applyCranePose(p,pose){
  p.cable.position.y=-pose.drop/2;
  p.node.userData.cranePhase=pose.phase;
 }
+// ART-02 (#348): salvage trio working-part motion. Pure deterministic pose shared
+// by update() and tests/salvageModels.test.mjs, so the tested pose is the rendered
+// pose (same contract as ART-06 cranePose). Numbers mirror the voxelSchema pivot
+// declarations exactly — no declaration drift. prefers-reduced-motion parks every
+// ART-02 part at zero. Decorative only: no production/freight authority (#274).
+export const ART02_MOTION=Object.freeze({rockerAmp:.55,rockerSpeed:.65,rollSpeed:1.75,screenAmp:.04,screenSpeed:3.4});
+export function art02Pose(time,reducedMotion=false,id=0){
+ if(reducedMotion)return {rocker:0,rollerA:0,rollerB:0,screen:0};
+ const M=ART02_MOTION;
+ return {rocker:Math.sin(time*M.rockerSpeed+id)*M.rockerAmp,
+  rollerA:time*M.rollSpeed,rollerB:-time*M.rollSpeed,
+  screen:Math.sin(time*M.screenSpeed+id)*M.screenAmp};
+}
 export function makeBuilding(b,time){
  const group=new THREE.Group();
  // Exact footprint pivot (#370): anchor cell is the min corner; the group sits
@@ -118,15 +131,31 @@ export function makeBuilding(b,time){
  const foot=add(0,.2,0,CELL*.87,.4,CELL*.87,"dark");
  add(0,.48,0,CELL*.72,.17,CELL*.72,"steel");
  if(kind==="salvager"){
-  add(0,1.25,0,2.7,1.5,2.55,"rust");
-  add(0,2.12,0,2.9,.33,2.9,"roof");
-  add(-1.08,1.15,1.25,.35,1,.25,"orange");
-  add(.8,1.15,1.26,.35,.8,.25,"steel");
-  for(let i=0;i<4;i++)box(group,-.95+i*.64,1.36,-1.3,.16,.45,.18,"dark");
+  // ART-02 (#348): Scrap Extractor — stepped hull/roof silhouette, glazed cab,
+  // flared intake mouth + discharge chute on the +Z frontage, side radiator fins,
+  // exhaust stack and rear counterweight. Original procedural kit, shared mats.
+  add(0,1.18,0,2.6,1.24,2.4,"rust");
+  add(0,1.9,0,2.8,.2,2.6,"roof");
+  add(0,2.09,-.55,1.6,.18,1.2,"roof");
+  for(let i=0;i<3;i++)add(-.5+i*.5,2.25,-.55,.18,.14,.8,"dark");
+  add(-.62,1.42,1.2,1.1,.72,.08,"dark");
+  add(-.62,1.42,1.26,.94,.56,.06,"glass");
+  add(-.62,.78,1.3,1,.34,.3,"orange");
+  add(-.62,.8,1.44,.8,.2,.08,"black");
+  add(.78,1,1.3,.5,.7,.3,"steel");
+  add(.78,1.36,1.3,.56,.12,.34,"dark");
+  for(let i=0;i<3;i++)add(-1.36,1.2,-.55+i*.55,.12,.8,.35,"dark");
+  cylinder(group,1.05,2.22,-.85,.14,.8,"steel");
+  cylinder(group,1.05,2.68,-.85,.18,.12,"rust");
+  add(0,.86,-1.3,2.2,.6,.3,"dark");
+  add(1.36,1.15,.1,.1,.9,1.8,"rust");
+  // Rocker arm keeps the ART-01 pivot contract (offset/axis/motion/swingRadius);
+  // the grapple head now carries three teeth so the working part reads at distance.
   const arm=new THREE.Group();arm.position.set(0,2.4,-.2);
-  cylinder(arm,0,.25,0,.55,.45,"dark");
-  box(arm,0,.35,-1.3,.42,.32,2.7,"orange");
-  box(arm,0,.08,-2.5,.8,.25,.25,"steel");
+  cylinder(arm,0,.2,0,.5,.4,"dark");
+  box(arm,0,.32,-1.2,.4,.3,2.6,"orange");
+  box(arm,0,.02,-2.5,.75,.22,.3,"steel");
+  for(let i=-1;i<=1;i++)box(arm,i*.25,-.14,-2.5,.12,.28,.12,"orange");
   arm.name="pivot:rocker";group.add(arm);parts.push({kind:"rocker",node:arm});
  } else if(kind==="depot"||kind==="market"){
   add(0,1.48,0,2.95,2.14,2.65,kind==="depot"?"body":"wood");
@@ -153,7 +182,48 @@ export function makeBuilding(b,time){
   add(0,1.32,1.32,1.32,.87,.12,"furnace");
   add(-1.2,1.05,0,.2,1.4,2.4,"rust");
   for(let i=0;i<3;i++)add(-.9+i*.9,2.45,1.35,.23,.12,.13,"orange");
- } else if(kind==="crusher"||kind==="refinery"){
+ } else if(kind==="crusher"){
+  // ART-02 (#348): Crusher + screening plant. Open-front crushing chamber with
+  // counter-rotating toothed rollers (pivot:rollerA carries the drive flywheel),
+  // stepped intake hopper as the roof silhouette, and the ART-02 "sorter" outcome:
+  // an oscillating screen deck (pivot:screen) feeding TWIN discharge chutes — the
+  // visual separation stage for the sim's real scrap -> iron + stone outputs.
+  // V2 has no standalone buildable "sorter" (content/simulation registry is outside
+  // the ART-02 lease); the separation stage lives here. Refinery keeps its own
+  // untouched branch below (ART-03 seam).
+  for(const s of [-1,1])add(s*1.1,1.09,-.2,.3,1.06,1.9,"body");
+  add(0,1.09,-1,2.5,1.06,.3,"body");
+  add(0,.62,-.15,2.2,.16,1.6,"dark");
+  for(const s of [-1,1])for(const z of [-.6,.2])add(s*1.32,1.1,z,.14,.9,.28,"dark");
+  add(0,1.15,-1.22,2.3,.8,.12,"rust");
+  add(0,1.78,-.15,1.4,.2,.95,"dark");
+  add(0,2,-.15,1.9,.26,1.35,"orange");
+  add(0,2.28,-.15,2.3,.3,1.7,"orange");
+  for(const z of [-.95,.65])add(0,2.47,z,2.4,.08,.1,"steel");
+  add(0,1.69,-1,2,.14,.5,"roof");
+  for(const s of [-1,1]){
+   add(s*.85,.78,1.28,.42,.5,.3,"steel");
+   add(s*.85,1.06,1.28,.48,.1,.34,s<0?"rust":"orange");
+  }
+  for(const z of [.35,.75])add(1.3,1.1,z,.06,1,.06,"steel");
+  for(let i=0;i<3;i++)add(1.3,.8+i*.3,.55,.06,.06,.46,"steel");
+  const mkRoller=(name,z,flywheel)=>{
+   const r=new THREE.Group();r.position.set(0,1.35,z);r.name=name;
+   cylinder(r,0,0,0,.27,1.8,"steel",true);
+   for(const s of [-1,1]){box(r,0,s*.3,0,.14,.12,1.86,"steel");box(r,0,0,s*.3,.14,.12,1.86,"steel");}
+   if(flywheel)cylinder(r,-1.32,0,0,.45,.14,"dark",true);
+   group.add(r);return r;
+  };
+  const rollerA=mkRoller("pivot:rollerA",.42,true);
+  const rollerB=mkRoller("pivot:rollerB",-.18,false);
+  parts.push({kind:"roll",node:rollerA,speed:ART02_MOTION.rollSpeed});
+  parts.push({kind:"roll",node:rollerB,speed:-ART02_MOTION.rollSpeed});
+  const screen=new THREE.Group();screen.position.set(0,.95,.95);screen.name="pivot:screen";
+  box(screen,0,0,0,1.9,.08,.7,"steel");
+  for(let i=0;i<5;i++)box(screen,-.76+i*.38,.06,0,.06,.07,.64,"dark");
+  group.add(screen);parts.push({kind:"screen",node:screen});
+ } else if(kind==="refinery"){
+  // ART-03 (#349) seam: refinery geometry is UNCHANGED by ART-02.
   add(0,1,0,2.55,1.04,2.5,"body");
   for(let i=-1;i<=1;i++)cylinder(group,i*.7,1.65,0,.35,.75,"steel",true);
   add(0,2.15,0,2.1,.38,1.6,"orange");
@@ -1022,12 +1092,16 @@ export class LivingWorld{
   if(width!==this.width||height!==this.height)this.resize();
   this.applyCamera();
   let craneStamp=null;
+  const art02Stamp={arm:"none",roller:"none",screen:"none"};
   for(const [id,obj] of this.built){
    const b=g.buildings.find(b=>b.id===id);if(!b)continue;
    obj.group.userData.buildingId=id;
+   const a02=art02Pose(time,this.reducedMotion,id);
    for(const p of obj.parts){
     if(p.kind==="spin")p.node.rotation.y=time*1.75;
-    if(p.kind==="rocker")p.node.rotation.y=Math.sin(time*.65+id)*.55;
+    if(p.kind==="rocker"){p.node.rotation.y=a02.rocker;art02Stamp.arm=a02.rocker.toFixed(3);}
+    if(p.kind==="roll"){p.node.rotation.x=p.speed>0?a02.rollerA:a02.rollerB;if(p.speed>0)art02Stamp.roller=a02.rollerA.toFixed(3);}
+    if(p.kind==="screen"){p.node.rotation.x=a02.screen;art02Stamp.screen=a02.screen.toFixed(3);}
     if(p.kind==="crane"){const pose=cranePose(time,this.reducedMotion);applyCranePose(p,pose);craneStamp=pose;}
     if(p.kind==="rotate")p.node.rotation.y=time*.22;
    }
@@ -1107,6 +1181,12 @@ export class LivingWorld{
   cd.craneTrolley=craneStamp?craneStamp.trolley.toFixed(3):"0";
   cd.craneDrop=craneStamp?craneStamp.drop.toFixed(3):"0";
   cd.craneReducedMotion=this.reducedMotion?"1":"0";
+  // ART-02 (#348): additive salvage working-part observability (camera stamps
+  // untouched). "none" when that machine is not in the yard; angles in radians.
+  cd.art02Arm=art02Stamp.arm;
+  cd.art02Roller=art02Stamp.roller;
+  cd.art02Screen=art02Stamp.screen;
+  cd.art02Reduced=this.reducedMotion?"1":"0";
   // ART-05 (#351): additive rig observability (camera stamps untouched). Wheel
   // angle must equal travelled distance / radius; crew stamps expose the honest
   // decorative anchoring so captures/tests can prove no fabricated freight.
