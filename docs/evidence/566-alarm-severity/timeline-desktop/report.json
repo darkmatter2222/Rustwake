@@ -1,0 +1,283 @@
+{
+  "version": 1,
+  "issue": 566,
+  "view": "desktop",
+  "build": "production-preview",
+  "source_sha": "1bd00ebd64f939fcc1eb80b6217d09f948757d85",
+  "started": "2026-11-17T18:49:52.299Z",
+  "timeline": [
+    {
+      "t": 0,
+      "elapsed": 0,
+      "chips": [],
+      "empty": true,
+      "summary": false,
+      "probe": {
+        "ids": [],
+        "counts": {
+          "critical": 0,
+          "warning": 0,
+          "total": 0
+        }
+      },
+      "stripIron": {
+        "state": "warning",
+        "flag": "◔"
+      },
+      "live": "All yard systems nominal",
+      "warningsCount": 0,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [],
+      "screenshot": "desktop-t000.png"
+    },
+    {
+      "t": 15,
+      "elapsed": 15,
+      "chips": [],
+      "empty": true,
+      "summary": false,
+      "probe": {
+        "ids": [],
+        "counts": {
+          "critical": 0,
+          "warning": 0,
+          "total": 0
+        }
+      },
+      "stripIron": {
+        "state": "ok",
+        "flag": null
+      },
+      "live": "All yard systems nominal",
+      "warningsCount": 0,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [],
+      "screenshot": "desktop-t015.png"
+    },
+    {
+      "t": 30,
+      "elapsed": 30,
+      "chips": [],
+      "empty": true,
+      "summary": false,
+      "probe": {
+        "ids": [],
+        "counts": {
+          "critical": 0,
+          "warning": 0,
+          "total": 0
+        }
+      },
+      "stripIron": {
+        "state": "ok",
+        "flag": null
+      },
+      "live": "All yard systems nominal",
+      "warningsCount": 0,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [],
+      "screenshot": "desktop-t030.png"
+    },
+    {
+      "t": 45,
+      "elapsed": 45,
+      "chips": [
+        {
+          "testid": "alarm-chip-storage-4",
+          "severity": "warning",
+          "state": "ready",
+          "kind": "storage",
+          "ariaLabel": "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 16 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+        }
+      ],
+      "empty": false,
+      "summary": false,
+      "probe": {
+        "ids": [
+          "storage-4"
+        ],
+        "counts": {
+          "critical": 0,
+          "warning": 1,
+          "total": 1
+        }
+      },
+      "stripIron": {
+        "state": "warning",
+        "flag": "◔"
+      },
+      "live": "1 yard alarm: WARNING BAY BACKUP · INDUCTION FURNACE",
+      "warningsCount": 1,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [
+        "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 16 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+      ],
+      "screenshot": "desktop-t045.png"
+    },
+    {
+      "t": 60,
+      "elapsed": 60,
+      "chips": [
+        {
+          "testid": "alarm-chip-storage-4",
+          "severity": "warning",
+          "state": "ready",
+          "kind": "storage",
+          "ariaLabel": "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 28 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+        }
+      ],
+      "empty": false,
+      "summary": false,
+      "probe": {
+        "ids": [
+          "storage-4"
+        ],
+        "counts": {
+          "critical": 0,
+          "warning": 1,
+          "total": 1
+        }
+      },
+      "stripIron": {
+        "state": "ok",
+        "flag": null
+      },
+      "live": "1 yard alarm: WARNING BAY BACKUP · INDUCTION FURNACE",
+      "warningsCount": 1,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [
+        "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 28 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+      ],
+      "screenshot": "desktop-t060.png"
+    },
+    {
+      "t": 120,
+      "elapsed": 120,
+      "chips": [
+        {
+          "testid": "alarm-chip-storage-4",
+          "severity": "warning",
+          "state": "ready",
+          "kind": "storage",
+          "ariaLabel": "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 60 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+        }
+      ],
+      "empty": false,
+      "summary": false,
+      "probe": {
+        "ids": [
+          "storage-4"
+        ],
+        "counts": {
+          "critical": 0,
+          "warning": 1,
+          "total": 1
+        }
+      },
+      "stripIron": {
+        "state": "ok",
+        "flag": null
+      },
+      "live": "1 yard alarm: WARNING BAY BACKUP · INDUCTION FURNACE",
+      "warningsCount": 1,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [
+        "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 60 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+      ],
+      "screenshot": "desktop-t120.png"
+    },
+    {
+      "t": 180,
+      "elapsed": 180,
+      "chips": [
+        {
+          "testid": "alarm-chip-storage-4",
+          "severity": "warning",
+          "state": "ready",
+          "kind": "storage",
+          "ariaLabel": "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 92 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+        }
+      ],
+      "empty": false,
+      "summary": false,
+      "probe": {
+        "ids": [
+          "storage-4"
+        ],
+        "counts": {
+          "critical": 0,
+          "warning": 1,
+          "total": 1
+        }
+      },
+      "stripIron": {
+        "state": "ok",
+        "flag": null
+      },
+      "live": "1 yard alarm: WARNING BAY BACKUP · INDUCTION FURNACE",
+      "warningsCount": 1,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [
+        "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 92 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+      ],
+      "screenshot": "desktop-t180.png"
+    },
+    {
+      "t": 240,
+      "elapsed": 240,
+      "chips": [
+        {
+          "testid": "alarm-chip-storage-4",
+          "severity": "warning",
+          "state": "ready",
+          "kind": "storage",
+          "ariaLabel": "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 128 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+        }
+      ],
+      "empty": false,
+      "summary": false,
+      "probe": {
+        "ids": [
+          "storage-4"
+        ],
+        "counts": {
+          "critical": 0,
+          "warning": 1,
+          "total": 1
+        }
+      },
+      "stripIron": {
+        "state": "ok",
+        "flag": null
+      },
+      "live": "1 yard alarm: WARNING BAY BACKUP · INDUCTION FURNACE",
+      "warningsCount": 1,
+      "cryWolfWarnings": [],
+      "starveWarnings": [],
+      "storageRemedy": [
+        "WARNING: BAY BACKUP · INDUCTION FURNACE. Induction Furnace at 16,13 is holding 128 units of output with no truck assigned to collect it. Remedy: The fleet is working through queued loads in turn — this bay is waiting for a free truck. The route is connected; trucks haul up to 15 per trip. Open Fleet to see the queue and cancel a job to reassign a truck."
+      ],
+      "screenshot": "desktop-t240.png"
+    }
+  ],
+  "discrimination": null,
+  "status": "FAIL",
+  "errors": [
+    "locator.click: Timeout 30000ms exceeded.\nCall log:\n\u001b[2m  - waiting for locator('[data-testid=\"alarm-action\"]')\u001b[22m\n\n    at C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\dev-566\\scripts\\capture-566-alarm-severity.mjs:175:55"
+  ],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone 390x844 is EMULATED (isMobile+hasTouch+dpr2), not a physical handset (#268/#275 owed)",
+    "PASS_NUMERIC_ONLY: rendered chip/aria-label/box proofs do not certify visual fidelity — sponsor visual review at G1 (#276) is still owed",
+    "Local production preview only — no hosted-deployment receipt; branch CI green is not a production release",
+    "Clause 1 uses a normal fresh yard with NO seed and ZERO input; clause 3 reaches the uncovered deficit through the real Trade Exchange Sell-10 UI, not a fixture"
+  ],
+  "servedCss": "/rustwake/assets/index-BUPhjJyc.css",
+  "completed": "2026-11-17T18:55:02.565Z"
+}

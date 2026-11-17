@@ -1,0 +1,1586 @@
+{
+  "version": 1,
+  "issue": 564,
+  "task": "phone home-camera HUD occlusion of the PROTECTED starter (regression from #550)",
+  "build": "production-preview",
+  "source_sha": "1bd00ebd64f939fcc1eb80b6217d09f948757d85",
+  "started": "2026-11-17T18:36:49.761Z",
+  "views": [
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "screenshots": [
+        "phone-home-default.png",
+        "phone-protected-home-tap.png"
+      ],
+      "contexts": {
+        "freshYard": {
+          "centre": {
+            "point": {
+              "x": 195,
+              "y": 422
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 156,
+              "bottom": 200,
+              "left": 10,
+              "right": 250,
+              "pointerEvents": "auto",
+              "order": "-1",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 256,
+              "bottom": 326,
+              "left": 10,
+              "right": 152,
+              "pointerEvents": "none",
+              "order": "1",
+              "display": "block"
+            },
+            ".rail-controls": {
+              "top": 206,
+              "bottom": 250,
+              "left": 10,
+              "right": 250,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 143,
+                "py": 306,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 143,
+                "py": 316,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 143,
+                "py": 291,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 143,
+                "py": 273,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 143,
+                "py": 256,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          }
+        },
+        "uiSeed": {
+          "centre": {
+            "point": {
+              "x": 195,
+              "y": 422
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 156,
+              "bottom": 200,
+              "left": 10,
+              "right": 307.3,
+              "pointerEvents": "auto",
+              "order": "-1",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 256,
+              "bottom": 326,
+              "left": 10,
+              "right": 152,
+              "pointerEvents": "none",
+              "order": "1",
+              "display": "block"
+            },
+            ".rail-controls": {
+              "top": 206,
+              "bottom": 250,
+              "left": 10,
+              "right": 307.3,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 143,
+                "py": 306,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 143,
+                "py": 316,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 143,
+                "py": 291,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 143,
+                "py": 273,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 143,
+                "py": 256,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          },
+          "tapSelect": {
+            "at": {
+              "px": 143,
+              "py": 306
+            },
+            "selected": true,
+            "site": "7.9",
+            "dismantleBlockedDisabled": true,
+            "reason": "Starter buildings are protected; construct your own district.",
+            "openCount": 0
+          }
+        },
+        "reservedSeed": {
+          "centre": {
+            "point": {
+              "x": 195,
+              "y": 422
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 156,
+              "bottom": 200,
+              "left": 10,
+              "right": 307.3,
+              "pointerEvents": "auto",
+              "order": "-1",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 256,
+              "bottom": 326,
+              "left": 10,
+              "right": 152,
+              "pointerEvents": "none",
+              "order": "1",
+              "display": "block"
+            },
+            ".rail-controls": {
+              "top": 206,
+              "bottom": 250,
+              "left": 10,
+              "right": 307.3,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 143,
+                "py": 306,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 143,
+                "py": 316,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 143,
+                "py": 291,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 143,
+                "py": 273,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 143,
+                "py": 256,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          }
+        },
+        "fixture": {
+          "centre": {
+            "point": {
+              "x": 195,
+              "y": 422
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 156,
+              "bottom": 200,
+              "left": 10,
+              "right": 378.45,
+              "pointerEvents": "auto",
+              "order": "-1",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 256,
+              "bottom": 326,
+              "left": 10,
+              "right": 152,
+              "pointerEvents": "none",
+              "order": "1",
+              "display": "block"
+            },
+            ".rail-controls": {
+              "top": 206,
+              "bottom": 250,
+              "left": 10,
+              "right": 378.45,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 143,
+                "py": 306,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 143,
+                "py": 316,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 143,
+                "py": 291,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 143,
+                "py": 273,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 143,
+                "py": 256,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          }
+        },
+        "sixAlarm": {
+          "centre": {
+            "point": {
+              "x": 195,
+              "y": 422
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 156,
+              "bottom": 200,
+              "left": 10,
+              "right": 380,
+              "pointerEvents": "auto",
+              "order": "-1",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 256,
+              "bottom": 326,
+              "left": 10,
+              "right": 152,
+              "pointerEvents": "none",
+              "order": "1",
+              "display": "block"
+            },
+            ".rail-controls": {
+              "top": 206,
+              "bottom": 250,
+              "left": 10,
+              "right": 380,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 143,
+                "py": 306,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 143,
+                "py": 316,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 143,
+                "py": 291,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 143,
+                "py": 273,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 143,
+                "py": 256,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          },
+          "railFunction": {
+            "railBox": {
+              "x": 10,
+              "y": 156,
+              "width": 370,
+              "height": 44
+            },
+            "chipCount": 6,
+            "swipes": 4,
+            "swipe": {
+              "scrollBefore": 0,
+              "scrollAfter": 874,
+              "delta": 874
+            },
+            "collapse": {
+              "topAt": "BUTTON.alarm-collapse",
+              "summaryShown": true,
+              "expandedAgain": true
+            }
+          }
+        }
+      },
+      "pageErrors": [],
+      "failures": []
+    },
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "screenshots": [
+        "desktop-home.png"
+      ],
+      "contexts": {
+        "freshYard": {
+          "centre": {
+            "point": {
+              "x": 720,
+              "y": 450
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 458,
+              "bottom": 502,
+              "left": 33.11,
+              "right": 184.05,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 104,
+              "bottom": 182,
+              "left": 33.11,
+              "right": 184.05,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "block"
+            },
+            ".rail-controls": {
+              "top": 196,
+              "bottom": 444,
+              "left": 33.11,
+              "right": 184.05,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1.15,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 656,
+                "py": 308,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 656,
+                "py": 321,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 656,
+                "py": 289,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 656,
+                "py": 268,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 656,
+                "py": 247,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          }
+        },
+        "uiSeed": {
+          "centre": {
+            "point": {
+              "x": 720,
+              "y": 450
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 458,
+              "bottom": 552,
+              "left": 33.11,
+              "right": 184.05,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 104,
+              "bottom": 182,
+              "left": 33.11,
+              "right": 184.05,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "block"
+            },
+            ".rail-controls": {
+              "top": 196,
+              "bottom": 444,
+              "left": 33.11,
+              "right": 184.05,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1.15,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 656,
+                "py": 308,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 656,
+                "py": 321,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 656,
+                "py": 289,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 656,
+                "py": 268,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 656,
+                "py": 247,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          }
+        },
+        "reservedSeed": {
+          "centre": {
+            "point": {
+              "x": 720,
+              "y": 450
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 458,
+              "bottom": 552,
+              "left": 33.11,
+              "right": 184.05,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 104,
+              "bottom": 182,
+              "left": 33.11,
+              "right": 184.05,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "block"
+            },
+            ".rail-controls": {
+              "top": 196,
+              "bottom": 444,
+              "left": 33.11,
+              "right": 184.05,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1.15,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 656,
+                "py": 308,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 656,
+                "py": 321,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 656,
+                "py": 289,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 656,
+                "py": 268,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 656,
+                "py": 247,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          }
+        },
+        "fixture": {
+          "centre": {
+            "point": {
+              "x": 720,
+              "y": 450
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 458,
+              "bottom": 552,
+              "left": 33.11,
+              "right": 234.09,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 104,
+              "bottom": 182,
+              "left": 33.11,
+              "right": 234.09,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "block"
+            },
+            ".rail-controls": {
+              "top": 196,
+              "bottom": 444,
+              "left": 33.11,
+              "right": 234.09,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1.15,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 656,
+                "py": 308,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 656,
+                "py": 321,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 656,
+                "py": 289,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 656,
+                "py": 268,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 656,
+                "py": 247,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          }
+        }
+      },
+      "pageErrors": [],
+      "failures": []
+    },
+    {
+      "name": "land-small",
+      "viewport": {
+        "width": 667,
+        "height": 375
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "screenshots": [
+        "land-small-home.png"
+      ],
+      "contexts": {
+        "freshYard": {
+          "centre": {
+            "point": {
+              "x": 333.5,
+              "y": 187.5
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 84,
+              "bottom": 128,
+              "left": 8,
+              "right": 248,
+              "pointerEvents": "auto",
+              "order": "-1",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 0,
+              "bottom": 0,
+              "left": 0,
+              "right": 0,
+              "pointerEvents": "none",
+              "order": "1",
+              "display": "none"
+            },
+            ".rail-controls": {
+              "top": 134,
+              "bottom": 178,
+              "left": 8,
+              "right": 248,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 310,
+                "py": 136,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 310,
+                "py": 141,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 310,
+                "py": 129,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 310,
+                "py": 121,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 310,
+                "py": 114,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          }
+        },
+        "uiSeed": {
+          "centre": {
+            "point": {
+              "x": 333.5,
+              "y": 187.5
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 84,
+              "bottom": 128,
+              "left": 8,
+              "right": 305.3,
+              "pointerEvents": "auto",
+              "order": "-1",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 0,
+              "bottom": 0,
+              "left": 0,
+              "right": 0,
+              "pointerEvents": "none",
+              "order": "1",
+              "display": "none"
+            },
+            ".rail-controls": {
+              "top": 134,
+              "bottom": 178,
+              "left": 8,
+              "right": 305.3,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 310,
+                "py": 136,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 310,
+                "py": 141,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 310,
+                "py": 129,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 310,
+                "py": 121,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 310,
+                "py": 114,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          }
+        },
+        "reservedSeed": {
+          "centre": {
+            "point": {
+              "x": 333.5,
+              "y": 187.5
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 84,
+              "bottom": 128,
+              "left": 8,
+              "right": 305.3,
+              "pointerEvents": "auto",
+              "order": "-1",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 0,
+              "bottom": 0,
+              "left": 0,
+              "right": 0,
+              "pointerEvents": "none",
+              "order": "1",
+              "display": "none"
+            },
+            ".rail-controls": {
+              "top": 134,
+              "bottom": 178,
+              "left": 8,
+              "right": 305.3,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 310,
+                "py": 136,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 310,
+                "py": 141,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 310,
+                "py": 129,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 310,
+                "py": 121,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 310,
+                "py": 114,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          }
+        },
+        "fixture": {
+          "centre": {
+            "point": {
+              "x": 333.5,
+              "y": 187.5
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 84,
+              "bottom": 128,
+              "left": 8,
+              "right": 376.45,
+              "pointerEvents": "auto",
+              "order": "-1",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 0,
+              "bottom": 0,
+              "left": 0,
+              "right": 0,
+              "pointerEvents": "none",
+              "order": "1",
+              "display": "none"
+            },
+            ".rail-controls": {
+              "top": 134,
+              "bottom": 178,
+              "left": 8,
+              "right": 376.45,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 310,
+                "py": 136,
+                "top": "DIV.rail-controls",
+                "canvas": false
+              },
+              {
+                "h": 0,
+                "px": 310,
+                "py": 141,
+                "top": "DIV.rail-controls",
+                "canvas": false
+              },
+              {
+                "h": 3,
+                "px": 310,
+                "py": 129,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 310,
+                "py": 121,
+                "top": "DIV.alarm-controls",
+                "canvas": false
+              },
+              {
+                "h": 7,
+                "px": 310,
+                "py": 114,
+                "top": "DIV.alarm-controls",
+                "canvas": false
+              }
+            ],
+            "allCanvas": false
+          }
+        }
+      },
+      "pageErrors": [],
+      "failures": []
+    },
+    {
+      "name": "land-wide",
+      "viewport": {
+        "width": 844,
+        "height": 390
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "screenshots": [
+        "land-wide-home.png"
+      ],
+      "contexts": {
+        "freshYard": {
+          "centre": {
+            "point": {
+              "x": 422,
+              "y": 195
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 116,
+              "bottom": 160,
+              "left": 19.41,
+              "right": 291.41,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 0,
+              "bottom": 0,
+              "left": 0,
+              "right": 0,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "none"
+            },
+            ".rail-controls": {
+              "top": 58,
+              "bottom": 102,
+              "left": 19.41,
+              "right": 479.64,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 398,
+                "py": 141,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 398,
+                "py": 146,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 398,
+                "py": 134,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 398,
+                "py": 126,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 398,
+                "py": 118,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          }
+        },
+        "uiSeed": {
+          "centre": {
+            "point": {
+              "x": 422,
+              "y": 195
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 116,
+              "bottom": 210,
+              "left": 19.41,
+              "right": 291.41,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 0,
+              "bottom": 0,
+              "left": 0,
+              "right": 0,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "none"
+            },
+            ".rail-controls": {
+              "top": 58,
+              "bottom": 102,
+              "left": 19.41,
+              "right": 479.64,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 398,
+                "py": 141,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 398,
+                "py": 146,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 398,
+                "py": 134,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 398,
+                "py": 126,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 398,
+                "py": 118,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          }
+        },
+        "reservedSeed": {
+          "centre": {
+            "point": {
+              "x": 422,
+              "y": 195
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 116,
+              "bottom": 210,
+              "left": 19.41,
+              "right": 291.41,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 0,
+              "bottom": 0,
+              "left": 0,
+              "right": 0,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "none"
+            },
+            ".rail-controls": {
+              "top": 58,
+              "bottom": 102,
+              "left": 19.41,
+              "right": 479.64,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 398,
+                "py": 141,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 398,
+                "py": 146,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 398,
+                "py": 134,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 398,
+                "py": 126,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 398,
+                "py": 118,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          }
+        },
+        "fixture": {
+          "centre": {
+            "point": {
+              "x": 422,
+              "y": 195
+            },
+            "top": "CANVAS.world-canvas",
+            "canvas": true
+          },
+          "railBoxes": {
+            ".alarm-rail": {
+              "top": 116,
+              "bottom": 210,
+              "left": 19.41,
+              "right": 291.41,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            },
+            ".coordinate-chip": {
+              "top": 0,
+              "bottom": 0,
+              "left": 0,
+              "right": 0,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "none"
+            },
+            ".rail-controls": {
+              "top": 58,
+              "bottom": 102,
+              "left": 19.41,
+              "right": 479.64,
+              "pointerEvents": "auto",
+              "order": "0",
+              "display": "flex"
+            }
+          },
+          "starter": {
+            "camera": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1,
+              "x": 0,
+              "z": 0
+            },
+            "aims": [
+              {
+                "h": 1.2,
+                "px": 398,
+                "py": 141,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 0,
+                "px": 398,
+                "py": 146,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 3,
+                "px": 398,
+                "py": 134,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 5,
+                "px": 398,
+                "py": 126,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              },
+              {
+                "h": 7,
+                "px": 398,
+                "py": 118,
+                "top": "CANVAS.world-canvas",
+                "canvas": true
+              }
+            ],
+            "allCanvas": true
+          }
+        }
+      },
+      "pageErrors": [],
+      "failures": []
+    }
+  ],
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone/landscape views are EMULATED (isMobile+hasTouch+dpr2), not physical handsets (#268/#275 owed)",
+    "PASS_NUMERIC_ONLY: elementFromPoint/box/tap proofs do not certify visual fidelity — sponsor visual review at G1 (#276) is still owed",
+    "Local production preview only — no hosted-deployment receipt (#333); branch CI green is not a production release",
+    "Landscape/desktop five-height results are recorded for regression comparison; the hard gate is the phone decisive clause + centres + rail function",
+    "The probe script itself is new evidence tooling for #564; scripts/capture-dismantle.mjs and every BLD-08 harness remain UNMODIFIED"
+  ],
+  "servedCss": {
+    "href": "/rustwake/assets/index-BUPhjJyc.css",
+    "has564Fix": true
+  },
+  "completed": "2026-11-17T18:37:27.504Z"
+}

@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "issue": 566,
+  "task": "clause 4.3 touch-swipe discrimination: real CDP swipe FAILS under touch-action:none while auto-scroll PASSES",
+  "build": "production-preview",
+  "source_sha": "1bd00ebd64f939fcc1eb80b6217d09f948757d85",
+  "started": "2026-11-17T18:40:33.228Z",
+  "phone": {
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "railBox": {
+      "x": 10,
+      "y": 156,
+      "width": 370,
+      "height": 44
+    },
+    "chipCount": 6,
+    "overflow": {
+      "scrollWidth": 1244,
+      "clientWidth": 370,
+      "touchAction": "pan-x"
+    },
+    "phases": {
+      "A_realSwipe_panX": {
+        "touchAction": "pan-x",
+        "scrollBefore": 0,
+        "scrollAfter": 225,
+        "delta": 225
+      },
+      "B_realSwipe_none": {
+        "touchAction": "none",
+        "scrollBefore": 0,
+        "scrollAfter": 0,
+        "delta": 0
+      },
+      "C_autoScroll_none": {
+        "touchAction": "none",
+        "method": "scrollLeft=400 (auto-scroll, NOT a swipe)",
+        "scrollBefore": 0,
+        "scrollAfter": 400,
+        "delta": 400
+      },
+      "D_realSwipe_restored": {
+        "touchAction": "pan-x",
+        "scrollBefore": 0,
+        "scrollAfter": 225,
+        "delta": 225
+      }
+    },
+    "screenshots": [
+      "phone-A-pan-x-real-swipe.png",
+      "phone-B-none-real-swipe.png",
+      "phone-C-none-auto-scroll.png",
+      "phone-D-restored-real-swipe.png"
+    ],
+    "failures": []
+  },
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone 390x844 is EMULATED (isMobile+hasTouch+dpr2), not a physical handset (#268/#275 owed)",
+    "PASS_NUMERIC_ONLY: scrollLeft deltas do not certify visual fidelity — sponsor visual review at G1 (#276) is still owed",
+    "Local production preview only — no hosted-deployment receipt; branch CI green is not a production release",
+    "New evidence tooling for #566; probe-564-geometry.mjs, probe-568-topband.mjs and capture-ux06.mjs are run UNMODIFIED elsewhere"
+  ],
+  "servedCss": "/rustwake/assets/index-BUPhjJyc.css",
+  "discrimination": {
+    "realSwipe_under_none_delta": 0,
+    "autoScroll_under_none_delta": 400,
+    "realSwipe_under_panX_delta": 225,
+    "realSwipe_restored_delta": 225,
+    "realSwipeFailsUnderNone": true,
+    "autoScrollPassesUnderNone": true,
+    "genuineSwipeWorksUnderPanX": true,
+    "restorationWorks": true
+  },
+  "completed": "2026-11-17T18:40:43.651Z"
+}
