@@ -2,8 +2,8 @@
   "issue": 339,
   "version": 2,
   "build": "production-preview",
-  "source_sha": "8c115c0831c5d7dbfe2b2f4b17131f52ee0cc1a6",
-  "started": "2026-11-17T04:48:16.082Z",
+  "source_sha": "ded72b164db22c0d01f9c976477950749f92faf7",
+  "started": "2026-11-17T05:07:36.396Z",
   "views": [
     {
       "name": "desktop",
@@ -774,5 +774,5 @@
     "G1 visual review (#276) is sponsor-reserved; these artifacts are evidence for that review, not approval",
     "Off-center zoom clamps smoothly below a limit when the pinned anchor would leave the +/-90 pan envelope; the FULL 0.20-12 range is reached by center-anchored controls (zero target shift)"
   ],
-  "completed": "2026-11-17T04:48:37.572Z"
+  "completed": "2026-11-17T05:08:03.071Z"
 }
