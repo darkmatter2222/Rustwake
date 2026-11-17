@@ -104,10 +104,21 @@ const seedScript=(json)=>`(()=>{try{const g=JSON.parse(${JSON.stringify(json)});
 
 try{
  child=spawn(process.execPath,["node_modules/vite/bin/vite.js","preview","--port",String(PORT),"--strictPort","--host","127.0.0.1"],{stdio:["ignore","pipe","pipe"]});
+ let previewExit=null;
+ child.on("exit",c=>{previewExit=c;});
  child.stdout.on("data",()=>{});child.stderr.on("data",d=>report.errors.push("preview: "+d.toString().slice(0,400)));
  let open=false;
- for(let i=0;i<70;i++){try{const r=await fetch(HOST,{signal:AbortSignal.timeout(2000)});if(r.ok){open=true;break;}}catch{}await new Promise(r=>setTimeout(r,200));}
+ for(let i=0;i<70;i++){
+  if(previewExit!==null)throw Error("preview exited early (code "+previewExit+") — port conflict? Refusing to measure a foreign/stale server on "+PORT);
+  try{const r=await fetch(HOST,{signal:AbortSignal.timeout(2000)});if(r.ok){open=true;break;}}catch{}
+  await new Promise(r=>setTimeout(r,200));
+ }
  if(!open)throw Error("Production preview did not become available on "+PORT);
+ // Stale-server guard: the SERVED production CSS must carry the #564 fix.
+ const html=await (await fetch(HOST)).text();
+ const cssHref=[...html.matchAll(/href="([^"]+\.css)"/g)].map(m=>m[1])[0]||null;
+ const cssBody=cssHref?await (await fetch(new URL(cssHref,HOST))).text():"";
+ report.servedCss={href:cssHref,has564Fix:/\.coordinate-chip\{order:1;pointer-events:none\}/.test(cssBody.replace(/\s+/g,""))};
  browser=await chromium.launch({headless:true,args:["--enable-webgl","--use-angle=swiftshader","--enable-unsafe-swiftshader"]});
 
  for(const v of [
@@ -119,6 +130,7 @@ try{
   const view={name:v.name,viewport:v.viewport,deviceScaleFactor:v.dpr,isMobile:v.isMobile,hasTouch:v.touch,screenshots:[],contexts:{}};
   report.views.push(view);
   const errs=[],fails=[];
+  if(v.hard&&!report.servedCss.has564Fix)fails.push("served production CSS lacks the #564 fix marker (stale/foreign preview?): "+JSON.stringify(report.servedCss));
   const shot=async(page,label)=>{const f=`${v.name}-${label}.png`;await page.screenshot({path:resolve(OUT,f),fullPage:false,animations:"disabled"});view.screenshots.push(f);return f;};
   const newPage=async(saveJson)=>{
    const ctx=await browser.newContext({viewport:v.viewport,deviceScaleFactor:v.dpr,isMobile:v.isMobile,hasTouch:v.touch,reducedMotion:"reduce"});
@@ -255,7 +267,7 @@ try{
 }catch(e){report.errors.push(String(e.stack||e));report.status="FAIL";process.exitCode=1;}
 finally{
  if(browser)await browser.close();
- if(child)child.kill("SIGTERM");
+ if(child){try{execSync("taskkill /PID "+child.pid+" /T /F",{stdio:"ignore"});}catch{try{child.kill("SIGKILL");}catch{}}}
  report.completed=new Date().toISOString();
  await writeFile(resolve(OUT,"report.json"),JSON.stringify(report,null,2)+"\n");
  console.log("#564 geometry probe:",report.status,OUT);
