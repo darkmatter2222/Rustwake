@@ -6,6 +6,9 @@
 3. Enforce one coordinator plus at most four child model sessions, only coordinator dispatches, no recursive delegation, no second forever loop and no browser swarm.
 4. Verify GitHub Projects capability. Project 2 is old history; V2 Project remains unverified until a concrete URL/number is observed. Do not claim a project based on a script.
 
+## Session ledger
+Before dispatching, reconcile live sessions, single-writer `src` leases and the browser holder. After a wave, capture the host dispatch census and write a session ledger receipt under `docs/operations/receipts/`, then validate it with `node scripts/verify-session-ledger.mjs --ledger <file>`. Declare what the receipt does not prove in `honest_limits`; never interpolate a finish clock the host did not record. Schema, violation codes and the deliberate negative case are in `docs/ops/SESSION_LEDGER.md`.
+
 ## Issue states
 backlog → ready (all blockers accepted and merged) → doing → PR review → accepted → merged → deployed verified → done. Rework, blocked, deferred and superseded are explicit exceptional states. Closed issue ≠ delivered, branch CI ≠ production deployed, deployed app ≠ sponsor art acceptance.
 

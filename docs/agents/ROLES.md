@@ -31,6 +31,8 @@ The executive sponsor owns aesthetic and first-playable visual acceptance. Coord
 ## Runtime and permissions
 Only the coordinator dispatches; worktrees and active session IDs must be reconciled before replacement. Role definitions can be implemented with verified installed OpenCode/Qwen profiles or a bounded coordinator assignment; files do not remotely provision new agents. Keep narrow scoped write paths and explicit role/effort/task timeout; low coordinator/release effort and high developer/modeling effort are guidance, not invented provider reasoning controls. No recursive spawn, second forever goal, credential changes, direct main push or unreviewed main merge.
 
+The cap in `roles.json` is machine-checkable, not merely prose. `scripts/verify-session-ledger.mjs` validates a wave's session ledger against these limits and rejects a duplicate coordinator, a recursive spawn, an over-cap concurrency, a second browser holder, a second release engineer, two writers on one `src` lease, and a finished child with no finish record. The cap is **concurrency, not lifetime total**. See `docs/ops/SESSION_LEDGER.md` for the schema, the violation codes and the host's known observability limits; a coordinator attestation without a validated ledger is a claim, not evidence.
+
 ## Required output for every role
 GitHub issue and PR URL; source SHA; exact changed paths; expected and observed behavior; test command/result and real screenshot/clip if visual; issue dependencies, limitations and next accountable owner. An automated numeric screenshot-color test cannot certify the visual style of the README art. Real-device evidence remains distinct from phone viewport emulation.
 
