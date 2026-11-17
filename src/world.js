@@ -253,6 +253,19 @@ export class LivingWorld{
   const dist=150,cos=Math.cos(y);
   this.camera.position.set(x+dist*cos*Math.sin(t),dist*Math.sin(y),z+dist*cos*Math.cos(t));
   this.camera.lookAt(new THREE.Vector3(x,0,z));this.camera.updateProjectionMatrix();this.camera.updateMatrixWorld(true);
+  this.stampCamera();
+ }
+ // Observability contract: the canvas dataset must reflect the APPLIED camera
+ // synchronously on every path (pointer input, UI zoom buttons, render loop).
+ // Stamping only after renderer.render() let slow software-WebGL frames leave
+ // a stale cameraZoom visible to UI/tests even though the camera had moved.
+ stampCamera(){
+  const d=this.renderer.domElement.dataset;
+  d.cameraYaw=String(this.view.yaw);
+  d.cameraElevation=String(this.view.elevation);
+  d.cameraZoom=String(this.view.zoom);
+  d.cameraX=String(this.view.x);
+  d.cameraZ=String(this.view.z);
  }
  screenToCell(cx,cy){
   const rect=this.renderer.domElement.getBoundingClientRect();
@@ -320,12 +333,9 @@ export class LivingWorld{
   }
   for(const [id,tr] of this.trucks)if(!alive.has(id)){this.vehicleGroup.remove(tr);this.trucks.delete(id);}
   this.renderer.render(this.scene,this.camera);
+  // applyCamera() already stamped this frame's camera synchronously; only the
+  // rendered-ready flag belongs after the first successful render.
   this.renderer.domElement.dataset.world3d="ready";
-  this.renderer.domElement.dataset.cameraYaw=String(this.view.yaw);
-  this.renderer.domElement.dataset.cameraElevation=String(this.view.elevation);
-  this.renderer.domElement.dataset.cameraZoom=String(this.view.zoom);
-  this.renderer.domElement.dataset.cameraX=String(this.view.x);
-  this.renderer.domElement.dataset.cameraZ=String(this.view.z);
  }
  dispose(){this.renderer.dispose();this.renderer.domElement.remove();this.scene.clear();}
 }
