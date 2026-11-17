@@ -14,7 +14,7 @@ node scripts/verify-session-ledger.mjs --scan <host task artifact dir> --primary
 
 `--ledger` prints `{ok, violations, peak_children, peak_sessions, census_cross_check}` and exits 1 on any violation, 2 on usage error. `--scan` prints a dispatch census as JSON on **stdout** and its one-line verdict on **stderr**, so the JSON stays parseable when redirected; it exits 1 if any dispatch burst exceeded `max_children`.
 
-`--census` is optional: when omitted, the validator auto-loads `dispatch_census.source` from the ledger itself, so the default invocation enforces the undocumented-child clause. `census_cross_check` reports `on` or `off` so a reader can never mistake an uncross-checked pass for a cross-checked one. Paths resolve against the repository root, the same convention `roles.json` already uses.
+`--census` is optional: when omitted, the validator auto-loads `dispatch_census.source` from the ledger itself, so the default invocation enforces the undocumented-child clause **and** the window/census integrity clauses below — a ledger cannot opt out of them by pointing at a different file. `census_cross_check` reports `on` or `off` so a reader can never mistake an uncross-checked pass for a cross-checked one. Paths resolve against the repository root, the same convention `roles.json` already uses.
 
 Limits are read from `docs/agents/roles.json` at run time. The validator never hard-codes 4 or 5, so tightening the contract in one place tightens enforcement everywhere.
 
@@ -50,6 +50,10 @@ Limits are read from `docs/agents/roles.json` at run time. The validator never h
 | `E_DISPATCH_BURST` | More than `max_children` children dispatched inside one 2000 ms burst. |
 | `E_UNDOCUMENTED_CHILD` | The census proves a child was dispatched inside `window`, but `sessions[]` omits it. Requires a census. |
 | `E_NO_DISPATCH_ARTIFACT` | `sessions[]` claims a child that has no dispatch artifact anywhere in the census. Requires a census. |
+| `E_CHILD_OUTSIDE_WINDOW` | A documented child's `started_at` precedes `window.from` or its `finished_at` exceeds `window.to`. Narrowing the window may not hide a child. |
+| `E_CENSUS_UNDECLARED` | A census was supplied but the ledger declares no `dispatch_census` summary to anchor it. Requires a census. |
+| `E_CENSUS_MISMATCH` | The loaded census disagrees with the declared summary on any of `artifact_count`, `zero_byte_count`, `first_at`, `last_at`, `max_burst`, `bursts`, `burst_size_histogram`, `primary_id`. Requires a census. |
+| `E_CENSUS_CLOCK` | A burst's `first_at`/`at` does not parse, or `first_at > at`. A malformed clock is a violation, never a silent skip. Requires a census. |
 
 Concurrency is computed by a sweep over every start and finish mark, counting sessions live at each mark. The cap is **concurrency, not lifetime total**: eight sequential children pass, five simultaneous children fail. Leases are checked the same way, so the same lease held sequentially by two developers is legal and is the normal serialized-train case.
 
@@ -69,6 +73,16 @@ A ledger that simply **omits** a child passes every concurrency, lease, browser 
 - **Ledger → census.** Every documented child must appear somewhere in the census, else `E_NO_DISPATCH_ARTIFACT`. This catches the opposite fraud: inventing a session that was never dispatched.
 
 The check is **window-scoped on purpose**. The committed census spans 194 artifacts back to the start of the coordinator session, while the pass receipt documents the six children of one wave. Requiring the ledger to document all 194 would demand finish clocks and roles the 0-byte defect makes unrecoverable — it would force fabrication, which is the opposite of the goal. Artifacts outside the window are therefore not asserted to be children of this ledger, and the receipt says so in `honest_limits`. Widening the window is a deliberate act that carries the obligation to document everything inside it.
+
+## Window and census integrity
+
+Window scoping is only honest if the window and the census cannot be quietly reshaped to make an omission disappear. Three evasions were reproduced against the first version of this validator and are now closed:
+
+- **Narrow the window.** Drop a child from `sessions[]` and move `window.from` past its dispatch: its burst falls out of scope, so the cross-check skips it and the ledger passes with the **genuine, unmodified** census. `E_CHILD_OUTSIDE_WINDOW` closes this — every documented child must lie inside `[window.from, window.to]`, so narrowing the window to hide one child exposes the others that started earlier.
+- **Truncate the census.** Point `dispatch_census.source` at a copy with the inconvenient burst deleted, leaving the declared summary untouched. The loaded census is now verified against that summary before any cross-check, so the deletion is `E_CENSUS_MISMATCH`. The histogram is compared as well as the burst count, so removing a burst and renumbering the count still fails.
+- **Invert a burst clock.** Set `first_at` later than `at` so the overlap test skips the burst. Both clocks must parse and `first_at <= at`, else `E_CENSUS_CLOCK`.
+
+**Residual limit, stated plainly:** `window.from` and `window.to` are still **self-declared by the coordinator**. The validator proves the documented children lie inside the window; it cannot prove the window was not chosen to exclude an inconvenient dispatch. An auditor must compare `window.from` against the census's **first in-wave burst** and confirm every census burst from that instant to `window.to` is documented. The pass receipt records that basis in `window_basis`. Likewise the declared summary is itself an attestation: it makes truncation detectable, not impossible, because a coordinator who edits both the census and the summary consistently is only caught by re-running `--scan` against the host artifact store. That re-scan is the auditor's step, and `dispatch_census.method` records the exact command.
 
 ## Known observability defect
 
@@ -98,7 +112,11 @@ This is a real limit of the evidence, not a claim that live cancellation was exe
 
 A second negative, `docs/operations/receipts/328-runtime-ledger-negative-undocumented.json`, is **derived from the real pass receipt** and cross-checked against the **genuine, unmodified** census. It removes one child that the census proves was dispatched inside the window and adds one fabricated child that has no artifact. Every other check still passes — peaks stay at 3 children / 4 sessions — which is precisely the point: the ledger looks healthy while being dishonest. Only `E_UNDOCUMENTED_CHILD` and `E_NO_DISPATCH_ARTIFACT` catch it. Its captured exit-1 output is committed as `…-negative-undocumented.output.txt`. It is a demonstration of the rejector, not runtime evidence of a real violation.
 
-`tests/sessionLedger.test.mjs` asserts the pass receipt validates at its measured peaks **with the cross-check on**, both negative receipts fail with every promised code, each violation code fires in isolation, and the inclusive boundaries pass (4 children + 1 primary = 5 sessions; one browser; disjoint leases; sequential lease reuse). It also asserts the cross-check's own edges: an omission is invisible without a census, out-of-window artifacts are not claimed, a burst straddling the window start is still checked, and `first_at`/`at` really are the earliest/latest dispatch. The suite runs under the existing `pnpm test` glob — no workflow change is needed or made.
+A third negative, `docs/operations/receipts/328-runtime-ledger-negative-window-shift.json`, is the window-narrowing evasion above, derived from the real pass receipt and cross-checked against the **genuine, unmodified** census. It drops one child and moves `window.from` past that child's dispatch. `E_UNDOCUMENTED_CHILD` deliberately does **not** fire — the burst really is out of scope — and `E_CHILD_OUTSIDE_WINDOW` fires three times instead, on the children that started before the narrowed window. Its captured exit-1 output is committed as `…-negative-window-shift.output.txt`.
+
+`tests/sessionLedger.test.mjs` asserts the pass receipt validates at its measured peaks **with the cross-check on**, both negative receipts fail with every promised code, each violation code fires in isolation, and the inclusive boundaries pass (4 children + 1 primary = 5 sessions; one browser; disjoint leases; sequential lease reuse). It also asserts the cross-check's own edges: an omission is invisible without a census, out-of-window artifacts are not claimed, a burst straddling the window start is still checked, and `first_at`/`at` really are the earliest/latest dispatch.
+
+The three evasions are regression-tested by **executing** them against the genuine receipts, not by asserting on hand-written fixtures: the window shift, the truncated census with an untouched summary, and the inverted burst clock each assert `ok === false` in-process **and exit status 1 through a spawned CLI**, alongside a spawned-CLI exit-0 control on the unmodified pass receipt. Every declared summary field is compared in isolation, a missing summary is rejected, an unparseable clock is rejected, a missing `first_at` still falls back to `at`, and exact window-boundary equality passes. The suite runs under the existing `pnpm test` glob — no workflow change is needed or made.
 
 ## Coordinator obligation
 
