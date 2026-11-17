@@ -242,3 +242,62 @@ crusher simply renders richer).
 - Remaining: independent reviewer + product ACCEPT of the immutable head, release
   engineer merge + deployed-source SHA verification, hosted-browser receipt (#333),
   physical handset (#268/#275), sponsor G1 visual review (#276).
+
+## #552 — Screening Plant buildable: silhouette decision (binding-only)
+
+Issue #552 asks for the ART-02 "sorter" outcome to exist as its own placeable
+machine. Two explicit silhouette decisions were made and recorded here:
+
+1. **Refinery keeps its OWN ART-03 distillation silhouette — UNCHANGED.** The issue
+   premise ("screening geometry only reachable inside another buildable, decide
+   whether refinery keeps the screening silhouette") is stale at base
+   `e82caa52a3973fae92a983e11b6906489269b655`: ART-03 (#349) already rebuilt the
+   refinery into a distinct distillation plant. There is no shared
+   refinery/screening silhouette to resolve. The refinery branch in
+   `src/world.js` is untouched by #552; no geometry, palette, primitive or
+   accepted-test edits were made to it.
+
+2. **Screening Plant binds to the EXISTING accepted ART-02 crusher+screening rig
+   (shared silhouette, disclosed not silent).** The screening stage geometry
+   (`pivot:screen` oscillating deck + twin discharge chutes + `pivot:rollerA` /
+   `pivot:rollerB`) lives only in the ART-02 crusher branch. #552 attaches the new
+   `screening` id to that branch via a NARROW ADDITIVE binding-only alias:
+   - `src/voxelSchema.js`: `RAW_MACHINES.screening = RAW_MACHINES.crusher;`
+     (pure descriptor alias; the frozen `MACHINES` map validates keys == BUILDINGS).
+   - `src/world.js` line ~276: `else if(kind==="crusher"||kind==="screening")`
+     selects the same rig; geometry UNCHANGED. Camera methods `applyCamera` /
+     `stampCamera` UNTOUCHED (hashes re-measured base+head, preserved:
+     `f3afa5479a66b97e`/602 and `691b3c0a3480e97b`/252).
+   - `src/simulation.js`: ZERO edits — `advanceGame` is data-driven off
+     `BLUEPRINTS`, so the content registry IS the wiring (PR #573 rebase mechanical).
+   - `src/content.js`: new `screening` processing buildable (cost
+     {credits:230,scrap:42,stone:22}, cycle 3.5 s, inputs {scrap:8},
+     outputs {stone:5,copper:1}, power 2, 1×1, tier-0 unlock). Surfaces through the
+     data-driven dock with ZERO UI edits (UI lease held by dev-566).
+
+   **Rationale:** a distinct screening-only silhouette requires new voxel geometry
+   in `src/world.js`, which is outside the binding-only lease exception and must be
+   serialized as its own world.js geometry task. Shipping the standalone buildable
+   now (genuinely consuming/producing, exact bank deltas, load-bearing tests) on the
+   accepted rig delivers the issue outcome without reviving archived UI or editing
+   accepted ART-02/03 geometry. The shared silhouette is an explicit, disclosed
+   interim state, not a claim of visual fidelity.
+
+   **Owed follow-up:** a serialized world.js geometry issue for a distinct
+   screening-only rig (deck/hopper/chute proportions tuned to screening rather than
+   crushing), with its own capture evidence and sponsor G1 review. Until then the
+   Screening Plant is visually the crusher rig BY DESIGN.
+
+   **Evidence (node-side only ⇒ PASS_NUMERIC_ONLY; browser NOT cleared, port 4201
+   reserved):** `pnpm test` 452 (451 pass / 1 fail = known Windows deliveryAlert
+   #207, identical on clean main; Linux CI authoritative); baseline measured 442.
+   +10 load-bearing tests in `tests/screeningPlant.test.mjs` fail 10/10 on base-main
+   blobs, pass 10/10 after. Exact bank deltas: build −230 cr / −42 sc / −22 st;
+   one cycle −8 sc / +5 st / +1 cu (stats.produced +6, bank untouched); dismantle
+   refund {credits:92,scrap:88,stone:13,copper:1}. 4 negative controls
+   (NC1 registry-removal 9 fail, NC2 recipe-mutation 1, NC3 power-mutation 1,
+   NC4 unlock-removal 4). One disclosed additive integration-test edit
+   (`tests/voxelSchema.test.mjs` pivot-expectation map gains
+   `screening: ["rollerA","rollerB","screen"]`; crusher/ART-02/03 rows UNCHANGED)
+   flagged for reviewer ratification. Code head
+   `0a0d88e95574aec2479261622c9038c12fe85beb` (PR #577 DRAFT).
