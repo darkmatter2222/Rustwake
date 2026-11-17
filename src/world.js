@@ -50,6 +50,58 @@ function textPanel(parent,label,x,y,z,size=2.2){
 function beam(parent,x,y,z,length,axis="x",material="steel"){
  return box(parent,x,y,z,axis==="x"?length:.21,.23,axis==="z"?length:.21,material);
 }
+// ART-06 (#352): the crane runs a scripted mechanical lift cycle, never the legacy
+// endless sinusoidal slew. Pure deterministic phase machine: elapsed time in,
+// named-pivot pose out (slew angle, trolley travel along the boom, hoist cable
+// payout). The hook always runs EMPTY — a visible load may only ever mirror a real
+// reserved shipment from the simulation authority (#274); this cycle implies no
+// production. prefers-reduced-motion parks the crane in a static pose.
+export const CRANE_LIMITS=Object.freeze({trolleyMin:.7,trolleyMax:4.35,dropMin:.45,dropMax:3.2,dropRelease:2.6,slewDrop:-.6});
+export const CRANE_PHASES=Object.freeze([
+ {name:"travel-out",dur:3},{name:"lower",dur:3},{name:"hook-dwell",dur:1.6},
+ {name:"raise",dur:3},{name:"travel-in",dur:3},{name:"slew-to-drop",dur:2.4},
+ {name:"lower-drop",dur:2.6},{name:"release-dwell",dur:1.6},{name:"raise-drop",dur:2.6},
+ {name:"slew-back",dur:2.4}
+]);
+export const CRANE_CYCLE_TOTAL=CRANE_PHASES.reduce((s,p)=>s+p.dur,0);
+const craneEase=u=>u*u*(3-2*u); // smoothstep: mechanical accel/decel, zero end velocity
+const craneLerp=(a,b,u)=>a+(b-a)*u;
+export function cranePose(time,reducedMotion=false){
+ const L=CRANE_LIMITS;
+ if(reducedMotion)return {phase:"parked",index:-1,progress:0,cycleT:0,slew:0,trolley:L.trolleyMin,drop:L.dropMin,reduced:true};
+ const cycleT=((time%CRANE_CYCLE_TOTAL)+CRANE_CYCLE_TOTAL)%CRANE_CYCLE_TOTAL;
+ let acc=0,index=CRANE_PHASES.length-1,progress=1;
+ for(let i=0;i<CRANE_PHASES.length;i++){
+  const d=CRANE_PHASES[i].dur;
+  if(cycleT<acc+d){index=i;progress=(cycleT-acc)/d;break;}
+  acc+=d;
+ }
+ const u=craneEase(Math.min(1,Math.max(0,progress)));
+ let slew=0,trolley=L.trolleyMin,drop=L.dropMin;
+ switch(CRANE_PHASES[index].name){
+  case "travel-out":trolley=craneLerp(L.trolleyMin,L.trolleyMax,u);break;
+  case "lower":trolley=L.trolleyMax;drop=craneLerp(L.dropMin,L.dropMax,u);break;
+  case "hook-dwell":trolley=L.trolleyMax;drop=L.dropMax;break;
+  case "raise":trolley=L.trolleyMax;drop=craneLerp(L.dropMax,L.dropMin,u);break;
+  case "travel-in":trolley=craneLerp(L.trolleyMax,L.trolleyMin,u);break;
+  case "slew-to-drop":slew=craneLerp(0,L.slewDrop,u);break;
+  case "lower-drop":slew=L.slewDrop;drop=craneLerp(L.dropMin,L.dropRelease,u);break;
+  case "release-dwell":slew=L.slewDrop;drop=L.dropRelease;break;
+  case "raise-drop":slew=L.slewDrop;drop=craneLerp(L.dropRelease,L.dropMin,u);break;
+  case "slew-back":slew=craneLerp(L.slewDrop,0,u);break;
+ }
+ return {phase:CRANE_PHASES[index].name,index,progress,cycleT,slew,trolley,drop,reduced:false};
+}
+// Single runtime application path (update() and tests share it): the hook pivot
+// rides exactly the cable end, so the load chain can never teleport apart.
+export function applyCranePose(p,pose){
+ p.node.rotation.y=pose.slew;
+ p.trolley.position.x=pose.trolley;
+ p.hook.position.y=-pose.drop;
+ p.cable.scale.y=pose.drop;
+ p.cable.position.y=-pose.drop/2;
+ p.node.userData.cranePhase=pose.phase;
+}
 export function makeBuilding(b,time){
  const group=new THREE.Group();
  // Exact footprint pivot (#370): anchor cell is the min corner; the group sits
@@ -110,13 +162,26 @@ export function makeBuilding(b,time){
   add(0,.7,0,2.2,.8,2.4,"rust");
   for(let s of [-1,1])for(let z of [-1,1])box(group,s*.9,2.8,z*.8,.22,4.3,.22,"orange");
   add(0,4.95,0,2.2,.28,1.8,"steel");
-  const boom=new THREE.Group();boom.position.set(0,5.1,0);
-  box(boom,1.5,0,0,6.5,.28,.38,"orange");
-  for(let i=0;i<8;i++){beam(boom,-1.4+i*.7,.36,0,.7,"x","steel");}
-  box(boom,4.35,-1.18,0,.14,2.4,.14,"steel");
-  box(boom,4.35,-2.38,0,.85,.45,.75,"rust");
-  box(boom,-1.45,-.15,0,1.5,.7,1.6,"dark");
-  boom.name="pivot:crane";group.add(boom);parts.push({kind:"crane",node:boom});
+  // ART-06 (#352): named slew/boom -> trolley -> hoist -> hook hierarchy. The root
+  // keeps the ART-01 schema name "pivot:crane" at (0,5.1,0); the trolley travels the
+  // boom, the hoist pays out a scaled cable and the empty hook block rides its end.
+  const slew=new THREE.Group();slew.position.set(0,5.1,0);slew.name="pivot:crane";
+  box(slew,1.5,0,0,6.5,.28,.38,"orange");
+  for(let i=0;i<8;i++){beam(slew,-1.4+i*.7,.36,0,.7,"x","steel");}
+  box(slew,-1.45,-.15,0,1.5,.7,1.6,"dark");
+  const trolley=new THREE.Group();trolley.name="pivot:crane:trolley";
+  trolley.position.set(CRANE_LIMITS.trolleyMin,-.31,0);
+  box(trolley,0,0,0,.6,.34,.62,"dark");
+  box(trolley,0,.02,.36,.66,.2,.08,"steel");
+  box(trolley,0,.02,-.36,.66,.2,.08,"steel");
+  const hoist=new THREE.Group();hoist.name="pivot:crane:hoist";hoist.position.set(0,-.2,0);
+  const cable=box(hoist,0,-CRANE_LIMITS.dropMin/2,0,.12,CRANE_LIMITS.dropMin,.12,"steel");
+  const hook=new THREE.Group();hook.name="pivot:crane:hook";hook.position.set(0,-CRANE_LIMITS.dropMin,0);
+  box(hook,0,-.24,0,.85,.45,.75,"rust");
+  box(hook,0,-.6,0,.16,.34,.16,"steel");
+  box(hook,0,-.82,0,.3,.12,.16,"orange");
+  hoist.add(hook);trolley.add(hoist);slew.add(trolley);group.add(slew);
+  parts.push({kind:"crane",node:slew,trolley,hoist,hook,cable});
  } else if(kind==="turret"){
   add(0,1.4,0,1.5,2.2,1.6,"dark");
   cylinder(group,0,2.7,0,.98,.4,"steel");
@@ -209,6 +274,11 @@ export class LivingWorld{
   this.raycaster=new THREE.Raycaster();
   this.groundPlane=new THREE.Plane(new THREE.Vector3(0,1,0),0);
   this.state=null;this.sig="";this.built=new Map();this.trucks=new Map();this.view={yaw:45,elevation:35.264,zoom:1,x:0,z:0};
+  // ART-06 (#352): prefers-reduced-motion parks continuous crane motion in a static
+  // pose; simulation/economic timing is untouched (MOTION_AUDIO.md accessibility).
+  const mq=typeof window!=="undefined"&&window.matchMedia?window.matchMedia("(prefers-reduced-motion: reduce)"):null;
+  this.reducedMotion=!!(mq&&mq.matches);
+  if(mq&&mq.addEventListener)mq.addEventListener("change",e=>{this.reducedMotion=!!e.matches;});
   this.resize();
  }
  makeTerrain(){
@@ -367,13 +437,14 @@ export class LivingWorld{
   const width=Math.max(1,this.host.clientWidth),height=Math.max(1,this.host.clientHeight);
   if(width!==this.width||height!==this.height)this.resize();
   this.applyCamera();
+  let craneStamp=null;
   for(const [id,obj] of this.built){
    const b=g.buildings.find(b=>b.id===id);if(!b)continue;
    obj.group.userData.buildingId=id;
    for(const p of obj.parts){
     if(p.kind==="spin")p.node.rotation.y=time*1.75;
     if(p.kind==="rocker")p.node.rotation.y=Math.sin(time*.65+id)*.55;
-    if(p.kind==="crane")p.node.rotation.y=Math.sin(time*.24)*.34;
+    if(p.kind==="crane"){const pose=cranePose(time,this.reducedMotion);applyCranePose(p,pose);craneStamp=pose;}
     if(p.kind==="rotate")p.node.rotation.y=time*.22;
    }
    if(b.type==="furnace"||b.type==="foundry")obj.group.scale.y=1+.009*Math.sin(time*5+id);
@@ -413,6 +484,12 @@ export class LivingWorld{
   // LOG-04 (#384): additive freight stamps (camera stamps above are untouched).
   this.renderer.domElement.dataset.freightLoaded=String(freightLoaded);
   this.renderer.domElement.dataset.freightOnboard=String(freightOnboard);
+  // ART-06 (#352): additive crane-cycle observability (camera stamps untouched).
+  const cd=this.renderer.domElement.dataset;
+  cd.cranePhase=craneStamp?craneStamp.phase:"none";
+  cd.craneTrolley=craneStamp?craneStamp.trolley.toFixed(3):"0";
+  cd.craneDrop=craneStamp?craneStamp.drop.toFixed(3):"0";
+  cd.craneReducedMotion=this.reducedMotion?"1":"0";
  }
  dispose(){this.renderer.dispose();this.renderer.domElement.remove();this.scene.clear();}
 }
