@@ -1,7 +1,9 @@
 // dev-552b C1 economy A/B harness for issue #552 / PR #577 (node-side, NO browser).
 // Product condition C1 (verbatim intent, ruling 6958022857): paired 2x2 A/B —
-//   dispatcher {pre-#573 = this head's src/simulation.js,
-//               post-#573 = #573's src/simulation.js at a named 40-char SHA}
+//   dispatcher {pre-#573 = src/simulation.js at --pre-dispatcher-sha (default
+//               119326d98480b05039b11a6b2e46318dc1f81d39, main immediately
+//               before #573 merged — NOT whatever is in the working tree),
+//               post-#573 = src/simulation.js at --dispatcher-sha}
 //   x yard     {screening built at t~0 via public buildAt, no screening}
 // fresh yard, same seed (createGame seed is fixed at 4073; zero player input
 // beyond the single buildAt). Report at t=120s: bank steel (gate > 20),
@@ -12,23 +14,29 @@
 // than the no-screening control. stats.produced / total delivered are vanity
 // metrics (ruling 6956801701 / 6956802181) — reported, NEVER gated.
 //
-// DISPATCHER VARIANT IS A PARAMETER, not a hardcoded edit:
+// DISPATCHER VARIANTS ARE PARAMETERS, not hardcoded edits:
 //   node scripts/measure-552-ab.mjs [--dispatcher-sha <40-char SHA>]
-// defaults to d8a492a68a8e7415021da431cc520a685041ad97 (#573 head). At #577's
-// train turn on the genuinely rebased head, re-run unchanged (or point
-// --dispatcher-sha at the merged dispatcher SHA).
+//                                   [--pre-dispatcher-sha <40-char SHA>]
+// --dispatcher-sha defaults to d8a492a68a8e7415021da431cc520a685041ad97 (#573
+// head); on the rebased head point it at the merged main SHA.
+// --pre-dispatcher-sha defaults to 119326d98480b05039b11a6b2e46318dc1f81d39
+// (main immediately before #573 merged). The harness HARD-FAILS if the two
+// arms' simulation.js bytes are identical (a degenerate 2x2 with false labels).
 //
-// SAFE LOCAL EXPERIMENT (coordinator ratification, brief-dev-552b): for the
-// post-#573 cells the orchestrator writes `git show <sha>:src/simulation.js`
-// into the WORKING TREE ONLY, measures in fresh child processes, then restores
-// the original bytes in a finally block and PROVES the restore (sha256
-// before/after + git diff --stat/--numstat for that path). The variant is
-// NEVER committed. Every cell JSON carries the sha256 of the simulation.js
-// bytes it actually imported, and the orchestrator cross-checks them.
+// SAFE LOCAL EXPERIMENT (coordinator ratification, brief-dev-552b): for BOTH
+// arms the orchestrator writes `git show <sha>:src/simulation.js` into the
+// WORKING TREE ONLY (preBuf for the pre573 cells, postBuf for the post573
+// cells), measures in fresh child processes, then restores the original bytes
+// in a finally block and PROVES the restore (sha256 before/after + git diff
+// --stat/--numstat for that path). The variants are NEVER committed. Every
+// cell JSON carries the sha256 of the simulation.js bytes it actually
+// imported, and the orchestrator cross-checks them per arm.
 //
-// SRC-PROVENANCE: variant (ii) is THIS HEAD's content.js + #573's
-// simulation.js at the named SHA — NOT a real merged tree. Both 40-char SHAs
-// are printed with every table.
+// SRC-PROVENANCE: BOTH arms are synthetic working-tree swaps of
+// src/simulation.js against THIS HEAD's content.js — NOT real merged trees.
+// The pre arm is #573's parent-main dispatcher at preSha; the post arm is the
+// dispatcher at postSha. Both 40-char SHAs and both sha256s are printed with
+// every table.
 //
 // Cell mode (internal): node scripts/measure-552-ab.mjs --cell --screening yes|no
 // prints exactly one JSON object on stdout.
@@ -41,6 +49,7 @@ import {fileURLToPath} from "node:url";
 const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const SIM_PATH = path.join(ROOT, "src", "simulation.js");
 const DEFAULT_POST573_SHA = "d8a492a68a8e7415021da431cc520a685041ad97";
+const DEFAULT_PRE573_SHA = "119326d98480b05039b11a6b2e46318dc1f81d39"; // main immediately before #573 merged
 const T = 120, DT = 0.5; // t=120s is the product gate horizon — do not redefine.
 const sha256 = (buf) => createHash("sha256").update(buf).digest("hex");
 const fileUrl = (p) => new URL("file:///" + p.replace(/\\/g, "/")).href;
@@ -116,20 +125,29 @@ if (flag("--cell")) {
 // ---------------- ORCHESTRATOR: 2x2 with safe dispatcher swap --------------
 const postSha = opt("--dispatcher-sha", DEFAULT_POST573_SHA);
 if (!/^[0-9a-f]{40}$/.test(postSha)) throw new Error("--dispatcher-sha must be a full 40-char SHA");
+const preSha = opt("--pre-dispatcher-sha", DEFAULT_PRE573_SHA);
+if (!/^[0-9a-f]{40}$/.test(preSha)) throw new Error("--pre-dispatcher-sha must be a full 40-char SHA");
 const headSha = git("rev-parse", "HEAD").toString().trim();
 const origBuf = fs.readFileSync(SIM_PATH);
 const origHash = sha256(origBuf);
 const preNumstat = git("diff", "--numstat", "--", "src/simulation.js").toString().trim();
 if (preNumstat) throw new Error("src/simulation.js has uncommitted changes BEFORE the experiment:\n" + preNumstat);
+const preBuf = git("show", preSha + ":src/simulation.js"); // raw blob bytes
+const preHash = sha256(preBuf);
 const postBuf = git("show", postSha + ":src/simulation.js"); // raw blob bytes
 const postHash = sha256(postBuf);
+if (preHash === postHash)
+  throw new Error("DEGENERATE 2x2: pre dispatcher (" + preSha + ") and post dispatcher (" + postSha +
+    ") have byte-identical src/simulation.js (sha256 " + preHash +
+    ") — the two arms would run the SAME code and the pre573 labels would be false. " +
+    "Point --pre-dispatcher-sha at a genuinely pre-#573 commit (default " + DEFAULT_PRE573_SHA + ").");
 
 function runCell(dispatcher, screening) {
   const r = spawnSync(process.execPath, [fileURLToPath(import.meta.url), "--cell", "--screening", screening],
     {cwd: ROOT, encoding: "utf8", maxBuffer: 64 * 1024 * 1024});
   if (r.status !== 0) throw new Error("cell " + dispatcher + "/" + screening + " failed:\n" + r.stderr + r.stdout);
   const cell = JSON.parse(r.stdout.trim());
-  const want = dispatcher === "pre573" ? origHash : postHash;
+  const want = dispatcher === "pre573" ? preHash : postHash;
   if (cell.simSha256 !== want)
     throw new Error("PROVENANCE MISMATCH: cell " + dispatcher + "/" + screening + " imported simulation.js sha256 " +
       cell.simSha256 + " expected " + want);
@@ -138,18 +156,23 @@ function runCell(dispatcher, screening) {
 }
 
 console.log("== C1 2x2 A/B — #552 Screening Plant (PASS_NUMERIC_ONLY, node-side, no browser) ==");
-console.log("head SHA (content.js + pre-#573 dispatcher): " + headSha);
-console.log("post-#573 dispatcher SHA (#573, unmerged):   " + postSha);
-console.log("SRC-PROVENANCE: variant (ii) = this head's content.js + #573's simulation.js at " + postSha + " — NOT a real merged tree.");
-console.log("simulation.js sha256 pre:  " + origHash);
+console.log("head SHA (content.js for ALL cells):        " + headSha);
+console.log("pre-#573 dispatcher SHA (#573 parent-main): " + preSha);
+console.log("post-#573 dispatcher SHA:                   " + postSha);
+console.log("SRC-PROVENANCE: BOTH arms are synthetic WORKING-TREE swaps of src/simulation.js against this head's content.js — NOT real merged trees.");
+console.log("  pre arm  = simulation.js at " + preSha + " (#573's parent-main dispatcher)");
+console.log("  post arm = simulation.js at " + postSha + " (merged/post-#573 dispatcher)");
+console.log("simulation.js sha256 pre:  " + preHash);
 console.log("simulation.js sha256 post: " + postHash);
+console.log("working-tree original sha256 (restored in finally): " + origHash);
 console.log("fresh yard, fixed seed 4073, zero player input beyond one public buildAt at t~0; t=120s, 0.5s substeps.\n");
 
 const cells = {};
-cells.pre573 = {yes: runCell("pre573", "yes"), no: runCell("pre573", "no")};
 let restoreProof = null;
-fs.writeFileSync(SIM_PATH, postBuf); // WORKING TREE ONLY — never committed
 try {
+  fs.writeFileSync(SIM_PATH, preBuf); // WORKING TREE ONLY — never committed
+  cells.pre573 = {yes: runCell("pre573", "yes"), no: runCell("pre573", "no")};
+  fs.writeFileSync(SIM_PATH, postBuf); // WORKING TREE ONLY — never committed
   cells.post573 = {yes: runCell("post573", "yes"), no: runCell("post573", "no")};
 } finally {
   fs.writeFileSync(SIM_PATH, origBuf); // byte-exact restore, guaranteed
@@ -174,7 +197,7 @@ const rows = [["pre573", "yes"], ["pre573", "no"], ["post573", "yes"], ["post573
 console.log("== 2x2 TABLE @ t=120s (bank steel gate > 20; scrap flow gate > 0) ==");
 for (const [d, s] of rows) {
   const c = cells[d][s];
-  console.log("--- dispatcher=" + d + " screening=" + s + " (sim sha256 " + c.simSha256.slice(0, 16) + "…) ---");
+  console.log("--- dispatcher=" + d + " (" + (d === "pre573" ? preSha : postSha) + ") screening=" + s + " (sim sha256 " + c.simSha256.slice(0, 16) + "…) ---");
   console.log("  bank steel @120s: " + c.bankSteelAt120);
   console.log("  delivered by resource (depot arrivals): " + JSON.stringify(c.deliveredByResource));
   console.log("  delivered by output pair: " + JSON.stringify(c.deliveredByPair));
@@ -207,5 +230,5 @@ if (failures.length) {
   for (const f of failures) console.error("  " + f);
   process.exit(1);
 }
-console.log("\nC1 PASS (PASS_NUMERIC_ONLY) — head " + headSha + " x #573 dispatcher " + postSha);
+console.log("\nC1 PASS (PASS_NUMERIC_ONLY) — head " + headSha + " content.js x pre dispatcher " + preSha + " vs post dispatcher " + postSha + " (synthetic working-tree swaps, not merged trees)");
 console.log("C2 (desktop+phone captures at the DEPLOYED SHA, crusher+screening adjacent in one frame) remains OWED — no browser in this session.");
