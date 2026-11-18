@@ -6,6 +6,8 @@ import {worldFootprint,terrainFor,surveyed,inside,footprintCells,bayCells} from 
 import {SCHEMA_ID,machineDescriptor,cellCenter,rigLodTier,RIGS,SCENERY,SCENERY_AUTHORITY,MATERIALS} from "./voxelSchema.js";
 import {ART03_TYPES,ART03_SMOKE,STATUS_MATERIALS,art03Advance,art03Pose,smokePuff} from "./art03.js";
 export {ART03_MOTION,ART03_TYPES,art03Pose,art03Advance,machineStatus,smokePuff} from "./art03.js";
+import {ART04_TYPES,ART04_STATUS_LIGHT,art04Advance,art04Pose,art04HotMaterial,depotDoorLift} from "./art04.js";
+export {ART04_MOTION,ART04_TYPES,ART04_DOCK,art04Pose,art04Advance,bayApproachDistance,depotDoorLift} from "./art04.js";
 
 const EDGE=WORLD_SIZE*CELL;
 const origin=(i)=>(i-WORLD_SIZE/2+.5)*CELL;
@@ -141,6 +143,9 @@ export function makeBuilding(b,time){
  // status surfaces get discrete shared-material swaps in update(); emit groups
  // carry a few smoke puffs phased off the sim work clock (visible only working).
  const a03={statusNodes:{},emits:[]};
+ // ART-04 (#350): status/shutter metadata for the four civic rigs. Runtime
+ // work-clock state (obj.a04) is created lazily in update() from REAL sim state.
+ const a04={statusNodes:{},door:null};
  const mkEmit=(name,x,y,z,count=ART03_SMOKE.count,material="smoke",flare=false)=>{
   const e=new THREE.Group();e.name=name;e.position.set(x,y,z);e.visible=false;e.userData.flare=flare;
   for(let i=0;i<count;i++){const p=box(e,0,0,0,ART03_SMOKE.base,ART03_SMOKE.base,ART03_SMOKE.base,material);p.userData.puff=i;}
@@ -176,14 +181,64 @@ export function makeBuilding(b,time){
   box(arm,0,.02,-2.5,.75,.22,.3,"steel");
   for(let i=-1;i<=1;i++)box(arm,i*.25,-.14,-2.5,.12,.28,.12,"orange");
   arm.name="pivot:rocker";group.add(arm);parts.push({kind:"rocker",node:arm});
- } else if(kind==="depot"||kind==="market"){
-  add(0,1.48,0,2.95,2.14,2.65,kind==="depot"?"body":"wood");
-  add(0,2.67,0,3.13,.4,2.88,"roof");
-  add(0,1.35,1.34,1.6,1.35,.13,"black");
-  add(.9,1.6,1.42,.23,1.15,.14,"orange");
-  add(-1.18,1.6,1.42,.12,1.2,.15,"orange");
-  for(let i=-1;i<=1;i++)add(i*.82,2.72,-.12,.45,.06,.9,"steel");
-  textPanel(group,kind==="depot"?"FREIGHT":"EXCHANGE",0,2.2,1.44,.95);
+ } else if(kind==="depot"){
+  // ART-04 (#350): Freight Depot — dock hall with a RAISED loading platform and
+  // steel lip, a roll-up shutter (pivot:door) whose lift is a pure function of
+  // the nearest REAL freight truck's distance to this depot's bay approach cell
+  // (art04.js depotDoorLift; never a wall-clock timer), a canopy on two posts
+  // framing the truck corridor (2.38 clear > 1.2 truck width), a side container
+  // and a crate-glyph logo plaque. Original kit, shared mats only.
+  add(0,1.5,-.25,3.0,1.9,2.3,"body");
+  add(0,2.56,-.25,3.14,.22,2.44,"roof");
+  add(0,2.8,-.7,1.3,.26,.9,"dark");
+  for(let i=-1;i<=1;i++)add(i*.4,2.95,-.7,.3,.06,.7,"steel");
+  add(0,.62,.75,2.6,.28,.55,"dark");
+  add(0,.78,1.0,2.6,.06,.1,"steel");
+  add(0,1.26,.88,1.6,1.04,.1,"black");
+  for(const s of [-1,1])add(s*.86,1.26,.93,.12,1.16,.16,"dark");
+  add(0,1.86,.93,1.84,.12,.16,"dark");
+  const door=new THREE.Group();door.position.set(0,.76,1.08);door.name="pivot:door";
+  box(door,0,.52,0,1.5,1.04,.07,"dark");
+  for(let i=0;i<3;i++)box(door,0,.2+i*.32,.045,1.4,.05,.02,"steel");
+  box(door,0,.03,.045,1.5,.06,.03,"orange");
+  door.userData.baseY=.76;group.add(door);a04.door=door;
+  add(0,2.12,1.45,2.7,.1,.6,"roof");
+  for(const s of [-1,1])add(s*1.25,1.42,1.6,.12,1.3,.12,"orange");
+  for(const s of [-1,1])add(s*.6,2.28,1.63,.05,.22,.05,"steel");
+  textPanel(group,"FREIGHT",0,2.45,1.63,.55);
+  add(-1.32,.95,-.9,.44,.8,1.2,"rust");
+  for(let i=0;i<3;i++)add(-1.32,.95,-1.3+i*.4,.48,.6,.06,"dark");
+  add(-.95,2.3,.91,.62,.5,.05,"dark");
+  for(let i=0;i<3;i++)add(-1.13+i*.18,2.3,.96,.16,.16,.06,i===1?"steel":"orange");
+ } else if(kind==="market"){
+  // ART-04 (#350): Trade Exchange — timber gabled hall (sloped roof slabs +
+  // ridge), a coin logo on the gable, a served counter with steel top and
+  // produce crates, an awning (pivot:awning) and a balance beam (pivot:scale).
+  // The beam/awning are DECLARED AMBIENT civic decoration on the sim elapsed
+  // clock (art04.js load label "ambient" — no production authority, #274); the
+  // status lamp reads "trading" only when g.stats.sold actually increased.
+  add(0,1.3,-.3,2.7,1.5,2.0,"wood");
+  for(const s of [-1,1]){const slab=add(s*.72,2.32,-.3,1.75,.12,2.3,"roof");slab.rotation.z=-s*.5;}
+  add(0,2.72,-.3,.34,.14,2.34,"dark");
+  add(0,2.2,.71,2.4,.6,.08,"wood");
+  add(0,2.55,.71,1.2,.3,.08,"wood");
+  const coin=cylinder(group,0,2.28,.78,.3,.06,"orange");coin.rotation.x=Math.PI/2;
+  add(0,2.28,.82,.12,.12,.02,"dark");
+  add(0,.95,.72,.9,.8,.06,"black");
+  for(const s of [-1,1])add(s*.5,.95,.74,.08,.84,.04,"orange");
+  textPanel(group,"EXCHANGE",0,1.6,.73,.6);
+  add(0,.85,.95,2.2,.5,.6,"wood");
+  add(0,1.12,.95,2.3,.06,.66,"steel");
+  for(const s of [-1,1]){add(s*1.2,.72,1.15,.5,.5,.5,s<0?"rust":"wood");add(s*1.2,.72,1.15,.54,.1,.54,"dark");}
+  const awning=new THREE.Group();awning.position.set(0,1.95,.72);awning.name="pivot:awning";
+  box(awning,0,0,.4,2.4,.06,.85,"orange");
+  for(let i=-1;i<=1;i++)box(awning,i*.8,-.05,.78,.7,.08,.06,"orange");
+  group.add(awning);parts.push({kind:"a04",node:awning,role:"awning",axis:"x"});
+  const scale=new THREE.Group();scale.position.set(0,2.95,.72);scale.name="pivot:scale";
+  box(scale,0,-.18,0,.08,.36,.08,"steel");
+  box(scale,0,0,0,1.1,.06,.06,"steel");
+  for(const s of [-1,1]){box(scale,s*.5,-.12,0,.03,.24,.03,"steel");cylinder(scale,s*.5,-.26,0,.16,.05,"orange");}
+  group.add(scale);parts.push({kind:"a04",node:scale,role:"scale",axis:"z"});
  } else if(kind==="generator"){
   // ART-03 (#349): Turbine Generator — hall body with a front intake grille
   // framing the visible counter-rotating turbine (pivot:turbine, axis z), the
@@ -381,15 +436,74 @@ export function makeBuilding(b,time){
   add(0,3.18,0,1.55,.48,1.2,"roof");
   box(head,0,0,-1,.38,.32,2.45,"orange");
   head.name="pivot:rotate";group.add(head);parts.push({kind:"rotate",node:head});
+ } else if(kind==="research"){
+  // ART-04 (#350): Signal Observatory — banded instrument tower with a cap
+  // deck, a side equipment cabinet (status:window), an access ladder, and a
+  // tilted azimuth dish (pivot:dish, axis y) carrying a nested feed horn
+  // (pivot:feed, axis x). Dish/feed turn ONLY on the real sim work clock while
+  // working (art04.js); unpowered/starved parks them. Full height 4.46 is
+  // SHORTER than the old 4.925 mast — height-aware picking improves.
+  cylinder(group,0,1.9,-.2,.95,2.7,"body");
+  for(const y of [1.15,2.35])cylinder(group,0,y,-.2,1.02,.14,"rust");
+  cylinder(group,0,3.35,-.2,1.06,.2,"dark");
+  add(1.15,1.0,.55,.7,1.0,.8,"body");
+  add(1.15,.75,.97,.5,.3,.04,"dark");
+  a04.statusNodes.window=add(1.15,1.35,.97,.42,.34,.05,"furnace");
+  a04.statusNodes.window.name="status:window";
+  add(1.15,1.62,.96,.84,.24,.04,"dark");
+  textPanel(group,"SIGNAL",1.15,1.62,.99,.25);
+  for(const z of [-.5,.1])add(-1.02,1.8,z,.06,2.4,.06,"steel");
+  for(let i=0;i<4;i++)add(-1.02,.9+i*.6,-.2,.06,.06,.66,"steel");
+  const dish=new THREE.Group();dish.position.set(0,3.55,-.2);dish.name="pivot:dish";
+  box(dish,0,-.15,0,.3,.5,.3,"dark");
+  const panel=cylinder(dish,0,.25,0,1.05,.16,"steel");panel.rotation.x=-.6;
+  const rim=cylinder(dish,0,.25,0,1.1,.06,"rust");rim.rotation.x=-.6;
+  const feed=new THREE.Group();feed.position.set(0,.55,.62);feed.name="pivot:feed";
+  box(feed,0,0,-.3,.08,.08,.6,"steel");
+  const horn=cylinder(feed,0,0,.05,.12,.2,"orange");horn.rotation.x=Math.PI/2;
+  dish.add(feed);group.add(dish);
+  parts.push({kind:"a04",node:dish,role:"dish",axis:"y"});
+  parts.push({kind:"a04",node:feed,role:"feed",axis:"x"});
+ } else if(kind==="fabricator"){
+  // ART-04 (#350): Parts Fabricator — workshop with a roof vent, an exposed
+  // 2:1 gear train on the front backplate (pivot:gear 8 teeth / pivot:pinion
+  // 4 teeth, counter-rotating on the real work clock) and a trip hammer
+  // (pivot:hammer, axis x) over an anvil, plus a parts chute, side entrance and
+  // hot status:window. The chute crate is static decoration — it never claims
+  // production; only the sim cycle timer drives the train (#274).
+  add(0,1.25,-.35,2.6,1.4,1.9,"body");
+  add(0,2.05,-.35,2.75,.2,2.05,"roof");
+  add(.7,2.32,-.7,.6,.34,.6,"dark");
+  add(.7,2.52,-.7,.7,.08,.7,"steel");
+  add(0,1.3,.62,1.9,1.2,.16,"dark");
+  const gear=new THREE.Group();gear.position.set(-.35,1.35,.78);gear.name="pivot:gear";
+  const gd=cylinder(gear,0,0,0,.5,.12,"steel");gd.rotation.x=Math.PI/2;
+  for(let i=0;i<8;i++){const a=i*Math.PI/4;const t=box(gear,Math.cos(a)*.54,Math.sin(a)*.54,0,.1,.1,.12,"steel");t.rotation.z=a;}
+  const gh=cylinder(gear,0,0,0,.14,.16,"orange");gh.rotation.x=Math.PI/2;
+  group.add(gear);parts.push({kind:"a04",node:gear,role:"gear",axis:"z"});
+  const pinion=new THREE.Group();pinion.position.set(.4,1.35,.78);pinion.name="pivot:pinion";
+  const pd=cylinder(pinion,0,0,0,.25,.12,"rust");pd.rotation.x=Math.PI/2;
+  for(let i=0;i<4;i++){const a=i*Math.PI/2;const t=box(pinion,Math.cos(a)*.28,Math.sin(a)*.28,0,.08,.08,.12,"rust");t.rotation.z=a;}
+  group.add(pinion);parts.push({kind:"a04",node:pinion,role:"pinion",axis:"z"});
+  add(1.05,.62,.9,.5,.24,.4,"dark");
+  add(1.05,.8,.9,.42,.14,.34,"steel");
+  const hammer=new THREE.Group();hammer.position.set(1.05,1.9,.9);hammer.name="pivot:hammer";
+  box(hammer,0,-.4,0,.14,.8,.14,"steel");
+  box(hammer,0,-.85,0,.4,.26,.3,"rust");
+  box(hammer,0,.05,0,.3,.16,.24,"dark");
+  group.add(hammer);parts.push({kind:"a04",node:hammer,role:"hammer",axis:"x"});
+  add(-1.0,.78,.95,.6,.12,.55,"steel");
+  for(const s of [-1,1])add(-1.0+s*.28,.86,.95,.06,.1,.55,"dark");
+  add(-1.0,.7,1.28,.4,.2,.3,"orange");
+  add(-1.32,.95,.2,.06,.9,.55,"black");
+  add(-1.32,1.44,.2,.08,.1,.65,"orange");
+  a04.statusNodes.window=add(-1.32,1.5,-.5,.06,.4,.6,"furnace");
+  a04.statusNodes.window.name="status:window";
+  textPanel(group,"FAB WORKS",.75,1.85,.72,.3);
  } else {
   add(0,1.4,0,2.75,2,2.65,"body");
   add(0,2.55,0,3,.3,2.8,"roof");
   for(let i=-1;i<=1;i++)add(i*.8,1.6,1.34,.47,.55,.12,"lights");
-  if(kind==="research"){
-   cylinder(group,0,3.65,0,.18,2.1,"steel");
-   cylinder(group,0,4.8,0,.3,.25,"lights");
-  }
-  if(kind==="fabricator")for(let i=-1;i<=1;i++)add(i*.76,2.8,0,.4,.5,.6,"orange");
  }
  // Each building has a ground-projected loading bay and luminous status marker.
  // ART-01 (#347): named port/status nodes + schema ownership metadata + pick volume.
@@ -412,7 +526,8 @@ export function makeBuilding(b,time){
  // runtime work-clock state (obj.a03) is created lazily in update() from the
  // REAL sim timers, never from wall time.
  const art03=ART03_TYPES.includes(kind)?{statusNodes:{light:status,...a03.statusNodes},emits:a03.emits}:null;
- return {group,parts,art03};
+ const art04=ART04_TYPES.includes(kind)?{statusNodes:{light:status,...a04.statusNodes},door:a04.door}:null;
+ return {group,parts,art03,art04};
 }
 // ART-03 (#349): the EXACT per-rig application World.update() runs, exported so
 // tests drive the real rendered code path (same shared mats pool, same pure
@@ -438,6 +553,27 @@ export function applyArt03(obj,g,b,reducedMotion,id){
  }
  if(b.type==="furnace"||b.type==="foundry")obj.group.scale.y=1+(working?pose.pulse:0);
  return {status:next.status,clock:next.clock,load:next.load};
+}
+// ART-04 (#350): the EXACT per-rig application World.update() runs for the four
+// civic rigs, exported so tests drive the real rendered code path (same shared
+// mats pool, same pure art04 functions) against a real makeBuilding graph with
+// real simulation state. Returns the observability stamp {status,clock,load,
+// door,truckDistance}. Never mutates the pool: status changes are discrete
+// mesh.material reassignments of registered entries. The depot shutter lift is
+// a pure function of the nearest real truck's bay distance — never wall time.
+export function applyArt04(obj,g,b,reducedMotion,id){
+ if(!obj.a04)obj.a04={clock:0,lastTimer:b.timer||0,lastElapsed:g.elapsed||0,lastSold:Number(g.stats?.sold||0)};
+ const next=art04Advance(obj.a04,g,b,reducedMotion);
+ obj.a04=next;
+ const pose=art04Pose(next.clock,reducedMotion,id);
+ for(const p of obj.parts)if(p.kind==="a04")p.node.rotation[p.axis]=pose[p.role];
+ let lift=0;
+ const door=obj.art04.door;
+ if(door){lift=depotDoorLift(next.truckDistance??Infinity,reducedMotion);door.position.y=door.userData.baseY+lift;}
+ obj.art04.statusNodes.light.material=mats[ART04_STATUS_LIGHT[next.status]||"statusIdle"];
+ const win=obj.art04.statusNodes.window;
+ if(win)win.material=mats[art04HotMaterial(next.status)];
+ return {status:next.status,clock:next.clock,load:next.load,door:lift,truckDistance:next.truckDistance};
 }
 // ---------------------------------------------------------------------------
 // ART-05 (#351): identity-specific vehicle/crew rigs at coherent relative scale.
@@ -1058,12 +1194,47 @@ export function applySceneryVisibility(build,conflicts){
  }
  build.rubbleMesh.instanceMatrix.needsUpdate=true;
 }
+// ART-04 (#350) WebGL-failure negative: a player whose browser cannot create a
+// WebGL context must get a LOUD, READABLE failure — never a blank near-black
+// page and never a fake 2D world. main.jsx mounts <App/> with no error boundary
+// (UI lease #564), so the constructor's rethrow below unmounts the whole React
+// tree; the notice therefore lives on document.body OUTSIDE #root and survives
+// that unmount. Inline styles only (styles.css is under the UI lease). The
+// original error is rethrown verbatim by the caller so the failure stays loud
+// (pageerror / console / telemetry). Idempotent: at most one notice.
+export function webglFailureNotice(err){
+ if(typeof document==="undefined"||!document.body)return null;
+ const old=document.querySelector&&document.querySelector(".webgl-failure-notice");
+ if(old&&old.parentNode)old.parentNode.removeChild(old);
+ const el=document.createElement("div");
+ el.setAttribute("role","alert");el.className="webgl-failure-notice";
+ el.style.cssText="position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#141b20;padding:24px;font:16px/1.55 system-ui,sans-serif";
+ const card=document.createElement("div");
+ card.style.cssText="max-width:560px;background:#1d2c33;border:2px solid #f0a03c;border-radius:10px;padding:28px 32px;color:#e8f0ee";
+ const h=document.createElement("h1");
+ h.style.cssText="margin:0 0 12px;font-size:26px;line-height:1.2;color:#f0a03c";
+ h.textContent="3D renderer unavailable";
+ const p=document.createElement("p");
+ p.style.cssText="margin:0 0 10px";
+ p.textContent="Rustwake's salvage yard needs WebGL, and this browser could not create a WebGL context. Enable hardware acceleration or open the game in a current browser, then reload.";
+ const d=document.createElement("p");
+ d.style.cssText="margin:0;font-size:13px;color:#9fb0aa";
+ d.textContent="Technical detail: "+(err&&err.message?err.message:String(err));
+ card.appendChild(h);card.appendChild(p);card.appendChild(d);
+ el.appendChild(card);document.body.appendChild(el);
+ return el;
+}
 export class LivingWorld{
  constructor(host){
   this.host=host;this.scene=new THREE.Scene();
   this.scene.background=new THREE.Color("#1a2930");this.scene.fog=new THREE.FogExp2("#3e4240",.0038);
   this.camera=new THREE.OrthographicCamera(-25,25,15,-15,.1,600);
-  this.renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});
+  try{
+   this.renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});
+  }catch(err){
+   webglFailureNotice(err);
+   throw err;
+  }
   this.renderer.setPixelRatio(Math.min(2,window.devicePixelRatio||1));
   this.renderer.outputColorSpace=THREE.SRGBColorSpace;
   this.renderer.toneMapping=THREE.ACESFilmicToneMapping;this.renderer.toneMappingExposure=1.9;
@@ -1245,6 +1416,7 @@ export class LivingWorld{
   let craneStamp=null;
   const art02Stamp={arm:"none",roller:"none",screen:"none"};
   const art03Stamp={};
+  const art04Stamp={};
   for(const [id,obj] of this.built){
    const b=g.buildings.find(b=>b.id===id);if(!b)continue;
    obj.group.userData.buildingId=id;
@@ -1262,6 +1434,12 @@ export class LivingWorld{
    // unpowered machines freeze and starved machines never smoke. Material swaps
    // reassign shared pool entries — the pool itself is never mutated.
    if(obj.art03)art03Stamp[b.type]=applyArt03(obj,g,b,this.reducedMotion,id);
+   // ART-04 (#350): civic rigs. research/fabricator status comes ONLY from the
+   // simulation (machineStatus) and their pivots integrate wrap-aware sim timer
+   // deltas; the depot shutter follows the nearest REAL truck's bay distance;
+   // the market beam/awning are labelled ambient decoration and its lamp reads
+   // "trading" only on a real g.stats.sold increase. Pool never mutated.
+   if(obj.art04)art04Stamp[b.type]=applyArt04(obj,g,b,this.reducedMotion,id);
   }
   // ART-05 (#351): one LOD tier per frame from the real projected cell size.
   const lodTier=rigLodTier(this.view.zoom,this.height);
@@ -1351,6 +1529,21 @@ export class LivingWorld{
   const lead03=[...this.built.values()].find(o=>o.art03&&o.a03);
   cd.art03Clock=lead03?lead03.a03.clock.toFixed(3):"0.000";
   cd.art03Reduced=this.reducedMotion?"1":"0";
+  // ART-04 (#350): additive civic-rig observability (camera stamps untouched).
+  // art04Door is the depot shutter lift (world units) and art04BayDist the
+  // nearest real truck distance to the depot bay approach cell — the honest
+  // drive signal, not a timer. art04MarketLoad is the LABELLED ambient clock.
+  for(const t of ART04_TYPES)cd["art04"+t[0].toUpperCase()+t.slice(1)]=art04Stamp[t]?art04Stamp[t].status:"absent";
+  const lead04=[...this.built.values()].find(o=>o.art04&&o.a04);
+  cd.art04Clock=lead04?lead04.a04.clock.toFixed(3):"0.000";
+  cd.art04Reduced=this.reducedMotion?"1":"0";
+  cd.art04Door=art04Stamp.depot?art04Stamp.depot.door.toFixed(3):"0.000";
+  cd.art04BayDist=art04Stamp.depot&&Number.isFinite(art04Stamp.depot.truckDistance)?art04Stamp.depot.truckDistance.toFixed(3):"none";
+  cd.art04MarketLoad=art04Stamp.market?art04Stamp.market.load.toFixed(3):"0.000";
+  // Per-type civic clocks: depot has no cycle (always 0.000 — honest), market
+  // is the labelled ambient elapsed clock, research/fabricator are sim work
+  // clocks. Captures/tests prove motion against these, never wall time.
+  for(const t of ART04_TYPES)cd["art04"+t[0].toUpperCase()+t.slice(1)+"Clock"]=art04Stamp[t]?art04Stamp[t].clock.toFixed(3):"0.000";
   // ART-05 (#351): additive rig observability (camera stamps untouched). Wheel
   // angle must equal travelled distance / radius; crew stamps expose the honest
   // decorative anchoring so captures/tests can prove no fabricated freight.

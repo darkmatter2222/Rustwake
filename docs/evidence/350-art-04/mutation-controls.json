@@ -1,0 +1,141 @@
+{
+  "issue": 350,
+  "source_sha": "d6ee7f3ca42777c516314551ff75d7e95cdc69a0",
+  "floor": 0.15,
+  "metric": "six-rig occupancy-grid Jaccard distinctness (verbatim capture-art04.mjs computation)",
+  "started": "2026-11-18T13:37:57.876Z",
+  "controls": [
+    {
+      "id": "C0-head-unmutated",
+      "kind": "positive-control",
+      "expected": "PASS",
+      "grid": [
+        14,
+        20,
+        14
+      ],
+      "pairs": {
+        "depot/market": 0.1776,
+        "depot/research": 0.4805,
+        "depot/fabricator": 0.2813,
+        "depot/salvager": 0.2442,
+        "depot/crusher": 0.3178,
+        "market/research": 0.4733,
+        "market/fabricator": 0.2904,
+        "market/salvager": 0.2615,
+        "market/crusher": 0.3165,
+        "research/fabricator": 0.4909,
+        "research/salvager": 0.4819,
+        "research/crusher": 0.4668,
+        "fabricator/salvager": 0.1741,
+        "fabricator/crusher": 0.1974,
+        "salvager/crusher": 0.2349
+      },
+      "min": 0.1741,
+      "minPair": "fabricator/salvager",
+      "verdict": "PASS",
+      "ok": true
+    },
+    {
+      "id": "C1-restore-shared-depot-market-body",
+      "kind": "mutation",
+      "description": "main's single kind==depot||kind==market blockout branch spliced over head's separate depot+market branches (the old world.js:179 defect)",
+      "mutatedWorldSha256": "d886dac9041fe983ab985914bdaecaa54819ce1abda36d5eac19f486d3499633",
+      "expected": "FAIL",
+      "grid": [
+        14,
+        20,
+        14
+      ],
+      "pairs": {
+        "depot/market": 0,
+        "depot/research": 0.4975,
+        "depot/fabricator": 0.3276,
+        "depot/salvager": 0.2359,
+        "depot/crusher": 0.344,
+        "market/research": 0.4975,
+        "market/fabricator": 0.3276,
+        "market/salvager": 0.2359,
+        "market/crusher": 0.344,
+        "research/fabricator": 0.4909,
+        "research/salvager": 0.4819,
+        "research/crusher": 0.4668,
+        "fabricator/salvager": 0.1741,
+        "fabricator/crusher": 0.1974,
+        "salvager/crusher": 0.2349
+      },
+      "min": 0,
+      "minPair": "depot/market",
+      "verdict": "FAIL",
+      "ok": true
+    },
+    {
+      "id": "C2-clone-depot-onto-research",
+      "kind": "mutation",
+      "description": "depot branch condition widened to kind==depot||kind==research so both share one body",
+      "mutatedWorldSha256": "120895cb46b0f1c0b5b3c8077eea8cb6bcda1fac2eb873351861f0f270cb627b",
+      "expected": "FAIL",
+      "grid": [
+        14,
+        20,
+        14
+      ],
+      "pairs": {
+        "depot/market": 0.1776,
+        "depot/research": 0,
+        "depot/fabricator": 0.2813,
+        "depot/salvager": 0.2442,
+        "depot/crusher": 0.3178,
+        "market/research": 0.1776,
+        "market/fabricator": 0.2904,
+        "market/salvager": 0.2615,
+        "market/crusher": 0.3165,
+        "research/fabricator": 0.2813,
+        "research/salvager": 0.2442,
+        "research/crusher": 0.3178,
+        "fabricator/salvager": 0.1741,
+        "fabricator/crusher": 0.1974,
+        "salvager/crusher": 0.2349
+      },
+      "min": 0,
+      "minPair": "depot/research",
+      "verdict": "FAIL",
+      "ok": true
+    },
+    {
+      "id": "C3-rollback-clean-main",
+      "kind": "rollback-control",
+      "description": "unmutated origin/main source snapshot from .rollback-main/",
+      "snapshotMatchesMainModuloCrlf": true,
+      "expected": "FAIL",
+      "grid": [
+        14,
+        20,
+        14
+      ],
+      "pairs": {
+        "depot/market": 0,
+        "depot/research": 0.1263,
+        "depot/fabricator": 0.1014,
+        "depot/salvager": 0.2359,
+        "depot/crusher": 0.344,
+        "market/research": 0.1263,
+        "market/fabricator": 0.1014,
+        "market/salvager": 0.2359,
+        "market/crusher": 0.344,
+        "research/fabricator": 0.0508,
+        "research/salvager": 0.2047,
+        "research/crusher": 0.2937,
+        "fabricator/salvager": 0.1913,
+        "fabricator/crusher": 0.2889,
+        "salvager/crusher": 0.2349
+      },
+      "min": 0,
+      "minPair": "depot/market",
+      "verdict": "FAIL",
+      "ok": true
+    }
+  ],
+  "ok": true,
+  "status": "CONTROLS_OK"
+}

@@ -1,0 +1,5338 @@
+{
+  "version": 1,
+  "build": "production-preview",
+  "issue": 350,
+  "schema": "rustwake.voxel.geometry.v1",
+  "source_sha": "d6ee7f3ca42777c516314551ff75d7e95cdc69a0",
+  "started": "2026-11-18T13:25:54.987Z",
+  "cameraHashes": {
+    "applyCamera": {
+      "expected": "f3afa5479a66b97e",
+      "actual": "f3afa5479a66b97e",
+      "ok": true
+    },
+    "stampCamera": {
+      "expected": "691b3c0a3480e97b",
+      "actual": "691b3c0a3480e97b",
+      "ok": true
+    }
+  },
+  "budgets": {
+    "depot": {
+      "meshes": 35,
+      "triangles": 410,
+      "declared": {
+        "maxMeshes": 38,
+        "maxTriangles": 460
+      },
+      "pivots": [
+        "door"
+      ],
+      "bounds": {
+        "width": 3.14,
+        "height": 2.98,
+        "depth": 3.2725
+      },
+      "pickHeight": 2.98
+    },
+    "market": {
+      "meshes": 32,
+      "triangles": 434,
+      "declared": {
+        "maxMeshes": 36,
+        "maxTriangles": 480
+      },
+      "pivots": [
+        "scale",
+        "awning"
+      ],
+      "bounds": {
+        "width": 3.045,
+        "height": 2.79,
+        "depth": 3.045
+      },
+      "pickHeight": 3.1
+    },
+    "research": {
+      "meshes": 24,
+      "triangles": 418,
+      "declared": {
+        "maxMeshes": 28,
+        "maxTriangles": 460
+      },
+      "pivots": [
+        "dish",
+        "feed"
+      ],
+      "bounds": {
+        "width": 3.09,
+        "height": 3.45,
+        "depth": 3.045
+      },
+      "pickHeight": 4.5
+    },
+    "fabricator": {
+      "meshes": 37,
+      "triangles": 494,
+      "declared": {
+        "maxMeshes": 40,
+        "maxTriangles": 540
+      },
+      "pivots": [
+        "gear",
+        "pinion",
+        "hammer"
+      ],
+      "bounds": {
+        "width": 3.045,
+        "height": 2.56,
+        "depth": 3.045
+      },
+      "pickHeight": 2.56
+    },
+    "salvager": {
+      "meshes": 29,
+      "triangles": 408,
+      "declared": {
+        "maxMeshes": 32,
+        "maxTriangles": 560
+      },
+      "pivots": [
+        "rocker"
+      ],
+      "bounds": {
+        "width": 3.045,
+        "height": 2.74,
+        "depth": 3.045
+      },
+      "pickHeight": 2.95
+    },
+    "crusher": {
+      "meshes": 45,
+      "triangles": 600,
+      "declared": {
+        "maxMeshes": 46,
+        "maxTriangles": 660
+      },
+      "pivots": [
+        "rollerA",
+        "rollerB",
+        "screen"
+      ],
+      "bounds": {
+        "width": 3.045,
+        "height": 2.51,
+        "depth": 3.045
+      },
+      "pickHeight": 2.51
+    }
+  },
+  "art04Motion": {
+    "dishSpeed": 0.5,
+    "feedAmp": 0.16,
+    "feedSpeed": 0.7,
+    "gearSpeed": 1.6,
+    "pinionSpeed": 3.2,
+    "hammerAmp": 0.45,
+    "hammerSpeed": 1.1,
+    "scaleAmp": 0.45,
+    "scaleSpeed": 1.3,
+    "awningAmp": 0.25,
+    "awningSpeed": 2.6
+  },
+  "art04Dock": {
+    "near": 2.5,
+    "far": 7,
+    "travel": 0.8
+  },
+  "distinctness3d": {
+    "grid": [
+      14,
+      20,
+      14
+    ],
+    "pairs": {
+      "depot/market": 0.1776,
+      "depot/research": 0.4805,
+      "depot/fabricator": 0.2813,
+      "depot/salvager": 0.2442,
+      "depot/crusher": 0.3178,
+      "market/research": 0.4733,
+      "market/fabricator": 0.2904,
+      "market/salvager": 0.2615,
+      "market/crusher": 0.3165,
+      "research/fabricator": 0.4909,
+      "research/salvager": 0.4819,
+      "research/crusher": 0.4668,
+      "fabricator/salvager": 0.1741,
+      "fabricator/crusher": 0.1974,
+      "salvager/crusher": 0.2349
+    },
+    "min": 0.1741,
+    "minPair": "fabricator/salvager"
+  },
+  "sites": {
+    "generator2": {
+      "x": 7,
+      "z": 14
+    },
+    "crusher": {
+      "x": 9,
+      "z": 9
+    },
+    "research": {
+      "x": 9,
+      "z": 14
+    },
+    "fabricator": {
+      "x": 13,
+      "z": 14
+    },
+    "refinery": {
+      "x": 6,
+      "z": 13
+    },
+    "foundry": {
+      "x": 17,
+      "z": 10
+    }
+  },
+  "freshLanding": [
+    {
+      "label": "desktop",
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "absent",
+        "art04Fabricator": "absent",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.108",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "parkedB": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "absent",
+        "art04Fabricator": "absent",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.933",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "parkedConstant": true,
+      "screenshot": "desktop-home-fresh.png"
+    },
+    {
+      "label": "phone",
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "absent",
+        "art04Fabricator": "absent",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.108",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "parkedB": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "absent",
+        "art04Fabricator": "absent",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "8.417",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "parkedConstant": true,
+      "screenshot": "phone-home-fresh.png"
+    }
+  ],
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "absent",
+        "art04Fabricator": "absent",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.108",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "iso": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": -8.720913528304015,
+        "z": -1.8978427214115943,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 12,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "working",
+        "art04Fabricator": "working",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.028",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "front": {
+        "yaw": 359.999989013672,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": -8.720913528304015,
+        "z": -1.8978427214115943,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 12,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "working",
+        "art04Fabricator": "working",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.151",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "final": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": -8.720913528304015,
+        "z": -1.8978427214115943,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 12,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "working",
+        "art04Fabricator": "working",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.308",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "placedGen2": {
+        "label": "desktop",
+        "type": "generator",
+        "site": {
+          "x": 7,
+          "z": 14
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 7.14 / POWER Turbine Generator × ▣ UNIT 013 · LEVEL 1 ONLINE Supplying 12 MW to the yard grid. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Local storage No cargo in this bu"
+      },
+      "placedCrusher": {
+        "label": "desktop",
+        "type": "crusher",
+        "site": {
+          "x": 9,
+          "z": 9
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 021 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle IN"
+      },
+      "placedResearch": {
+        "label": "desktop",
+        "type": "research",
+        "site": {
+          "x": 9,
+          "z": 14
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 9.14 / RESEARCH Signal Observatory × ▣ UNIT 031 · LEVEL 1 WAITING FOR INPUTS Short 2 CI — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Product"
+      },
+      "placedFabricator": {
+        "label": "desktop",
+        "type": "fabricator",
+        "site": {
+          "x": 13,
+          "z": 14
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 045 · LEVEL 1 WAITING FOR INPUTS Short 3 ST, 3 CU — trucks deliver from the depot. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Pr"
+      },
+      "placedRefinery": {
+        "label": "desktop",
+        "type": "refinery",
+        "site": {
+          "x": 6,
+          "z": 13
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 6.13 / PROCESS Fuel Refinery × ▣ UNIT 062 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell Product"
+      },
+      "placedFoundry": {
+        "label": "desktop",
+        "type": "foundry",
+        "site": {
+          "x": 17,
+          "z": 10
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 17.10 / INDUSTRY Alloy Foundry × ▣ UNIT 069 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell "
+      },
+      "clips": [
+        {
+          "file": "desktop-depot-clip.png",
+          "clipCss": {
+            "x": 836.8517253314636,
+            "y": 295.89121292091033,
+            "width": 163.91704450130726,
+            "height": 174.66278405481904
+          },
+          "clamped": false
+        },
+        {
+          "file": "desktop-market-clip.png",
+          "clipCss": {
+            "x": 541.1420594121034,
+            "y": 463.37633171295636,
+            "width": 163.91704450130726,
+            "height": 169.7760285402859
+          },
+          "clamped": false
+        },
+        {
+          "file": "desktop-research-clip.png",
+          "clipCss": {
+            "x": 385.2250149107961,
+            "y": 0,
+            "width": 163.91704450130732,
+            "height": 186.75107401182225
+          },
+          "clamped": true
+        },
+        {
+          "file": "desktop-fabricator-clip.png",
+          "clipCss": {
+            "x": 697.0591039134107,
+            "y": 199.23823253939236,
+            "width": 163.91704450130726,
+            "height": 163.86048239111403
+          },
+          "clamped": false
+        },
+        {
+          "file": "desktop-salvager-clip.png",
+          "clipCss": {
+            "x": 634.10058105287,
+            "y": 152.01030652690912,
+            "width": 163.91704450130726,
+            "height": 168.49004024698758
+          },
+          "clamped": false
+        },
+        {
+          "file": "desktop-crusher-clip.png",
+          "clipCss": {
+            "x": 790.0176255541772,
+            "y": 247.94373445032616,
+            "width": 163.91704450130715,
+            "height": 162.57449409781586
+          },
+          "clamped": false
+        }
+      ],
+      "rigPoses": {
+        "depot": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": 1.8935018121900868,
+          "z": -3.1807791458282484,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.000",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "market": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": 9.209529847497512,
+          "z": 15.359165648828947,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.193",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "research": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": 9.209529847497512,
+          "z": 15.359165648828947,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "10.406",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "fabricator": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": 9.209529847497512,
+          "z": 15.359165648828947,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.085",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "salvager": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": -8.720913528304015,
+          "z": -1.8978427214115943,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "15.568",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "crusher": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": -8.720913528304015,
+          "z": -1.8978427214115943,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "9.874",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        }
+      },
+      "stampMatchesApplied": true,
+      "beforeButtonZoom": 1.15,
+      "buttonZoom": 1.7825,
+      "appliedZoom": 1.7825,
+      "screenshots": {
+        "landing": "desktop-landing.png",
+        "built": "desktop-yard-built.png",
+        "front": "desktop-yard-front.png",
+        "depotSelected": "desktop-depot-selected.png",
+        "marketSelected": "desktop-market-selected.png",
+        "researchSelected": "desktop-research-selected.png",
+        "fabricatorSelected": "desktop-fabricator-selected.png",
+        "salvagerSelected": "desktop-salvager-selected.png",
+        "crusherSelected": "desktop-crusher-selected.png"
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "canvasCount": 1,
+      "documentScroll": false
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "absent",
+        "art04Fabricator": "absent",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.108",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "iso": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.1999127802413274,
+        "x": -7.255862071540615,
+        "z": -3.3868679862950293,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 12,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "working",
+        "art04Fabricator": "working",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.006",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "front": {
+        "yaw": 0.0000018310547034161573,
+        "elevation": 35.264,
+        "zoom": 2.1999127802413274,
+        "x": -7.255862071540615,
+        "z": -3.3868679862950293,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 12,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "working",
+        "art04Fabricator": "working",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.669",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "final": {
+        "yaw": 45.000000000000284,
+        "elevation": 35.264,
+        "zoom": 2.1999127802413274,
+        "x": -7.255862071540615,
+        "z": -3.3868679862950293,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 12,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "working",
+        "art04Fabricator": "working",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.417",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "placedGen2": {
+        "label": "phone",
+        "type": "generator",
+        "site": {
+          "x": 7,
+          "z": 14
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 7.14 / POWER Turbine Generator × ▣ UNIT 016 · LEVEL 1 ONLINE Supplying 12 MW to the yard grid. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Local storage No cargo in this bu"
+      },
+      "placedCrusher": {
+        "label": "phone",
+        "type": "crusher",
+        "site": {
+          "x": 9,
+          "z": 9
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 025 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle IN"
+      },
+      "placedResearch": {
+        "label": "phone",
+        "type": "research",
+        "site": {
+          "x": 9,
+          "z": 14
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 9.14 / RESEARCH Signal Observatory × ▣ UNIT 037 · LEVEL 1 WAITING FOR INPUTS Short 2 CI — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Product"
+      },
+      "placedFabricator": {
+        "label": "phone",
+        "type": "fabricator",
+        "site": {
+          "x": 13,
+          "z": 14
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 049 · LEVEL 1 WAITING FOR INPUTS Short 3 ST, 3 CU — trucks deliver from the depot. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Pr"
+      },
+      "placedRefinery": {
+        "label": "phone",
+        "type": "refinery",
+        "site": {
+          "x": 6,
+          "z": 13
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 6.13 / PROCESS Fuel Refinery × ▣ UNIT 063 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell Product"
+      },
+      "placedFoundry": {
+        "label": "phone",
+        "type": "foundry",
+        "site": {
+          "x": 17,
+          "z": 10
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 17.10 / INDUSTRY Alloy Foundry × ▣ UNIT 071 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell "
+      },
+      "clips": [
+        {
+          "file": "phone-depot-clip.png",
+          "clipCss": {
+            "x": 133.56018782518913,
+            "y": 57.46705301777598,
+            "width": 122.87962434962171,
+            "height": 130.79708152830733
+          },
+          "clamped": false
+        },
+        {
+          "file": "phone-market-clip.png",
+          "clipCss": {
+            "x": 24.737045588190938,
+            "y": 359.20737241151636,
+            "width": 122.87908413790282,
+            "height": 127.19596124732499
+          },
+          "clamped": false
+        },
+        {
+          "file": "phone-research-clip.png",
+          "clipCss": {
+            "x": 75.14623151571882,
+            "y": 239.01500912685262,
+            "width": 122.8790841379028,
+            "height": 139.70311005332363
+          },
+          "clamped": false
+        },
+        {
+          "file": "phone-fabricator-clip.png",
+          "clipCss": {
+            "x": 304.90439979152444,
+            "y": 388.53037419705754,
+            "width": 122.8790841379028,
+            "height": 122.83740939068906
+          },
+          "clamped": true
+        },
+        {
+          "file": "phone-salvager-clip.png",
+          "clipCss": {
+            "x": 247.46485772257296,
+            "y": 20.332756492784824,
+            "width": 122.8790841379028,
+            "height": 126.24844997414328
+          },
+          "clamped": false
+        },
+        {
+          "file": "phone-crusher-clip.png",
+          "clipCss": {
+            "x": 197.05567179504516,
+            "y": 272.30004965722657,
+            "width": 122.8790841379028,
+            "height": 121.88989811750736
+          },
+          "clamped": false
+        }
+      ],
+      "rigPoses": {
+        "depot": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.1999231251937914,
+          "x": 3.5213043325086657,
+          "z": -6.008567118770447,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "8.681",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "market": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.199912780241328,
+          "x": 14.12798388222334,
+          "z": 17.996977967468926,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.169",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "research": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.1999127802413274,
+          "x": -2.7252120992205757,
+          "z": 11.215396842121102,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.629",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "fabricator": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.1999127802413274,
+          "x": -2.7252120992205757,
+          "z": 11.215396842121102,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.042",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "salvager": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.1999127802413274,
+          "x": -2.7252120992205757,
+          "z": 11.215396842121102,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "starved",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.222",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "crusher": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.1999127802413274,
+          "x": -7.255862071540615,
+          "z": -3.3868679862950293,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "8.680",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        }
+      },
+      "stampMatchesApplied": true,
+      "beforeButtonZoom": 1,
+      "buttonZoom": 1.55,
+      "appliedZoom": 1.55,
+      "screenshots": {
+        "landing": "phone-landing.png",
+        "built": "phone-yard-built.png",
+        "front": "phone-yard-front.png",
+        "depotSelected": "phone-depot-selected.png",
+        "marketSelected": "phone-market-selected.png",
+        "researchSelected": "phone-research-selected.png",
+        "fabricatorSelected": "phone-fabricator-selected.png",
+        "salvagerSelected": "phone-salvager-selected.png",
+        "crusherSelected": "phone-crusher-selected.png"
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "canvasCount": 1,
+      "documentScroll": false
+    }
+  ],
+  "placement": [
+    {
+      "label": "desktop",
+      "type": "generator",
+      "site": {
+        "x": 7,
+        "z": 14
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 7.14 / POWER Turbine Generator × ▣ UNIT 013 · LEVEL 1 ONLINE Supplying 12 MW to the yard grid. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Local storage No cargo in this bu"
+    },
+    {
+      "label": "desktop",
+      "type": "crusher",
+      "site": {
+        "x": 9,
+        "z": 9
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 021 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle IN"
+    },
+    {
+      "label": "desktop",
+      "type": "research",
+      "site": {
+        "x": 9,
+        "z": 14
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 9.14 / RESEARCH Signal Observatory × ▣ UNIT 031 · LEVEL 1 WAITING FOR INPUTS Short 2 CI — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Product"
+    },
+    {
+      "label": "desktop",
+      "type": "fabricator",
+      "site": {
+        "x": 13,
+        "z": 14
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 045 · LEVEL 1 WAITING FOR INPUTS Short 3 ST, 3 CU — trucks deliver from the depot. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Pr"
+    },
+    {
+      "label": "desktop",
+      "type": "refinery",
+      "site": {
+        "x": 6,
+        "z": 13
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 6.13 / PROCESS Fuel Refinery × ▣ UNIT 062 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell Product"
+    },
+    {
+      "label": "desktop",
+      "type": "foundry",
+      "site": {
+        "x": 17,
+        "z": 10
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 17.10 / INDUSTRY Alloy Foundry × ▣ UNIT 069 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell "
+    },
+    {
+      "label": "phone",
+      "type": "generator",
+      "site": {
+        "x": 7,
+        "z": 14
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 7.14 / POWER Turbine Generator × ▣ UNIT 016 · LEVEL 1 ONLINE Supplying 12 MW to the yard grid. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Local storage No cargo in this bu"
+    },
+    {
+      "label": "phone",
+      "type": "crusher",
+      "site": {
+        "x": 9,
+        "z": 9
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 025 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle IN"
+    },
+    {
+      "label": "phone",
+      "type": "research",
+      "site": {
+        "x": 9,
+        "z": 14
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 9.14 / RESEARCH Signal Observatory × ▣ UNIT 037 · LEVEL 1 WAITING FOR INPUTS Short 2 CI — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Product"
+    },
+    {
+      "label": "phone",
+      "type": "fabricator",
+      "site": {
+        "x": 13,
+        "z": 14
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 049 · LEVEL 1 WAITING FOR INPUTS Short 3 ST, 3 CU — trucks deliver from the depot. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Pr"
+    },
+    {
+      "label": "phone",
+      "type": "refinery",
+      "site": {
+        "x": 6,
+        "z": 13
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 6.13 / PROCESS Fuel Refinery × ▣ UNIT 063 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell Product"
+    },
+    {
+      "label": "phone",
+      "type": "foundry",
+      "site": {
+        "x": 17,
+        "z": 10
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 17.10 / INDUSTRY Alloy Foundry × ▣ UNIT 071 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell "
+    }
+  ],
+  "picking": [
+    {
+      "label": "desktop",
+      "machine": "Freight Depot",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 13.9 / LOGISTICS Freight Depot × ▣ UNIT 002 · LEVEL 1 ONLINE Support structure active — no production cycle. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Depot storage is uncapped in this build",
+      "screenshot": "desktop-depot-selected.png"
+    },
+    {
+      "label": "desktop",
+      "machine": "Trade Exchange",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 15.18 / ECONOMY Trade Exchange × ▣ UNIT 006 · LEVEL 1 ONLINE Support structure active — no production cycle. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Local storage No cargo in this building",
+      "screenshot": "desktop-market-selected.png"
+    },
+    {
+      "label": "desktop",
+      "machine": "Signal Observatory",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 9.14 / RESEARCH Signal Observatory × ▣ UNIT 031 · LEVEL 1 OPERATING Cycle 13s · level 1 · outputs scale with level. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 13s 2 C",
+      "screenshot": "desktop-research-selected.png"
+    },
+    {
+      "label": "desktop",
+      "machine": "Parts Fabricator",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 045 · LEVEL 1 OPERATING Cycle 8s · level 1 · outputs scale with level. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 8s 3 ST +",
+      "screenshot": "desktop-fabricator-selected.png"
+    },
+    {
+      "label": "desktop",
+      "machine": "Scrap Extractor",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 7.9 / HARVEST Scrap Extractor × ▣ UNIT 001 · LEVEL 1 OPERATING Cycle 3.6s · level 1 · outputs scale with level. Power demand 1 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Active alarms ▤ WARNING · BAY BACKUP",
+      "screenshot": "desktop-salvager-selected.png"
+    },
+    {
+      "label": "desktop",
+      "machine": "Crusher",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 021 · LEVEL 1 OPERATING Cycle 4s · level 1 · outputs scale with level. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Active alarms ▤ WARNING · BAY BACKUP · CRUSHER",
+      "screenshot": "desktop-crusher-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Freight Depot",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 13.9 / LOGISTICS Freight Depot × ▣ UNIT 002 · LEVEL 1 ONLINE Support structure active — no production cycle. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Depot storage is uncapped in this build",
+      "screenshot": "phone-depot-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Trade Exchange",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 15.18 / ECONOMY Trade Exchange × ▣ UNIT 006 · LEVEL 1 ONLINE Support structure active — no production cycle. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Local storage No cargo in this building",
+      "screenshot": "phone-market-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Signal Observatory",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 9.14 / RESEARCH Signal Observatory × ▣ UNIT 037 · LEVEL 1 OPERATING Cycle 13s · level 1 · outputs scale with level. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 13s 2 C",
+      "screenshot": "phone-research-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Parts Fabricator",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 049 · LEVEL 1 OPERATING Cycle 8s · level 1 · outputs scale with level. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 8s 3 ST +",
+      "screenshot": "phone-fabricator-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Scrap Extractor",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 7.9 / HARVEST Scrap Extractor × ▣ UNIT 001 · LEVEL 1 OPERATING Cycle 3.6s · level 1 · outputs scale with level. Power demand 1 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Active alarms ▤ WARNING · BAY BACKUP",
+      "screenshot": "phone-salvager-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Crusher",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 025 · LEVEL 1 OPERATING Cycle 4s · level 1 · outputs scale with level. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Active alarms ▤ WARNING · BAY BACKUP · CRUSHER",
+      "screenshot": "phone-crusher-selected.png"
+    }
+  ],
+  "motion": {
+    "elapsedSeconds": 13.637,
+    "samples": 100,
+    "stages": [
+      {
+        "name": "clock-warmup",
+        "stamp": {
+          "marketClock": "5.820",
+          "researchClock": "5.820",
+          "fabricatorClock": "5.820",
+          "depot": "idle",
+          "market": "idle",
+          "research": "working",
+          "fabricator": "working"
+        },
+        "screenshot": "desktop-motion-clock-warmup.png"
+      },
+      {
+        "name": "clock-quarter-cycle",
+        "stamp": {
+          "marketClock": "6.113",
+          "researchClock": "6.113",
+          "fabricatorClock": "6.113",
+          "depot": "idle",
+          "market": "idle",
+          "research": "working",
+          "fabricator": "working"
+        },
+        "screenshot": "desktop-motion-clock-quarter-cycle.png"
+      },
+      {
+        "name": "clock-half-cycle",
+        "stamp": {
+          "marketClock": "6.423",
+          "researchClock": "6.423",
+          "fabricatorClock": "6.423",
+          "depot": "docking",
+          "market": "idle",
+          "research": "working",
+          "fabricator": "working"
+        },
+        "screenshot": "desktop-motion-clock-half-cycle.png"
+      },
+      {
+        "name": "clock-full-cycle",
+        "stamp": {
+          "marketClock": "6.700",
+          "researchClock": "6.700",
+          "fabricatorClock": "6.700",
+          "depot": "docking",
+          "market": "idle",
+          "research": "working",
+          "fabricator": "working"
+        },
+        "screenshot": "desktop-motion-clock-full-cycle.png"
+      }
+    ],
+    "monotone": true,
+    "maxStep": 0.4500000000000002,
+    "speedOk": true,
+    "tracksSim": true,
+    "boundedByWall": true,
+    "moving": true,
+    "simAdvance": 11,
+    "workOk": true,
+    "depotClockZero": true,
+    "dockingSamples": 24,
+    "wallVsSim": {
+      "wall": 13.637,
+      "simFloorAdvance": 11,
+      "marketClockAdvance": 11.137
+    },
+    "researchWorking": true,
+    "allReducedOff": true,
+    "loadOne": true,
+    "distinctValues": {
+      "marketClock": 99
+    },
+    "marketClockAdvance": 11.137,
+    "pageErrors": [],
+    "failedRequests": [],
+    "canvasCount": 1,
+    "documentScroll": false,
+    "timeline": [
+      {
+        "t": 0.005,
+        "marketClock": 5.82,
+        "researchClock": 5.82,
+        "fabricatorClock": 5.82,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 5,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.282",
+        "bayDist": "5.414",
+        "reduced": "0"
+      },
+      {
+        "t": 0.011,
+        "marketClock": 5.82,
+        "researchClock": 5.82,
+        "fabricatorClock": 5.82,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 5,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.282",
+        "bayDist": "5.414",
+        "reduced": "0"
+      },
+      {
+        "t": 0.537,
+        "marketClock": 6.113,
+        "researchClock": 6.113,
+        "fabricatorClock": 6.113,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 5,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.556",
+        "bayDist": "3.870",
+        "reduced": "0"
+      },
+      {
+        "t": 1.028,
+        "marketClock": 6.423,
+        "researchClock": 6.423,
+        "fabricatorClock": 6.423,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 6,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "1.049",
+        "reduced": "0"
+      },
+      {
+        "t": 1.435,
+        "marketClock": 6.7,
+        "researchClock": 6.7,
+        "fabricatorClock": 6.7,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 6,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "1.274",
+        "reduced": "0"
+      },
+      {
+        "t": 2.05,
+        "marketClock": 7.15,
+        "researchClock": 7.15,
+        "fabricatorClock": 7.15,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 6,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.290",
+        "bayDist": "5.368",
+        "reduced": "0"
+      },
+      {
+        "t": 2.186,
+        "marketClock": 7.22,
+        "researchClock": 7.22,
+        "fabricatorClock": 7.22,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 7,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.177",
+        "bayDist": "6.005",
+        "reduced": "0"
+      },
+      {
+        "t": 2.313,
+        "marketClock": 7.36,
+        "researchClock": 7.36,
+        "fabricatorClock": 7.36,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 7,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.348",
+        "bayDist": "5.042",
+        "reduced": "0"
+      },
+      {
+        "t": 2.437,
+        "marketClock": 7.43,
+        "researchClock": 7.43,
+        "fabricatorClock": 7.43,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 7,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.446",
+        "bayDist": "4.490",
+        "reduced": "0"
+      },
+      {
+        "t": 2.555,
+        "marketClock": 7.567,
+        "researchClock": 7.567,
+        "fabricatorClock": 7.567,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 7,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.638",
+        "bayDist": "3.414",
+        "reduced": "0"
+      },
+      {
+        "t": 2.673,
+        "marketClock": 7.637,
+        "researchClock": 7.637,
+        "fabricatorClock": 7.637,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 7,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.736",
+        "bayDist": "2.863",
+        "reduced": "0"
+      },
+      {
+        "t": 2.798,
+        "marketClock": 7.777,
+        "researchClock": 7.777,
+        "fabricatorClock": 7.777,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 7,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "1.760",
+        "reduced": "0"
+      },
+      {
+        "t": 2.924,
+        "marketClock": 7.847,
+        "researchClock": 7.847,
+        "fabricatorClock": 7.847,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 7,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "1.209",
+        "reduced": "0"
+      },
+      {
+        "t": 3.05,
+        "marketClock": 7.987,
+        "researchClock": 7.987,
+        "fabricatorClock": 7.987,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 7,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "0.106",
+        "reduced": "0"
+      },
+      {
+        "t": 3.164,
+        "marketClock": 8.053,
+        "researchClock": 8.053,
+        "fabricatorClock": 8.053,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 8,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "0.000",
+        "reduced": "0"
+      },
+      {
+        "t": 3.289,
+        "marketClock": 8.193,
+        "researchClock": 8.193,
+        "fabricatorClock": 8.193,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 8,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "1.102",
+        "reduced": "0"
+      },
+      {
+        "t": 3.415,
+        "marketClock": 8.263,
+        "researchClock": 8.263,
+        "fabricatorClock": 8.263,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 8,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "1.654",
+        "reduced": "0"
+      },
+      {
+        "t": 3.528,
+        "marketClock": 8.403,
+        "researchClock": 8.403,
+        "fabricatorClock": 8.403,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 8,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.754",
+        "bayDist": "2.756",
+        "reduced": "0"
+      },
+      {
+        "t": 3.638,
+        "marketClock": 8.473,
+        "researchClock": 8.473,
+        "fabricatorClock": 8.473,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 8,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.656",
+        "bayDist": "3.308",
+        "reduced": "0"
+      },
+      {
+        "t": 3.756,
+        "marketClock": 8.54,
+        "researchClock": 8.54,
+        "fabricatorClock": 8.54,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 8,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.563",
+        "bayDist": "3.833",
+        "reduced": "0"
+      },
+      {
+        "t": 3.872,
+        "marketClock": 8.68,
+        "researchClock": 8.68,
+        "fabricatorClock": 8.68,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 8,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.367",
+        "bayDist": "4.935",
+        "reduced": "0"
+      },
+      {
+        "t": 3.991,
+        "marketClock": 8.75,
+        "researchClock": 8.75,
+        "fabricatorClock": 8.75,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 8,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.269",
+        "bayDist": "5.487",
+        "reduced": "0"
+      },
+      {
+        "t": 4.102,
+        "marketClock": 8.89,
+        "researchClock": 8.89,
+        "fabricatorClock": 8.89,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 8,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.073",
+        "bayDist": "6.589",
+        "reduced": "0"
+      },
+      {
+        "t": 4.224,
+        "marketClock": 8.96,
+        "researchClock": 8.96,
+        "fabricatorClock": 8.96,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 8,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "7.140",
+        "reduced": "0"
+      },
+      {
+        "t": 4.344,
+        "marketClock": 9.1,
+        "researchClock": 9.1,
+        "fabricatorClock": 9.1,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 8,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "8.243",
+        "reduced": "0"
+      },
+      {
+        "t": 4.473,
+        "marketClock": 9.17,
+        "researchClock": 9.17,
+        "fabricatorClock": 9.17,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 9,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "8.794",
+        "reduced": "0"
+      },
+      {
+        "t": 4.598,
+        "marketClock": 9.307,
+        "researchClock": 9.307,
+        "fabricatorClock": 9.307,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 9,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "9.871",
+        "reduced": "0"
+      },
+      {
+        "t": 4.724,
+        "marketClock": 9.377,
+        "researchClock": 9.377,
+        "fabricatorClock": 9.377,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 9,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "10.422",
+        "reduced": "0"
+      },
+      {
+        "t": 4.85,
+        "marketClock": 9.517,
+        "researchClock": 9.517,
+        "fabricatorClock": 9.517,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 9,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "10.709",
+        "reduced": "0"
+      },
+      {
+        "t": 4.977,
+        "marketClock": 9.587,
+        "researchClock": 9.587,
+        "fabricatorClock": 9.587,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 9,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "10.219",
+        "reduced": "0"
+      },
+      {
+        "t": 5.105,
+        "marketClock": 9.723,
+        "researchClock": 9.723,
+        "fabricatorClock": 9.723,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 9,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "9.262",
+        "reduced": "0"
+      },
+      {
+        "t": 5.235,
+        "marketClock": 9.863,
+        "researchClock": 9.863,
+        "fabricatorClock": 9.863,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 9,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "8.282",
+        "reduced": "0"
+      },
+      {
+        "t": 5.356,
+        "marketClock": 9.933,
+        "researchClock": 9.933,
+        "fabricatorClock": 9.933,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 9,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "7.792",
+        "reduced": "0"
+      },
+      {
+        "t": 5.467,
+        "marketClock": 10.003,
+        "researchClock": 10.003,
+        "fabricatorClock": 10.003,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 10,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "7.302",
+        "reduced": "0"
+      },
+      {
+        "t": 5.589,
+        "marketClock": 10.143,
+        "researchClock": 10.143,
+        "fabricatorClock": 10.143,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 10,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.121",
+        "bayDist": "6.322",
+        "reduced": "0"
+      },
+      {
+        "t": 5.703,
+        "marketClock": 10.213,
+        "researchClock": 10.213,
+        "fabricatorClock": 10.213,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 10,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.208",
+        "bayDist": "5.832",
+        "reduced": "0"
+      },
+      {
+        "t": 5.829,
+        "marketClock": 10.353,
+        "researchClock": 10.353,
+        "fabricatorClock": 10.353,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 10,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.382",
+        "bayDist": "4.852",
+        "reduced": "0"
+      },
+      {
+        "t": 5.955,
+        "marketClock": 10.423,
+        "researchClock": 10.423,
+        "fabricatorClock": 10.423,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 10,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.469",
+        "bayDist": "4.362",
+        "reduced": "0"
+      },
+      {
+        "t": 6.068,
+        "marketClock": 10.56,
+        "researchClock": 10.56,
+        "fabricatorClock": 10.56,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 10,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.639",
+        "bayDist": "3.405",
+        "reduced": "0"
+      },
+      {
+        "t": 6.193,
+        "marketClock": 10.63,
+        "researchClock": 10.63,
+        "fabricatorClock": 10.63,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 10,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.726",
+        "bayDist": "2.915",
+        "reduced": "0"
+      },
+      {
+        "t": 6.318,
+        "marketClock": 10.77,
+        "researchClock": 10.77,
+        "fabricatorClock": 10.77,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 10,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "1.935",
+        "reduced": "0"
+      },
+      {
+        "t": 6.444,
+        "marketClock": 10.84,
+        "researchClock": 10.84,
+        "fabricatorClock": 10.84,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 10,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "1.445",
+        "reduced": "0"
+      },
+      {
+        "t": 6.57,
+        "marketClock": 10.977,
+        "researchClock": 10.977,
+        "fabricatorClock": 10.977,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 10,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "0.489",
+        "reduced": "0"
+      },
+      {
+        "t": 6.699,
+        "marketClock": 11.117,
+        "researchClock": 11.117,
+        "fabricatorClock": 11.117,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 11,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "0.490",
+        "reduced": "0"
+      },
+      {
+        "t": 6.821,
+        "marketClock": 11.187,
+        "researchClock": 11.187,
+        "fabricatorClock": 11.187,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 11,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "0.980",
+        "reduced": "0"
+      },
+      {
+        "t": 6.944,
+        "marketClock": 11.327,
+        "researchClock": 11.327,
+        "fabricatorClock": 11.327,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 11,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "1.960",
+        "reduced": "0"
+      },
+      {
+        "t": 7.073,
+        "marketClock": 11.397,
+        "researchClock": 11.397,
+        "fabricatorClock": 11.397,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 11,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "2.450",
+        "reduced": "0"
+      },
+      {
+        "t": 7.191,
+        "marketClock": 11.533,
+        "researchClock": 11.533,
+        "fabricatorClock": 11.533,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 11,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.639",
+        "bayDist": "3.407",
+        "reduced": "0"
+      },
+      {
+        "t": 7.328,
+        "marketClock": 11.6,
+        "researchClock": 11.6,
+        "fabricatorClock": 11.6,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 11,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.556",
+        "bayDist": "3.874",
+        "reduced": "0"
+      },
+      {
+        "t": 7.453,
+        "marketClock": 11.74,
+        "researchClock": 11.74,
+        "fabricatorClock": 11.74,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 11,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.381",
+        "bayDist": "4.855",
+        "reduced": "0"
+      },
+      {
+        "t": 7.578,
+        "marketClock": 11.81,
+        "researchClock": 11.81,
+        "fabricatorClock": 11.81,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 11,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.294",
+        "bayDist": "5.345",
+        "reduced": "0"
+      },
+      {
+        "t": 7.704,
+        "marketClock": 11.95,
+        "researchClock": 11.95,
+        "fabricatorClock": 11.95,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 11,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.120",
+        "bayDist": "6.325",
+        "reduced": "0"
+      },
+      {
+        "t": 7.834,
+        "marketClock": 12.087,
+        "researchClock": 12.087,
+        "fabricatorClock": 12.087,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 11,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "7.281",
+        "reduced": "0"
+      },
+      {
+        "t": 7.956,
+        "marketClock": 12.157,
+        "researchClock": 12.157,
+        "fabricatorClock": 12.157,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 11,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "7.771",
+        "reduced": "0"
+      },
+      {
+        "t": 8.075,
+        "marketClock": 12.293,
+        "researchClock": 12.293,
+        "fabricatorClock": 12.293,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 12,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "8.608",
+        "reduced": "0"
+      },
+      {
+        "t": 8.206,
+        "marketClock": 12.363,
+        "researchClock": 12.363,
+        "fabricatorClock": 12.363,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 12,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "8.057",
+        "reduced": "0"
+      },
+      {
+        "t": 8.322,
+        "marketClock": 12.503,
+        "researchClock": 12.503,
+        "fabricatorClock": 12.503,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 12,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.008",
+        "bayDist": "6.955",
+        "reduced": "0"
+      },
+      {
+        "t": 8.457,
+        "marketClock": 12.573,
+        "researchClock": 12.573,
+        "fabricatorClock": 12.573,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 12,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.106",
+        "bayDist": "6.403",
+        "reduced": "0"
+      },
+      {
+        "t": 8.583,
+        "marketClock": 12.713,
+        "researchClock": 12.713,
+        "fabricatorClock": 12.713,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 12,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.302",
+        "bayDist": "5.301",
+        "reduced": "0"
+      },
+      {
+        "t": 8.71,
+        "marketClock": 12.783,
+        "researchClock": 12.783,
+        "fabricatorClock": 12.783,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 12,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.400",
+        "bayDist": "4.750",
+        "reduced": "0"
+      },
+      {
+        "t": 8.835,
+        "marketClock": 12.92,
+        "researchClock": 12.92,
+        "fabricatorClock": 12.92,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 12,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.591",
+        "bayDist": "3.673",
+        "reduced": "0"
+      },
+      {
+        "t": 8.964,
+        "marketClock": 13.06,
+        "researchClock": 13.06,
+        "fabricatorClock": 13.06,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 13,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.787",
+        "bayDist": "2.571",
+        "reduced": "0"
+      },
+      {
+        "t": 9.086,
+        "marketClock": 13.13,
+        "researchClock": 13.13,
+        "fabricatorClock": 13.13,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 13,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "2.019",
+        "reduced": "0"
+      },
+      {
+        "t": 9.208,
+        "marketClock": 13.27,
+        "researchClock": 13.27,
+        "fabricatorClock": 13.27,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 13,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "0.917",
+        "reduced": "0"
+      },
+      {
+        "t": 9.338,
+        "marketClock": 13.337,
+        "researchClock": 13.337,
+        "fabricatorClock": 13.337,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 13,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "0.392",
+        "reduced": "0"
+      },
+      {
+        "t": 9.454,
+        "marketClock": 13.477,
+        "researchClock": 13.477,
+        "fabricatorClock": 13.477,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 13,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "0.551",
+        "reduced": "0"
+      },
+      {
+        "t": 9.577,
+        "marketClock": 13.547,
+        "researchClock": 13.547,
+        "fabricatorClock": 13.547,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 13,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "1.102",
+        "reduced": "0"
+      },
+      {
+        "t": 9.695,
+        "marketClock": 13.687,
+        "researchClock": 13.687,
+        "fabricatorClock": 13.687,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 13,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "2.205",
+        "reduced": "0"
+      },
+      {
+        "t": 9.828,
+        "marketClock": 13.753,
+        "researchClock": 13.753,
+        "fabricatorClock": 13.753,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 13,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.759",
+        "bayDist": "2.730",
+        "reduced": "0"
+      },
+      {
+        "t": 9.955,
+        "marketClock": 13.893,
+        "researchClock": 13.893,
+        "fabricatorClock": 13.893,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 13,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.563",
+        "bayDist": "3.833",
+        "reduced": "0"
+      },
+      {
+        "t": 10.085,
+        "marketClock": 14.03,
+        "researchClock": 14.03,
+        "fabricatorClock": 14.03,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 13,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.372",
+        "bayDist": "4.909",
+        "reduced": "0"
+      },
+      {
+        "t": 10.209,
+        "marketClock": 14.1,
+        "researchClock": 14.1,
+        "fabricatorClock": 14.1,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 13,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.274",
+        "bayDist": "5.461",
+        "reduced": "0"
+      },
+      {
+        "t": 10.335,
+        "marketClock": 14.24,
+        "researchClock": 14.24,
+        "fabricatorClock": 14.24,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 14,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.078",
+        "bayDist": "6.563",
+        "reduced": "0"
+      },
+      {
+        "t": 10.459,
+        "marketClock": 14.31,
+        "researchClock": 14.31,
+        "fabricatorClock": 14.31,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 14,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "7.078",
+        "reduced": "0"
+      },
+      {
+        "t": 10.587,
+        "marketClock": 14.447,
+        "researchClock": 14.447,
+        "fabricatorClock": 14.447,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 14,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "8.190",
+        "reduced": "0"
+      },
+      {
+        "t": 10.714,
+        "marketClock": 14.517,
+        "researchClock": 14.517,
+        "fabricatorClock": 14.517,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 14,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "8.741",
+        "reduced": "0"
+      },
+      {
+        "t": 10.838,
+        "marketClock": 14.657,
+        "researchClock": 14.657,
+        "fabricatorClock": 14.657,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 14,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "9.844",
+        "reduced": "0"
+      },
+      {
+        "t": 10.964,
+        "marketClock": 14.727,
+        "researchClock": 14.727,
+        "fabricatorClock": 14.727,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 14,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "10.395",
+        "reduced": "0"
+      },
+      {
+        "t": 11.091,
+        "marketClock": 14.867,
+        "researchClock": 14.867,
+        "fabricatorClock": 14.867,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 14,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "11.498",
+        "reduced": "0"
+      },
+      {
+        "t": 11.216,
+        "marketClock": 14.933,
+        "researchClock": 14.933,
+        "fabricatorClock": 14.933,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 14,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "12.022",
+        "reduced": "0"
+      },
+      {
+        "t": 11.338,
+        "marketClock": 15.073,
+        "researchClock": 15.073,
+        "fabricatorClock": 15.073,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "13.124",
+        "reduced": "0"
+      },
+      {
+        "t": 11.468,
+        "marketClock": 15.143,
+        "researchClock": 15.143,
+        "fabricatorClock": 15.143,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "13.324",
+        "reduced": "0"
+      },
+      {
+        "t": 11.588,
+        "marketClock": 15.283,
+        "researchClock": 15.283,
+        "fabricatorClock": 15.283,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "12.344",
+        "reduced": "0"
+      },
+      {
+        "t": 11.706,
+        "marketClock": 15.353,
+        "researchClock": 15.353,
+        "fabricatorClock": 15.353,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "11.854",
+        "reduced": "0"
+      },
+      {
+        "t": 11.821,
+        "marketClock": 15.493,
+        "researchClock": 15.493,
+        "fabricatorClock": 15.493,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "10.874",
+        "reduced": "0"
+      },
+      {
+        "t": 11.942,
+        "marketClock": 15.563,
+        "researchClock": 15.563,
+        "fabricatorClock": 15.563,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "10.384",
+        "reduced": "0"
+      },
+      {
+        "t": 12.056,
+        "marketClock": 15.7,
+        "researchClock": 15.7,
+        "fabricatorClock": 15.7,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "9.428",
+        "reduced": "0"
+      },
+      {
+        "t": 12.178,
+        "marketClock": 15.77,
+        "researchClock": 15.77,
+        "fabricatorClock": 15.77,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "8.938",
+        "reduced": "0"
+      },
+      {
+        "t": 12.288,
+        "marketClock": 15.84,
+        "researchClock": 15.84,
+        "fabricatorClock": 15.84,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "8.448",
+        "reduced": "0"
+      },
+      {
+        "t": 12.406,
+        "marketClock": 15.98,
+        "researchClock": 15.98,
+        "fabricatorClock": 15.98,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "7.468",
+        "reduced": "0"
+      },
+      {
+        "t": 12.525,
+        "marketClock": 16.05,
+        "researchClock": 16.05,
+        "fabricatorClock": 16.05,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.004",
+        "bayDist": "6.978",
+        "reduced": "0"
+      },
+      {
+        "t": 12.649,
+        "marketClock": 16.19,
+        "researchClock": 16.19,
+        "fabricatorClock": 16.19,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.178",
+        "bayDist": "5.998",
+        "reduced": "0"
+      },
+      {
+        "t": 12.775,
+        "marketClock": 16.26,
+        "researchClock": 16.26,
+        "fabricatorClock": 16.26,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.265",
+        "bayDist": "5.508",
+        "reduced": "0"
+      },
+      {
+        "t": 12.889,
+        "marketClock": 16.397,
+        "researchClock": 16.397,
+        "fabricatorClock": 16.397,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.435",
+        "bayDist": "4.551",
+        "reduced": "0"
+      },
+      {
+        "t": 13.007,
+        "marketClock": 16.467,
+        "researchClock": 16.467,
+        "fabricatorClock": 16.467,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.522",
+        "bayDist": "4.061",
+        "reduced": "0"
+      },
+      {
+        "t": 13.131,
+        "marketClock": 16.607,
+        "researchClock": 16.607,
+        "fabricatorClock": 16.607,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.697",
+        "bayDist": "3.081",
+        "reduced": "0"
+      },
+      {
+        "t": 13.259,
+        "marketClock": 16.677,
+        "researchClock": 16.677,
+        "fabricatorClock": 16.677,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.784",
+        "bayDist": "2.591",
+        "reduced": "0"
+      },
+      {
+        "t": 13.384,
+        "marketClock": 16.747,
+        "researchClock": 16.747,
+        "fabricatorClock": 16.747,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "2.101",
+        "reduced": "0"
+      },
+      {
+        "t": 13.505,
+        "marketClock": 16.887,
+        "researchClock": 16.887,
+        "fabricatorClock": 16.887,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "1.121",
+        "reduced": "0"
+      },
+      {
+        "t": 13.637,
+        "marketClock": 16.957,
+        "researchClock": 16.957,
+        "fabricatorClock": 16.957,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "0.631",
+        "reduced": "0"
+      }
+    ]
+  },
+  "dockingProof": {
+    "bayDist": 2.101,
+    "doorLift": 0.8,
+    "stamp": {
+      "yaw": 45,
+      "elevation": 35.264,
+      "zoom": 2.0000000009253482,
+      "x": -0.7619872302604265,
+      "z": 1.0033885414591777,
+      "voxelSchema": "rustwake.voxel.geometry.v1",
+      "machineCount": 12,
+      "world3d": "ready",
+      "art04Depot": "docking",
+      "art04Market": "idle",
+      "art04Research": "working",
+      "art04Fabricator": "working",
+      "art04Clock": "0.000",
+      "art04Reduced": "0",
+      "art04Door": "0.800",
+      "art04BayDist": "2.101",
+      "art04MarketLoad": "1.000",
+      "art04DepotClock": "0.000",
+      "art04MarketClock": "4.700",
+      "art04ResearchClock": "4.700",
+      "art04FabricatorClock": "4.700"
+    },
+    "screenshot": "desktop-depot-docking.png",
+    "clip": {
+      "file": "desktop-depot-docking-clip.png",
+      "clipCss": {
+        "x": 900.169120217046,
+        "y": 307.4853144520557,
+        "width": 141.6431821219952,
+        "height": 150.8538161022555
+      },
+      "clamped": false
+    },
+    "framing": {
+      "panIterations": 0,
+      "bbox": {
+        "minX": 904.169120217046,
+        "minY": 311.4853144520557,
+        "maxX": 1037.8123023390413,
+        "maxY": 454.3391305543112
+      }
+    },
+    "contract": "art04Depot docking iff nearest real truck <= ART04_DOCK.near (2.5) to the LOG-02 bay approach cell; shutter lift = depotDoorLift(distance)"
+  },
+  "contactChecks": [
+    {
+      "label": "desktop:fresh",
+      "point": {
+        "x": 720,
+        "y": 450
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "desktop:unlock",
+      "point": {
+        "x": 720,
+        "y": 450
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "desktop:starved",
+      "point": {
+        "x": 720,
+        "y": 450
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "desktop:unpowered",
+      "point": {
+        "x": 720,
+        "y": 450
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "phone:fresh",
+      "point": {
+        "x": 195,
+        "y": 422
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "phone:unlock",
+      "point": {
+        "x": 195,
+        "y": 422
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "phone:starved",
+      "point": {
+        "x": 195,
+        "y": 422
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "phone:unpowered",
+      "point": {
+        "x": 195,
+        "y": 422
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "motion",
+      "point": {
+        "x": 720,
+        "y": 450
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "desktop:home-shutter-watch",
+      "point": {
+        "x": 720,
+        "y": 450
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "desktop:home-shutter-dockable",
+      "point": {
+        "x": 720,
+        "y": 450
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "phone:home-shutter-watch",
+      "point": {
+        "x": 195,
+        "y": 422
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "phone:home-shutter-dockable",
+      "point": {
+        "x": 195,
+        "y": 422
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    }
+  ],
+  "motionDetails": {
+    "research": {
+      "clocks": [
+        17.237,
+        18.457
+      ],
+      "simFloors": [
+        17,
+        18
+      ],
+      "clips": [
+        {
+          "file": "desktop-motion-research-t1.png",
+          "clipCss": {
+            "x": 330.2706025414126,
+            "y": 317.65351951946536,
+            "width": 163.9170441361046,
+            "height": 186.75107359313574
+          },
+          "clamped": false
+        },
+        {
+          "file": "desktop-motion-research-t2.png",
+          "clipCss": {
+            "x": 330.2706025414126,
+            "y": 317.65351951946536,
+            "width": 163.9170441361046,
+            "height": 186.75107359313574
+          },
+          "clamped": false
+        }
+      ],
+      "pair": {
+        "meanAbsDiff": 2.257,
+        "diffFractionOver24": 0.0358,
+        "maxPixelDiff": 104.3
+      }
+    },
+    "fabricator": {
+      "clocks": [
+        18.777,
+        20.033
+      ],
+      "simFloors": [
+        18,
+        19
+      ],
+      "clips": [
+        {
+          "file": "desktop-motion-fabricator-t1.png",
+          "clipCss": {
+            "x": 642.1046908136218,
+            "y": 520.5798742133521,
+            "width": 163.91704413610455,
+            "height": 163.86048202604388
+          },
+          "clamped": false
+        },
+        {
+          "file": "desktop-motion-fabricator-t2.png",
+          "clipCss": {
+            "x": 642.1046908136218,
+            "y": 520.5798742133521,
+            "width": 163.91704413610455,
+            "height": 163.86048202604388
+          },
+          "clamped": false
+        }
+      ],
+      "pair": {
+        "meanAbsDiff": 1.921,
+        "diffFractionOver24": 0.0267,
+        "maxPixelDiff": 133.4
+      }
+    },
+    "market": {
+      "clocks": [
+        20.843,
+        22.09
+      ],
+      "simFloors": [
+        20,
+        21
+      ],
+      "clips": [
+        {
+          "file": "desktop-motion-market-t1.png",
+          "clipCss": {
+            "x": 596.1876422050119,
+            "y": 459.7179859824489,
+            "width": 163.91704413610455,
+            "height": 169.77602816135982
+          },
+          "clamped": false
+        },
+        {
+          "file": "desktop-motion-market-t2.png",
+          "clipCss": {
+            "x": 596.1876422050119,
+            "y": 459.7179859824489,
+            "width": 163.91704413610455,
+            "height": 169.77602816135982
+          },
+          "clamped": false
+        }
+      ],
+      "pair": {
+        "meanAbsDiff": 1.538,
+        "diffFractionOver24": 0.0168,
+        "maxPixelDiff": 146
+      }
+    },
+    "depot": {
+      "doorLifts": [
+        0.8,
+        0
+      ],
+      "bayDists": [
+        1.47,
+        7.28
+      ],
+      "framing": {
+        "panIterations": 1,
+        "bbox": {
+          "minX": 642.0414617204403,
+          "minY": 366.6686080464474,
+          "maxX": 797.9585058565449,
+          "maxY": 533.3313917108942
+        }
+      },
+      "clips": [
+        {
+          "file": "desktop-motion-depot-open.png",
+          "clipCss": {
+            "x": 638.0414617204403,
+            "y": 362.6686080464474,
+            "width": 163.91704413610455,
+            "height": 174.6627836644468
+          },
+          "clamped": false
+        },
+        {
+          "file": "desktop-motion-depot-closed.png",
+          "clipCss": {
+            "x": 638.0414617204403,
+            "y": 362.6686080464474,
+            "width": 163.91704413610455,
+            "height": 174.6627836644468
+          },
+          "clamped": false
+        }
+      ],
+      "pair": {
+        "meanAbsDiff": 3.92,
+        "diffFractionOver24": 0.0667,
+        "maxPixelDiff": 114.9
+      },
+      "diagViews": [
+        "desktop-motion-depot-diag-open.png",
+        "desktop-motion-depot-diag-closed.png"
+      ]
+    },
+    "marketDiag": {
+      "marketId": 6,
+      "targetClocks": [
+        30.425456520809227,
+        32.84206625433984
+      ],
+      "peaks": [
+        {
+          "targetClock": 30.425456520809227,
+          "clock": 30.456,
+          "scaleAngle": 0.4496453098122488,
+          "simFloor": 30,
+          "clip": {
+            "file": "desktop-motion-market-diag-peak1.png",
+            "clipCss": {
+              "x": 508.6149502556675,
+              "y": 491.65515952464415,
+              "width": 79.27636303364784,
+              "height": 90.30265686099284
+            },
+            "clamped": false,
+            "pivotWorld": {
+              "x": 12.25,
+              "y": 2.95,
+              "z": 23.47
+            },
+            "swingRadius": 0.8
+          }
+        },
+        {
+          "targetClock": 32.84206625433984,
+          "clock": 32.863,
+          "scaleAngle": -0.4498333764795301,
+          "simFloor": 33,
+          "clip": {
+            "file": "desktop-motion-market-diag-peak2.png",
+            "clipCss": {
+              "x": 508.6149502556675,
+              "y": 491.65515952464415,
+              "width": 79.27636303364784,
+              "height": 90.30265686099284
+            },
+            "clamped": false,
+            "pivotWorld": {
+              "x": 12.25,
+              "y": 2.95,
+              "z": 23.47
+            },
+            "swingRadius": 0.8
+          }
+        }
+      ],
+      "pair": {
+        "meanAbsDiff": 2.766,
+        "diffFractionOver24": 0.0349,
+        "maxPixelDiff": 140.7
+      }
+    }
+  },
+  "homeShutterVisibility": {
+    "starterGeometry": {
+      "depot": {
+        "x": 13,
+        "z": 9,
+        "rot": 0
+      },
+      "bayCell": {
+        "x": 13,
+        "z": 10
+      },
+      "roadCell": {
+        "x": 13,
+        "z": 8
+      },
+      "bayWorld": {
+        "x": 5.25,
+        "z": -5.25
+      },
+      "roadWorld": {
+        "x": 5.25,
+        "z": -12.25
+      },
+      "bayToRoadWorld": 7,
+      "dock": {
+        "near": 2.5,
+        "far": 7,
+        "travel": 0.8
+      }
+    },
+    "viewports": {
+      "desktop": {
+        "freshDefaultYard": {
+          "home": {
+            "cam": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1.15,
+              "x": 0,
+              "z": 0,
+              "voxelSchema": "rustwake.voxel.geometry.v1",
+              "machineCount": 6,
+              "world3d": "ready",
+              "art04Depot": "idle",
+              "art04Market": "idle",
+              "art04Research": "absent",
+              "art04Fabricator": "absent",
+              "art04Clock": "0.000",
+              "art04Reduced": "0",
+              "art04Door": "0.000",
+              "art04BayDist": "7.108",
+              "art04MarketLoad": "1.000",
+              "art04DepotClock": "0.000",
+              "art04MarketClock": "0.157",
+              "art04ResearchClock": "0.000",
+              "art04FabricatorClock": "0.000"
+            },
+            "rect": {
+              "left": 0,
+              "top": 0,
+              "width": 1440,
+              "height": 900
+            },
+            "bbox": {
+              "minX": 816.0560368068101,
+              "minY": 381.549213362362,
+              "maxX": 880.0933946780168,
+              "maxY": 450
+            },
+            "bboxFitsCanvas": true,
+            "shutterTravelPx": 8.45,
+            "rigHeightPx": 68.45
+          },
+          "samples": 61,
+          "maxDoorLift": 0,
+          "minBayDist": 7,
+          "dockingSamples": 0,
+          "shutterEverOpens": false,
+          "screenshot": "desktop-home-shutter-watch.png",
+          "pageErrors": [],
+          "failedRequests": []
+        },
+        "dockableYardAtHome": {
+          "home": {
+            "cam": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1.15,
+              "x": 0,
+              "z": 0,
+              "voxelSchema": "rustwake.voxel.geometry.v1",
+              "machineCount": 12,
+              "world3d": "ready",
+              "art04Depot": "idle",
+              "art04Market": "idle",
+              "art04Research": "working",
+              "art04Fabricator": "working",
+              "art04Clock": "0.000",
+              "art04Reduced": "0",
+              "art04Door": "0.000",
+              "art04BayDist": "10.807",
+              "art04MarketLoad": "1.000",
+              "art04DepotClock": "0.000",
+              "art04MarketClock": "0.157",
+              "art04ResearchClock": "0.157",
+              "art04FabricatorClock": "0.157"
+            },
+            "rect": {
+              "left": 0,
+              "top": 0,
+              "width": 1440,
+              "height": 900
+            },
+            "bbox": {
+              "minX": 816.0560368068101,
+              "minY": 381.549213362362,
+              "maxX": 880.0933946780168,
+              "maxY": 450
+            },
+            "bboxFitsCanvas": true,
+            "shutterTravelPx": 8.45,
+            "rigHeightPx": 68.45
+          },
+          "doorLifts": [
+            0.8,
+            0
+          ],
+          "bayDists": [
+            2.428,
+            7.743
+          ],
+          "clips": [
+            {
+              "file": "desktop-home-depot-open.png",
+              "clipCss": {
+                "x": 812.0560368068101,
+                "y": 377.549213362362,
+                "width": 72.03735787120672,
+                "height": 76.45078663763798
+              },
+              "clamped": false
+            },
+            {
+              "file": "desktop-home-depot-closed.png",
+              "clipCss": {
+                "x": 812.0560368068101,
+                "y": 377.549213362362,
+                "width": 72.03735787120672,
+                "height": 76.45078663763798
+              },
+              "clamped": false
+            }
+          ],
+          "pair": {
+            "meanAbsDiff": 3.161,
+            "diffFractionOver24": 0.0565,
+            "maxPixelDiff": 116
+          },
+          "shutterTravelOnScreen": true,
+          "motionDetectableAtHome": true,
+          "pageErrors": [],
+          "failedRequests": []
+        }
+      },
+      "phone": {
+        "freshDefaultYard": {
+          "home": {
+            "cam": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1,
+              "x": 0,
+              "z": 0,
+              "voxelSchema": "rustwake.voxel.geometry.v1",
+              "machineCount": 6,
+              "world3d": "ready",
+              "art04Depot": "idle",
+              "art04Market": "idle",
+              "art04Research": "absent",
+              "art04Fabricator": "absent",
+              "art04Clock": "0.000",
+              "art04Reduced": "0",
+              "art04Door": "0.000",
+              "art04BayDist": "7.108",
+              "art04MarketLoad": "1.000",
+              "art04DepotClock": "0.000",
+              "art04MarketClock": "0.157",
+              "art04ResearchClock": "0.000",
+              "art04FabricatorClock": "0.000"
+            },
+            "rect": {
+              "left": 0,
+              "top": 0,
+              "width": 390,
+              "height": 844
+            },
+            "bbox": {
+              "minX": 273.3297536859398,
+              "minY": 366.1811942781,
+              "maxX": 325.5495894765663,
+              "maxY": 422
+            },
+            "bboxFitsCanvas": true,
+            "shutterTravelPx": 6.89,
+            "rigHeightPx": 55.82
+          },
+          "samples": 62,
+          "maxDoorLift": 0,
+          "minBayDist": 7,
+          "dockingSamples": 0,
+          "shutterEverOpens": false,
+          "screenshot": "phone-home-shutter-watch.png",
+          "pageErrors": [],
+          "failedRequests": []
+        },
+        "dockableYardAtHome": {
+          "home": {
+            "cam": {
+              "yaw": 45,
+              "elevation": 35.264,
+              "zoom": 1,
+              "x": 0,
+              "z": 0,
+              "voxelSchema": "rustwake.voxel.geometry.v1",
+              "machineCount": 12,
+              "world3d": "ready",
+              "art04Depot": "idle",
+              "art04Market": "idle",
+              "art04Research": "working",
+              "art04Fabricator": "working",
+              "art04Clock": "0.000",
+              "art04Reduced": "0",
+              "art04Door": "0.000",
+              "art04BayDist": "10.807",
+              "art04MarketLoad": "1.000",
+              "art04DepotClock": "0.000",
+              "art04MarketClock": "0.157",
+              "art04ResearchClock": "0.157",
+              "art04FabricatorClock": "0.157"
+            },
+            "rect": {
+              "left": 0,
+              "top": 0,
+              "width": 390,
+              "height": 844
+            },
+            "bbox": {
+              "minX": 273.3297536859398,
+              "minY": 366.1811942781,
+              "maxX": 325.5495894765663,
+              "maxY": 422
+            },
+            "bboxFitsCanvas": true,
+            "shutterTravelPx": 6.89,
+            "rigHeightPx": 55.82
+          },
+          "doorLifts": [
+            0.8,
+            0
+          ],
+          "bayDists": [
+            2.241,
+            7.403
+          ],
+          "clips": [
+            {
+              "file": "phone-home-depot-open.png",
+              "clipCss": {
+                "x": 269.3297536859398,
+                "y": 362.1811942781,
+                "width": 60.21983579062652,
+                "height": 63.81880572189999
+              },
+              "clamped": false
+            },
+            {
+              "file": "phone-home-depot-closed.png",
+              "clipCss": {
+                "x": 269.3297536859398,
+                "y": 362.1811942781,
+                "width": 60.21983579062652,
+                "height": 63.81880572189999
+              },
+              "clamped": false
+            }
+          ],
+          "pair": {
+            "meanAbsDiff": 3.148,
+            "diffFractionOver24": 0.0581,
+            "maxPixelDiff": 116
+          },
+          "shutterTravelOnScreen": true,
+          "motionDetectableAtHome": true,
+          "pageErrors": [],
+          "failedRequests": []
+        }
+      }
+    }
+  },
+  "sanity": {
+    "fileCount": 65,
+    "minColors": 403,
+    "minSigma": 15.239,
+    "files": {
+      "desktop-crusher-clip.png": {
+        "colors": 1745,
+        "luminanceMean": 117.47,
+        "luminanceSigma": 41.173,
+        "pixels": 26406,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-crusher-selected.png": {
+        "colors": 29583,
+        "luminanceMean": 96.47,
+        "luminanceSigma": 44.704,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-depot-clip.png": {
+        "colors": 2142,
+        "luminanceMean": 109.39,
+        "luminanceSigma": 41.035,
+        "pixels": 28362,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-depot-docking-clip.png": {
+        "colors": 1510,
+        "luminanceMean": 113.11,
+        "luminanceSigma": 37.953,
+        "pixels": 21150,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-depot-docking.png": {
+        "colors": 26964,
+        "luminanceMean": 110.44,
+        "luminanceSigma": 40.282,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-depot-selected.png": {
+        "colors": 32124,
+        "luminanceMean": 94.2,
+        "luminanceSigma": 44.232,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-fabricator-clip.png": {
+        "colors": 1474,
+        "luminanceMean": 128.89,
+        "luminanceSigma": 35.687,
+        "pixels": 26569,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-fabricator-selected.png": {
+        "colors": 31343,
+        "luminanceMean": 96.88,
+        "luminanceSigma": 45.139,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-home-depot-closed.png": {
+        "colors": 733,
+        "luminanceMean": 113.81,
+        "luminanceSigma": 35.893,
+        "pixels": 5472,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-home-depot-open.png": {
+        "colors": 876,
+        "luminanceMean": 115.07,
+        "luminanceSigma": 37.008,
+        "pixels": 5472,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-home-fresh.png": {
+        "colors": 27139,
+        "luminanceMean": 106.44,
+        "luminanceSigma": 42.081,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-home-shutter-watch.png": {
+        "colors": 27186,
+        "luminanceMean": 106.42,
+        "luminanceSigma": 42.096,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-landing.png": {
+        "colors": 27103,
+        "luminanceMean": 106.35,
+        "luminanceSigma": 42.143,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-market-clip.png": {
+        "colors": 1886,
+        "luminanceMean": 114.4,
+        "luminanceSigma": 38.908,
+        "pixels": 27547,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-market-selected.png": {
+        "colors": 29889,
+        "luminanceMean": 102.1,
+        "luminanceSigma": 45.769,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-clock-full-cycle.png": {
+        "colors": 27277,
+        "luminanceMean": 114.55,
+        "luminanceSigma": 40.075,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-clock-half-cycle.png": {
+        "colors": 27266,
+        "luminanceMean": 114.51,
+        "luminanceSigma": 40.075,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-clock-quarter-cycle.png": {
+        "colors": 27217,
+        "luminanceMean": 114.5,
+        "luminanceSigma": 40.064,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-clock-warmup.png": {
+        "colors": 27044,
+        "luminanceMean": 114.5,
+        "luminanceSigma": 40.037,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-depot-closed.png": {
+        "colors": 1395,
+        "luminanceMean": 112.9,
+        "luminanceSigma": 37.322,
+        "pixels": 28362,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-depot-diag-closed.png": {
+        "colors": 27183,
+        "luminanceMean": 111.24,
+        "luminanceSigma": 40.714,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-depot-diag-open.png": {
+        "colors": 27806,
+        "luminanceMean": 110.89,
+        "luminanceSigma": 40.869,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-depot-open.png": {
+        "colors": 1701,
+        "luminanceMean": 114.21,
+        "luminanceSigma": 39.136,
+        "pixels": 28362,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-fabricator-t1.png": {
+        "colors": 1578,
+        "luminanceMean": 133.02,
+        "luminanceSigma": 38.143,
+        "pixels": 26569,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-fabricator-t2.png": {
+        "colors": 1549,
+        "luminanceMean": 133.03,
+        "luminanceSigma": 37.995,
+        "pixels": 26569,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-market-diag-peak1.png": {
+        "colors": 855,
+        "luminanceMean": 123.3,
+        "luminanceSigma": 36.801,
+        "pixels": 7110,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-market-diag-peak2.png": {
+        "colors": 847,
+        "luminanceMean": 124.1,
+        "luminanceSigma": 36.803,
+        "pixels": 7110,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-market-t1.png": {
+        "colors": 1895,
+        "luminanceMean": 114.04,
+        "luminanceSigma": 38.568,
+        "pixels": 27547,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-market-t2.png": {
+        "colors": 1964,
+        "luminanceMean": 114.52,
+        "luminanceSigma": 38.88,
+        "pixels": 27547,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-research-t1.png": {
+        "colors": 1361,
+        "luminanceMean": 131.86,
+        "luminanceSigma": 36.037,
+        "pixels": 30318,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-motion-research-t2.png": {
+        "colors": 1343,
+        "luminanceMean": 133.57,
+        "luminanceSigma": 36.707,
+        "pixels": 30318,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-research-clip.png": {
+        "colors": 4228,
+        "luminanceMean": 105.41,
+        "luminanceSigma": 36.402,
+        "pixels": 30318,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-research-selected.png": {
+        "colors": 29828,
+        "luminanceMean": 102.05,
+        "luminanceSigma": 45.834,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-salvager-clip.png": {
+        "colors": 1922,
+        "luminanceMean": 111.46,
+        "luminanceSigma": 36.782,
+        "pixels": 27384,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-salvager-selected.png": {
+        "colors": 28069,
+        "luminanceMean": 99.68,
+        "luminanceSigma": 44.159,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-starved-fabricator-clip.png": {
+        "colors": 1541,
+        "luminanceMean": 131.53,
+        "luminanceSigma": 37.222,
+        "pixels": 26569,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-starved-yard.png": {
+        "colors": 29016,
+        "luminanceMean": 104.82,
+        "luminanceSigma": 43.005,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-unpowered-research-clip.png": {
+        "colors": 1344,
+        "luminanceMean": 129.27,
+        "luminanceSigma": 35.401,
+        "pixels": 30318,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-unpowered-yard.png": {
+        "colors": 28362,
+        "luminanceMean": 106.09,
+        "luminanceSigma": 42.189,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-webgl-failure.png": {
+        "colors": 403,
+        "luminanceMean": 28.52,
+        "luminanceSigma": 15.239,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 16,
+          "sigma": 2
+        },
+        "ok": true
+      },
+      "desktop-yard-built.png": {
+        "colors": 31040,
+        "luminanceMean": 96.8,
+        "luminanceSigma": 44.533,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-yard-front.png": {
+        "colors": 24356,
+        "luminanceMean": 107.85,
+        "luminanceSigma": 42.951,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-crusher-clip.png": {
+        "colors": 2122,
+        "luminanceMean": 117.62,
+        "luminanceSigma": 41.211,
+        "pixels": 59048,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-crusher-selected.png": {
+        "colors": 18736,
+        "luminanceMean": 73.87,
+        "luminanceSigma": 46.177,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-depot-clip.png": {
+        "colors": 5256,
+        "luminanceMean": 88.32,
+        "luminanceSigma": 43.97,
+        "pixels": 63440,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-depot-selected.png": {
+        "colors": 20656,
+        "luminanceMean": 72.29,
+        "luminanceSigma": 45.31,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-fabricator-clip.png": {
+        "colors": 1583,
+        "luminanceMean": 135,
+        "luminanceSigma": 36.433,
+        "pixels": 41480,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-fabricator-selected.png": {
+        "colors": 20333,
+        "luminanceMean": 71.57,
+        "luminanceSigma": 45.086,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-home-depot-closed.png": {
+        "colors": 1123,
+        "luminanceMean": 113.65,
+        "luminanceSigma": 36.221,
+        "pixels": 15120,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-home-depot-open.png": {
+        "colors": 1363,
+        "luminanceMean": 114.87,
+        "luminanceSigma": 37.395,
+        "pixels": 15120,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-home-fresh.png": {
+        "colors": 26875,
+        "luminanceMean": 111.38,
+        "luminanceSigma": 48.001,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-home-shutter-watch.png": {
+        "colors": 26582,
+        "luminanceMean": 111.21,
+        "luminanceSigma": 48.125,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-landing.png": {
+        "colors": 27256,
+        "luminanceMean": 111.45,
+        "luminanceSigma": 48.042,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-market-clip.png": {
+        "colors": 2359,
+        "luminanceMean": 114.18,
+        "luminanceSigma": 38.283,
+        "pixels": 61976,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-market-selected.png": {
+        "colors": 16579,
+        "luminanceMean": 73.81,
+        "luminanceSigma": 46.718,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-research-clip.png": {
+        "colors": 4464,
+        "luminanceMean": 123.65,
+        "luminanceSigma": 39.965,
+        "pixels": 67832,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-research-selected.png": {
+        "colors": 20379,
+        "luminanceMean": 71.9,
+        "luminanceSigma": 45.628,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-salvager-clip.png": {
+        "colors": 5169,
+        "luminanceMean": 77.84,
+        "luminanceSigma": 40.769,
+        "pixels": 61488,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-salvager-selected.png": {
+        "colors": 20467,
+        "luminanceMean": 71.4,
+        "luminanceSigma": 44.627,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-starved-fabricator-clip.png": {
+        "colors": 1912,
+        "luminanceMean": 131.83,
+        "luminanceSigma": 37.291,
+        "pixels": 59536,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-starved-yard.png": {
+        "colors": 28925,
+        "luminanceMean": 108.93,
+        "luminanceSigma": 48.463,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-unpowered-research-clip.png": {
+        "colors": 2011,
+        "luminanceMean": 129.18,
+        "luminanceSigma": 35.556,
+        "pixels": 67832,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-unpowered-yard.png": {
+        "colors": 28922,
+        "luminanceMean": 109.64,
+        "luminanceSigma": 48.484,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-yard-built.png": {
+        "colors": 16993,
+        "luminanceMean": 68.72,
+        "luminanceSigma": 43.403,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-yard-front.png": {
+        "colors": 17683,
+        "luminanceMean": 99.61,
+        "luminanceSigma": 47.749,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      }
+    }
+  },
+  "negatives": {
+    "starved": [
+      {
+        "label": "desktop",
+        "stamps": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 11,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "starved",
+          "art04Fabricator": "starved",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "9.899",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "after": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.8000001081408596,
+          "x": 3.009523185338884,
+          "z": 5.13523555370384,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 11,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "starved",
+          "art04Fabricator": "starved",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "9.899",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "stable": true,
+        "clip": {
+          "file": "desktop-starved-fabricator-clip.png",
+          "clipCss": {
+            "x": 607.4307779167084,
+            "y": 410.4450877500759,
+            "width": 163.9170512734206,
+            "height": 163.86048916077073
+          },
+          "clamped": false
+        },
+        "screenshots": [
+          "desktop-starved-yard.png",
+          "desktop-starved-fabricator-clip.png"
+        ],
+        "pageErrors": []
+      },
+      {
+        "label": "phone",
+        "stamps": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 11,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "starved",
+          "art04Fabricator": "starved",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "9.899",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "after": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.199947064661011,
+          "x": 2.8121891592203987,
+          "z": 4.786321026493743,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 11,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "starved",
+          "art04Fabricator": "starved",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "9.899",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "stable": true,
+        "clip": {
+          "file": "phone-starved-fabricator-clip.png",
+          "clipCss": {
+            "x": 108.51769628117852,
+            "y": 396.97864165107063,
+            "width": 122.88087446466885,
+            "height": 122.83919906797729
+          },
+          "clamped": false
+        },
+        "screenshots": [
+          "phone-starved-yard.png",
+          "phone-starved-fabricator-clip.png"
+        ],
+        "pageErrors": []
+      }
+    ],
+    "unpowered": [
+      {
+        "label": "desktop",
+        "stamps": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "unpowered",
+          "art04Fabricator": "unpowered",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "10.808",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "after": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.8000001081408596,
+          "x": -5.18544986828421,
+          "z": 5.185449868284209,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "unpowered",
+          "art04Fabricator": "unpowered",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "12.016",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "stable": true,
+        "clip": {
+          "file": "desktop-unpowered-research-clip.png",
+          "clipCss": {
+            "x": 479.2488613194585,
+            "y": 312.2578610663338,
+            "width": 163.91705127342055,
+            "height": 186.75108177571076
+          },
+          "clamped": false
+        },
+        "screenshots": [
+          "desktop-unpowered-yard.png",
+          "desktop-unpowered-research-clip.png"
+        ],
+        "pageErrors": []
+      },
+      {
+        "label": "phone",
+        "stamps": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "unpowered",
+          "art04Fabricator": "unpowered",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "10.807",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "after": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.199947064661011,
+          "x": -4.78909767801496,
+          "z": 4.78909767801496,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "unpowered",
+          "art04Fabricator": "unpowered",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "4.269",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "stable": true,
+        "clip": {
+          "file": "phone-unpowered-research-clip.png",
+          "clipCss": {
+            "x": 3.5504420765859095,
+            "y": 319.45777034654583,
+            "width": 122.88087446466886,
+            "height": 139.70516257319588
+          },
+          "clamped": false
+        },
+        "screenshots": [
+          "phone-unpowered-yard.png",
+          "phone-unpowered-research-clip.png"
+        ],
+        "pageErrors": []
+      }
+    ],
+    "reducedMotion": [
+      {
+        "label": "desktop",
+        "stage": "fresh-landing",
+        "parkedA": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "absent",
+          "art04Fabricator": "absent",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.108",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "parkedB": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "absent",
+          "art04Fabricator": "absent",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.933",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "parkedConstant": true
+      },
+      {
+        "label": "desktop",
+        "stage": "all-rigs-live",
+        "parkedC": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.7825,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "8.320",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "parkedD": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.7825,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "8.226",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "allParkedConstant": true
+      },
+      {
+        "label": "phone",
+        "stage": "fresh-landing",
+        "parkedA": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "absent",
+          "art04Fabricator": "absent",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.108",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "parkedB": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "absent",
+          "art04Fabricator": "absent",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "8.417",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "parkedConstant": true
+      },
+      {
+        "label": "phone",
+        "stage": "all-rigs-live",
+        "parkedC": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 0.7000679294366855,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "starved",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.140",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "parkedD": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 0.7000679294366855,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.539",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "allParkedConstant": true
+      }
+    ],
+    "webglFailure": {
+      "webglNullHits": 2,
+      "canvasCount": 0,
+      "worldCanvasCount": 0,
+      "world3dReady": false,
+      "bodyText": "3D renderer unavailable Rustwake's salvage yard needs WebGL, and this browser could not create a WebGL context. Enable hardware acceleration or open the game in a current browser, then reload. Technical detail: THREE.WebGLRenderer: Error creating WebGL context.",
+      "pageErrors": [
+        "Error: THREE.WebGLRenderer: Error creating WebGL context."
+      ],
+      "screenshot": "desktop-webgl-failure.png"
+    }
+  },
+  "legibility": {
+    "targetPx": 96,
+    "machines": {
+      "desktop:depot": {
+        "file": "desktop-depot-clip.png",
+        "width": 163,
+        "height": 174,
+        "edgeEnergy": 14.116
+      },
+      "desktop:market": {
+        "file": "desktop-market-clip.png",
+        "width": 163,
+        "height": 169,
+        "edgeEnergy": 10.725
+      },
+      "desktop:research": {
+        "file": "desktop-research-clip.png",
+        "width": 163,
+        "height": 186,
+        "edgeEnergy": 10.188
+      },
+      "desktop:fabricator": {
+        "file": "desktop-fabricator-clip.png",
+        "width": 163,
+        "height": 163,
+        "edgeEnergy": 9.56
+      },
+      "desktop:salvager": {
+        "file": "desktop-salvager-clip.png",
+        "width": 163,
+        "height": 168,
+        "edgeEnergy": 11.457
+      },
+      "desktop:crusher": {
+        "file": "desktop-crusher-clip.png",
+        "width": 163,
+        "height": 162,
+        "edgeEnergy": 11.779
+      },
+      "phone:depot": {
+        "file": "phone-depot-clip.png",
+        "width": 244,
+        "height": 260,
+        "edgeEnergy": 17.365
+      },
+      "phone:market": {
+        "file": "phone-market-clip.png",
+        "width": 244,
+        "height": 254,
+        "edgeEnergy": 7.608
+      },
+      "phone:research": {
+        "file": "phone-research-clip.png",
+        "width": 244,
+        "height": 278,
+        "edgeEnergy": 10.349
+      },
+      "phone:fabricator": {
+        "file": "phone-fabricator-clip.png",
+        "width": 170,
+        "height": 244,
+        "edgeEnergy": 7.583
+      },
+      "phone:salvager": {
+        "file": "phone-salvager-clip.png",
+        "width": 244,
+        "height": 252,
+        "edgeEnergy": 9.087
+      },
+      "phone:crusher": {
+        "file": "phone-crusher-clip.png",
+        "width": 244,
+        "height": 242,
+        "edgeEnergy": 8.363
+      }
+    },
+    "pairwise": {
+      "desktop:depot-market": {
+        "meanAbsDiff": 26.149,
+        "diffFractionOver24": 0.4393,
+        "maxPixelDiff": 143.7
+      },
+      "desktop:depot-research": {
+        "meanAbsDiff": 36.043,
+        "diffFractionOver24": 0.587,
+        "maxPixelDiff": 147.3
+      },
+      "desktop:depot-fabricator": {
+        "meanAbsDiff": 32.632,
+        "diffFractionOver24": 0.472,
+        "maxPixelDiff": 151.7
+      },
+      "desktop:depot-salvager": {
+        "meanAbsDiff": 27.196,
+        "diffFractionOver24": 0.458,
+        "maxPixelDiff": 146.3
+      },
+      "desktop:depot-crusher": {
+        "meanAbsDiff": 26.881,
+        "diffFractionOver24": 0.4671,
+        "maxPixelDiff": 154.7
+      },
+      "desktop:market-research": {
+        "meanAbsDiff": 33.151,
+        "diffFractionOver24": 0.54,
+        "maxPixelDiff": 154.6
+      },
+      "desktop:market-fabricator": {
+        "meanAbsDiff": 32.404,
+        "diffFractionOver24": 0.555,
+        "maxPixelDiff": 145.3
+      },
+      "desktop:market-salvager": {
+        "meanAbsDiff": 18.938,
+        "diffFractionOver24": 0.2893,
+        "maxPixelDiff": 134.3
+      },
+      "desktop:market-crusher": {
+        "meanAbsDiff": 22.15,
+        "diffFractionOver24": 0.391,
+        "maxPixelDiff": 138
+      },
+      "desktop:research-fabricator": {
+        "meanAbsDiff": 34.455,
+        "diffFractionOver24": 0.5436,
+        "maxPixelDiff": 143.7
+      },
+      "desktop:research-salvager": {
+        "meanAbsDiff": 30.497,
+        "diffFractionOver24": 0.5146,
+        "maxPixelDiff": 135.7
+      },
+      "desktop:research-crusher": {
+        "meanAbsDiff": 32.891,
+        "diffFractionOver24": 0.5203,
+        "maxPixelDiff": 137
+      },
+      "desktop:fabricator-salvager": {
+        "meanAbsDiff": 31.583,
+        "diffFractionOver24": 0.54,
+        "maxPixelDiff": 139.7
+      },
+      "desktop:fabricator-crusher": {
+        "meanAbsDiff": 29.335,
+        "diffFractionOver24": 0.5109,
+        "maxPixelDiff": 144.3
+      },
+      "desktop:salvager-crusher": {
+        "meanAbsDiff": 23.157,
+        "diffFractionOver24": 0.383,
+        "maxPixelDiff": 129.7
+      },
+      "phone:depot-market": {
+        "meanAbsDiff": 40.765,
+        "diffFractionOver24": 0.6492,
+        "maxPixelDiff": 192.7
+      },
+      "phone:depot-research": {
+        "meanAbsDiff": 50.688,
+        "diffFractionOver24": 0.7036,
+        "maxPixelDiff": 184.6
+      },
+      "phone:depot-fabricator": {
+        "meanAbsDiff": 56.836,
+        "diffFractionOver24": 0.7508,
+        "maxPixelDiff": 145.5
+      },
+      "phone:depot-salvager": {
+        "meanAbsDiff": 42.839,
+        "diffFractionOver24": 0.6334,
+        "maxPixelDiff": 193.7
+      },
+      "phone:depot-crusher": {
+        "meanAbsDiff": 43.079,
+        "diffFractionOver24": 0.6939,
+        "maxPixelDiff": 183.8
+      },
+      "phone:market-research": {
+        "meanAbsDiff": 35.814,
+        "diffFractionOver24": 0.6028,
+        "maxPixelDiff": 137.2
+      },
+      "phone:market-fabricator": {
+        "meanAbsDiff": 36.134,
+        "diffFractionOver24": 0.5501,
+        "maxPixelDiff": 145.3
+      },
+      "phone:market-salvager": {
+        "meanAbsDiff": 40.046,
+        "diffFractionOver24": 0.5806,
+        "maxPixelDiff": 135.7
+      },
+      "phone:market-crusher": {
+        "meanAbsDiff": 20.848,
+        "diffFractionOver24": 0.3762,
+        "maxPixelDiff": 136.9
+      },
+      "phone:research-fabricator": {
+        "meanAbsDiff": 39.324,
+        "diffFractionOver24": 0.5543,
+        "maxPixelDiff": 142.8
+      },
+      "phone:research-salvager": {
+        "meanAbsDiff": 49.69,
+        "diffFractionOver24": 0.6604,
+        "maxPixelDiff": 184.3
+      },
+      "phone:research-crusher": {
+        "meanAbsDiff": 36.122,
+        "diffFractionOver24": 0.5875,
+        "maxPixelDiff": 191.6
+      },
+      "phone:fabricator-salvager": {
+        "meanAbsDiff": 64.318,
+        "diffFractionOver24": 0.7733,
+        "maxPixelDiff": 144.2
+      },
+      "phone:fabricator-crusher": {
+        "meanAbsDiff": 37.856,
+        "diffFractionOver24": 0.5943,
+        "maxPixelDiff": 146.6
+      },
+      "phone:salvager-crusher": {
+        "meanAbsDiff": 42.768,
+        "diffFractionOver24": 0.6132,
+        "maxPixelDiff": 138.7
+      }
+    }
+  },
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated (390x844 dpr2, hasTouch/isMobile) — physical handset verification remains #268/#275",
+    "Scenario yards (tier-2 unlock, working, starved, unpowered) are seeded through the real save schema; status itself is derived only by the live simulation from that state",
+    "V2 has no 2D fallback renderer; the WebGL-failure negative proves a loud failure, not a playable fallback",
+    "Numeric smoke only (PASS_NUMERIC_ONLY) — not art parity vs public/reference/approved-yard.png, not reviewer/product acceptance, not sponsor G1 approval (#276, sponsor-reserved, still owed)",
+    "The code author is not vision-capable; no art self-certification is made or implied"
+  ],
+  "previewIntegrity": {
+    "entry": "/rustwake/assets/index-Bo5XjHaF.js",
+    "sha256": "47cf35442613b2c3513ea45af2b79d4b00fc88d309df6903d18f23dc181a543a",
+    "ok": true
+  },
+  "completed": "2026-11-18T13:30:15.796Z"
+}
