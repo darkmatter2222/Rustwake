@@ -10,7 +10,7 @@
     "source": "src/voxelSchema.js",
     "docs": "docs/design/VOXEL_GEOMETRY.md",
     "issue": 347,
-    "provenance": "Describes the original procedural geometry in src/world.js (PR #307 baseline 006b5e8) against public/reference/approved-yard.png and docs/design/tokens.json; validated by tests/voxelSchema.test.mjs and scripts/capture-art.mjs; ART-06 crane lift cycle (#352) validated by tests/craneMotion.test.mjs and scripts/capture-crane.mjs; ART-05 vehicle rigs (#351) validated by tests/vehicleRigs.test.mjs, scripts/measure-rigs.mjs and scripts/capture-rigs.mjs; ART-07 yard terrain/scenery (#353) validated by tests/yardScenery.test.mjs and scripts/capture-terrain.mjs; ART-02 salvage structures (#348) validated by tests/salvageModels.test.mjs and scripts/capture-art02.mjs; ART-03 industrial rigs (#349) validated by tests/art03Models.test.mjs and scripts/capture-art03.mjs",
+    "provenance": "Describes the original procedural geometry in src/world.js (PR #307 baseline 006b5e8) against public/reference/approved-yard.png and docs/design/tokens.json; validated by tests/voxelSchema.test.mjs and scripts/capture-art.mjs; ART-06 crane lift cycle (#352) validated by tests/craneMotion.test.mjs and scripts/capture-crane.mjs; ART-05 vehicle rigs (#351) validated by tests/vehicleRigs.test.mjs, scripts/measure-rigs.mjs and scripts/capture-rigs.mjs; ART-07 yard terrain/scenery (#353) validated by tests/yardScenery.test.mjs and scripts/capture-terrain.mjs; ART-02 salvage structures (#348) validated by tests/salvageModels.test.mjs and scripts/capture-art02.mjs; ART-03 industrial rigs (#349) validated by tests/art03Models.test.mjs and scripts/capture-art03.mjs; ART-04 civic rigs (#350) validated by tests/art04Models.test.mjs, scripts/capture-art04.mjs, scripts/mutate-art04.mjs and scripts/mutate-art04-motion.mjs",
     "parcel": {
       "cells": [
         24,
@@ -481,6 +481,69 @@
       "picking_note": "world.js screenToCell is ground-plane raycast (not mesh raycast): valid pick aims project inside the footprint ground cells; body taps select the cell behind (height-aware mesh picking = registered GAPS CAM-01 debt). Capture dismisses the never-auto-dismissing NOTICE toast (#548, App.jsx lease) through its real button and uses same-cell sub-offsets + closed-loop zoom reframe; inherited MACHINE_NOT_CLICKABLE was harness aiming bug (a), not a new product defect",
       "evidence": "tests/art03Models.test.mjs (18 tests) + scripts/capture-art03.mjs -> docs/evidence/349-art-03/ (PASS_NUMERIC_ONLY; report.json.source_sha = capture head, direct parent of the evidence commit, empty src/scripts/tests diff between them; desktop 1440x900 dpr1 + emulated phone 390x844 dpr2, real UI refinery/foundry placement + inspector picking proof for all four rigs, sim-seeded starved/unpowered negatives, 96px silhouette pairwise metrics via independent PNG decode, motion timeline >=100 samples/>=12s referenced to the footline SIM elapsed readout (app clamps frame dt to .07s so sim time, not wall time, is the contract), reduced-motion parked negatives, WebGL-failure loud-failure negative)",
       "stage": "live structure contract; numeric validation only, not automatically production-approved art parity (G1 #276 sponsor visual review still owed); independent reviewer/product ACCEPT of immutable head pending; nothing live/deployed until release engineer merges and verifies"
+    },
+    "civic_rigs": {
+      "issue": 350,
+      "source": "src/world.js makeBuilding depot/market/research/fabricator branches + exported applyArt04 (the exact runtime application, driven by tests) + src/art04.js pure module (ART04_TYPES/ART04_MOTION/ART04_DOCK/ART04_STATUS_LIGHT/bayApproachDistance/art04Advance/art04Pose/depotDoorLift, no THREE/DOM) + src/voxelSchema.js descriptors",
+      "docs": "docs/design/CIVIC_RIGS.md",
+      "provenance": "All geometry original, authored in code (shared unit BoxGeometry + 8-segment cylinders, shared MATERIALS pool mirroring docs/design/tokens.json, flat shading); no external/downloaded models, textures or images as the playable world; approved-yard.png and color/scale tokens unchanged; replaces the pre-ART-04 shared depot/market blockout (ONE body differing only by a text panel) and the research mast / fabricator orange-box specials",
+      "structures": {
+        "depot": {
+          "staticBounds": [3.14, 2.98, 3.2725],
+          "pickHeight": 2.98,
+          "features": ["dock hall + monitor roof with steel vents", "raised loading platform with steel lip + roll-up shutter", "canopy on two orange posts framing the truck corridor (2.38 clear > 1.2 truck width)", "ribbed side container", "crate-glyph logo plaque", "hanging FREIGHT sign"],
+          "pivots": [
+            {"id": "door", "offset": [0, 0.76, 1.08], "axis": "y", "motion": {"kind": "lift", "travel": 0.8, "drive": "nearest-truck-bay-distance"}, "swingRadius": 0.8, "parts": ["panel", "slats", "edge"]}
+          ],
+          "measured": {"meshes": 35, "triangles": 410},
+          "budget": {"maxMeshes": 38, "maxTriangles": 460}
+        },
+        "market": {
+          "staticBounds": [3.045, 2.79, 3.045],
+          "pickHeight": 3.1,
+          "features": ["timber gabled hall (sloped roof slabs + ridge)", "coin logo on the gable", "served counter with steel top", "banded produce crates", "EXCHANGE sign"],
+          "pivots": [
+            {"id": "scale", "offset": [0, 2.95, 0.72], "axis": "z", "motion": {"kind": "oscillate", "amplitude": 0.45, "speed": 1.3, "drive": "ambient-elapsed"}, "swingRadius": 0.8, "parts": ["post", "beam", "hangers", "pans"]},
+            {"id": "awning", "offset": [0, 1.95, 0.72], "axis": "x", "motion": {"kind": "oscillate", "amplitude": 0.25, "speed": 2.6, "drive": "ambient-elapsed"}, "swingRadius": 0.85, "parts": ["canopy", "scallops"]}
+          ],
+          "measured": {"meshes": 32, "triangles": 434},
+          "budget": {"maxMeshes": 36, "maxTriangles": 480}
+        },
+        "research": {
+          "staticBounds": [3.09, 3.45, 3.045],
+          "pickHeight": 4.5,
+          "features": ["banded tower + cap (SHORTER than the old mast: static 3.45, full 4.4589 vs old 4.925)", "ladder", "cabinet + hot status window", "SIGNAL sign"],
+          "pivots": [
+            {"id": "dish", "offset": [0, 3.55, -0.2], "axis": "y", "motion": {"kind": "spin", "speed": 0.5}, "swingRadius": 1.15, "parts": ["drum", "panel", "rim"]},
+            {"id": "feed", "parent": "pivot:dish", "offset": [0, 0.55, 0.62], "axis": "x", "motion": {"kind": "oscillate", "amplitude": 0.16, "speed": 0.7}, "swingRadius": 0.65, "parts": ["arm", "horn"]}
+          ],
+          "measured": {"meshes": 24, "triangles": 418},
+          "budget": {"maxMeshes": 28, "maxTriangles": 460}
+        },
+        "fabricator": {
+          "staticBounds": [3.045, 2.56, 3.045],
+          "pickHeight": 2.56,
+          "features": ["workshop + vent", "output chute + crate", "side entrance with lintel", "hot status window", "FAB WORKS sign"],
+          "pivots": [
+            {"id": "gear", "offset": [-0.35, 1.35, 0.78], "axis": "z", "motion": {"kind": "spin", "speed": 1.6}, "swingRadius": 0.6, "parts": ["disc", "teeth", "hub"]},
+            {"id": "pinion", "offset": [0.4, 1.35, 0.78], "axis": "z", "motion": {"kind": "spin", "speed": -3.2}, "swingRadius": 0.35, "parts": ["disc", "teeth"]},
+            {"id": "hammer", "offset": [1.05, 1.9, 0.9], "axis": "x", "motion": {"kind": "oscillate", "amplitude": 0.45, "speed": 1.1}, "swingRadius": 1.05, "parts": ["arm", "head", "bearing"]}
+          ],
+          "measured": {"meshes": 37, "triangles": 494},
+          "budget": {"maxMeshes": 40, "maxTriangles": 540}
+        }
+      },
+      "status": "art04Advance derives status ONLY from the real simulation: depot docking iff nearest real freight truck <= ART04_DOCK.near 2.5 else idle (no production cycle); market trading ONLY when g.stats.sold actually increased (eps 1e-7; simulation.js sell() is the sole writer) else idle, load label 1 = DECLARED ambient decoration, no authority (#274); research/fabricator machineStatus(g,b) from art03.js (powerStatus grid + inputs fit, same 1e-7 epsilon as simulation.js); discrete shared-material swaps via ART04_STATUS_LIGHT (docking/trading/working/assembling lights, starved statusStarved, unpowered statusDead, idle statusIdle), hot surfaces reuse ART-03 STATUS_MATERIALS, civic shells stay dark; pool never mutated",
+      "motion": "art04Advance integrates wrap-aware deltas (research/fabricator b.timer deltas via timerDelta ONLY while working — starved sim timers advance but the work clock freezes, unpowered pivots freeze; market g.elapsed deltas on the labelled ambient clock); art04Pose(clock,reducedMotion,id) pure pivot angles mirroring ART04_MOTION exactly (drift-guarded): dish 0.5, feed sin 0.16/0.7, gear 1.6, pinion -3.2, hammer sin 0.45/1.1, scale sin 0.45/1.3, awning sin 0.25/2.6 phase 2*id — the awning is the beam's EXACT second harmonic for every id, combined displacement >= 0.4002 rad over any 1.2-1.35 sim window (dense phase sweep, regression-pinned; the old 0.5/0.8 pair rendered 0.552 meanAbsDiff at clock 20.35->21.58 id 6); depotDoorLift pure piecewise linear: fully open travel 0.8 at near 2.5, closed at far 7, Infinity (no trucks) => closed, never a wall-clock timer",
+      "reducedMotion": "prefers-reduced-motion parks ALL pose channels at 0 and the depot shutter CLOSED but keeps tracking lastTimer/lastElapsed/lastSold (re-enabling never jumps); status colours still apply (not motion); sim/economic timing untouched",
+      "stamps": ["art04Depot", "art04Market", "art04Research", "art04Fabricator", "art04Clock", "art04Reduced", "art04Door", "art04BayDist", "art04MarketLoad", "art04DepotClock", "art04MarketClock", "art04ResearchClock", "art04FabricatorClock"],
+      "unchanged": "1x1 footprints, +Z port:loading-bay [0,0.11,1.295] 1.22x0.08x0.42, status light [1.28,0.95,1.25], full-cell pick volumes, mid-build staging semantics, save semantics/registry/costs/outputs; ART-02 salvager/crusher, ART-03 industrial rigs, ART-05 vehicle rigs, ART-06 crane cycle, ART-07 scenery untouched; src/App.jsx/UI modules/cameraInput.js/simulation.js/content.js untouched (lease)",
+      "lift_vocabulary": "lift joins spin|oscillate in the src/voxelSchema.js validator (lines 481-483): positive numeric travel + a non-empty named drive signal, same envelope rules; documented in docs/design/ASSETS.md + docs/backlog/GAPS.md per coordinator RULING 2 — the src comment at voxelSchema.js:147-149 is left byte-identical (a src edit would void the numeric evidence bound to the capture head)",
+      "camera_invariants": "applyCamera/stampCamera byte-identical to main (sha256-16 f3afa5479a66b97e / 691b3c0a3480e97b, hash-guarded in tests/art04Models.test.mjs and scripts/capture-art04.mjs)",
+      "performance": "shared geometry/materials, 8-segment cylinders, no new lights/textures/tokens; per-rig budgets 38/460, 36/480, 28/460, 40/540 within the UNCHANGED global 60 meshes / 1600 tris caps; measured from the real makeBuilding graph",
+      "starter_shutter_debt": "#580 — starter depot (13,9) rot 0, bay cell (13,10), nearest road cell (13,8): bayToRoadWorld 7 >= ART04_DOCK.far 7, so the starter-yard shutter never opens (gate probe 0/960 docking steps over 240 sim-seconds; capture homeShutterVisibility watch dockingSamples 0, minBayDist 7, maxDoorLift 0, desktop 61 / phone 62 samples). The drive is honest: a dockable yard reaches bayDist 2.101 -> doorLift 0.8 (dockingProof). Geometry fix owned by the sim/content lease AFTER the current train; ART04_DOCK NOT widened, no distinctness/motion floor lowered",
+      "evidence": "tests/art04Models.test.mjs + scripts/capture-art04.mjs + scripts/mutate-art04.mjs + scripts/mutate-art04-motion.mjs -> docs/evidence/350-art-04/ (PASS_NUMERIC_ONLY; report.json.source_sha d6ee7f3ca42777c516314551ff75d7e95cdc69a0 = capture head, direct parent of evidence commit E1, git diff captureHead..docs-tail-head -- src scripts tests .github EMPTY; 68 evidence files; desktop 1440x900 dpr1 + emulated phone 390x844 dpr2; six-rig occupancy-grid Jaccard distinctness min 0.1741 fabricator/salvager floor 0.15, depot/market 0.1776, all 15 pairs pass; rendered motion pairs research 2.257 / fabricator 1.921 / market 1.538 / depot 3.92 / marketDiag 2.766 floor 1; mutation controls C0 PASS / C1-C3 FAIL distinctness 0 / C4 MOTION_NOT_VISIBLE_IN_RENDER research 0.019 / C5 MOTION_NOT_VISIBLE_IN_RENDER market 0, CONTROLS_OK; PROVENANCE.md discloses the re-capture, identical-vs-jitter reproduction and CRLF hash table)",
+      "stage": "live structure contract; numeric validation only, not automatically production-approved art parity (G1 #276 sponsor visual review still owed, physical handsets #268/#275); C6 delta re-gates owed on the docs-tail head; nothing live/deployed until release engineer merges and verifies"
     },
     "stage": "live geometry contract; numeric validation only, not automatically production-approved art parity (G1 #276)"
   },

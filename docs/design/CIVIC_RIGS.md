@@ -34,7 +34,9 @@ industrial rigs, ART-05 vehicle rigs, ART-06 crane and ART-07 scenery untouched.
 ## Structures (authored local space, #370 footprint contract)
 
 Measured counts come from the real `makeBuilding` graph (production capture at
-source_sha `b21d5b847759948a2d4820faacb1e8a18b1579ef`, `docs/evidence/350-art-04/`).
+source_sha `d6ee7f3ca42777c516314551ff75d7e95cdc69a0`, `docs/evidence/350-art-04/`;
+re-captured at that head after the harness-provenance remedy — see
+`docs/evidence/350-art-04/PROVENANCE.md`).
 
 ### Freight Depot (depot) — 35 meshes / 410 tris (budget 38 / 460)
 
@@ -103,10 +105,36 @@ depot/market **0.1776**. The same computation runs in the production capture
 (`scripts/capture-art04.mjs`) and in `tests/art04Models.test.mjs`.
 
 Mutation controls (`scripts/mutate-art04.mjs`, evidence
-`docs/evidence/350-art-04/mutation-controls.json`): C0 unmutated head PASS;
+`docs/evidence/350-art-04/mutation-controls.json`, refreshed at source_sha
+`d6ee7f3ca42777c516314551ff75d7e95cdc69a0`): C0 unmutated head PASS;
 C1 main's old shared depot/market body spliced back in → FAIL (depot/market 0);
 C2 depot body cloned onto research → FAIL (depot/research 0); C3 untouched
 clean-main snapshot → FAIL (depot/market 0). The metric is load-bearing.
+
+Rendered motion is mutation-proven too (`scripts/mutate-art04-motion.mjs`,
+evidence `docs/evidence/350-art-04/motion-mutation-controls.json`, same head):
+C4 all-pivots-parked pose → the research dish/feed pair clause FAILS on its own
+(`MOTION_NOT_VISIBLE_IN_RENDER research`, meanAbsDiff 0.019 < 1); C5 parks ONLY
+the market scale+awning channels → the market ambient pair clause FAILS on its
+own (`MOTION_NOT_VISIBLE_IN_RENDER market`, meanAbsDiff 0). Re-captured
+unmutated pair meanAbsDiff at that head: research **2.257**, fabricator
+**1.921**, market **1.538**, depot **3.92**, market diag-extrema **2.766**
+(floor 1; the historical 0.552 incident above is the pre-harmonic pair).
+
+## Starter-yard shutter debt (#580)
+
+On the DEFAULT starter yard the depot shutter never opens, and the capture
+records that honestly instead of hiding it: the starter depot sits at (13,9)
+rot 0 with bay cell (13,10) and nearest road cell (13,8) — bay-to-road world
+distance **7 ≥ ART04_DOCK.far 7**, so no freight truck ever enters the dock
+window. Gate probe: **0 docking steps of 960 over 240 sim-seconds**; capture
+`homeShutterVisibility` watch: dockingSamples 0, minBayDist 7, maxDoorLift 0
+(desktop 61 / phone 62 samples over the 15 s wall-clock loop). The drive itself
+is honest — a dockable yard reaches bayDist **2.101** → doorLift **0.8**
+(`dockingProof` in `report.json`). The defect is starter-yard GEOMETRY (bay too
+far from its road), filed as **#580** for the sim/content lease AFTER the
+current train; `ART04_DOCK` (near 2.5 / far 7 / travel 0.8) is NOT widened and
+no distinctness/motion floor is lowered to make the starter yard pass.
 
 ## Honesty ceiling
 
