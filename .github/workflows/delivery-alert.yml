@@ -3,8 +3,11 @@ name: delivery-alert
 # Real incident: CI run 44063235910 (main ec641433) timed out at 14 minutes and
 # GitHub reported `cancelled`, not `failure`; delivery.yml's success-only
 # package gate skipped all four delivery jobs (run 44065451074) with no
-# signal. This workflow is ADDITIVE: delivery.yml and ci.yml are
-# byte-identical to base main and must stay that way (review condition).
+# signal. This workflow was ADDITIVE under #549 (delivery.yml/ci.yml frozen
+# byte-identical to base main 680c0156). OPS-12 (#336) deliberately supersedes
+# that freeze: all workflows are now SHA-pinned with explicit least-privilege
+# permissions; the drift guard in tests/deliveryAlert.test.mjs is re-baselined
+# to the hardened content. Gate semantics are unchanged.
 # The guard below is a thin text mirror of shouldAlert() in
 # scripts/delivery-alert.mjs, which holds the unit-tested logic.
 # `!= 'success'` is load-bearing: a failure-only comparison would miss
@@ -46,7 +49,7 @@ jobs:
       issues: write
       actions: read
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           # Pin to main: a workflow_run payload's head_sha can predate the
           # merge that introduced this script (CI queued before merge,
@@ -54,7 +57,7 @@ jobs:
           # checkout, so main HEAD is always the correct script source.
           ref: main
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
       # All untrusted run metadata travels through environment variables and is

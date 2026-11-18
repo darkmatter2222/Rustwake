@@ -1,0 +1,63 @@
+{
+  "issue": 336,
+  "pr": 560,
+  "follow_up_issue": 561,
+  "branch": "rw/336-ops-12-supply-chain",
+  "base_main": "7856771597d1b69af4d404cc5ff9af1b0c56034a",
+  "hardening_commit": "9f15b96a93f39be9765df960fb6675091c95f201",
+  "train_turn_rebase": {
+    "performed_at": "2026-11-18T11:37:21.785Z",
+    "old_base": "b56fded0f0bbe6d038c353399d6f353419ceded4",
+    "old_head": "514b80e0174d6dd5f11d7b87064c3681e464b763",
+    "new_base": "7856771597d1b69af4d404cc5ff9af1b0c56034a",
+    "rebased_docs_head": "031b9fa8378bede7e6719c4d4bd51c743f62f589",
+    "only_conflict": "docs/backlog/GAPS.md",
+    "gaps_union": "STRICT UNION 47 data rows = 46 main + OPS-12 inserted at top; zero rows dropped; every main row byte-identical (numstat +1/-0)",
+    "code_free_proofs": {
+      "git diff main..newHead -- src scripts": "EMPTY",
+      "git diff oldHead..newHead -- .github/workflows/": "EMPTY (hardening byte-preserved)",
+      "git diff main..newHead --stat": "exactly the original 13-file PR delta"
+    },
+    "superseded_acceptances": {
+      "reviewer": "6952171042",
+      "product": "6952308794",
+      "reason": "bound to stale base b56fded0 / head 514b80e0; delta re-gates requested at the new immutable head"
+    },
+    "product_ruling_requested": "#549 zero-diff freeze supersession (drift guard re-baselined to hardened hashes)"
+  },
+  "measured_at": "2026-11-18T11:37:21.785Z",
+  "test_reconciliation": {
+    "command": "pnpm test (= node --test tests/*.test.mjs)",
+    "clean_main_scratch_worktree": {
+      "sha": "7856771597d1b69af4d404cc5ff9af1b0c56034a",
+      "tests": 466,
+      "pass": 465,
+      "fail": 1
+    },
+    "branch": {
+      "tests": 477,
+      "pass": 476,
+      "fail": 1,
+      "new_tests": 11
+    },
+    "per_file": "tests/workflowSupplyChain.test.mjs 11/11 pass (new); tests/deliveryAlert.test.mjs 18 tests on BOTH main and branch (PR modified existing assertions, added none); 477 = 466 + 11 exactly",
+    "single_failure_both": "tests/deliveryAlert.test.mjs test \"delivery-alert.yml text contract...\" — pre-existing Windows-only LF-only permissions regex at :253 under autocrlf; identical on clean main 7856771; NOT fixed here (out of bounded scope); Linux CI green",
+    "new_test_file": "tests/workflowSupplyChain.test.mjs (11 tests, CRLF-normalized reads)"
+  },
+  "mutations": {
+    "count": 7,
+    "all_load_bearing": true,
+    "all_restored_sha256_identical": true,
+    "re_run_at_rebased_code_head": "9f15b96a93f39be9765df960fb6675091c95f201",
+    "re_run_totals": "each variant ran the full 477-test suite; M1-M5,M7 broke 3 tests (known Windows fail + drift guard + named OPS12 guard), M6 broke 4 (adds needs-chain guard); same named guards as the original proof",
+    "detail": "mutation-results.json"
+  },
+  "dist_identity": {
+    "files": 18,
+    "diffs": 0,
+    "vs": "7856771597d1b69af4d404cc5ff9af1b0c56034a",
+    "detail": "dist-identity.json"
+  },
+  "settings_mutated": false,
+  "honesty": "Text-level YAML contract + JS mirror bound by exact-expression assertion, not GitHub runtime execution of the delivery path. Branch CI success is not a production release. No visual acceptance claimed; G1 #276 still owed. dist byte-identity is the no-game-change evidence. Evidence binds rebased code head 9f15b96; git diff codeHead..evidenceHead -- src scripts tests .github/workflows is EMPTY (evidence-only descendant commits)."
+}

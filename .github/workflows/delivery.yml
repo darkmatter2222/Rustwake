@@ -32,11 +32,11 @@ jobs:
         run: |
           [[ "$SOURCE_SHA" =~ ^[a-f0-9]{40}$ ]]
           echo "sha=$SOURCE_SHA" >> "$GITHUB_OUTPUT"
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           ref: ${{ steps.identity.outputs.sha }}
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           cache: npm
@@ -47,7 +47,7 @@ jobs:
         env:
           RUSTWAKE_SOURCE_SHA: ${{ steps.identity.outputs.sha }}
         run: node scripts/package-dashboard.mjs
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: rustwake-${{ steps.identity.outputs.sha }}
           path: dist/
@@ -61,7 +61,7 @@ jobs:
     steps:
       # No checkout and no npm on this machine. The host-owned adapter is installed
       # and reviewed during bootstrap, outside repository-writable paths.
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: rustwake-${{ needs.package.outputs.source_sha }}
           path: ${{ runner.temp }}/rustwake-${{ github.run_id }}-${{ github.run_attempt }}
@@ -76,7 +76,7 @@ jobs:
           /opt/rustwake-delivery/deploy-artifact.py "$ARTIFACT_DIR" "$SOURCE_SHA" "$RECEIPT_PATH"
       - name: Publish sanitized receipt
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: rustwake-deployment-${{ needs.package.outputs.source_sha }}
           path: ${{ runner.temp }}/rustwake-${{ github.run_id }}-${{ github.run_attempt }}-receipt.json
@@ -106,12 +106,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           ref: ${{ needs.package.outputs.source_sha }}
           fetch-depth: 2
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
       - name: Record previous-main rollback target
@@ -133,7 +133,7 @@ jobs:
             --out live-release-proof.json
       - name: Publish live verification receipt
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: rustwake-live-verification-${{ needs.package.outputs.source_sha }}
           path: live-release-proof.json
@@ -165,11 +165,11 @@ jobs:
       group: rustwake-hosted-browser-${{ needs.package.outputs.source_sha }}
       cancel-in-progress: false
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
         with:
           ref: ${{ needs.package.outputs.source_sha }}
           persist-credentials: false
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
           node-version: 22
           cache: npm
@@ -182,7 +182,7 @@ jobs:
         run: node scripts/capture-live.mjs "$SOURCE_SHA"
       - name: Publish hosted-browser screenshots and report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
         with:
           name: rustwake-hosted-browser-${{ needs.package.outputs.source_sha }}
           path: artifacts/live-smoke/

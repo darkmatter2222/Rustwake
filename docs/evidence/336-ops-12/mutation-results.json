@@ -1,0 +1,122 @@
+[
+  {
+    "id": "M1-fork-exclusion-removed",
+    "file": ".github/workflows/delivery.yml",
+    "failingTests": [
+      "delivery-alert.yml text contract: isolation, runner, timeout, permissions, dry-run",
+      "delivery.yml and ci.yml match the OPS-12 (\\#336) hardened baseline",
+      "OPS12: package gate expression is EXACTLY the audited fail-closed predicate (incl. fork exclusion)"
+    ],
+    "totals": {
+      "tests": 477,
+      "pass": 474,
+      "fail": 3
+    },
+    "restoredSha256Identical": true,
+    "originalSha256": "6a40a24207e849828fb8d087cd7d0e6413f950d77f4b769b5027ae7134545168",
+    "originalLfNormalizedSha256": "675320f94e6085cd997b3179f3e7106c1ea56e653cacade952831211dbe964da"
+  },
+  {
+    "id": "M2-action-unpinned",
+    "file": ".github/workflows/ci.yml",
+    "failingTests": [
+      "delivery-alert.yml text contract: isolation, runner, timeout, permissions, dry-run",
+      "delivery.yml and ci.yml match the OPS-12 (\\#336) hardened baseline",
+      "OPS12: every uses: is pinned to the exact audited 40-hex SHA with version comment"
+    ],
+    "totals": {
+      "tests": 477,
+      "pass": 474,
+      "fail": 3
+    },
+    "restoredSha256Identical": true,
+    "originalSha256": "a53ea08dd76dfa8adc235d5bb9353ef785f962a1db2f51426b1736a0eb8adf48",
+    "originalLfNormalizedSha256": "4212ae963e3c92645d216df0ad1bba0f4518fbdb70013647419a0a403550b55b"
+  },
+  {
+    "id": "M3-pull_request_target-added",
+    "file": ".github/workflows/ci.yml",
+    "failingTests": [
+      "delivery-alert.yml text contract: isolation, runner, timeout, permissions, dry-run",
+      "delivery.yml and ci.yml match the OPS-12 (\\#336) hardened baseline",
+      "OPS12: no pull_request_target anywhere; trigger sets are exact"
+    ],
+    "totals": {
+      "tests": 477,
+      "pass": 474,
+      "fail": 3
+    },
+    "restoredSha256Identical": true,
+    "originalSha256": "a53ea08dd76dfa8adc235d5bb9353ef785f962a1db2f51426b1736a0eb8adf48",
+    "originalLfNormalizedSha256": "4212ae963e3c92645d216df0ad1bba0f4518fbdb70013647419a0a403550b55b"
+  },
+  {
+    "id": "M4-write-all-permissions",
+    "file": ".github/workflows/ci.yml",
+    "failingTests": [
+      "delivery-alert.yml text contract: isolation, runner, timeout, permissions, dry-run",
+      "delivery.yml and ci.yml match the OPS-12 (\\#336) hardened baseline",
+      "OPS12: explicit top-level permissions; only the alert job escalates; no write-all"
+    ],
+    "totals": {
+      "tests": 477,
+      "pass": 474,
+      "fail": 3
+    },
+    "restoredSha256Identical": true,
+    "originalSha256": "a53ea08dd76dfa8adc235d5bb9353ef785f962a1db2f51426b1736a0eb8adf48",
+    "originalLfNormalizedSha256": "4212ae963e3c92645d216df0ad1bba0f4518fbdb70013647419a0a403550b55b"
+  },
+  {
+    "id": "M5-secret-echoed",
+    "file": ".github/workflows/delivery.yml",
+    "failingTests": [
+      "delivery-alert.yml text contract: isolation, runner, timeout, permissions, dry-run",
+      "delivery.yml and ci.yml match the OPS-12 (\\#336) hardened baseline",
+      "OPS12: no secret ever reaches a shell command line, log dump or xtrace"
+    ],
+    "totals": {
+      "tests": 477,
+      "pass": 474,
+      "fail": 3
+    },
+    "restoredSha256Identical": true,
+    "originalSha256": "6a40a24207e849828fb8d087cd7d0e6413f950d77f4b769b5027ae7134545168",
+    "originalLfNormalizedSha256": "675320f94e6085cd997b3179f3e7106c1ea56e653cacade952831211dbe964da"
+  },
+  {
+    "id": "M6-deploy-needs-removed",
+    "file": ".github/workflows/delivery.yml",
+    "failingTests": [
+      "delivery-alert.yml text contract: isolation, runner, timeout, permissions, dry-run",
+      "delivery.yml and ci.yml match the OPS-12 (\\#336) hardened baseline",
+      "OPS12: exactly one self-hosted job (delivery/deploy); it never checks out or runs repo code",
+      "OPS12: needs chain is exact and downstream jobs cannot run when package is skipped"
+    ],
+    "totals": {
+      "tests": 477,
+      "pass": 473,
+      "fail": 4
+    },
+    "restoredSha256Identical": true,
+    "originalSha256": "6a40a24207e849828fb8d087cd7d0e6413f950d77f4b769b5027ae7134545168",
+    "originalLfNormalizedSha256": "675320f94e6085cd997b3179f3e7106c1ea56e653cacade952831211dbe964da"
+  },
+  {
+    "id": "M7-rm-rf-unquoted",
+    "file": ".github/workflows/delivery.yml",
+    "failingTests": [
+      "delivery-alert.yml text contract: isolation, runner, timeout, permissions, dry-run",
+      "delivery.yml and ci.yml match the OPS-12 (\\#336) hardened baseline",
+      "OPS12: the only rm -rf is the quoted, --terminated, runner.temp-scoped candidate cleanup"
+    ],
+    "totals": {
+      "tests": 477,
+      "pass": 474,
+      "fail": 3
+    },
+    "restoredSha256Identical": true,
+    "originalSha256": "6a40a24207e849828fb8d087cd7d0e6413f950d77f4b769b5027ae7134545168",
+    "originalLfNormalizedSha256": "675320f94e6085cd997b3179f3e7106c1ea56e653cacade952831211dbe964da"
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "purpose": "OPS-12 #336 action pin provenance — resolved live, not from memory",
+  "resolved_at": "2026-11-17T14:55:32.951Z",
+  "method": "gh api repos/actions/<action>/git/ref/tags/v4 (object.type=commit) cross-checked against gh api repos/actions/<action>/tags?per_page=100 — the moving v4 tag SHA equals the newest v4.x.y tag SHA for every action, so the pin is behaviour-identical to the floating @v4 at main b56fded0",
+  "pins": {
+    "actions/checkout": {
+      "version": "v4.4.0",
+      "sha": "11d5960a326750d5838078e36cf38b85af677262"
+    },
+    "actions/setup-node": {
+      "version": "v4.4.0",
+      "sha": "49933ea5288caeca8642d1e84afbd3f7d6820020"
+    },
+    "actions/upload-artifact": {
+      "version": "v4.6.2",
+      "sha": "ea165f8d65b6e75b540449e92b4886f43607fa02"
+    },
+    "actions/download-artifact": {
+      "version": "v4.3.0",
+      "sha": "d3f86a106a0bac45b974a628896c90dbdf5c8093"
+    }
+  },
+  "reverified_at": "2026-11-18T11:37:21.785Z",
+  "reverification": "TRAIN-TURN REBASE 2026-11-18: gh api repos/actions/<a>/git/ref/tags/v4 re-resolved for all four actions — moving v4 tags STILL point at exactly the pinned SHAs (type=commit), so the pins remain behaviour-identical to floating @v4 at current main 7856771"
+}
