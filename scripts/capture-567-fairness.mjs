@@ -93,6 +93,15 @@ const ORIGIN=new URL(HOST).origin;
 // var, never a hand-written constant — E must be captured with HEAD == H.
 const SHA=execSync("git rev-parse HEAD",{cwd:ROOT,encoding:"utf8"}).trim();
 if(!/^[0-9a-f]{40}$/.test(SHA))throw Error("git rev-parse HEAD did not yield a 40-hex SHA: "+SHA);
+// Provenance is SELF-VERIFYING (issue 567 C3 rework): record the harness blob
+// id at HEAD alongside harness_sha. In live mode, BEFORE any browser launch,
+// refuse a dirty TRACKED tree and assert blob-at-harness_sha == HEAD blob ==
+// hash of the file ACTUALLY RUNNING on disk. The original defect (harness_sha
+// = main while the live-mode harness was modified-but-uncommitted) fails the
+// running-file comparison even if the dirty-tree guard were bypassed.
+const HARNESS_REL="scripts/capture-567-fairness.mjs";
+const HARNESS_BLOB=execSync("git rev-parse HEAD:"+HARNESS_REL,{cwd:ROOT,encoding:"utf8"}).trim();
+if(!/^[0-9a-f]{40}$/.test(HARNESS_BLOB))throw Error("git rev-parse HEAD:"+HARNESS_REL+" did not yield a 40-hex blob id: "+HARNESS_BLOB);
 const STARTER_STEEL=INITIAL_BANK.steel; // 20 — the product gate bar baseline
 const SIM_TARGET=120;   // seconds of SIM elapsed (normal speed, real wall clock)
 const WALL_CAP_MS=240000; // generous per-view wall cap; fail loud on timeout
@@ -101,7 +110,7 @@ const FURNACE_ID=4;     // starter furnace (STARTER_BUILDINGS); storage-4 alarm 
 const report={version:1,issue:567,task:"dispatch fairness — furnace output freight reaches the bank unattended on a fresh untouched yard (real production build)",
  mode:LIVE_URL?"hosted-live":"production-preview",
  build:LIVE_URL?"hosted-live":"production-preview",source_sha:LIVE_URL?null:SHA,
- live_url:LIVE_URL,expected_source_sha:EXPECTED_SHA,manifest_source_sha:null,harness_sha:SHA,
+ live_url:LIVE_URL,expected_source_sha:EXPECTED_SHA,manifest_source_sha:null,harness_sha:SHA,harness_blob:HARNESS_BLOB,
  releaseCitation:LIVE_URL&&EXPECTED_SHA==="21adb5131a8d52e997f408f4270fba8551316c80"?{liveSha:EXPECTED_SHA,receiptComment:6988269848,reVerifiedBy:"coordinator comment 6988331782",note:"release chain already verified (rel-582 Receipt B) — cited, NOT re-verified by this capture"}:null,
  port:LIVE_URL?null:PORT,portNote,started:new Date().toISOString(),
  views:[],status:"UNKNOWN",errors:[],
@@ -125,6 +134,33 @@ let child,browser;
 await mkdir(OUT,{recursive:true});
 try{
  if(LIVE_URL){
+  // ---- Provenance gates BEFORE any browser launch — same discipline and
+  // placement as the manifest gate below. A dirty TRACKED tree means the
+  // running harness is not the committed one: refuse. Untracked files (the
+  // capture's own output, pnpm-lock.yaml) must NOT trip this, hence
+  // --untracked-files=no.
+  const dirty=execSync("git status --porcelain --untracked-files=no",{cwd:ROOT,encoding:"utf8"}).trim();
+  if(dirty)throw Error("live mode refuses a dirty TRACKED tree (no browser launched) — commit the harness before capturing. Offending paths:\n"+dirty);
+  // ---- Harness provenance self-check (falsifiable; would have caught the
+  // original harness_sha misattribution). git hash-object reads the WORKING
+  // TREE file, so a modified-but-uncommitted harness fails here even if the
+  // dirty-tree guard above were bypassed. All three ids must be valid 40-hex
+  // and equal — undefined/empty can never pass.
+  const blobAtSha=execSync("git rev-parse "+SHA+":"+HARNESS_REL,{cwd:ROOT,encoding:"utf8"}).trim();
+  const runningBlob=execSync('git hash-object "'+resolve(ROOT,HARNESS_REL)+'"',{cwd:ROOT,encoding:"utf8"}).trim();
+  if(!/^[0-9a-f]{40}$/.test(blobAtSha)||!/^[0-9a-f]{40}$/.test(runningBlob))
+   throw Error("harness provenance self-check got non-blob ids (no browser launched): atHarnessSha="+blobAtSha+" runningFile="+runningBlob);
+  if(blobAtSha!==HARNESS_BLOB||runningBlob!==HARNESS_BLOB)
+   throw Error("harness provenance self-check FAILED (no browser launched): blob at harness_sha "+SHA+" = "+blobAtSha+", running file = "+runningBlob+", recorded harness_blob = "+HARNESS_BLOB);
+  // The harness blob at harness_sha must actually CONTAIN live mode — zero
+  // RUSTWAKE_LIVE_URL occurrences while RUSTWAKE_LIVE_URL is set is the
+  // original reachable-wrong-action defect: a reproducer following the
+  // recorded SHA could not run live mode at all.
+  const blobSrc=execSync("git cat-file blob "+HARNESS_BLOB,{cwd:ROOT,encoding:"utf8"});
+  const liveModeHits=(blobSrc.match(/RUSTWAKE_LIVE_URL/g)||[]).length;
+  report.provenanceSelfCheck={harness_sha:SHA,harness_blob:HARNESS_BLOB,blobAtHarnessSha:blobAtSha,runningFileBlob:runningBlob,
+   trackedTreeClean:true,liveModeOccurrencesAtHarnessSha:liveModeHits,match:true};
+  if(liveModeHits===0)throw Error("harness blob at harness_sha contains ZERO RUSTWAKE_LIVE_URL occurrences — live mode is not reproducible at the recorded SHA (no browser launched)");
   // ---- Manifest gate BEFORE any browser launch (capture-552-c2 discipline) ----
   if(!EXPECTED_SHA||!/^[0-9a-f]{40}$/.test(EXPECTED_SHA))
    throw Error("live mode requires argv[0] = expected deployed 40-hex SHA (no browser launched)");
@@ -301,7 +337,7 @@ finally{
  try{if(child)child.kill();}catch{} // only the preview WE spawned
  report.finished=new Date().toISOString();
  await writeFile(resolve(OUT,"report.json"),JSON.stringify(report,null,2));
- console.log(JSON.stringify({status:report.status,mode:report.mode,source_sha:report.source_sha,expected_source_sha:EXPECTED_SHA,manifest_source_sha:report.manifest_source_sha,port:LIVE_URL?null:PORT,
+ console.log(JSON.stringify({status:report.status,mode:report.mode,source_sha:report.source_sha,expected_source_sha:EXPECTED_SHA,manifest_source_sha:report.manifest_source_sha,harness_sha:SHA,harness_blob:HARNESS_BLOB,port:LIVE_URL?null:PORT,
   views:report.views.map(x=>({name:x.name,status:x.status,failure:x.failure||null,errors:x.errors.length,finalSteel:x.proof?.bankSteel?.final??null,
    movedCount:x.proof?.motion?.movedCount??null,
    perTruck:(x.proof?.motion?.perTruck||[]).map(t=>({id:t.id,netCells:+t.netCells.toFixed(3),pathCells:+t.pathCells.toFixed(3),phaseTransitions:t.transitions.length})),
