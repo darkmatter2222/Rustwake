@@ -1,5 +1,6 @@
 import {WORLD_SIZE,INITIAL_BANK,BLUEPRINTS,TIERS,RESEARCH,ROAD_KINDS,SAVE_KEY,STARTER_BUILDINGS,INITIAL_ROADS} from "./content.js";
 import {key,cellOf,inside,checkSite,buildingAt,footprintCells,normalizeRot} from "./gridOccupancy.js";
+import {laneRoute,separationClamp,turnClear,envelopeGapWorld,MIN_GAP_WORLD,WAIT_TIMEOUT_SECONDS} from "./traffic.js";
 
 export {key,cellOf,inside} from "./gridOccupancy.js";
 export {checkSite,buildingAt,footprintCells,footprintDims,bayCells,worldFootprint,terrainFor,terrainAt,ownedParcels,parcelId,surveyed,facingName,normalizeRot,SURVEY_MIN,SURVEY_MAX,ROAD_REACH,PARCEL_SIZE,PARCEL_NAMES} from "./gridOccupancy.js";
@@ -173,10 +174,14 @@ export function committedTotals(g){
 }
 export function createGame(){
  const buildings=clone(STARTER_BUILDINGS);
+ // #589: heading/waiting/blockedBy/waitTime are real motion state. heading is the
+ // last axis-aligned travel direction (envelope orientation + right-of-way geometry);
+ // waiting/blockedBy expose an honest traffic queue to the fleet panel and tests;
+ // waitTime accumulates continuous blocked seconds and drives deadlock rerouting.
  const vehicles=[
-  {id:1,name:"HAULER-01",x:11,z:10,speed:2.25,job:null,cargo:null,anim:0},
-  {id:2,name:"HAULER-02",x:11,z:11,speed:2.6,job:null,cargo:null,anim:0},
-  {id:3,name:"HAULER-03",x:11,z:12,speed:2.0,job:null,cargo:null,anim:0}
+  {id:1,name:"HAULER-01",x:11,z:10,speed:2.25,job:null,cargo:null,anim:0,heading:{x:1,z:0},waiting:false,blockedBy:null,waitTime:0},
+  {id:2,name:"HAULER-02",x:11,z:11,speed:2.6,job:null,cargo:null,anim:0,heading:{x:1,z:0},waiting:false,blockedBy:null,waitTime:0},
+  {id:3,name:"HAULER-03",x:11,z:12,speed:2.0,job:null,cargo:null,anim:0,heading:{x:1,z:0},waiting:false,blockedBy:null,waitTime:0}
  ];
  return {version:2,seed:4073,createdAt:Date.now(),lastSavedAt:Date.now(),elapsed:0,
   nextId:10,bank:{...INITIAL_BANK},buildings,roads:[...INITIAL_ROADS],vehicles,
@@ -425,15 +430,18 @@ export function nearestRoad(g,x,z){
   if(d<score){best={x:a,z:b};score=d;}}
  return score<=3?best:null;
 }
-export function roadPath(g,a,b){
+export function roadPath(g,a,b,avoid=null){
  if(!a||!b)return null;
  const start=key(a.x,a.z),end=key(b.x,b.z),set=new Set(g.roads);
  if(!set.has(start)||!set.has(end))return null;
+ // #589 deadlock recovery: an optional obstacle set (blocker cells) the BFS must
+ // route around. Backward compatible — 2-arg callers pass null and get the old
+ // shortest path. If the destination itself is avoided, no path exists (null).
  const frontier=[start],prev=new Map([[start,null]]);
  for(let i=0;i<frontier.length;i++){
   const t=frontier[i];if(t===end)break;
   const [x,z]=cellOf(t);
-  for(const [nx,nz] of neighbors(x,z)){const k=key(nx,nz);if(set.has(k)&&!prev.has(k)){prev.set(k,t);frontier.push(k);}}
+  for(const [nx,nz] of neighbors(x,z)){const k=key(nx,nz);if(set.has(k)&&!prev.has(k)&&!(avoid&&avoid.has(k))){prev.set(k,t);frontier.push(k);}}
  }
  if(!prev.has(end))return null;
  const rev=[];for(let at=end;at!==null;at=prev.get(at)){const [x,z]=cellOf(at);rev.push({x,z});}
@@ -620,6 +628,35 @@ export function freightManifest(g){
   totals:freightTotals(g)
  };
 }
+// #589 deadlock recovery. A truck continuously blocked past WAIT_TIMEOUT_SECONDS
+// re-routes around its blocker's cell via obstacle BFS, then resumes on the new
+// right-hand lane. This is the guaranteed cycle-breaker: forward-only + id
+// tie-breaks can still form a mixed following/mutual wait-for cycle at a saturated
+// intersection; a bounded reroute dissolves it without starving the furnace.
+// Freight is untouched (same source/dest, same phase); only j.route changes. The
+// new lane start is separation-checked against every other truck BEFORE commit, so
+// recovery can never introduce an overlap. Returns true if a safe reroute landed.
+function rerouteAroundBlocker(g,v){
+ const j=v.job;if(!j||v.blockedBy==null)return false;
+ const dest=j.route[j.route.length-1];
+ const cur=nearestRoad(g,Math.round(v.x),Math.round(v.z));
+ if(!cur||!dest)return false;
+ const blocker=g.vehicles.find(u=>u.id===v.blockedBy);
+ const avoid=new Set();
+ if(blocker){const bc=nearestRoad(g,Math.round(blocker.x),Math.round(blocker.z));if(bc)avoid.add(key(bc.x,bc.z));}
+ if(avoid.has(key(dest.x,dest.z)))return false; // cannot route around the goal itself
+ const path=roadPath(g,cur,dest,avoid);
+ if(!path||path.length<2)return false;
+ const lane=laneRoute(path);
+ const start={x:lane.points[0].x,z:lane.points[0].z,heading:lane.headings[0]||v.heading};
+ // Never teleport into another envelope: require declared clearance at the new start.
+ for(const u of g.vehicles){if(u.id===v.id)continue;
+  if(envelopeGapWorld(start,u)<MIN_GAP_WORLD-1e-6)return false;}
+ j.route=path;j.segment=0;j.progress=0;
+ v.x=start.x;v.z=start.z;v.heading=start.heading;
+ v.waitTime=0;v.waiting=false;v.blockedBy=null;
+ return true;
+}
 function moveVehicle(g,v,seconds){
  const j=v.job;if(!j)return;
  // #384 disconnect guard: a severed route or vanished source returns the freight
@@ -628,7 +665,15 @@ function moveVehicle(g,v,seconds){
  const severed=r=>!Array.isArray(r)||r.some(p=>!roadSet.has(key(p.x,p.z)));
  if(severed(j.route)||severed(j.toSource)||severed(j.toDest)){returnFreight(g,v,"ROUTE_BLOCKED");return;}
  if(!g.buildings.some(b=>b.id===j.sourceId)){returnFreight(g,v,"SOURCE_MISSING");return;}
- let remaining=seconds*(v.speed||2.1)*(g.research.includes("fleet")?1.18:1);
+ // #589 separation: integrate along the right-hand lane-offset polyline and clamp
+ // progress against every other truck's swept envelope before committing. The
+ // freight guards above are unchanged; only the position integrator now reads the
+ // fleet. A clamped truck queues honestly (waiting/blockedBy) and resumes from its
+ // clamped progress when the blocker clears — no teleport, no reset, no lost cargo.
+ const speedMult=g.research.includes("fleet")?1.18:1;
+ let remaining=seconds*(v.speed||2.1)*speedMult;
+ const others=g.vehicles;
+ v.waiting=false;v.blockedBy=null;
  while(remaining>0&&v.job){
   const route=j.route;
   if(j.segment>=route.length-1){
@@ -639,12 +684,44 @@ function moveVehicle(g,v,seconds){
    }
    arriveCargo(g,v);return;
   }
-  const from=route[j.segment],to=route[j.segment+1];
-  const capacity=1-j.progress,delta=Math.min(remaining,capacity);
-  j.progress+=delta;remaining-=delta;
+  const lane=laneRoute(route);
+  const from=lane.points[j.segment],to=lane.points[j.segment+1];
+  const hv=lane.headings[j.segment];
+  const len=lane.lengths[j.segment]||1;
+  v.heading=hv;
+  const intended=Math.min(1,j.progress+remaining/len);
+  const {progress,blockedBy}=separationClamp(v,others,from,to,hv,j.progress,intended,seconds,speedMult);
+  const advanced=progress-j.progress;
+  j.progress=progress;
   v.x=from.x+(to.x-from.x)*j.progress;v.z=from.z+(to.z-from.z)*j.progress;
-  if(j.progress>=1-1e-8){j.segment++;j.progress=0;}
+  if(progress<intended-1e-9){
+   v.waiting=true;v.blockedBy=blockedBy;
+   // Accumulate continuous blocked time; past the timeout, attempt a safe reroute
+   // around the blocker (bounded: one attempt per tick, separation-checked).
+   v.waitTime=(v.waitTime||0)+seconds;
+   if(v.waitTime>=WAIT_TIMEOUT_SECONDS)rerouteAroundBlocker(g,v);
+   break;
+  }
+  remaining-=advanced*len;
+  if(j.progress>=1-1e-8){
+   // Corner turn gate: the outgoing orientation must clear every neighbour before
+   // the heading flips, else wait at the corner (incoming orientation, already
+   // proven clear by the approach clamp) until it does. Prevents the stationary
+   // heading-flip near-miss without reserving square space along the segment.
+   const ns=j.segment+1;
+   if(ns<route.length-1){
+    const tb=turnClear(v,others,{x:v.x,z:v.z},lane.headings[ns]);
+    if(tb!=null){
+     v.waiting=true;v.blockedBy=tb;
+     v.waitTime=(v.waitTime||0)+seconds;
+     if(v.waitTime>=WAIT_TIMEOUT_SECONDS)rerouteAroundBlocker(g,v);
+     break;
+    }
+   }
+   j.segment=ns;j.progress=0;
+  }
  }
+ if(!v.waiting)v.waitTime=0;
 }
 export function advanceGame(g,seconds){
  let remaining=Math.max(0,Math.min(seconds,300));
@@ -670,7 +747,10 @@ export function advanceGame(g,seconds){
     }
    }
   }
-  for(const v of g.vehicles){
+  // #589: deterministic ascending-id motion order. Right-of-way tie-breaks are
+  // already id-based (traffic.hasPriority); processing lowest id first makes the
+  // queue attribution and resume order reproducible run-to-run and save/reload.
+  for(const v of [...g.vehicles].sort((a,b)=>a.id-b.id)){
    if(!v.job&&v.cargo)returnFreight(g,v,"JOB_MISSING");
    if(!v.job)assignJob(g,v);
    if(v.job)moveVehicle(g,v,dt);
