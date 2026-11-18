@@ -43,7 +43,7 @@
 // (SAVE_KEY, ~4.2s cadence) and its own fleetProbe observability stamp.
 //
 // Gate bar (product C-2): bank steel > 20, strictly rising from the starter
-// 20. NOT equality with the node harness figure (48 @ t=120s): the browser
+// 20. NOT equality with the node harness figure (84 @ t=120s): the browser
 // steps at rAF granularity (dt capped 0.07s per frame) while measure-567.mjs
 // steps at fixed 0.5s substeps, so the measured values legitimately differ.
 // The measured number is reported and the granularity difference disclosed.
@@ -111,21 +111,21 @@ const report={version:1,issue:567,task:"dispatch fairness — furnace output fre
  mode:LIVE_URL?"hosted-live":"production-preview",
  build:LIVE_URL?"hosted-live":"production-preview",source_sha:LIVE_URL?null:SHA,
  live_url:LIVE_URL,expected_source_sha:EXPECTED_SHA,manifest_source_sha:null,harness_sha:SHA,harness_blob:HARNESS_BLOB,
- releaseCitation:LIVE_URL&&EXPECTED_SHA==="21adb5131a8d52e997f408f4270fba8551316c80"?{liveSha:EXPECTED_SHA,receiptComment:6988269848,reVerifiedBy:"coordinator comment 6988331782",note:"release chain already verified (rel-582 Receipt B) — cited, NOT re-verified by this capture"}:null,
+ releaseCitation:LIVE_URL&&EXPECTED_SHA==="9baecedf32175110189bda4e08bbb09cf5ade855"?{liveSha:EXPECTED_SHA,receiptCommentA:6990127018,receiptCommentB:6990286378,note:"release chain already verified (PR 583 release Receipts A/B, live-verified at release) — cited, NOT re-verified by this capture"}:null,
  port:LIVE_URL?null:PORT,portNote,started:new Date().toISOString(),
  views:[],status:"UNKNOWN",errors:[],
  gate:{bar:"bank steel > "+STARTER_STEEL+" (strictly rising from the starter "+STARTER_STEEL+") by sim elapsed >= "+SIM_TARGET+"s",
-  nodeReference:{harness:"scripts/measure-567.mjs",bankSteelAt120s:48,substep:"0.5s fixed"},
-  granularityDisclosure:"The browser advances at rAF granularity (dt capped 0.07s per frame); the node harness steps at fixed 0.5s substeps. Measured browser values legitimately differ from the node figure 48. The gate asserted here is the product bar (> 20, strictly rising), NOT equality with 48 — requiring 48 would be a fabricated gate."},
+  nodeReference:{harness:"scripts/measure-567.mjs",bankSteelAt120s:84,substep:"0.5s fixed"},
+  granularityDisclosure:"The browser advances at rAF granularity (dt capped 0.07s per frame); the node harness steps at fixed 0.5s substeps. Measured browser values legitimately differ from the node figure 84. The gate asserted here is the product bar (> 20, strictly rising), NOT equality with 84 — requiring 84 would be a fabricated gate."},
  limitations:[
   LIVE_URL
-   ?"Hosted-live capture at the DEPLOYED SHA: release-manifest.json source_sha gated BEFORE any browser launch; the release chain itself is cited (receipt 6988269848, coordinator re-verification 6988331782), NOT re-verified here. This is NOT a release action and NOT visual acceptance"
+   ?"Hosted-live capture at the DEPLOYED SHA: release-manifest.json source_sha gated BEFORE any browser launch; the release chain itself is cited (PR 583 release receipts 6990127018 / 6990286378, live-verified at release), NOT re-verified here. This is NOT a release action and NOT visual acceptance"
    :"Local production preview only (pnpm build + vite preview of dist) — the live hosted receipt is produced at release by the release engineer; this is NOT a release and NOT visual acceptance",
   ...(LIVE_URL?["Live fresh context dismisses the first-run intro overlay (Enter the yard) if present — the ONLY UI input; no builds, no seeds, no save injection, no bank/speed/inventory mutation. The fresh starter yard already has real work (salvager, furnace with iron/fuel inputs, depot, road grid, HAULER-01/02/03), so no fixture is injected; the moved gate falsifies if the yard produced no motion"]:[]),
   "One headless Chromium/SwiftShader run; phone view is EMULATED 390x844 dpr2 (isMobile/hasTouch), not a physical device; no physical display",
   "Numeric proofs do not certify visual fidelity or art parity — sponsor screenshot+motion review required at G1 (#276), still owed",
   "FRESH UNTOUCHED YARD: no seeds, no builds, no bank mutation, no speed changes, no hand-stocked inventory, no save injection. Each view is a fresh browser context with empty localStorage; the app's own createGame starter yard runs at normal speed. The fresh yard IS the default player-reachable state (product ruling)",
-  "Browser rAF granularity differs from the node harness's 0.5s substeps, so the measured bank-steel value differs from the node figure 48; the asserted gate is the product bar (> 20, strictly rising from the starter 20), and the measured number is reported as-is",
+  "Browser rAF granularity differs from the node harness's 0.5s substeps, so the measured bank-steel value differs from the node figure 84; the asserted gate is the product bar (> 20, strictly rising from the starter 20), and the measured number is reported as-is",
   "Game readings come from the app's own periodic persist (SAVE_KEY, ~4.2s wall cadence) and its own fleetProbe stamp (~270ms); stamp elapsed values are therefore quantized to the persist cadence. The only page-side instrumentation is a read-only rAF frame counter",
   "storage-4 is DERIVED, not stored: the save does not persist alarm state, so alarm ids are computed read-only from each persisted save via the pure src/alarms.js read model (alarmsState never mutates g)",
   "This capture proves the OUTPUT-side player-visible promise that the #558 sibling harness disclosed as BLOCKED by the pre-#573 dispatch-starvation defect (0 player output jobs in 120s on both base and fix). Deterministic gate coverage lives in tests/dispatchGate567.test.mjs + tests/dispatchFairness.test.mjs and scripts/measure-567.mjs"]};
@@ -306,7 +306,7 @@ try{
    const finalSteel=series[series.length-1].steel;
    if(!(finalSteel>STARTER_STEEL))throw Error("GATE FAIL: bank steel "+finalSteel+" did not rise above the starter "+STARTER_STEEL+" by sim elapsed "+stamps[stamps.length-1].elapsed+"s: "+JSON.stringify(series));
    view.proof.bankSteel={series,final:finalSteel,elapsedAtRead:stamps[stamps.length-1].elapsed,gate:"PASS (> "+STARTER_STEEL+", strictly rising)",
-    nodeComparison:{nodeFigure:48,browserMeasured:finalSteel,note:"rAF granularity vs 0.5s substeps — difference disclosed, equality NOT asserted"}};
+    nodeComparison:{nodeFigure:84,browserMeasured:finalSteel,note:"rAF granularity vs 0.5s substeps — difference disclosed, equality NOT asserted"}};
    // ---- furnace bay: not monotonically piling (output is being hauled away) ----
    const bay=stamps.map(s=>({label:s.label,elapsed:s.elapsed,steel:s.furnaceSteel}));
    if(bay.some(x=>!Number.isFinite(x.steel)))throw Error("furnace bay steel not exposed in save: "+JSON.stringify(bay));
