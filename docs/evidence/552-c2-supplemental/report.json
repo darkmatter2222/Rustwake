@@ -1,0 +1,666 @@
+{
+  "version": 1,
+  "issue": 552,
+  "condition": "C2.1 — desktop + phone captures at the DEPLOYED SHA, crusher and Screening Plant adjacent in ONE frame",
+  "check": "rustwake-552-c2-deployed-supplemental",
+  "build": "hosted-live",
+  "live_url": "https://home.darkmatter2222.com/rustwake/",
+  "expected_source_sha": "f0acf5a2b1e831bc0ba88fa0ab50a84547a95887",
+  "source_sha": "f0acf5a2b1e831bc0ba88fa0ab50a84547a95887",
+  "started": "2026-11-18T18:08:11.409Z",
+  "completed": "2026-11-18T18:08:38.143Z",
+  "mergedPr": 577,
+  "releaseReceiptComment": 6986865110,
+  "deliveryRun": 44361310545,
+  "mainCiRun": 44361187797,
+  "fixture": {
+    "injection": "ctx.addInitScript BEFORE any page script; localStorage[SAVE_KEY] = real public-shape v2 save",
+    "saveKey": "rustwake:living-world:v2",
+    "save": {
+      "version": 2,
+      "seed": 4073,
+      "createdAt": 1795025291409,
+      "lastSavedAt": 1795025291409,
+      "elapsed": 0,
+      "nextId": 10,
+      "bank": {
+        "credits": 1310,
+        "scrap": 132,
+        "iron": 90,
+        "copper": 45,
+        "stone": 170,
+        "fuel": 110,
+        "water": 90,
+        "steel": 20,
+        "alloy": 0,
+        "gears": 0,
+        "circuits": 0,
+        "data": 15,
+        "relics": 0,
+        "influence": 0,
+        "shards": 0,
+        "charters": 0,
+        "renown": 0
+      },
+      "buildings": [
+        {
+          "id": 1,
+          "type": "salvager",
+          "x": 7,
+          "z": 9,
+          "level": 1,
+          "remaining": 0,
+          "inventory": {},
+          "timer": 0
+        },
+        {
+          "id": 2,
+          "type": "depot",
+          "x": 13,
+          "z": 9,
+          "level": 1,
+          "remaining": 0,
+          "inventory": {},
+          "timer": 0
+        },
+        {
+          "id": 3,
+          "type": "generator",
+          "x": 7,
+          "z": 16,
+          "level": 1,
+          "remaining": 0,
+          "inventory": {},
+          "timer": 0
+        },
+        {
+          "id": 4,
+          "type": "furnace",
+          "x": 16,
+          "z": 13,
+          "level": 1,
+          "remaining": 0,
+          "inventory": {
+            "iron": 10,
+            "fuel": 7
+          },
+          "timer": 0
+        },
+        {
+          "id": 5,
+          "type": "crane",
+          "x": 15,
+          "z": 5,
+          "rot": 0,
+          "level": 1,
+          "remaining": 0,
+          "inventory": {},
+          "timer": 0
+        },
+        {
+          "id": 6,
+          "type": "market",
+          "x": 15,
+          "z": 18,
+          "level": 1,
+          "remaining": 0,
+          "inventory": {},
+          "timer": 0
+        },
+        {
+          "id": 7,
+          "type": "crusher",
+          "x": 9,
+          "z": 9,
+          "rot": 0,
+          "level": 1,
+          "remaining": 0,
+          "inventory": {},
+          "timer": 0,
+          "paid": {
+            "credits": 260,
+            "scrap": 46,
+            "stone": 28
+          }
+        },
+        {
+          "id": 8,
+          "type": "screening",
+          "x": 10,
+          "z": 9,
+          "rot": 0,
+          "level": 1,
+          "remaining": 0,
+          "inventory": {},
+          "timer": 0,
+          "paid": {
+            "credits": 230,
+            "scrap": 42,
+            "stone": 22
+          }
+        }
+      ],
+      "roads": [
+        "5,8",
+        "6,8",
+        "7,8",
+        "8,8",
+        "9,8",
+        "10,8",
+        "11,8",
+        "12,8",
+        "13,8",
+        "14,8",
+        "15,8",
+        "16,8",
+        "17,8",
+        "18,8",
+        "19,8",
+        "5,12",
+        "6,12",
+        "7,12",
+        "8,12",
+        "9,12",
+        "10,12",
+        "11,12",
+        "12,12",
+        "13,12",
+        "14,12",
+        "15,12",
+        "16,12",
+        "17,12",
+        "18,12",
+        "19,12",
+        "5,17",
+        "6,17",
+        "7,17",
+        "8,17",
+        "9,17",
+        "10,17",
+        "11,17",
+        "12,17",
+        "13,17",
+        "14,17",
+        "15,17",
+        "16,17",
+        "17,17",
+        "18,17",
+        "19,17",
+        "11,4",
+        "11,5",
+        "11,6",
+        "11,7",
+        "11,9",
+        "11,10",
+        "11,11",
+        "11,13",
+        "11,14",
+        "11,15",
+        "11,16",
+        "11,18",
+        "11,19",
+        "11,20",
+        "5,9",
+        "5,10",
+        "5,11",
+        "5,13",
+        "5,14",
+        "5,15",
+        "5,16",
+        "19,9",
+        "19,10",
+        "19,11",
+        "19,13",
+        "19,14",
+        "19,15",
+        "19,16"
+      ],
+      "vehicles": [
+        {
+          "id": 1,
+          "name": "HAULER-01",
+          "x": 11,
+          "z": 10,
+          "speed": 2.25,
+          "job": null,
+          "cargo": null,
+          "anim": 0
+        },
+        {
+          "id": 2,
+          "name": "HAULER-02",
+          "x": 11,
+          "z": 11,
+          "speed": 2.6,
+          "job": null,
+          "cargo": null,
+          "anim": 0
+        },
+        {
+          "id": 3,
+          "name": "HAULER-03",
+          "x": 11,
+          "z": 12,
+          "speed": 2,
+          "job": null,
+          "cargo": null,
+          "anim": 0
+        }
+      ],
+      "research": [],
+      "discovered": [
+        "cinders"
+      ],
+      "tier": 0,
+      "world": "Cinder Basin",
+      "sector": 1,
+      "ledger": [],
+      "freightLedger": [],
+      "commands": [],
+      "dispatchCooldowns": {},
+      "freightServedAt": {},
+      "view": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1
+      },
+      "stats": {
+        "produced": 0,
+        "delivered": 0,
+        "shipments": 0,
+        "sold": 0,
+        "builds": 2
+      },
+      "log": [
+        {
+          "id": 0,
+          "time": 0,
+          "message": "Cinder Yard established. Roads and freight trucks are operational."
+        }
+      ],
+      "notices": []
+    },
+    "intent": "crusher id 7 at (9,9) + screening id 8 at (10,9), neighbouring tiles, both remaining:0, costs deducted and recorded as b.paid, both road-connected to depot (13,9) via the starter z=8 asphalt row; lastSavedAt=now so readGame runs no offline catch-up",
+    "readBack": "asserted from the app's OWN periodic persist, plus renderer machineCount/voxelSchema stamps, plus real-UI inspector picking by name, plus projected on-screen bounds"
+  },
+  "sharedSilhouetteDisclosure": "src/voxelSchema.js aliases RAW_MACHINES.screening = RAW_MACHINES.crusher and src/world.js routes both kinds to the same ART-02 rig: the two machines look IDENTICAL in these captures BY DESIGN (product ruling 6986365525). NOT a rendering bug and NOT a distinct silhouette; the distinct screening-only silhouette is follow-up #578.",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "screenshots": [
+        "desktop-pair.png",
+        "desktop-crusher-inspector.png",
+        "desktop-screening-inspector.png",
+        "desktop-context.png"
+      ],
+      "loadedProof": {
+        "saveKey": "rustwake:living-world:v2",
+        "source": "app's own periodic persist (read back from localStorage)",
+        "loadedBuildingCount": 8,
+        "elapsedAtRead": 0,
+        "crusher": {
+          "id": 7,
+          "type": "crusher",
+          "x": 9,
+          "z": 9,
+          "remaining": 0,
+          "paid": {
+            "credits": 260,
+            "scrap": 46,
+            "stone": 28
+          }
+        },
+        "screening": {
+          "id": 8,
+          "type": "screening",
+          "x": 10,
+          "z": 9,
+          "remaining": 0,
+          "paid": {
+            "credits": 230,
+            "scrap": 42,
+            "stone": 22
+          }
+        },
+        "cells": {
+          "crusher": {
+            "x": 9,
+            "z": 9
+          },
+          "screening": {
+            "x": 10,
+            "z": 9
+          }
+        },
+        "adjacent": true,
+        "crusherRoadPath": true,
+        "screeningRoadPath": true,
+        "depot": {
+          "id": 2,
+          "x": 13,
+          "z": 9
+        },
+        "machineCountStamp": 8,
+        "machineCountMatches": true,
+        "voxelSchemaStamp": "rustwake.voxel.geometry.v1",
+        "schemaMatches": true,
+        "inspectorTexts": {
+          "crusher": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 007 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 4s 10 SC OUTPU",
+          "screening": "SITE 10.9 / PROCESS Screening Plant × ▣ UNIT 008 · LEVEL 1 OPERATING Cycle 3.5s · level 1 · outputs scale with level. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell Production cycle INPUT / 3.5s 8 SC O"
+        },
+        "crusherInspector": true,
+        "screeningInspector": true
+      },
+      "world3d": "ready",
+      "onScreenProof": {
+        "pairCamera": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.8000001081408596,
+          "x": -6.999999045987713,
+          "z": -8.749998926959256
+        },
+        "canvasRect": {
+          "left": 0,
+          "top": 0,
+          "width": 1440,
+          "height": 900
+        },
+        "midpointWorld": {
+          "x": -7,
+          "z": -8.75
+        },
+        "panIterations": [
+          {
+            "iter": 0,
+            "cameraX": -6.999999045987713,
+            "cameraZ": -8.749998926959256
+          }
+        ],
+        "crusherBounds": {
+          "minX": 603.0622141961583,
+          "minY": 317.92994454211583,
+          "maxX": 758.9792654695789,
+          "maxY": 472.5044453537326,
+          "width": 155.9170512734206,
+          "height": 154.57450081161676,
+          "pivotScreen": {
+            "x": 681.0207398328686,
+            "y": 427.495502511688
+          },
+          "worldPivot": {
+            "x": -8.75,
+            "y": 0,
+            "z": -8.75
+          },
+          "heightWorld": 2.51
+        },
+        "screeningBounds": {
+          "minX": 681.0207398328686,
+          "minY": 362.93888738416035,
+          "maxX": 836.9377911062892,
+          "maxY": 517.5133881957771,
+          "width": 155.9170512734206,
+          "height": 154.57450081161676,
+          "pivotScreen": {
+            "x": 758.9792654695789,
+            "y": 472.5044453537326
+          },
+          "worldPivot": {
+            "x": -5.25,
+            "y": 0,
+            "z": -8.75
+          },
+          "heightWorld": 2.51
+        },
+        "crusherInside": true,
+        "screeningInside": true,
+        "sizes": {
+          "crusher": {
+            "w": 155.9170512734206,
+            "h": 154.57450081161676
+          },
+          "screening": {
+            "w": 155.9170512734206,
+            "h": 154.57450081161676
+          }
+        },
+        "readable": true,
+        "readabilityFloorPx": 24,
+        "note": "8-corner projected bounds (footprint x descriptor height) from the synchronous camera dataset stamp; numeric floor only, NOT visual certification"
+      },
+      "documentScrollAtPair": false,
+      "documentScroll": false,
+      "rafProof": {
+        "before": 40,
+        "after": 47,
+        "delta": 7,
+        "intervalMs": 600
+      },
+      "framesAdvancing": true,
+      "webglContextCount": 1,
+      "pickCameras": {
+        "crusher": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.8000001081408596,
+          "x": -6.999999045987713,
+          "z": -8.749998926959256
+        },
+        "screening": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.8000001081408596,
+          "x": -6.999999045987713,
+          "z": -8.749998926959256
+        }
+      },
+      "canvasCount": 1,
+      "documentScrollAtEnd": false,
+      "pageErrors": [],
+      "failedRequests": [],
+      "failures": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "screenshots": [
+        "phone-pair.png",
+        "phone-crusher-inspector.png",
+        "phone-screening-inspector.png",
+        "phone-context.png"
+      ],
+      "loadedProof": {
+        "saveKey": "rustwake:living-world:v2",
+        "source": "app's own periodic persist (read back from localStorage)",
+        "loadedBuildingCount": 8,
+        "elapsedAtRead": 0,
+        "crusher": {
+          "id": 7,
+          "type": "crusher",
+          "x": 9,
+          "z": 9,
+          "remaining": 0,
+          "paid": {
+            "credits": 260,
+            "scrap": 46,
+            "stone": 28
+          }
+        },
+        "screening": {
+          "id": 8,
+          "type": "screening",
+          "x": 10,
+          "z": 9,
+          "remaining": 0,
+          "paid": {
+            "credits": 230,
+            "scrap": 42,
+            "stone": 22
+          }
+        },
+        "cells": {
+          "crusher": {
+            "x": 9,
+            "z": 9
+          },
+          "screening": {
+            "x": 10,
+            "z": 9
+          }
+        },
+        "adjacent": true,
+        "crusherRoadPath": true,
+        "screeningRoadPath": true,
+        "depot": {
+          "id": 2,
+          "x": 13,
+          "z": 9
+        },
+        "machineCountStamp": 8,
+        "machineCountMatches": true,
+        "voxelSchemaStamp": "rustwake.voxel.geometry.v1",
+        "schemaMatches": true,
+        "inspectorTexts": {
+          "crusher": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 007 · LEVEL 1 OPERATING Cycle 4s · level 1 · outputs scale with level. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Active alarms ▤ WARNING · BAY BACKUP · CRUSHER",
+          "screening": "SITE 10.9 / PROCESS Screening Plant × ▣ UNIT 008 · LEVEL 1 WAITING FOR INPUTS Short 8 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell Active alarms ▤ WARNING · BAY BA"
+        },
+        "crusherInspector": true,
+        "screeningInspector": true
+      },
+      "world3d": "ready",
+      "onScreenProof": {
+        "pairCamera": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.399935879609433,
+          "x": -6.999999298430925,
+          "z": -8.749999728800441
+        },
+        "canvasRect": {
+          "left": 0,
+          "top": 0,
+          "width": 390,
+          "height": 844
+        },
+        "midpointWorld": {
+          "x": -7,
+          "z": -8.75
+        },
+        "panIterations": [
+          {
+            "iter": 0,
+            "cameraX": -6.999999298430925,
+            "cameraZ": -8.749999728800441
+          }
+        ],
+        "crusherBounds": {
+          "minX": 101.00679913896619,
+          "minY": 315.8436828468139,
+          "maxX": 226.33105668020363,
+          "maxY": 440.08881441393225,
+          "width": 125.32425754123744,
+          "height": 124.24513156711834,
+          "pivotScreen": {
+            "x": 163.6689279095849,
+            "y": 403.911165476078
+          },
+          "worldPivot": {
+            "x": -8.75,
+            "y": 0,
+            "z": -8.75
+          },
+          "heightWorld": 2.51
+        },
+        "screeningBounds": {
+          "minX": 163.6689279095849,
+          "minY": 352.0213317846682,
+          "maxX": 288.99318545082235,
+          "maxY": 476.26646335178646,
+          "width": 125.32425754123744,
+          "height": 124.24513156711828,
+          "pivotScreen": {
+            "x": 226.33105668020363,
+            "y": 440.08881441393225
+          },
+          "worldPivot": {
+            "x": -5.25,
+            "y": 0,
+            "z": -8.75
+          },
+          "heightWorld": 2.51
+        },
+        "crusherInside": true,
+        "screeningInside": true,
+        "sizes": {
+          "crusher": {
+            "w": 125.32425754123744,
+            "h": 124.24513156711834
+          },
+          "screening": {
+            "w": 125.32425754123744,
+            "h": 124.24513156711828
+          }
+        },
+        "readable": true,
+        "readabilityFloorPx": 24,
+        "note": "8-corner projected bounds (footprint x descriptor height) from the synchronous camera dataset stamp; numeric floor only, NOT visual certification"
+      },
+      "documentScrollAtPair": false,
+      "documentScroll": false,
+      "rafProof": {
+        "before": 82,
+        "after": 90,
+        "delta": 8,
+        "intervalMs": 600
+      },
+      "framesAdvancing": true,
+      "webglContextCount": 1,
+      "pickCameras": {
+        "crusher": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.399935879609433,
+          "x": -6.999999298430925,
+          "z": -8.749999728800441
+        },
+        "screening": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.399935879609433,
+          "x": 4.3540097834814695,
+          "z": 4.354009783481471
+        }
+      },
+      "canvasCount": 1,
+      "documentScrollAtEnd": false,
+      "pageErrors": [],
+      "failedRequests": [],
+      "failures": []
+    }
+  ],
+  "errors": [],
+  "vacuityAudit": "Every assertion is evaluated against measured page data (persisted save read-back, dataset stamps, projected bounds, rAF deltas, event counts). No check is structurally vacuous: each has a concrete failing condition exercised by viewFailures. Measured values are recorded per view so a reviewer can re-derive every verdict. The 24px readability floor is a numeric floor only, not visual certification.",
+  "limitations": [
+    "PASS_NUMERIC_ONLY — numeric assertions plus real screenshot artifacts; NO visual-fidelity self-certification. Sponsor G1 (#276, request 6983776010) and physical handsets (#268/#275) remain OWED",
+    "One headless Chromium/SwiftShader run against the live site; phone view is EMULATED 390x844 dpr2 (isMobile/hasTouch), not a physical handset",
+    "reducedMotion:\"reduce\" per the capture-live precedent: the rAF render loop advances (measured) but ART-02 motion channels park; motion review belongs to the sponsor",
+    "The two rigs share the ART-02 silhouette by design (product ruling 6986365525); distinct screening silhouette is #578",
+    "Fixture yard is injected evidence state, not a fresh player yard; it uses the real public save shape and the app's own load/persist path",
+    "The fixture crusher starts with no scrap input, so the real bay-backup alarm chip (alarm-chip-storage-7) can float over the canvas; on phone a pick may need the proven pair framing restored first (recorded per view as pickReframes/pickCameras). The alarm is genuine simulation state of the fixture yard, not a #577 defect; taps are only ever made on elementFromPoint-verified exposed canvas"
+  ],
+  "status": "PASS_NUMERIC_ONLY"
+}
