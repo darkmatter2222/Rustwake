@@ -1,0 +1,69 @@
+{
+  "status": "PASS_NUMERIC_ONLY",
+  "mode": "hosted-live",
+  "source_sha": "21adb5131a8d52e997f408f4270fba8551316c80",
+  "expected_source_sha": "21adb5131a8d52e997f408f4270fba8551316c80",
+  "manifest_source_sha": "21adb5131a8d52e997f408f4270fba8551316c80",
+  "port": null,
+  "views": [
+    {
+      "name": "desktop",
+      "status": "PASS_NUMERIC_ONLY",
+      "failure": null,
+      "errors": 0,
+      "finalSteel": 40,
+      "movedCount": 12,
+      "perTruck": [
+        {
+          "id": 1,
+          "netCells": 2.955,
+          "pathCells": 15.793,
+          "phaseTransitions": 3
+        },
+        {
+          "id": 2,
+          "netCells": 1.451,
+          "pathCells": 8.43,
+          "phaseTransitions": 3
+        },
+        {
+          "id": 3,
+          "netCells": 1.94,
+          "pathCells": 13.393,
+          "phaseTransitions": 2
+        }
+      ],
+      "vacuityNotes": []
+    },
+    {
+      "name": "phone",
+      "status": "PASS_NUMERIC_ONLY",
+      "failure": null,
+      "errors": 0,
+      "finalSteel": 32,
+      "movedCount": 12,
+      "perTruck": [
+        {
+          "id": 1,
+          "netCells": 7.747,
+          "pathCells": 18.543,
+          "phaseTransitions": 2
+        },
+        {
+          "id": 2,
+          "netCells": 2.794,
+          "pathCells": 7.656,
+          "phaseTransitions": 3
+        },
+        {
+          "id": 3,
+          "netCells": 4.216,
+          "pathCells": 10.77,
+          "phaseTransitions": 2
+        }
+      ],
+      "vacuityNotes": []
+    }
+  ]
+}
+CAPTURE_EXIT=0
