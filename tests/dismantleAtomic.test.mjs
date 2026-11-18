@@ -440,14 +440,19 @@ test("stock recovery: PROCESSED OUTPUTS refund at 100% — crusher 3 cycles, exa
  advanceGame(g,12); // exactly 3 crusher cycles (4s each): 30 scrap -> 18 iron + 6 stone
  assert.deepEqual(b.inventory,{scrap:0,iron:18,stone:6},"3 cycles of {scrap:10}->{iron:6,stone:2}, exact");
  const bankBefore={...g.bank};
- assert.deepEqual(bankBefore,{...ZERO_BANK,credits:740,scrap:154,stone:172},"build cost spent, production never touches the bank");
+ // issue 585: the starter salvager's crew recovers 1 diesel per 3.6s cycle
+ // straight to the bank (byproduct, not freight). Over completed()'s 5s + the
+ // 12s below it cycles 4 times (t3.6/7.2/10.8/14.4) -> fuel 4. That audited
+ // trickle is the ONLY production move of the bank; the crusher's processed
+ // outputs still stay in its bay (freight OFF), so the refund audit stays exact.
+ assert.deepEqual(bankBefore,{...ZERO_BANK,credits:740,scrap:154,stone:172,fuel:4},"build cost spent; bank moved only by the audited crew diesel byproduct");
  const others=g.buildings.filter(x=>x.id!==b.id).map(x=>({id:x.id,inventory:clone(x.inventory)}));
  const r=removeBuilding(g,b.id,"t11-dismantle");
  assert.equal(r.ok,true);assert.equal(r.code,"OK");
  // floor(40% of paid 260/46/28) = 104/18/11; cargo iron 18 + stone 6 at 100%.
  assert.deepEqual(r.refund,{credits:104,scrap:18,stone:17,iron:18});
  assert.deepEqual(delta(g.bank,bankBefore,["credits","scrap","stone","iron"]),{credits:104,scrap:18,stone:17,iron:18});
- assert.deepEqual(g.bank,{...ZERO_BANK,credits:844,scrap:172,stone:189,iron:18},"exact post-dismantle bank");
+ assert.deepEqual(g.bank,{...ZERO_BANK,credits:844,scrap:172,stone:189,iron:18,fuel:4},"exact post-dismantle bank (crew diesel 4 conserved through the dismantle)");
  const e=g.ledger.at(-1);
  assert.equal(e.kind,"salvage");assert.deepEqual(e.refund,r.refund);
  // Dismantle touches ONLY the target machine's stock.

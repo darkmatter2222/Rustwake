@@ -29,7 +29,19 @@ export const INITIAL_BANK = {
 };
 
 export const BUILDINGS = [
- {id:"salvager",name:"Scrap Extractor",tag:"HARVEST",family:"extraction",description:"Rakes salvage into reusable scrap, ferrous ore and copper fragments.",cost:{credits:180,scrap:28,stone:12},cycle:3.6,inputs:{},outputs:{scrap:9,iron:3,copper:1},power:1,color:"#a5b4b4",accent:"#e9a05c"},
+ // #585 starter-fuel economy: the salvager's crew also recovers a TRICKLE of
+ // diesel from the salvage it rakes — 1 per 3.6s cycle ≈ 0.28/s, delivered
+ // straight to the depot bank as a crew byproduct (NOT a bay output: routing it
+ // through the saturated 3-truck fleet added fuel trips that backed the furnace
+ // steel bay up past the storage alarm — measured). One efficient furnace burns
+ // 2 per 5.5s ≈ 0.36/s, so recovery covers ~76% of the burn and the finite
+ // starter bank (110) funds the remainder well past the 660s zero-input window
+ // (~1300s of unattended operation). Fuel stays NET-NEGATIVE, so the tier-1 Fuel
+ // Refinery remains the progression answer to a genuine deficit (issue 586
+ // messaging). Byproduct is content-only: no new currency, no save-schema
+ // change, and the starvation remedy still names the refinery (fuel is not in
+ // outputs, so the alarm producer list is unchanged).
+ {id:"salvager",name:"Scrap Extractor",tag:"HARVEST",family:"extraction",description:"Rakes salvage into reusable scrap, ferrous ore and copper fragments; the crew recovers a trickle of diesel for the depot.",cost:{credits:180,scrap:28,stone:12},cycle:3.6,inputs:{},outputs:{scrap:9,iron:3,copper:1},byproduct:{fuel:1},power:1,color:"#a5b4b4",accent:"#e9a05c"},
  {id:"depot",name:"Freight Depot",tag:"LOGISTICS",family:"logistics",description:"The shared material bank. Trucks load, unload and reserve cargo here.",cost:{credits:200,scrap:35,stone:24},cycle:0,inputs:{},outputs:{},power:0,color:"#718e95",accent:"#f1b577"},
  {id:"furnace",name:"Induction Furnace",tag:"PROCESS",family:"processing",description:"Smelts ferrous ore into premium steel. Needs diesel and truck deliveries.",cost:{credits:360,iron:24,scrap:50,stone:20},cycle:5.5,inputs:{iron:5,fuel:2},outputs:{steel:4},power:3,color:"#a2afb1",accent:"#e87b4e"},
  {id:"crusher",name:"Crusher",tag:"PROCESS",family:"processing",description:"Compacts scrap into high-value ferrous feedstock.",cost:{credits:260,scrap:46,stone:28},cycle:4,inputs:{scrap:10},outputs:{iron:6,stone:2},power:2,color:"#88959b",accent:"#d9a069"},

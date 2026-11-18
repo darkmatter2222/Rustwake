@@ -60,7 +60,11 @@ function mirrorCandidates(g){
   }
   for(const [id,n] of Object.entries(def.inputs)){
    const have=stock(b.inventory,id);
-   if(have<n*2 && stock(g.bank,id)>=n*2 && !cooled(bank.id,id) &&
+   // #585 MIRROR SYNC: verbatim copy of the simulation.js stranding fix — an
+   // emergency top-up fires when the buffer cannot fund one cycle (have<n)
+   // and the bank can (bank>=n), even below the normal n*2 bank threshold.
+   const bankHave=stock(g.bank,id);
+   if(have<n*2 && bankHave>=n && (bankHave>=n*2||have<n) && !cooled(bank.id,id) &&
       !g.vehicles.some(v=>v.job?.destId===b.id&&v.job?.resource===id)){
     candidates.push({source:bank,dest:b,resource:id,amount:Math.min(stock(g.bank,id),n*3),priority:3});
    }

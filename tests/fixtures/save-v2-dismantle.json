@@ -11,7 +11,7 @@
     "iron": 18,
     "copper": 0,
     "stone": 189,
-    "fuel": 0,
+    "fuel": 4,
     "water": 0,
     "steel": 0,
     "alloy": 0,
@@ -243,13 +243,15 @@
       }
     }
   ],
+  "dispatchCooldowns": {},
+  "freightServedAt": {},
   "view": {
     "yaw": 45,
     "elevation": 35.264,
     "zoom": 1
   },
   "stats": {
-    "produced": 84,
+    "produced": 88,
     "delivered": 0,
     "shipments": 0,
     "sold": 0,
