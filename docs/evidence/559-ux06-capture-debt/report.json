@@ -3,9 +3,9 @@
  "issue": 559,
  "branch": "rw/559-ux06-capture-debt",
  "build": "production-preview",
- "source_sha": "46a9268614e5e54bbf4b1d96c8e6c742c63f35c5",
- "rebase_base": "38c36cc0a68f7900ea1daf6751fa4b153133bd3b",
- "started": "2026-11-17T15:28:20.411Z",
+ "source_sha": "d2994a2159bfe4562432d1b8e60ad188316407c5",
+ "rebase_base": "f3ec58a57fd0b6b074ab7af8001c7c0102f5fdd2",
+ "started": "2026-11-18T15:01:13.992Z",
  "verdict": "PASS_NUMERIC_ONLY",
  "phone_emulated": true,
  "preview_only": true,
@@ -177,26 +177,26 @@
     },
     "railBox": {
      "x": 10,
-     "y": 112,
+     "y": 156,
      "width": 370,
      "height": 44
     },
     "controls_before": {
      "warningsLabelBox": {
       "x": 1091.84375,
-      "y": 112,
+      "y": 156,
       "width": 93.8125,
       "height": 44
      },
      "warningsInputBox": {
       "x": 1106.84375,
-      "y": 126,
+      "y": 170,
       "width": 16,
       "height": 16
      },
      "collapseBox": {
       "x": 1191.65625,
-      "y": 112,
+      "y": 156,
       "width": 62.640625,
       "height": 44
      },
@@ -210,7 +210,7 @@
       "finger": {
        "from": 360,
        "to": 50,
-       "y": 134
+       "y": 178
       }
      },
      {
@@ -220,7 +220,7 @@
       "finger": {
        "from": 360,
        "to": 50,
-       "y": 134
+       "y": 178
       }
      },
      {
@@ -230,20 +230,20 @@
       "finger": {
        "from": 360,
        "to": 50,
-       "y": 134
+       "y": 178
       }
      }
     ],
     "controls_after": {
      "warningsLabelBox": {
       "x": 217.84375,
-      "y": 112,
+      "y": 156,
       "width": 93.8125,
       "height": 44
      },
      "collapseBox": {
       "x": 317.65625,
-      "y": 112,
+      "y": 156,
       "width": 62.640625,
       "height": 44
      },
@@ -252,12 +252,12 @@
     "collapse_tap": {
      "tapPoint": {
       "x": 348.9765625,
-      "y": 134,
+      "y": 178,
       "id": 1
      },
      "box": {
       "x": 317.65625,
-      "y": 112,
+      "y": 156,
       "width": 62.640625,
       "height": 44
      }
@@ -272,12 +272,12 @@
     "summary_tap": {
      "tapPoint": {
       "x": 68.5859375,
-      "y": 134,
+      "y": 178,
       "id": 1
      },
      "box": {
       "x": 10,
-      "y": 112,
+      "y": 156,
       "width": 117.171875,
       "height": 44
      }
@@ -290,7 +290,7 @@
       "finger": {
        "from": 360,
        "to": 50,
-       "y": 134
+       "y": 178
       }
      },
      {
@@ -300,7 +300,7 @@
       "finger": {
        "from": 360,
        "to": 50,
-       "y": 134
+       "y": 178
       }
      },
      {
@@ -310,19 +310,19 @@
       "finger": {
        "from": 360,
        "to": 50,
-       "y": 134
+       "y": 178
       }
      }
     ],
     "warnings_tap_1": {
      "tapPoint": {
       "x": 264.75,
-      "y": 134,
+      "y": 178,
       "id": 1
      },
      "box": {
       "x": 217.84375,
-      "y": 112,
+      "y": 156,
       "width": 93.8125,
       "height": 44
      }
@@ -330,12 +330,12 @@
     "warnings_tap_2": {
      "tapPoint": {
       "x": 264.75,
-      "y": 134,
+      "y": 178,
       "id": 1
      },
      "box": {
       "x": 217.84375,
-      "y": 112,
+      "y": 156,
       "width": 93.8125,
       "height": 44
      }
@@ -361,5 +361,5 @@
   "Local production preview only — no hosted-deployment receipt (#333) is claimed by this capture",
   "CDP touch swipes/taps are synthesized single-finger contacts; fling momentum is whatever Chromium derives from the dispatched moves — no Playwright auto-scroll is used on any strip control"
  ],
- "finished": "2026-11-17T15:28:49.628Z"
+ "finished": "2026-11-18T15:01:30.868Z"
 }
