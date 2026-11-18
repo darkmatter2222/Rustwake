@@ -1,9 +1,9 @@
 {
   "issue": 350,
-  "source_sha": "df181678e8d20da3f1ef436476ea628424426783",
+  "source_sha": "d6ee7f3ca42777c516314551ff75d7e95cdc69a0",
   "floor": 0.15,
   "metric": "six-rig occupancy-grid Jaccard distinctness (verbatim capture-art04.mjs computation)",
-  "started": "2026-11-18T12:40:55.766Z",
+  "started": "2026-11-18T13:37:57.876Z",
   "controls": [
     {
       "id": "C0-head-unmutated",
