@@ -1,7 +1,7 @@
 {
   "purpose": "OPS-12 #336 READ-ONLY GitHub settings audit — no setting was mutated",
-  "audited_at": "2026-11-17T14:55:30.870Z",
-  "main_sha": "b56fded0f0bbe6d038c353399d6f353419ceded4",
+  "audited_at": "2026-11-18T11:37:21.785Z",
+  "main_sha": "7856771597d1b69af4d404cc5ff9af1b0c56034a",
   "branch_protection": {
     "http_error": "gh: Branch not protected (HTTP 404)",
     "status": 404
@@ -21,5 +21,6 @@
     "private": false,
     "visibility": "public"
   },
-  "follow_up_issue": "https://github.com/darkmatter2222/Rustwake/issues/561"
+  "follow_up_issue": "https://github.com/darkmatter2222/Rustwake/issues/561",
+  "reconfirmed_at_train_turn_rebase": "2026-11-18 read-only gh api re-check: all values unchanged from 2026-11-17 audit"
 }

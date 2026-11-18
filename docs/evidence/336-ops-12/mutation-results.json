@@ -8,8 +8,8 @@
       "OPS12: package gate expression is EXACTLY the audited fail-closed predicate (incl. fork exclusion)"
     ],
     "totals": {
-      "tests": 370,
-      "pass": 367,
+      "tests": 477,
+      "pass": 474,
       "fail": 3
     },
     "restoredSha256Identical": true,
@@ -25,8 +25,8 @@
       "OPS12: every uses: is pinned to the exact audited 40-hex SHA with version comment"
     ],
     "totals": {
-      "tests": 370,
-      "pass": 367,
+      "tests": 477,
+      "pass": 474,
       "fail": 3
     },
     "restoredSha256Identical": true,
@@ -42,8 +42,8 @@
       "OPS12: no pull_request_target anywhere; trigger sets are exact"
     ],
     "totals": {
-      "tests": 370,
-      "pass": 367,
+      "tests": 477,
+      "pass": 474,
       "fail": 3
     },
     "restoredSha256Identical": true,
@@ -59,8 +59,8 @@
       "OPS12: explicit top-level permissions; only the alert job escalates; no write-all"
     ],
     "totals": {
-      "tests": 370,
-      "pass": 367,
+      "tests": 477,
+      "pass": 474,
       "fail": 3
     },
     "restoredSha256Identical": true,
@@ -76,8 +76,8 @@
       "OPS12: no secret ever reaches a shell command line, log dump or xtrace"
     ],
     "totals": {
-      "tests": 370,
-      "pass": 367,
+      "tests": 477,
+      "pass": 474,
       "fail": 3
     },
     "restoredSha256Identical": true,
@@ -94,8 +94,8 @@
       "OPS12: needs chain is exact and downstream jobs cannot run when package is skipped"
     ],
     "totals": {
-      "tests": 370,
-      "pass": 366,
+      "tests": 477,
+      "pass": 473,
       "fail": 4
     },
     "restoredSha256Identical": true,
@@ -111,8 +111,8 @@
       "OPS12: the only rm -rf is the quoted, --terminated, runner.temp-scoped candidate cleanup"
     ],
     "totals": {
-      "tests": 370,
-      "pass": 367,
+      "tests": 477,
+      "pass": 474,
       "fail": 3
     },
     "restoredSha256Identical": true,
