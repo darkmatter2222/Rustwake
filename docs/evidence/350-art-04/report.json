@@ -3,8 +3,8 @@
   "build": "production-preview",
   "issue": 350,
   "schema": "rustwake.voxel.geometry.v1",
-  "source_sha": "5c1f11ab44fa9aa260058f4641f5d58a41e602b7",
-  "started": "2026-11-18T12:35:33.990Z",
+  "source_sha": "d6ee7f3ca42777c516314551ff75d7e95cdc69a0",
+  "started": "2026-11-18T13:25:54.987Z",
   "cameraHashes": {
     "applyCamera": {
       "expected": "f3afa5479a66b97e",
@@ -216,7 +216,7 @@
         "art04Clock": "0.000",
         "art04Reduced": "1",
         "art04Door": "0.000",
-        "art04BayDist": "7.110",
+        "art04BayDist": "7.108",
         "art04MarketLoad": "1.000",
         "art04DepotClock": "0.000",
         "art04MarketClock": "0.000",
@@ -239,7 +239,7 @@
         "art04Clock": "0.000",
         "art04Reduced": "1",
         "art04Door": "0.000",
-        "art04BayDist": "8.702",
+        "art04BayDist": "7.933",
         "art04MarketLoad": "1.000",
         "art04DepotClock": "0.000",
         "art04MarketClock": "0.000",
@@ -290,7 +290,7 @@
         "art04Clock": "0.000",
         "art04Reduced": "1",
         "art04Door": "0.000",
-        "art04BayDist": "9.068",
+        "art04BayDist": "8.417",
         "art04MarketLoad": "1.000",
         "art04DepotClock": "0.000",
         "art04MarketClock": "0.000",
@@ -350,7 +350,7 @@
         "art04Clock": "0.000",
         "art04Reduced": "1",
         "art04Door": "0.000",
-        "art04BayDist": "7.007",
+        "art04BayDist": "7.028",
         "art04MarketLoad": "1.000",
         "art04DepotClock": "0.000",
         "art04MarketClock": "0.000",
@@ -373,7 +373,7 @@
         "art04Clock": "0.000",
         "art04Reduced": "1",
         "art04Door": "0.000",
-        "art04BayDist": "7.130",
+        "art04BayDist": "7.151",
         "art04MarketLoad": "1.000",
         "art04DepotClock": "0.000",
         "art04MarketClock": "0.000",
@@ -396,7 +396,7 @@
         "art04Clock": "0.000",
         "art04Reduced": "1",
         "art04Door": "0.000",
-        "art04BayDist": "7.614",
+        "art04BayDist": "7.308",
         "art04MarketLoad": "1.000",
         "art04DepotClock": "0.000",
         "art04MarketClock": "0.000",
@@ -566,7 +566,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "7.132",
+          "art04BayDist": "7.000",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -589,7 +589,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "7.028",
+          "art04BayDist": "7.193",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -612,7 +612,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "9.856",
+          "art04BayDist": "10.406",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -635,7 +635,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "7.298",
+          "art04BayDist": "7.085",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -658,7 +658,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "7.002",
+          "art04BayDist": "15.568",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -681,7 +681,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "8.879",
+          "art04BayDist": "9.874",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -757,7 +757,7 @@
         "art04Clock": "0.000",
         "art04Reduced": "1",
         "art04Door": "0.000",
-        "art04BayDist": "7.308",
+        "art04BayDist": "7.006",
         "art04MarketLoad": "1.000",
         "art04DepotClock": "0.000",
         "art04MarketClock": "0.000",
@@ -780,7 +780,7 @@
         "art04Clock": "0.000",
         "art04Reduced": "1",
         "art04Door": "0.000",
-        "art04BayDist": "7.945",
+        "art04BayDist": "7.669",
         "art04MarketLoad": "1.000",
         "art04DepotClock": "0.000",
         "art04MarketClock": "0.000",
@@ -803,7 +803,7 @@
         "art04Clock": "0.000",
         "art04Reduced": "1",
         "art04Door": "0.000",
-        "art04BayDist": "7.016",
+        "art04BayDist": "7.417",
         "art04MarketLoad": "1.000",
         "art04DepotClock": "0.000",
         "art04MarketClock": "0.000",
@@ -864,7 +864,7 @@
           "code": "OK",
           "reason": ""
         },
-        "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 050 · LEVEL 1 WAITING FOR INPUTS Short 3 ST, 3 CU — trucks deliver from the depot. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Pr"
+        "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 049 · LEVEL 1 WAITING FOR INPUTS Short 3 ST, 3 CU — trucks deliver from the depot. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Pr"
       },
       "placedRefinery": {
         "label": "phone",
@@ -878,7 +878,7 @@
           "code": "OK",
           "reason": ""
         },
-        "inspectorText": "SITE 6.13 / PROCESS Fuel Refinery × ▣ UNIT 062 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell Product"
+        "inspectorText": "SITE 6.13 / PROCESS Fuel Refinery × ▣ UNIT 063 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell Product"
       },
       "placedFoundry": {
         "label": "phone",
@@ -892,7 +892,7 @@
           "code": "OK",
           "reason": ""
         },
-        "inspectorText": "SITE 17.10 / INDUSTRY Alloy Foundry × ▣ UNIT 073 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell "
+        "inspectorText": "SITE 17.10 / INDUSTRY Alloy Foundry × ▣ UNIT 071 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell "
       },
       "clips": [
         {
@@ -973,7 +973,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "7.837",
+          "art04BayDist": "8.681",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -996,7 +996,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "7.831",
+          "art04BayDist": "7.169",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -1019,7 +1019,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "7.182",
+          "art04BayDist": "7.629",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -1042,7 +1042,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "7.093",
+          "art04BayDist": "7.042",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -1065,7 +1065,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "7.575",
+          "art04BayDist": "7.222",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -1088,7 +1088,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "7.024",
+          "art04BayDist": "8.680",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -1256,7 +1256,7 @@
         "code": "OK",
         "reason": ""
       },
-      "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 050 · LEVEL 1 WAITING FOR INPUTS Short 3 ST, 3 CU — trucks deliver from the depot. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Pr"
+      "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 049 · LEVEL 1 WAITING FOR INPUTS Short 3 ST, 3 CU — trucks deliver from the depot. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Pr"
     },
     {
       "label": "phone",
@@ -1270,7 +1270,7 @@
         "code": "OK",
         "reason": ""
       },
-      "inspectorText": "SITE 6.13 / PROCESS Fuel Refinery × ▣ UNIT 062 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell Product"
+      "inspectorText": "SITE 6.13 / PROCESS Fuel Refinery × ▣ UNIT 063 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell Product"
     },
     {
       "label": "phone",
@@ -1284,7 +1284,7 @@
         "code": "OK",
         "reason": ""
       },
-      "inspectorText": "SITE 17.10 / INDUSTRY Alloy Foundry × ▣ UNIT 073 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell "
+      "inspectorText": "SITE 17.10 / INDUSTRY Alloy Foundry × ▣ UNIT 071 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell "
     }
   ],
   "picking": [
@@ -1385,7 +1385,7 @@
       "aim": "ground-center",
       "groundCover": null,
       "reframed": false,
-      "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 050 · LEVEL 1 OPERATING Cycle 8s · level 1 · outputs scale with level. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 8s 3 ST +",
+      "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 049 · LEVEL 1 OPERATING Cycle 8s · level 1 · outputs scale with level. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 8s 3 ST +",
       "screenshot": "phone-fabricator-selected.png"
     },
     {
@@ -1410,15 +1410,15 @@
     }
   ],
   "motion": {
-    "elapsedSeconds": 13.618,
+    "elapsedSeconds": 13.637,
     "samples": 100,
     "stages": [
       {
         "name": "clock-warmup",
         "stamp": {
-          "marketClock": "5.877",
-          "researchClock": "5.877",
-          "fabricatorClock": "5.877",
+          "marketClock": "5.820",
+          "researchClock": "5.820",
+          "fabricatorClock": "5.820",
           "depot": "idle",
           "market": "idle",
           "research": "working",
@@ -1429,9 +1429,9 @@
       {
         "name": "clock-quarter-cycle",
         "stamp": {
-          "marketClock": "6.117",
-          "researchClock": "6.117",
-          "fabricatorClock": "6.117",
+          "marketClock": "6.113",
+          "researchClock": "6.113",
+          "fabricatorClock": "6.113",
           "depot": "idle",
           "market": "idle",
           "research": "working",
@@ -1442,9 +1442,9 @@
       {
         "name": "clock-half-cycle",
         "stamp": {
-          "marketClock": "6.410",
-          "researchClock": "6.410",
-          "fabricatorClock": "6.410",
+          "marketClock": "6.423",
+          "researchClock": "6.423",
+          "fabricatorClock": "6.423",
           "depot": "docking",
           "market": "idle",
           "research": "working",
@@ -1455,9 +1455,9 @@
       {
         "name": "clock-full-cycle",
         "stamp": {
-          "marketClock": "6.704",
-          "researchClock": "6.704",
-          "fabricatorClock": "6.704",
+          "marketClock": "6.700",
+          "researchClock": "6.700",
+          "fabricatorClock": "6.700",
           "depot": "docking",
           "market": "idle",
           "research": "working",
@@ -1467,19 +1467,19 @@
       }
     ],
     "monotone": true,
-    "maxStep": 0.36300000000000043,
+    "maxStep": 0.4500000000000002,
     "speedOk": true,
     "tracksSim": true,
     "boundedByWall": true,
     "moving": true,
-    "simAdvance": 10,
+    "simAdvance": 11,
     "workOk": true,
     "depotClockZero": true,
-    "dockingSamples": 25,
+    "dockingSamples": 24,
     "wallVsSim": {
-      "wall": 13.618,
-      "simFloorAdvance": 10,
-      "marketClockAdvance": 10.080000000000002
+      "wall": 13.637,
+      "simFloorAdvance": 11,
+      "marketClockAdvance": 11.137
     },
     "researchWorking": true,
     "allReducedOff": true,
@@ -1487,17 +1487,17 @@
     "distinctValues": {
       "marketClock": 99
     },
-    "marketClockAdvance": 10.080000000000002,
+    "marketClockAdvance": 11.137,
     "pageErrors": [],
     "failedRequests": [],
     "canvasCount": 1,
     "documentScroll": false,
     "timeline": [
       {
-        "t": 0.003,
-        "marketClock": 5.877,
-        "researchClock": 5.877,
-        "fabricatorClock": 5.877,
+        "t": 0.005,
+        "marketClock": 5.82,
+        "researchClock": 5.82,
+        "fabricatorClock": 5.82,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 5,
@@ -1505,15 +1505,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.207",
-        "bayDist": "5.834",
+        "door": "0.282",
+        "bayDist": "5.414",
         "reduced": "0"
       },
       {
-        "t": 0.008,
-        "marketClock": 5.877,
-        "researchClock": 5.877,
-        "fabricatorClock": 5.877,
+        "t": 0.011,
+        "marketClock": 5.82,
+        "researchClock": 5.82,
+        "fabricatorClock": 5.82,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 5,
@@ -1521,31 +1521,31 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.207",
-        "bayDist": "5.834",
+        "door": "0.282",
+        "bayDist": "5.414",
         "reduced": "0"
       },
       {
-        "t": 0.49,
-        "marketClock": 6.117,
-        "researchClock": 6.117,
-        "fabricatorClock": 6.117,
+        "t": 0.537,
+        "marketClock": 6.113,
+        "researchClock": 6.113,
+        "fabricatorClock": 6.113,
         "depotClock": 0,
         "marketLoad": 1,
-        "simFloor": 6,
+        "simFloor": 5,
         "depot": "idle",
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.562",
-        "bayDist": "3.837",
+        "door": "0.556",
+        "bayDist": "3.870",
         "reduced": "0"
       },
       {
-        "t": 0.944,
-        "marketClock": 6.41,
-        "researchClock": 6.41,
-        "fabricatorClock": 6.41,
+        "t": 1.028,
+        "marketClock": 6.423,
+        "researchClock": 6.423,
+        "fabricatorClock": 6.423,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 6,
@@ -1554,14 +1554,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.800",
-        "bayDist": "1.168",
+        "bayDist": "1.049",
         "reduced": "0"
       },
       {
-        "t": 1.408,
-        "marketClock": 6.704,
-        "researchClock": 6.704,
-        "fabricatorClock": 6.704,
+        "t": 1.435,
+        "marketClock": 6.7,
+        "researchClock": 6.7,
+        "fabricatorClock": 6.7,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 6,
@@ -1574,10 +1574,10 @@
         "reduced": "0"
       },
       {
-        "t": 1.987,
-        "marketClock": 7.067,
-        "researchClock": 7.067,
-        "fabricatorClock": 7.067,
+        "t": 2.05,
+        "marketClock": 7.15,
+        "researchClock": 7.15,
+        "fabricatorClock": 7.15,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 6,
@@ -1585,15 +1585,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.430",
-        "bayDist": "4.580",
+        "door": "0.290",
+        "bayDist": "5.368",
         "reduced": "0"
       },
       {
-        "t": 2.106,
-        "marketClock": 7.207,
-        "researchClock": 7.207,
-        "fabricatorClock": 7.207,
+        "t": 2.186,
+        "marketClock": 7.22,
+        "researchClock": 7.22,
+        "fabricatorClock": 7.22,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 7,
@@ -1601,15 +1601,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.204",
-        "bayDist": "5.854",
+        "door": "0.177",
+        "bayDist": "6.005",
         "reduced": "0"
       },
       {
-        "t": 2.239,
-        "marketClock": 7.277,
-        "researchClock": 7.277,
-        "fabricatorClock": 7.277,
+        "t": 2.313,
+        "marketClock": 7.36,
+        "researchClock": 7.36,
+        "fabricatorClock": 7.36,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 7,
@@ -1617,15 +1617,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.232",
-        "bayDist": "5.695",
+        "door": "0.348",
+        "bayDist": "5.042",
         "reduced": "0"
       },
       {
-        "t": 2.358,
-        "marketClock": 7.417,
-        "researchClock": 7.417,
-        "fabricatorClock": 7.417,
+        "t": 2.437,
+        "marketClock": 7.43,
+        "researchClock": 7.43,
+        "fabricatorClock": 7.43,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 7,
@@ -1633,15 +1633,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.428",
-        "bayDist": "4.593",
+        "door": "0.446",
+        "bayDist": "4.490",
         "reduced": "0"
       },
       {
-        "t": 2.492,
-        "marketClock": 7.487,
-        "researchClock": 7.487,
-        "fabricatorClock": 7.487,
+        "t": 2.555,
+        "marketClock": 7.567,
+        "researchClock": 7.567,
+        "fabricatorClock": 7.567,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 7,
@@ -1649,15 +1649,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.526",
-        "bayDist": "4.041",
+        "door": "0.638",
+        "bayDist": "3.414",
         "reduced": "0"
       },
       {
-        "t": 2.621,
-        "marketClock": 7.557,
-        "researchClock": 7.557,
-        "fabricatorClock": 7.557,
+        "t": 2.673,
+        "marketClock": 7.637,
+        "researchClock": 7.637,
+        "fabricatorClock": 7.637,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 7,
@@ -1665,15 +1665,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.624",
-        "bayDist": "3.490",
+        "door": "0.736",
+        "bayDist": "2.863",
         "reduced": "0"
       },
       {
-        "t": 2.74,
-        "marketClock": 7.697,
-        "researchClock": 7.697,
-        "fabricatorClock": 7.697,
+        "t": 2.798,
+        "marketClock": 7.777,
+        "researchClock": 7.777,
+        "fabricatorClock": 7.777,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 7,
@@ -1682,14 +1682,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.800",
-        "bayDist": "2.388",
+        "bayDist": "1.760",
         "reduced": "0"
       },
       {
-        "t": 2.874,
-        "marketClock": 7.767,
-        "researchClock": 7.767,
-        "fabricatorClock": 7.767,
+        "t": 2.924,
+        "marketClock": 7.847,
+        "researchClock": 7.847,
+        "fabricatorClock": 7.847,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 7,
@@ -1698,14 +1698,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.800",
-        "bayDist": "1.836",
+        "bayDist": "1.209",
         "reduced": "0"
       },
       {
-        "t": 3.004,
-        "marketClock": 7.907,
-        "researchClock": 7.907,
-        "fabricatorClock": 7.907,
+        "t": 3.05,
+        "marketClock": 7.987,
+        "researchClock": 7.987,
+        "fabricatorClock": 7.987,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 7,
@@ -1714,33 +1714,17 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.800",
-        "bayDist": "0.734",
+        "bayDist": "0.106",
         "reduced": "0"
       },
       {
-        "t": 3.123,
-        "marketClock": 7.977,
-        "researchClock": 7.977,
-        "fabricatorClock": 7.977,
+        "t": 3.164,
+        "marketClock": 8.053,
+        "researchClock": 8.053,
+        "fabricatorClock": 8.053,
         "depotClock": 0,
         "marketLoad": 1,
-        "simFloor": 7,
-        "depot": "docking",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.800",
-        "bayDist": "0.183",
-        "reduced": "0"
-      },
-      {
-        "t": 3.253,
-        "marketClock": 8.047,
-        "researchClock": 8.047,
-        "fabricatorClock": 8.047,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 7,
+        "simFloor": 8,
         "depot": "docking",
         "market": "idle",
         "research": "working",
@@ -1750,10 +1734,10 @@
         "reduced": "0"
       },
       {
-        "t": 3.384,
-        "marketClock": 8.187,
-        "researchClock": 8.187,
-        "fabricatorClock": 8.187,
+        "t": 3.289,
+        "marketClock": 8.193,
+        "researchClock": 8.193,
+        "fabricatorClock": 8.193,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 8,
@@ -1766,10 +1750,10 @@
         "reduced": "0"
       },
       {
-        "t": 3.505,
-        "marketClock": 8.257,
-        "researchClock": 8.257,
-        "fabricatorClock": 8.257,
+        "t": 3.415,
+        "marketClock": 8.263,
+        "researchClock": 8.263,
+        "fabricatorClock": 8.263,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 8,
@@ -1782,26 +1766,10 @@
         "reduced": "0"
       },
       {
-        "t": 3.615,
-        "marketClock": 8.327,
-        "researchClock": 8.327,
-        "fabricatorClock": 8.327,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 8,
-        "depot": "docking",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.800",
-        "bayDist": "2.205",
-        "reduced": "0"
-      },
-      {
-        "t": 3.741,
-        "marketClock": 8.397,
-        "researchClock": 8.397,
-        "fabricatorClock": 8.397,
+        "t": 3.528,
+        "marketClock": 8.403,
+        "researchClock": 8.403,
+        "fabricatorClock": 8.403,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 8,
@@ -1814,10 +1782,10 @@
         "reduced": "0"
       },
       {
-        "t": 3.868,
-        "marketClock": 8.537,
-        "researchClock": 8.537,
-        "fabricatorClock": 8.537,
+        "t": 3.638,
+        "marketClock": 8.473,
+        "researchClock": 8.473,
+        "fabricatorClock": 8.473,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 8,
@@ -1825,15 +1793,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.558",
-        "bayDist": "3.859",
+        "door": "0.656",
+        "bayDist": "3.308",
         "reduced": "0"
       },
       {
-        "t": 3.984,
-        "marketClock": 8.607,
-        "researchClock": 8.607,
-        "fabricatorClock": 8.607,
+        "t": 3.756,
+        "marketClock": 8.54,
+        "researchClock": 8.54,
+        "fabricatorClock": 8.54,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 8,
@@ -1841,15 +1809,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.460",
-        "bayDist": "4.410",
+        "door": "0.563",
+        "bayDist": "3.833",
         "reduced": "0"
       },
       {
-        "t": 4.104,
-        "marketClock": 8.677,
-        "researchClock": 8.677,
-        "fabricatorClock": 8.677,
+        "t": 3.872,
+        "marketClock": 8.68,
+        "researchClock": 8.68,
+        "fabricatorClock": 8.68,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 8,
@@ -1857,15 +1825,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.362",
-        "bayDist": "4.961",
+        "door": "0.367",
+        "bayDist": "4.935",
         "reduced": "0"
       },
       {
-        "t": 4.222,
-        "marketClock": 8.817,
-        "researchClock": 8.817,
-        "fabricatorClock": 8.817,
+        "t": 3.991,
+        "marketClock": 8.75,
+        "researchClock": 8.75,
+        "fabricatorClock": 8.75,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 8,
@@ -1873,15 +1841,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.166",
-        "bayDist": "6.064",
+        "door": "0.269",
+        "bayDist": "5.487",
         "reduced": "0"
       },
       {
-        "t": 4.354,
-        "marketClock": 8.887,
-        "researchClock": 8.887,
-        "fabricatorClock": 8.887,
+        "t": 4.102,
+        "marketClock": 8.89,
+        "researchClock": 8.89,
+        "fabricatorClock": 8.89,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 8,
@@ -1889,31 +1857,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.068",
-        "bayDist": "6.615",
+        "door": "0.073",
+        "bayDist": "6.589",
         "reduced": "0"
       },
       {
-        "t": 4.478,
-        "marketClock": 8.957,
-        "researchClock": 8.957,
-        "fabricatorClock": 8.957,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 8,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "7.166",
-        "reduced": "0"
-      },
-      {
-        "t": 4.605,
-        "marketClock": 9.097,
-        "researchClock": 9.097,
-        "fabricatorClock": 9.097,
+        "t": 4.224,
+        "marketClock": 8.96,
+        "researchClock": 8.96,
+        "fabricatorClock": 8.96,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 8,
@@ -1922,14 +1874,30 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "8.269",
+        "bayDist": "7.140",
         "reduced": "0"
       },
       {
-        "t": 4.731,
-        "marketClock": 9.167,
-        "researchClock": 9.167,
-        "fabricatorClock": 9.167,
+        "t": 4.344,
+        "marketClock": 9.1,
+        "researchClock": 9.1,
+        "fabricatorClock": 9.1,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 8,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "8.243",
+        "reduced": "0"
+      },
+      {
+        "t": 4.473,
+        "marketClock": 9.17,
+        "researchClock": 9.17,
+        "fabricatorClock": 9.17,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 9,
@@ -1938,14 +1906,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "8.820",
+        "bayDist": "8.794",
         "reduced": "0"
       },
       {
-        "t": 4.841,
-        "marketClock": 9.237,
-        "researchClock": 9.237,
-        "fabricatorClock": 9.237,
+        "t": 4.598,
+        "marketClock": 9.307,
+        "researchClock": 9.307,
+        "fabricatorClock": 9.307,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 9,
@@ -1954,11 +1922,11 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "9.371",
+        "bayDist": "9.871",
         "reduced": "0"
       },
       {
-        "t": 4.967,
+        "t": 4.724,
         "marketClock": 9.377,
         "researchClock": 9.377,
         "fabricatorClock": 9.377,
@@ -1970,14 +1938,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "10.474",
+        "bayDist": "10.422",
         "reduced": "0"
       },
       {
-        "t": 5.094,
-        "marketClock": 9.447,
-        "researchClock": 9.447,
-        "fabricatorClock": 9.447,
+        "t": 4.85,
+        "marketClock": 9.517,
+        "researchClock": 9.517,
+        "fabricatorClock": 9.517,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 9,
@@ -1986,11 +1954,11 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "11.025",
+        "bayDist": "10.709",
         "reduced": "0"
       },
       {
-        "t": 5.217,
+        "t": 4.977,
         "marketClock": 9.587,
         "researchClock": 9.587,
         "fabricatorClock": 9.587,
@@ -2002,14 +1970,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "10.197",
+        "bayDist": "10.219",
         "reduced": "0"
       },
       {
-        "t": 5.339,
-        "marketClock": 9.657,
-        "researchClock": 9.657,
-        "fabricatorClock": 9.657,
+        "t": 5.105,
+        "marketClock": 9.723,
+        "researchClock": 9.723,
+        "fabricatorClock": 9.723,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 9,
@@ -2018,14 +1986,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "9.707",
+        "bayDist": "9.262",
         "reduced": "0"
       },
       {
-        "t": 5.458,
-        "marketClock": 9.727,
-        "researchClock": 9.727,
-        "fabricatorClock": 9.727,
+        "t": 5.235,
+        "marketClock": 9.863,
+        "researchClock": 9.863,
+        "fabricatorClock": 9.863,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 9,
@@ -2034,14 +2002,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "9.217",
+        "bayDist": "8.282",
         "reduced": "0"
       },
       {
-        "t": 5.586,
-        "marketClock": 9.867,
-        "researchClock": 9.867,
-        "fabricatorClock": 9.867,
+        "t": 5.356,
+        "marketClock": 9.933,
+        "researchClock": 9.933,
+        "fabricatorClock": 9.933,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 9,
@@ -2050,62 +2018,30 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "8.237",
+        "bayDist": "7.792",
         "reduced": "0"
       },
       {
-        "t": 5.712,
-        "marketClock": 9.937,
-        "researchClock": 9.937,
-        "fabricatorClock": 9.937,
+        "t": 5.467,
+        "marketClock": 10.003,
+        "researchClock": 10.003,
+        "fabricatorClock": 10.003,
         "depotClock": 0,
         "marketLoad": 1,
-        "simFloor": 9,
+        "simFloor": 10,
         "depot": "idle",
         "market": "idle",
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "7.747",
+        "bayDist": "7.302",
         "reduced": "0"
       },
       {
-        "t": 5.837,
-        "marketClock": 10.007,
-        "researchClock": 10.007,
-        "fabricatorClock": 10.007,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 9,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "7.257",
-        "reduced": "0"
-      },
-      {
-        "t": 5.952,
-        "marketClock": 10.147,
-        "researchClock": 10.147,
-        "fabricatorClock": 10.147,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 9,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.129",
-        "bayDist": "6.277",
-        "reduced": "0"
-      },
-      {
-        "t": 6.072,
-        "marketClock": 10.217,
-        "researchClock": 10.217,
-        "fabricatorClock": 10.217,
+        "t": 5.589,
+        "marketClock": 10.143,
+        "researchClock": 10.143,
+        "fabricatorClock": 10.143,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 10,
@@ -2113,15 +2049,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.216",
-        "bayDist": "5.787",
+        "door": "0.121",
+        "bayDist": "6.322",
         "reduced": "0"
       },
       {
-        "t": 6.199,
-        "marketClock": 10.287,
-        "researchClock": 10.287,
-        "fabricatorClock": 10.287,
+        "t": 5.703,
+        "marketClock": 10.213,
+        "researchClock": 10.213,
+        "fabricatorClock": 10.213,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 10,
@@ -2129,15 +2065,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.303",
-        "bayDist": "5.297",
+        "door": "0.208",
+        "bayDist": "5.832",
         "reduced": "0"
       },
       {
-        "t": 6.316,
-        "marketClock": 10.427,
-        "researchClock": 10.427,
-        "fabricatorClock": 10.427,
+        "t": 5.829,
+        "marketClock": 10.353,
+        "researchClock": 10.353,
+        "fabricatorClock": 10.353,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 10,
@@ -2145,15 +2081,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.477",
-        "bayDist": "4.317",
+        "door": "0.382",
+        "bayDist": "4.852",
         "reduced": "0"
       },
       {
-        "t": 6.45,
-        "marketClock": 10.497,
-        "researchClock": 10.497,
-        "fabricatorClock": 10.497,
+        "t": 5.955,
+        "marketClock": 10.423,
+        "researchClock": 10.423,
+        "fabricatorClock": 10.423,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 10,
@@ -2161,15 +2097,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.564",
-        "bayDist": "3.827",
+        "door": "0.469",
+        "bayDist": "4.362",
         "reduced": "0"
       },
       {
-        "t": 6.582,
-        "marketClock": 10.637,
-        "researchClock": 10.637,
-        "fabricatorClock": 10.637,
+        "t": 6.068,
+        "marketClock": 10.56,
+        "researchClock": 10.56,
+        "fabricatorClock": 10.56,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 10,
@@ -2177,15 +2113,31 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.738",
-        "bayDist": "2.847",
+        "door": "0.639",
+        "bayDist": "3.405",
         "reduced": "0"
       },
       {
-        "t": 6.703,
-        "marketClock": 10.707,
-        "researchClock": 10.707,
-        "fabricatorClock": 10.707,
+        "t": 6.193,
+        "marketClock": 10.63,
+        "researchClock": 10.63,
+        "fabricatorClock": 10.63,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 10,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.726",
+        "bayDist": "2.915",
+        "reduced": "0"
+      },
+      {
+        "t": 6.318,
+        "marketClock": 10.77,
+        "researchClock": 10.77,
+        "fabricatorClock": 10.77,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 10,
@@ -2194,14 +2146,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.800",
-        "bayDist": "2.357",
+        "bayDist": "1.935",
         "reduced": "0"
       },
       {
-        "t": 6.828,
-        "marketClock": 10.777,
-        "researchClock": 10.777,
-        "fabricatorClock": 10.777,
+        "t": 6.444,
+        "marketClock": 10.84,
+        "researchClock": 10.84,
+        "fabricatorClock": 10.84,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 10,
@@ -2210,14 +2162,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.800",
-        "bayDist": "1.867",
+        "bayDist": "1.445",
         "reduced": "0"
       },
       {
-        "t": 6.938,
-        "marketClock": 10.847,
-        "researchClock": 10.847,
-        "fabricatorClock": 10.847,
+        "t": 6.57,
+        "marketClock": 10.977,
+        "researchClock": 10.977,
+        "fabricatorClock": 10.977,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 10,
@@ -2226,49 +2178,17 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.800",
-        "bayDist": "1.377",
+        "bayDist": "0.489",
         "reduced": "0"
       },
       {
-        "t": 7.065,
-        "marketClock": 10.987,
-        "researchClock": 10.987,
-        "fabricatorClock": 10.987,
+        "t": 6.699,
+        "marketClock": 11.117,
+        "researchClock": 11.117,
+        "fabricatorClock": 11.117,
         "depotClock": 0,
         "marketLoad": 1,
-        "simFloor": 10,
-        "depot": "docking",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.800",
-        "bayDist": "0.397",
-        "reduced": "0"
-      },
-      {
-        "t": 7.191,
-        "marketClock": 11.057,
-        "researchClock": 11.057,
-        "fabricatorClock": 11.057,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 10,
-        "depot": "docking",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.800",
-        "bayDist": "0.000",
-        "reduced": "0"
-      },
-      {
-        "t": 7.302,
-        "marketClock": 11.127,
-        "researchClock": 11.127,
-        "fabricatorClock": 11.127,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 10,
+        "simFloor": 11,
         "depot": "docking",
         "market": "idle",
         "research": "working",
@@ -2278,10 +2198,10 @@
         "reduced": "0"
       },
       {
-        "t": 7.424,
-        "marketClock": 11.267,
-        "researchClock": 11.267,
-        "fabricatorClock": 11.267,
+        "t": 6.821,
+        "marketClock": 11.187,
+        "researchClock": 11.187,
+        "fabricatorClock": 11.187,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 11,
@@ -2290,14 +2210,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.800",
-        "bayDist": "1.470",
+        "bayDist": "0.980",
         "reduced": "0"
       },
       {
-        "t": 7.556,
-        "marketClock": 11.337,
-        "researchClock": 11.337,
-        "fabricatorClock": 11.337,
+        "t": 6.944,
+        "marketClock": 11.327,
+        "researchClock": 11.327,
+        "fabricatorClock": 11.327,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 11,
@@ -2310,10 +2230,26 @@
         "reduced": "0"
       },
       {
-        "t": 7.686,
-        "marketClock": 11.477,
-        "researchClock": 11.477,
-        "fabricatorClock": 11.477,
+        "t": 7.073,
+        "marketClock": 11.397,
+        "researchClock": 11.397,
+        "fabricatorClock": 11.397,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 11,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "2.450",
+        "reduced": "0"
+      },
+      {
+        "t": 7.191,
+        "marketClock": 11.533,
+        "researchClock": 11.533,
+        "fabricatorClock": 11.533,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 11,
@@ -2321,15 +2257,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.722",
-        "bayDist": "2.940",
+        "door": "0.639",
+        "bayDist": "3.407",
         "reduced": "0"
       },
       {
-        "t": 7.806,
-        "marketClock": 11.547,
-        "researchClock": 11.547,
-        "fabricatorClock": 11.547,
+        "t": 7.328,
+        "marketClock": 11.6,
+        "researchClock": 11.6,
+        "fabricatorClock": 11.6,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 11,
@@ -2337,15 +2273,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.635",
-        "bayDist": "3.430",
+        "door": "0.556",
+        "bayDist": "3.874",
         "reduced": "0"
       },
       {
-        "t": 7.933,
-        "marketClock": 11.617,
-        "researchClock": 11.617,
-        "fabricatorClock": 11.617,
+        "t": 7.453,
+        "marketClock": 11.74,
+        "researchClock": 11.74,
+        "fabricatorClock": 11.74,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 11,
@@ -2353,15 +2289,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.548",
-        "bayDist": "3.920",
+        "door": "0.381",
+        "bayDist": "4.855",
         "reduced": "0"
       },
       {
-        "t": 8.05,
-        "marketClock": 11.757,
-        "researchClock": 11.757,
-        "fabricatorClock": 11.757,
+        "t": 7.578,
+        "marketClock": 11.81,
+        "researchClock": 11.81,
+        "fabricatorClock": 11.81,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 11,
@@ -2369,15 +2305,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.373",
-        "bayDist": "4.900",
+        "door": "0.294",
+        "bayDist": "5.345",
         "reduced": "0"
       },
       {
-        "t": 8.172,
-        "marketClock": 11.827,
-        "researchClock": 11.827,
-        "fabricatorClock": 11.827,
+        "t": 7.704,
+        "marketClock": 11.95,
+        "researchClock": 11.95,
+        "fabricatorClock": 11.95,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 11,
@@ -2385,47 +2321,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.286",
-        "bayDist": "5.390",
+        "door": "0.120",
+        "bayDist": "6.325",
         "reduced": "0"
       },
       {
-        "t": 8.292,
-        "marketClock": 11.897,
-        "researchClock": 11.897,
-        "fabricatorClock": 11.897,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 11,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.199",
-        "bayDist": "5.880",
-        "reduced": "0"
-      },
-      {
-        "t": 8.422,
-        "marketClock": 12.037,
-        "researchClock": 12.037,
-        "fabricatorClock": 12.037,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 11,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.025",
-        "bayDist": "6.860",
-        "reduced": "0"
-      },
-      {
-        "t": 8.538,
-        "marketClock": 12.107,
-        "researchClock": 12.107,
-        "fabricatorClock": 12.107,
+        "t": 7.834,
+        "marketClock": 12.087,
+        "researchClock": 12.087,
+        "fabricatorClock": 12.087,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 11,
@@ -2434,14 +2338,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "7.350",
+        "bayDist": "7.281",
         "reduced": "0"
       },
       {
-        "t": 8.671,
-        "marketClock": 12.177,
-        "researchClock": 12.177,
-        "fabricatorClock": 12.177,
+        "t": 7.956,
+        "marketClock": 12.157,
+        "researchClock": 12.157,
+        "fabricatorClock": 12.157,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 11,
@@ -2450,14 +2354,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "7.840",
+        "bayDist": "7.771",
         "reduced": "0"
       },
       {
-        "t": 8.791,
-        "marketClock": 12.317,
-        "researchClock": 12.317,
-        "fabricatorClock": 12.317,
+        "t": 8.075,
+        "marketClock": 12.293,
+        "researchClock": 12.293,
+        "fabricatorClock": 12.293,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 12,
@@ -2466,14 +2370,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "8.374",
+        "bayDist": "8.608",
         "reduced": "0"
       },
       {
-        "t": 8.922,
-        "marketClock": 12.387,
-        "researchClock": 12.387,
-        "fabricatorClock": 12.387,
+        "t": 8.206,
+        "marketClock": 12.363,
+        "researchClock": 12.363,
+        "fabricatorClock": 12.363,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 12,
@@ -2482,14 +2386,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "7.822",
+        "bayDist": "8.057",
         "reduced": "0"
       },
       {
-        "t": 9.049,
-        "marketClock": 12.457,
-        "researchClock": 12.457,
-        "fabricatorClock": 12.457,
+        "t": 8.322,
+        "marketClock": 12.503,
+        "researchClock": 12.503,
+        "fabricatorClock": 12.503,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 12,
@@ -2497,15 +2401,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "7.271",
+        "door": "0.008",
+        "bayDist": "6.955",
         "reduced": "0"
       },
       {
-        "t": 9.165,
-        "marketClock": 12.597,
-        "researchClock": 12.597,
-        "fabricatorClock": 12.597,
+        "t": 8.457,
+        "marketClock": 12.573,
+        "researchClock": 12.573,
+        "fabricatorClock": 12.573,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 12,
@@ -2513,15 +2417,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.148",
-        "bayDist": "6.169",
+        "door": "0.106",
+        "bayDist": "6.403",
         "reduced": "0"
       },
       {
-        "t": 9.288,
-        "marketClock": 12.667,
-        "researchClock": 12.667,
-        "fabricatorClock": 12.667,
+        "t": 8.583,
+        "marketClock": 12.713,
+        "researchClock": 12.713,
+        "fabricatorClock": 12.713,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 12,
@@ -2529,15 +2433,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.246",
-        "bayDist": "5.617",
+        "door": "0.302",
+        "bayDist": "5.301",
         "reduced": "0"
       },
       {
-        "t": 9.413,
-        "marketClock": 12.737,
-        "researchClock": 12.737,
-        "fabricatorClock": 12.737,
+        "t": 8.71,
+        "marketClock": 12.783,
+        "researchClock": 12.783,
+        "fabricatorClock": 12.783,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 12,
@@ -2545,15 +2449,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.344",
-        "bayDist": "5.066",
+        "door": "0.400",
+        "bayDist": "4.750",
         "reduced": "0"
       },
       {
-        "t": 9.527,
-        "marketClock": 12.877,
-        "researchClock": 12.877,
-        "fabricatorClock": 12.877,
+        "t": 8.835,
+        "marketClock": 12.92,
+        "researchClock": 12.92,
+        "fabricatorClock": 12.92,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 12,
@@ -2561,31 +2465,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.540",
-        "bayDist": "3.964",
+        "door": "0.591",
+        "bayDist": "3.673",
         "reduced": "0"
       },
       {
-        "t": 9.639,
-        "marketClock": 12.947,
-        "researchClock": 12.947,
-        "fabricatorClock": 12.947,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 12,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.638",
-        "bayDist": "3.412",
-        "reduced": "0"
-      },
-      {
-        "t": 9.761,
-        "marketClock": 13.017,
-        "researchClock": 13.017,
-        "fabricatorClock": 13.017,
+        "t": 8.964,
+        "marketClock": 13.06,
+        "researchClock": 13.06,
+        "fabricatorClock": 13.06,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 13,
@@ -2593,15 +2481,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.736",
-        "bayDist": "2.861",
+        "door": "0.787",
+        "bayDist": "2.571",
         "reduced": "0"
       },
       {
-        "t": 9.873,
-        "marketClock": 13.087,
-        "researchClock": 13.087,
-        "fabricatorClock": 13.087,
+        "t": 9.086,
+        "marketClock": 13.13,
+        "researchClock": 13.13,
+        "fabricatorClock": 13.13,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 13,
@@ -2610,14 +2498,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.800",
-        "bayDist": "2.310",
+        "bayDist": "2.019",
         "reduced": "0"
       },
       {
-        "t": 9.999,
-        "marketClock": 13.227,
-        "researchClock": 13.227,
-        "fabricatorClock": 13.227,
+        "t": 9.208,
+        "marketClock": 13.27,
+        "researchClock": 13.27,
+        "fabricatorClock": 13.27,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 13,
@@ -2626,14 +2514,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.800",
-        "bayDist": "1.207",
+        "bayDist": "0.917",
         "reduced": "0"
       },
       {
-        "t": 10.125,
-        "marketClock": 13.297,
-        "researchClock": 13.297,
-        "fabricatorClock": 13.297,
+        "t": 9.338,
+        "marketClock": 13.337,
+        "researchClock": 13.337,
+        "fabricatorClock": 13.337,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 13,
@@ -2642,30 +2530,14 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.800",
-        "bayDist": "0.656",
+        "bayDist": "0.392",
         "reduced": "0"
       },
       {
-        "t": 10.255,
-        "marketClock": 13.437,
-        "researchClock": 13.437,
-        "fabricatorClock": 13.437,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 13,
-        "depot": "docking",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.800",
-        "bayDist": "0.000",
-        "reduced": "0"
-      },
-      {
-        "t": 10.39,
-        "marketClock": 13.507,
-        "researchClock": 13.507,
-        "fabricatorClock": 13.507,
+        "t": 9.454,
+        "marketClock": 13.477,
+        "researchClock": 13.477,
+        "fabricatorClock": 13.477,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 13,
@@ -2678,10 +2550,10 @@
         "reduced": "0"
       },
       {
-        "t": 10.516,
-        "marketClock": 13.577,
-        "researchClock": 13.577,
-        "fabricatorClock": 13.577,
+        "t": 9.577,
+        "marketClock": 13.547,
+        "researchClock": 13.547,
+        "fabricatorClock": 13.547,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 13,
@@ -2694,10 +2566,10 @@
         "reduced": "0"
       },
       {
-        "t": 10.639,
-        "marketClock": 13.717,
-        "researchClock": 13.717,
-        "fabricatorClock": 13.717,
+        "t": 9.695,
+        "marketClock": 13.687,
+        "researchClock": 13.687,
+        "fabricatorClock": 13.687,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 13,
@@ -2710,10 +2582,10 @@
         "reduced": "0"
       },
       {
-        "t": 10.767,
-        "marketClock": 13.787,
-        "researchClock": 13.787,
-        "fabricatorClock": 13.787,
+        "t": 9.828,
+        "marketClock": 13.753,
+        "researchClock": 13.753,
+        "fabricatorClock": 13.753,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 13,
@@ -2721,15 +2593,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.754",
-        "bayDist": "2.756",
+        "door": "0.759",
+        "bayDist": "2.730",
         "reduced": "0"
       },
       {
-        "t": 10.894,
-        "marketClock": 13.927,
-        "researchClock": 13.927,
-        "fabricatorClock": 13.927,
+        "t": 9.955,
+        "marketClock": 13.893,
+        "researchClock": 13.893,
+        "fabricatorClock": 13.893,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 13,
@@ -2737,15 +2609,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.558",
-        "bayDist": "3.859",
+        "door": "0.563",
+        "bayDist": "3.833",
         "reduced": "0"
       },
       {
-        "t": 11.021,
-        "marketClock": 13.997,
-        "researchClock": 13.997,
-        "fabricatorClock": 13.997,
+        "t": 10.085,
+        "marketClock": 14.03,
+        "researchClock": 14.03,
+        "fabricatorClock": 14.03,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 13,
@@ -2753,15 +2625,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.460",
-        "bayDist": "4.410",
+        "door": "0.372",
+        "bayDist": "4.909",
         "reduced": "0"
       },
       {
-        "t": 11.148,
-        "marketClock": 14.067,
-        "researchClock": 14.067,
-        "fabricatorClock": 14.067,
+        "t": 10.209,
+        "marketClock": 14.1,
+        "researchClock": 14.1,
+        "fabricatorClock": 14.1,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 13,
@@ -2769,31 +2641,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.362",
-        "bayDist": "4.961",
+        "door": "0.274",
+        "bayDist": "5.461",
         "reduced": "0"
       },
       {
-        "t": 11.273,
-        "marketClock": 14.207,
-        "researchClock": 14.207,
-        "fabricatorClock": 14.207,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 13,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.166",
-        "bayDist": "6.064",
-        "reduced": "0"
-      },
-      {
-        "t": 11.401,
-        "marketClock": 14.277,
-        "researchClock": 14.277,
-        "fabricatorClock": 14.277,
+        "t": 10.335,
+        "marketClock": 14.24,
+        "researchClock": 14.24,
+        "fabricatorClock": 14.24,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 14,
@@ -2801,15 +2657,15 @@
         "market": "idle",
         "research": "working",
         "fabricator": "working",
-        "door": "0.068",
-        "bayDist": "6.615",
+        "door": "0.078",
+        "bayDist": "6.563",
         "reduced": "0"
       },
       {
-        "t": 11.522,
-        "marketClock": 14.417,
-        "researchClock": 14.417,
-        "fabricatorClock": 14.417,
+        "t": 10.459,
+        "marketClock": 14.31,
+        "researchClock": 14.31,
+        "fabricatorClock": 14.31,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 14,
@@ -2818,257 +2674,17 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "7.718",
+        "bayDist": "7.078",
         "reduced": "0"
       },
       {
-        "t": 11.654,
-        "marketClock": 14.487,
-        "researchClock": 14.487,
-        "fabricatorClock": 14.487,
+        "t": 10.587,
+        "marketClock": 14.447,
+        "researchClock": 14.447,
+        "fabricatorClock": 14.447,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 14,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "8.269",
-        "reduced": "0"
-      },
-      {
-        "t": 11.765,
-        "marketClock": 14.557,
-        "researchClock": 14.557,
-        "fabricatorClock": 14.557,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 14,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "8.820",
-        "reduced": "0"
-      },
-      {
-        "t": 11.876,
-        "marketClock": 14.627,
-        "researchClock": 14.627,
-        "fabricatorClock": 14.627,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 14,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "9.371",
-        "reduced": "0"
-      },
-      {
-        "t": 12.001,
-        "marketClock": 14.767,
-        "researchClock": 14.767,
-        "fabricatorClock": 14.767,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 14,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "10.474",
-        "reduced": "0"
-      },
-      {
-        "t": 12.126,
-        "marketClock": 14.837,
-        "researchClock": 14.837,
-        "fabricatorClock": 14.837,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 14,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "11.025",
-        "reduced": "0"
-      },
-      {
-        "t": 12.252,
-        "marketClock": 14.907,
-        "researchClock": 14.907,
-        "fabricatorClock": 14.907,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 14,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "11.576",
-        "reduced": "0"
-      },
-      {
-        "t": 12.378,
-        "marketClock": 15.047,
-        "researchClock": 15.047,
-        "fabricatorClock": 15.047,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 14,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "12.679",
-        "reduced": "0"
-      },
-      {
-        "t": 12.504,
-        "marketClock": 15.117,
-        "researchClock": 15.117,
-        "fabricatorClock": 15.117,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 14,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "13.230",
-        "reduced": "0"
-      },
-      {
-        "t": 12.617,
-        "marketClock": 15.187,
-        "researchClock": 15.187,
-        "fabricatorClock": 15.187,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 15,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "13.090",
-        "reduced": "0"
-      },
-      {
-        "t": 12.73,
-        "marketClock": 15.327,
-        "researchClock": 15.327,
-        "fabricatorClock": 15.327,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 15,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "12.110",
-        "reduced": "0"
-      },
-      {
-        "t": 12.865,
-        "marketClock": 15.397,
-        "researchClock": 15.397,
-        "fabricatorClock": 15.397,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 15,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "11.620",
-        "reduced": "0"
-      },
-      {
-        "t": 12.988,
-        "marketClock": 15.467,
-        "researchClock": 15.467,
-        "fabricatorClock": 15.467,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 15,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "11.130",
-        "reduced": "0"
-      },
-      {
-        "t": 13.105,
-        "marketClock": 15.607,
-        "researchClock": 15.607,
-        "fabricatorClock": 15.607,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 15,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "10.150",
-        "reduced": "0"
-      },
-      {
-        "t": 13.238,
-        "marketClock": 15.677,
-        "researchClock": 15.677,
-        "fabricatorClock": 15.677,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 15,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "9.660",
-        "reduced": "0"
-      },
-      {
-        "t": 13.365,
-        "marketClock": 15.747,
-        "researchClock": 15.747,
-        "fabricatorClock": 15.747,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 15,
-        "depot": "idle",
-        "market": "idle",
-        "research": "working",
-        "fabricator": "working",
-        "door": "0.000",
-        "bayDist": "9.170",
-        "reduced": "0"
-      },
-      {
-        "t": 13.489,
-        "marketClock": 15.887,
-        "researchClock": 15.887,
-        "fabricatorClock": 15.887,
-        "depotClock": 0,
-        "marketLoad": 1,
-        "simFloor": 15,
         "depot": "idle",
         "market": "idle",
         "research": "working",
@@ -3078,10 +2694,90 @@
         "reduced": "0"
       },
       {
-        "t": 13.618,
-        "marketClock": 15.957,
-        "researchClock": 15.957,
-        "fabricatorClock": 15.957,
+        "t": 10.714,
+        "marketClock": 14.517,
+        "researchClock": 14.517,
+        "fabricatorClock": 14.517,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 14,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "8.741",
+        "reduced": "0"
+      },
+      {
+        "t": 10.838,
+        "marketClock": 14.657,
+        "researchClock": 14.657,
+        "fabricatorClock": 14.657,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 14,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "9.844",
+        "reduced": "0"
+      },
+      {
+        "t": 10.964,
+        "marketClock": 14.727,
+        "researchClock": 14.727,
+        "fabricatorClock": 14.727,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 14,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "10.395",
+        "reduced": "0"
+      },
+      {
+        "t": 11.091,
+        "marketClock": 14.867,
+        "researchClock": 14.867,
+        "fabricatorClock": 14.867,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 14,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "11.498",
+        "reduced": "0"
+      },
+      {
+        "t": 11.216,
+        "marketClock": 14.933,
+        "researchClock": 14.933,
+        "fabricatorClock": 14.933,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 14,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "12.022",
+        "reduced": "0"
+      },
+      {
+        "t": 11.338,
+        "marketClock": 15.073,
+        "researchClock": 15.073,
+        "fabricatorClock": 15.073,
         "depotClock": 0,
         "marketLoad": 1,
         "simFloor": 15,
@@ -3090,13 +2786,317 @@
         "research": "working",
         "fabricator": "working",
         "door": "0.000",
-        "bayDist": "7.700",
+        "bayDist": "13.124",
+        "reduced": "0"
+      },
+      {
+        "t": 11.468,
+        "marketClock": 15.143,
+        "researchClock": 15.143,
+        "fabricatorClock": 15.143,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "13.324",
+        "reduced": "0"
+      },
+      {
+        "t": 11.588,
+        "marketClock": 15.283,
+        "researchClock": 15.283,
+        "fabricatorClock": 15.283,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "12.344",
+        "reduced": "0"
+      },
+      {
+        "t": 11.706,
+        "marketClock": 15.353,
+        "researchClock": 15.353,
+        "fabricatorClock": 15.353,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "11.854",
+        "reduced": "0"
+      },
+      {
+        "t": 11.821,
+        "marketClock": 15.493,
+        "researchClock": 15.493,
+        "fabricatorClock": 15.493,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "10.874",
+        "reduced": "0"
+      },
+      {
+        "t": 11.942,
+        "marketClock": 15.563,
+        "researchClock": 15.563,
+        "fabricatorClock": 15.563,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "10.384",
+        "reduced": "0"
+      },
+      {
+        "t": 12.056,
+        "marketClock": 15.7,
+        "researchClock": 15.7,
+        "fabricatorClock": 15.7,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "9.428",
+        "reduced": "0"
+      },
+      {
+        "t": 12.178,
+        "marketClock": 15.77,
+        "researchClock": 15.77,
+        "fabricatorClock": 15.77,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "8.938",
+        "reduced": "0"
+      },
+      {
+        "t": 12.288,
+        "marketClock": 15.84,
+        "researchClock": 15.84,
+        "fabricatorClock": 15.84,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "8.448",
+        "reduced": "0"
+      },
+      {
+        "t": 12.406,
+        "marketClock": 15.98,
+        "researchClock": 15.98,
+        "fabricatorClock": 15.98,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.000",
+        "bayDist": "7.468",
+        "reduced": "0"
+      },
+      {
+        "t": 12.525,
+        "marketClock": 16.05,
+        "researchClock": 16.05,
+        "fabricatorClock": 16.05,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 15,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.004",
+        "bayDist": "6.978",
+        "reduced": "0"
+      },
+      {
+        "t": 12.649,
+        "marketClock": 16.19,
+        "researchClock": 16.19,
+        "fabricatorClock": 16.19,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.178",
+        "bayDist": "5.998",
+        "reduced": "0"
+      },
+      {
+        "t": 12.775,
+        "marketClock": 16.26,
+        "researchClock": 16.26,
+        "fabricatorClock": 16.26,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.265",
+        "bayDist": "5.508",
+        "reduced": "0"
+      },
+      {
+        "t": 12.889,
+        "marketClock": 16.397,
+        "researchClock": 16.397,
+        "fabricatorClock": 16.397,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.435",
+        "bayDist": "4.551",
+        "reduced": "0"
+      },
+      {
+        "t": 13.007,
+        "marketClock": 16.467,
+        "researchClock": 16.467,
+        "fabricatorClock": 16.467,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.522",
+        "bayDist": "4.061",
+        "reduced": "0"
+      },
+      {
+        "t": 13.131,
+        "marketClock": 16.607,
+        "researchClock": 16.607,
+        "fabricatorClock": 16.607,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.697",
+        "bayDist": "3.081",
+        "reduced": "0"
+      },
+      {
+        "t": 13.259,
+        "marketClock": 16.677,
+        "researchClock": 16.677,
+        "fabricatorClock": 16.677,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "idle",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.784",
+        "bayDist": "2.591",
+        "reduced": "0"
+      },
+      {
+        "t": 13.384,
+        "marketClock": 16.747,
+        "researchClock": 16.747,
+        "fabricatorClock": 16.747,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "2.101",
+        "reduced": "0"
+      },
+      {
+        "t": 13.505,
+        "marketClock": 16.887,
+        "researchClock": 16.887,
+        "fabricatorClock": 16.887,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "1.121",
+        "reduced": "0"
+      },
+      {
+        "t": 13.637,
+        "marketClock": 16.957,
+        "researchClock": 16.957,
+        "fabricatorClock": 16.957,
+        "depotClock": 0,
+        "marketLoad": 1,
+        "simFloor": 16,
+        "depot": "docking",
+        "market": "idle",
+        "research": "working",
+        "fabricator": "working",
+        "door": "0.800",
+        "bayDist": "0.631",
         "reduced": "0"
       }
     ]
   },
   "dockingProof": {
-    "bayDist": 2.145,
+    "bayDist": 2.101,
     "doorLift": 0.8,
     "stamp": {
       "yaw": 45,
@@ -3114,12 +3114,12 @@
       "art04Clock": "0.000",
       "art04Reduced": "0",
       "art04Door": "0.800",
-      "art04BayDist": "2.145",
+      "art04BayDist": "2.101",
       "art04MarketLoad": "1.000",
       "art04DepotClock": "0.000",
-      "art04MarketClock": "4.693",
-      "art04ResearchClock": "4.693",
-      "art04FabricatorClock": "4.693"
+      "art04MarketClock": "4.700",
+      "art04ResearchClock": "4.700",
+      "art04FabricatorClock": "4.700"
     },
     "screenshot": "desktop-depot-docking.png",
     "clip": {
@@ -3369,12 +3369,12 @@
   "motionDetails": {
     "research": {
       "clocks": [
-        16.237,
-        17.46
+        17.237,
+        18.457
       ],
       "simFloors": [
-        16,
-        17
+        17,
+        18
       ],
       "clips": [
         {
@@ -3399,19 +3399,19 @@
         }
       ],
       "pair": {
-        "meanAbsDiff": 2.233,
-        "diffFractionOver24": 0.036,
-        "maxPixelDiff": 118.2
+        "meanAbsDiff": 2.257,
+        "diffFractionOver24": 0.0358,
+        "maxPixelDiff": 104.3
       }
     },
     "fabricator": {
       "clocks": [
-        17.77,
-        19.007
+        18.777,
+        20.033
       ],
       "simFloors": [
-        17,
-        18
+        18,
+        19
       ],
       "clips": [
         {
@@ -3436,18 +3436,18 @@
         }
       ],
       "pair": {
-        "meanAbsDiff": 1.154,
-        "diffFractionOver24": 0.0158,
-        "maxPixelDiff": 131
+        "meanAbsDiff": 1.921,
+        "diffFractionOver24": 0.0267,
+        "maxPixelDiff": 133.4
       }
     },
     "market": {
       "clocks": [
-        19.943,
-        21.166
+        20.843,
+        22.09
       ],
       "simFloors": [
-        19,
+        20,
         21
       ],
       "clips": [
@@ -3473,9 +3473,9 @@
         }
       ],
       "pair": {
-        "meanAbsDiff": 2.151,
-        "diffFractionOver24": 0.026,
-        "maxPixelDiff": 153.3
+        "meanAbsDiff": 1.538,
+        "diffFractionOver24": 0.0168,
+        "maxPixelDiff": 146
       }
     },
     "depot": {
@@ -3484,8 +3484,8 @@
         0
       ],
       "bayDists": [
-        2.266,
-        7.071
+        1.47,
+        7.28
       ],
       "framing": {
         "panIterations": 1,
@@ -3519,9 +3519,9 @@
         }
       ],
       "pair": {
-        "meanAbsDiff": 3.107,
-        "diffFractionOver24": 0.0498,
-        "maxPixelDiff": 117.7
+        "meanAbsDiff": 3.92,
+        "diffFractionOver24": 0.0667,
+        "maxPixelDiff": 114.9
       },
       "diagViews": [
         "desktop-motion-depot-diag-open.png",
@@ -3537,8 +3537,8 @@
       "peaks": [
         {
           "targetClock": 30.425456520809227,
-          "clock": 30.493,
-          "scaleAngle": 0.44826636755502053,
+          "clock": 30.456,
+          "scaleAngle": 0.4496453098122488,
           "simFloor": 30,
           "clip": {
             "file": "desktop-motion-market-diag-peak1.png",
@@ -3559,8 +3559,8 @@
         },
         {
           "targetClock": 32.84206625433984,
-          "clock": 32.86,
-          "scaleAngle": -0.4498777098257467,
+          "clock": 32.863,
+          "scaleAngle": -0.4498333764795301,
           "simFloor": 33,
           "clip": {
             "file": "desktop-motion-market-diag-peak2.png",
@@ -3581,9 +3581,9 @@
         }
       ],
       "pair": {
-        "meanAbsDiff": 2.521,
-        "diffFractionOver24": 0.0318,
-        "maxPixelDiff": 140.3
+        "meanAbsDiff": 2.766,
+        "diffFractionOver24": 0.0349,
+        "maxPixelDiff": 140.7
       }
     }
   },
@@ -3660,7 +3660,7 @@
             "shutterTravelPx": 8.45,
             "rigHeightPx": 68.45
           },
-          "samples": 62,
+          "samples": 61,
           "maxDoorLift": 0,
           "minBayDist": 7,
           "dockingSamples": 0,
@@ -3715,8 +3715,8 @@
             0
           ],
           "bayDists": [
-            1.983,
-            7.481
+            2.428,
+            7.743
           ],
           "clips": [
             {
@@ -3741,8 +3741,8 @@
             }
           ],
           "pair": {
-            "meanAbsDiff": 3.157,
-            "diffFractionOver24": 0.0561,
+            "meanAbsDiff": 3.161,
+            "diffFractionOver24": 0.0565,
             "maxPixelDiff": 116
           },
           "shutterTravelOnScreen": true,
@@ -3793,7 +3793,7 @@
             "shutterTravelPx": 6.89,
             "rigHeightPx": 55.82
           },
-          "samples": 63,
+          "samples": 62,
           "maxDoorLift": 0,
           "minBayDist": 7,
           "dockingSamples": 0,
@@ -3848,8 +3848,8 @@
             0
           ],
           "bayDists": [
-            2.054,
-            7.376
+            2.241,
+            7.403
           ],
           "clips": [
             {
@@ -3874,9 +3874,9 @@
             }
           ],
           "pair": {
-            "meanAbsDiff": 3.122,
-            "diffFractionOver24": 0.0562,
-            "maxPixelDiff": 94
+            "meanAbsDiff": 3.148,
+            "diffFractionOver24": 0.0581,
+            "maxPixelDiff": 116
           },
           "shutterTravelOnScreen": true,
           "motionDetectableAtHome": true,
@@ -3903,9 +3903,9 @@
         "ok": true
       },
       "desktop-crusher-selected.png": {
-        "colors": 29576,
-        "luminanceMean": 96.56,
-        "luminanceSigma": 44.768,
+        "colors": 29583,
+        "luminanceMean": 96.47,
+        "luminanceSigma": 44.704,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -3914,9 +3914,9 @@
         "ok": true
       },
       "desktop-depot-clip.png": {
-        "colors": 1924,
-        "luminanceMean": 110.88,
-        "luminanceSigma": 38.744,
+        "colors": 2142,
+        "luminanceMean": 109.39,
+        "luminanceSigma": 41.035,
         "pixels": 28362,
         "floor": {
           "colors": 64,
@@ -3925,8 +3925,8 @@
         "ok": true
       },
       "desktop-depot-docking-clip.png": {
-        "colors": 1515,
-        "luminanceMean": 113.13,
+        "colors": 1510,
+        "luminanceMean": 113.11,
         "luminanceSigma": 37.953,
         "pixels": 21150,
         "floor": {
@@ -3936,9 +3936,9 @@
         "ok": true
       },
       "desktop-depot-docking.png": {
-        "colors": 26980,
+        "colors": 26964,
         "luminanceMean": 110.44,
-        "luminanceSigma": 40.284,
+        "luminanceSigma": 40.282,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -3947,9 +3947,9 @@
         "ok": true
       },
       "desktop-depot-selected.png": {
-        "colors": 32082,
-        "luminanceMean": 94.24,
-        "luminanceSigma": 44.221,
+        "colors": 32124,
+        "luminanceMean": 94.2,
+        "luminanceSigma": 44.232,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -3969,9 +3969,9 @@
         "ok": true
       },
       "desktop-fabricator-selected.png": {
-        "colors": 30648,
-        "luminanceMean": 96.82,
-        "luminanceSigma": 45.126,
+        "colors": 31343,
+        "luminanceMean": 96.88,
+        "luminanceSigma": 45.139,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -3991,9 +3991,9 @@
         "ok": true
       },
       "desktop-home-depot-open.png": {
-        "colors": 860,
-        "luminanceMean": 115.37,
-        "luminanceSigma": 36.818,
+        "colors": 876,
+        "luminanceMean": 115.07,
+        "luminanceSigma": 37.008,
         "pixels": 5472,
         "floor": {
           "colors": 64,
@@ -4002,9 +4002,9 @@
         "ok": true
       },
       "desktop-home-fresh.png": {
-        "colors": 27155,
+        "colors": 27139,
         "luminanceMean": 106.44,
-        "luminanceSigma": 42.082,
+        "luminanceSigma": 42.081,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -4013,9 +4013,9 @@
         "ok": true
       },
       "desktop-home-shutter-watch.png": {
-        "colors": 27158,
-        "luminanceMean": 106.41,
-        "luminanceSigma": 42.082,
+        "colors": 27186,
+        "luminanceMean": 106.42,
+        "luminanceSigma": 42.096,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -4024,9 +4024,9 @@
         "ok": true
       },
       "desktop-landing.png": {
-        "colors": 27123,
+        "colors": 27103,
         "luminanceMean": 106.35,
-        "luminanceSigma": 42.145,
+        "luminanceSigma": 42.143,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -4046,9 +4046,9 @@
         "ok": true
       },
       "desktop-market-selected.png": {
-        "colors": 29859,
-        "luminanceMean": 102.07,
-        "luminanceSigma": 45.778,
+        "colors": 29889,
+        "luminanceMean": 102.1,
+        "luminanceSigma": 45.769,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -4057,9 +4057,9 @@
         "ok": true
       },
       "desktop-motion-clock-full-cycle.png": {
-        "colors": 27304,
-        "luminanceMean": 114.54,
-        "luminanceSigma": 40.077,
+        "colors": 27277,
+        "luminanceMean": 114.55,
+        "luminanceSigma": 40.075,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -4068,9 +4068,9 @@
         "ok": true
       },
       "desktop-motion-clock-half-cycle.png": {
-        "colors": 27233,
-        "luminanceMean": 114.53,
-        "luminanceSigma": 40.077,
+        "colors": 27266,
+        "luminanceMean": 114.51,
+        "luminanceSigma": 40.075,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -4079,9 +4079,9 @@
         "ok": true
       },
       "desktop-motion-clock-quarter-cycle.png": {
-        "colors": 27170,
-        "luminanceMean": 114.52,
-        "luminanceSigma": 40.065,
+        "colors": 27217,
+        "luminanceMean": 114.5,
+        "luminanceSigma": 40.064,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -4090,9 +4090,9 @@
         "ok": true
       },
       "desktop-motion-clock-warmup.png": {
-        "colors": 27132,
+        "colors": 27044,
         "luminanceMean": 114.5,
-        "luminanceSigma": 40.038,
+        "luminanceSigma": 40.037,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -4112,9 +4112,9 @@
         "ok": true
       },
       "desktop-motion-depot-diag-closed.png": {
-        "colors": 27336,
-        "luminanceMean": 111.31,
-        "luminanceSigma": 40.719,
+        "colors": 27183,
+        "luminanceMean": 111.24,
+        "luminanceSigma": 40.714,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -4123,9 +4123,9 @@
         "ok": true
       },
       "desktop-motion-depot-diag-open.png": {
-        "colors": 27117,
-        "luminanceMean": 111.28,
-        "luminanceSigma": 40.658,
+        "colors": 27806,
+        "luminanceMean": 110.89,
+        "luminanceSigma": 40.869,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -4134,9 +4134,9 @@
         "ok": true
       },
       "desktop-motion-depot-open.png": {
-        "colors": 1718,
-        "luminanceMean": 114.38,
-        "luminanceSigma": 38.48,
+        "colors": 1701,
+        "luminanceMean": 114.21,
+        "luminanceSigma": 39.136,
         "pixels": 28362,
         "floor": {
           "colors": 64,
@@ -4145,9 +4145,9 @@
         "ok": true
       },
       "desktop-motion-fabricator-t1.png": {
-        "colors": 1562,
-        "luminanceMean": 132.9,
-        "luminanceSigma": 38.301,
+        "colors": 1578,
+        "luminanceMean": 133.02,
+        "luminanceSigma": 38.143,
         "pixels": 26569,
         "floor": {
           "colors": 64,
@@ -4156,9 +4156,9 @@
         "ok": true
       },
       "desktop-motion-fabricator-t2.png": {
-        "colors": 1578,
-        "luminanceMean": 133.07,
-        "luminanceSigma": 38.076,
+        "colors": 1549,
+        "luminanceMean": 133.03,
+        "luminanceSigma": 37.995,
         "pixels": 26569,
         "floor": {
           "colors": 64,
@@ -4167,9 +4167,9 @@
         "ok": true
       },
       "desktop-motion-market-diag-peak1.png": {
-        "colors": 859,
-        "luminanceMean": 123.24,
-        "luminanceSigma": 36.696,
+        "colors": 855,
+        "luminanceMean": 123.3,
+        "luminanceSigma": 36.801,
         "pixels": 7110,
         "floor": {
           "colors": 64,
@@ -4178,9 +4178,9 @@
         "ok": true
       },
       "desktop-motion-market-diag-peak2.png": {
-        "colors": 837,
-        "luminanceMean": 124.34,
-        "luminanceSigma": 36.94,
+        "colors": 847,
+        "luminanceMean": 124.1,
+        "luminanceSigma": 36.803,
         "pixels": 7110,
         "floor": {
           "colors": 64,
@@ -4189,9 +4189,9 @@
         "ok": true
       },
       "desktop-motion-market-t1.png": {
-        "colors": 1916,
-        "luminanceMean": 114.62,
-        "luminanceSigma": 39.024,
+        "colors": 1895,
+        "luminanceMean": 114.04,
+        "luminanceSigma": 38.568,
         "pixels": 27547,
         "floor": {
           "colors": 64,
@@ -4200,9 +4200,9 @@
         "ok": true
       },
       "desktop-motion-market-t2.png": {
-        "colors": 1926,
-        "luminanceMean": 113.66,
-        "luminanceSigma": 38.686,
+        "colors": 1964,
+        "luminanceMean": 114.52,
+        "luminanceSigma": 38.88,
         "pixels": 27547,
         "floor": {
           "colors": 64,
@@ -4211,9 +4211,9 @@
         "ok": true
       },
       "desktop-motion-research-t1.png": {
-        "colors": 1374,
-        "luminanceMean": 130.57,
-        "luminanceSigma": 35.45,
+        "colors": 1361,
+        "luminanceMean": 131.86,
+        "luminanceSigma": 36.037,
         "pixels": 30318,
         "floor": {
           "colors": 64,
@@ -4222,9 +4222,9 @@
         "ok": true
       },
       "desktop-motion-research-t2.png": {
-        "colors": 1362,
-        "luminanceMean": 132.24,
-        "luminanceSigma": 36.133,
+        "colors": 1343,
+        "luminanceMean": 133.57,
+        "luminanceSigma": 36.707,
         "pixels": 30318,
         "floor": {
           "colors": 64,
@@ -4233,9 +4233,9 @@
         "ok": true
       },
       "desktop-research-clip.png": {
-        "colors": 4212,
-        "luminanceMean": 105.4,
-        "luminanceSigma": 36.382,
+        "colors": 4228,
+        "luminanceMean": 105.41,
+        "luminanceSigma": 36.402,
         "pixels": 30318,
         "floor": {
           "colors": 64,
@@ -4244,9 +4244,9 @@
         "ok": true
       },
       "desktop-research-selected.png": {
-        "colors": 29806,
+        "colors": 29828,
         "luminanceMean": 102.05,
-        "luminanceSigma": 45.831,
+        "luminanceSigma": 45.834,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -4266,9 +4266,9 @@
         "ok": true
       },
       "desktop-salvager-selected.png": {
-        "colors": 28362,
-        "luminanceMean": 99.72,
-        "luminanceSigma": 44.255,
+        "colors": 28069,
+        "luminanceMean": 99.68,
+        "luminanceSigma": 44.159,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -4310,9 +4310,9 @@
         "ok": true
       },
       "desktop-unpowered-yard.png": {
-        "colors": 28364,
+        "colors": 28362,
         "luminanceMean": 106.09,
-        "luminanceSigma": 42.19,
+        "luminanceSigma": 42.189,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -4333,8 +4333,8 @@
       },
       "desktop-yard-built.png": {
         "colors": 31040,
-        "luminanceMean": 96.81,
-        "luminanceSigma": 44.529,
+        "luminanceMean": 96.8,
+        "luminanceSigma": 44.533,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -4343,9 +4343,9 @@
         "ok": true
       },
       "desktop-yard-front.png": {
-        "colors": 24786,
-        "luminanceMean": 107.88,
-        "luminanceSigma": 42.95,
+        "colors": 24356,
+        "luminanceMean": 107.85,
+        "luminanceSigma": 42.951,
         "pixels": 1296000,
         "floor": {
           "colors": 64,
@@ -4365,9 +4365,9 @@
         "ok": true
       },
       "phone-crusher-selected.png": {
-        "colors": 18399,
-        "luminanceMean": 73.89,
-        "luminanceSigma": 46.201,
+        "colors": 18736,
+        "luminanceMean": 73.87,
+        "luminanceSigma": 46.177,
         "pixels": 1316640,
         "floor": {
           "colors": 64,
@@ -4376,9 +4376,9 @@
         "ok": true
       },
       "phone-depot-clip.png": {
-        "colors": 5305,
-        "luminanceMean": 87.4,
-        "luminanceSigma": 43.826,
+        "colors": 5256,
+        "luminanceMean": 88.32,
+        "luminanceSigma": 43.97,
         "pixels": 63440,
         "floor": {
           "colors": 64,
@@ -4387,9 +4387,9 @@
         "ok": true
       },
       "phone-depot-selected.png": {
-        "colors": 21356,
-        "luminanceMean": 72.27,
-        "luminanceSigma": 45.29,
+        "colors": 20656,
+        "luminanceMean": 72.29,
+        "luminanceSigma": 45.31,
         "pixels": 1316640,
         "floor": {
           "colors": 64,
@@ -4409,9 +4409,9 @@
         "ok": true
       },
       "phone-fabricator-selected.png": {
-        "colors": 20398,
-        "luminanceMean": 71.61,
-        "luminanceSigma": 45.139,
+        "colors": 20333,
+        "luminanceMean": 71.57,
+        "luminanceSigma": 45.086,
         "pixels": 1316640,
         "floor": {
           "colors": 64,
@@ -4431,9 +4431,9 @@
         "ok": true
       },
       "phone-home-depot-open.png": {
-        "colors": 1356,
-        "luminanceMean": 114.72,
-        "luminanceSigma": 37.45,
+        "colors": 1363,
+        "luminanceMean": 114.87,
+        "luminanceSigma": 37.395,
         "pixels": 15120,
         "floor": {
           "colors": 64,
@@ -4442,9 +4442,9 @@
         "ok": true
       },
       "phone-home-fresh.png": {
-        "colors": 26892,
+        "colors": 26875,
         "luminanceMean": 111.38,
-        "luminanceSigma": 47.996,
+        "luminanceSigma": 48.001,
         "pixels": 1316640,
         "floor": {
           "colors": 64,
@@ -4453,9 +4453,9 @@
         "ok": true
       },
       "phone-home-shutter-watch.png": {
-        "colors": 26977,
-        "luminanceMean": 111.32,
-        "luminanceSigma": 48.039,
+        "colors": 26582,
+        "luminanceMean": 111.21,
+        "luminanceSigma": 48.125,
         "pixels": 1316640,
         "floor": {
           "colors": 64,
@@ -4464,9 +4464,9 @@
         "ok": true
       },
       "phone-landing.png": {
-        "colors": 27249,
-        "luminanceMean": 111.46,
-        "luminanceSigma": 48.033,
+        "colors": 27256,
+        "luminanceMean": 111.45,
+        "luminanceSigma": 48.042,
         "pixels": 1316640,
         "floor": {
           "colors": 64,
@@ -4486,9 +4486,9 @@
         "ok": true
       },
       "phone-market-selected.png": {
-        "colors": 15949,
-        "luminanceMean": 73.88,
-        "luminanceSigma": 46.639,
+        "colors": 16579,
+        "luminanceMean": 73.81,
+        "luminanceSigma": 46.718,
         "pixels": 1316640,
         "floor": {
           "colors": 64,
@@ -4508,9 +4508,9 @@
         "ok": true
       },
       "phone-research-selected.png": {
-        "colors": 20602,
-        "luminanceMean": 71.97,
-        "luminanceSigma": 45.63,
+        "colors": 20379,
+        "luminanceMean": 71.9,
+        "luminanceSigma": 45.628,
         "pixels": 1316640,
         "floor": {
           "colors": 64,
@@ -4530,9 +4530,9 @@
         "ok": true
       },
       "phone-salvager-selected.png": {
-        "colors": 20472,
-        "luminanceMean": 71.41,
-        "luminanceSigma": 44.637,
+        "colors": 20467,
+        "luminanceMean": 71.4,
+        "luminanceSigma": 44.627,
         "pixels": 1316640,
         "floor": {
           "colors": 64,
@@ -4585,9 +4585,9 @@
         "ok": true
       },
       "phone-yard-built.png": {
-        "colors": 17078,
+        "colors": 16993,
         "luminanceMean": 68.72,
-        "luminanceSigma": 43.362,
+        "luminanceSigma": 43.403,
         "pixels": 1316640,
         "floor": {
           "colors": 64,
@@ -4596,9 +4596,9 @@
         "ok": true
       },
       "phone-yard-front.png": {
-        "colors": 18199,
-        "luminanceMean": 99.86,
-        "luminanceSigma": 48,
+        "colors": 17683,
+        "luminanceMean": 99.61,
+        "luminanceSigma": 47.749,
         "pixels": 1316640,
         "floor": {
           "colors": 64,
@@ -4760,7 +4760,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "10.807",
+          "art04BayDist": "10.808",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -4783,7 +4783,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "12.718",
+          "art04BayDist": "12.016",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -4848,7 +4848,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "5.739",
+          "art04BayDist": "4.269",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -4893,7 +4893,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "7.110",
+          "art04BayDist": "7.108",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -4916,7 +4916,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "8.702",
+          "art04BayDist": "7.933",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -4944,7 +4944,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "7.350",
+          "art04BayDist": "8.320",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -4967,7 +4967,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "7.291",
+          "art04BayDist": "8.226",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -5018,7 +5018,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "9.068",
+          "art04BayDist": "8.417",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -5046,7 +5046,7 @@
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "7.614",
+          "art04BayDist": "7.140",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -5065,11 +5065,11 @@
           "art04Depot": "idle",
           "art04Market": "idle",
           "art04Research": "working",
-          "art04Fabricator": "starved",
+          "art04Fabricator": "working",
           "art04Clock": "0.000",
           "art04Reduced": "1",
           "art04Door": "0.000",
-          "art04BayDist": "7.129",
+          "art04BayDist": "7.539",
           "art04MarketLoad": "1.000",
           "art04DepotClock": "0.000",
           "art04MarketClock": "0.000",
@@ -5098,7 +5098,7 @@
         "file": "desktop-depot-clip.png",
         "width": 163,
         "height": 174,
-        "edgeEnergy": 12.75
+        "edgeEnergy": 14.116
       },
       "desktop:market": {
         "file": "desktop-market-clip.png",
@@ -5110,7 +5110,7 @@
         "file": "desktop-research-clip.png",
         "width": 163,
         "height": 186,
-        "edgeEnergy": 10.147
+        "edgeEnergy": 10.188
       },
       "desktop:fabricator": {
         "file": "desktop-fabricator-clip.png",
@@ -5134,7 +5134,7 @@
         "file": "phone-depot-clip.png",
         "width": 244,
         "height": 260,
-        "edgeEnergy": 16.592
+        "edgeEnergy": 17.365
       },
       "phone:market": {
         "file": "phone-market-clip.png",
@@ -5169,34 +5169,34 @@
     },
     "pairwise": {
       "desktop:depot-market": {
-        "meanAbsDiff": 24.058,
-        "diffFractionOver24": 0.3931,
+        "meanAbsDiff": 26.149,
+        "diffFractionOver24": 0.4393,
         "maxPixelDiff": 143.7
       },
       "desktop:depot-research": {
-        "meanAbsDiff": 34.671,
-        "diffFractionOver24": 0.5569,
-        "maxPixelDiff": 168.3
+        "meanAbsDiff": 36.043,
+        "diffFractionOver24": 0.587,
+        "maxPixelDiff": 147.3
       },
       "desktop:depot-fabricator": {
-        "meanAbsDiff": 31.029,
-        "diffFractionOver24": 0.4795,
+        "meanAbsDiff": 32.632,
+        "diffFractionOver24": 0.472,
         "maxPixelDiff": 151.7
       },
       "desktop:depot-salvager": {
-        "meanAbsDiff": 25.216,
-        "diffFractionOver24": 0.417,
+        "meanAbsDiff": 27.196,
+        "diffFractionOver24": 0.458,
         "maxPixelDiff": 146.3
       },
       "desktop:depot-crusher": {
-        "meanAbsDiff": 24.292,
-        "diffFractionOver24": 0.4082,
+        "meanAbsDiff": 26.881,
+        "diffFractionOver24": 0.4671,
         "maxPixelDiff": 154.7
       },
       "desktop:market-research": {
-        "meanAbsDiff": 33.184,
-        "diffFractionOver24": 0.5384,
-        "maxPixelDiff": 157.2
+        "meanAbsDiff": 33.151,
+        "diffFractionOver24": 0.54,
+        "maxPixelDiff": 154.6
       },
       "desktop:market-fabricator": {
         "meanAbsDiff": 32.404,
@@ -5214,19 +5214,19 @@
         "maxPixelDiff": 138
       },
       "desktop:research-fabricator": {
-        "meanAbsDiff": 34.43,
-        "diffFractionOver24": 0.5441,
+        "meanAbsDiff": 34.455,
+        "diffFractionOver24": 0.5436,
         "maxPixelDiff": 143.7
       },
       "desktop:research-salvager": {
         "meanAbsDiff": 30.497,
-        "diffFractionOver24": 0.514,
-        "maxPixelDiff": 146
+        "diffFractionOver24": 0.5146,
+        "maxPixelDiff": 135.7
       },
       "desktop:research-crusher": {
-        "meanAbsDiff": 32.916,
-        "diffFractionOver24": 0.5197,
-        "maxPixelDiff": 145.7
+        "meanAbsDiff": 32.891,
+        "diffFractionOver24": 0.5203,
+        "maxPixelDiff": 137
       },
       "desktop:fabricator-salvager": {
         "meanAbsDiff": 31.583,
@@ -5244,29 +5244,29 @@
         "maxPixelDiff": 129.7
       },
       "phone:depot-market": {
-        "meanAbsDiff": 41.24,
-        "diffFractionOver24": 0.6548,
+        "meanAbsDiff": 40.765,
+        "diffFractionOver24": 0.6492,
         "maxPixelDiff": 192.7
       },
       "phone:depot-research": {
-        "meanAbsDiff": 50.588,
-        "diffFractionOver24": 0.6978,
+        "meanAbsDiff": 50.688,
+        "diffFractionOver24": 0.7036,
         "maxPixelDiff": 184.6
       },
       "phone:depot-fabricator": {
-        "meanAbsDiff": 57.266,
-        "diffFractionOver24": 0.7523,
-        "maxPixelDiff": 186.4
+        "meanAbsDiff": 56.836,
+        "diffFractionOver24": 0.7508,
+        "maxPixelDiff": 145.5
       },
       "phone:depot-salvager": {
-        "meanAbsDiff": 42.257,
-        "diffFractionOver24": 0.6255,
-        "maxPixelDiff": 193.6
+        "meanAbsDiff": 42.839,
+        "diffFractionOver24": 0.6334,
+        "maxPixelDiff": 193.7
       },
       "phone:depot-crusher": {
-        "meanAbsDiff": 43.16,
-        "diffFractionOver24": 0.693,
-        "maxPixelDiff": 185.5
+        "meanAbsDiff": 43.079,
+        "diffFractionOver24": 0.6939,
+        "maxPixelDiff": 183.8
       },
       "phone:market-research": {
         "meanAbsDiff": 35.814,
@@ -5334,5 +5334,5 @@
     "sha256": "47cf35442613b2c3513ea45af2b79d4b00fc88d309df6903d18f23dc181a543a",
     "ok": true
   },
-  "completed": "2026-11-18T12:40:00.256Z"
+  "completed": "2026-11-18T13:30:15.796Z"
 }
