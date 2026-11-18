@@ -453,6 +453,11 @@ function deliveryCandidates(g){
   if(b.remaining>0||b.id===bank.id)continue;
   const def=BLUEPRINTS[b.type];if(!def)continue;
   for(const [id,amount] of Object.entries(b.inventory||{})){
+   // #575: a machine's own feedstock is never an "output". Hauling it to the
+   // bank only to re-deliver it as a priority-3 input burned shuttle trips on
+   // the saturated starter fleet (product ruling #567, follow-up #575). Input
+   // resupply below still tops the buffer up; produced goods still export.
+   if(def.inputs&&id in def.inputs)continue;
    if(amount>=3 && !cooled(b.id,id) && !g.vehicles.some(v=>v.job?.sourceId===b.id&&v.job?.resource===id)){
     // #567: oldest-served-first tie-break among priority-1 outputs; a pair
     // never collected (-1) outranks every previously served pair.
@@ -461,7 +466,15 @@ function deliveryCandidates(g){
   }
   for(const [id,n] of Object.entries(def.inputs)){
    const have=stock(b.inventory,id);
-   if(have<n*2 && stock(g.bank,id)>=n*2 && !cooled(bank.id,id) &&
+   // #585 stranding fix: below the normal n*2 bank threshold, an EMERGENCY
+   // top-up still fires when the buffer cannot fund one more cycle (have<n)
+   // and the bank can (bank>=n). The old n*2 rule stranded usable fuel — bank
+   // 2 sat below 4 while the furnace buffer stuck at 1 < 2/cycle, a halt with
+   // bank fuel >= per-cycle cost. Now a genuine halt leaves bank stock
+   // strictly BELOW the per-cycle cost. Normal resupply (have<n*2, bank>=n*2)
+   // and the #575 feedstock guard above are unchanged.
+   const bankHave=stock(g.bank,id);
+   if(have<n*2 && bankHave>=n && (bankHave>=n*2||have<n) && !cooled(bank.id,id) &&
       !g.vehicles.some(v=>v.job?.destId===b.id&&v.job?.resource===id)){
     candidates.push({source:bank,dest:b,resource:id,amount:Math.min(stock(g.bank,id),n*3),priority:3});
    }
@@ -647,6 +660,13 @@ export function advanceGame(g,seconds){
     if(fits(b.inventory,d.inputs)){
      spend(b.inventory,d.inputs);
      for(const [id,n] of Object.entries(d.outputs)){deposit(b.inventory,id,n*b.level);g.stats.produced+=n*b.level;}
+     // #585: crew-recovered byproduct (salvager diesel trickle) lands straight
+     // in the depot bank on a SUCCESSFUL cycle — new units created, like any
+     // production, never freight. Keeping it out of the bay avoids adding
+     // truck trips on the saturated starter fleet (measured: bay-output fuel
+     // backed the furnace steel bay past the storage alarm). Freight ledgers,
+     // the #575 guard and dispatch ordering are untouched.
+     if(d.byproduct)for(const [id,n] of Object.entries(d.byproduct)){deposit(g.bank,id,n*b.level);g.stats.produced+=n*b.level;}
     }
    }
   }
