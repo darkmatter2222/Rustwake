@@ -328,15 +328,17 @@ export function makeBuilding(b,time){
   group.add(ffan);parts.push({kind:"a03",node:ffan,role:"foundryFan",axis:"y"});
   mkEmit("emit:stackA",-.8,4.22,-.85);
   mkEmit("emit:stackB",.8,3.82,-.85);
- } else if(kind==="crusher"){
+ } else if(kind==="crusher"||kind==="screening"){
   // ART-02 (#348): Crusher + screening plant. Open-front crushing chamber with
   // counter-rotating toothed rollers (pivot:rollerA carries the drive flywheel),
   // stepped intake hopper as the roof silhouette, and the ART-02 "sorter" outcome:
   // an oscillating screen deck (pivot:screen) feeding TWIN discharge chutes — the
   // visual separation stage for the sim's real scrap -> iron + stone outputs.
-  // V2 has no standalone buildable "sorter" (content/simulation registry is outside
-  // the ART-02 lease); the separation stage lives here. ART-03 (#349) rebuilt the
-  // refinery into its own distillation plant below; this crusher is UNCHANGED.
+  // #552: the standalone Screening Plant buildable binds to this SAME accepted rig
+  // (binding-only exception; geometry UNCHANGED). It therefore shares the crusher's
+  // silhouette by design — a distinct screening-only rig is a serialized world.js
+  // geometry follow-up. ART-03 (#349) rebuilt the refinery into its own distillation
+  // plant below; this crusher branch is UNCHANGED.
   for(const s of [-1,1])add(s*1.1,1.09,-.2,.3,1.06,1.9,"body");
   add(0,1.09,-1,2.5,1.06,.3,"body");
   add(0,.62,-.15,2.2,.16,1.6,"dark");
