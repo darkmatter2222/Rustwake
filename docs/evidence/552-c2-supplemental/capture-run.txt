@@ -1,0 +1,129 @@
+Rustwake #552 C2.1 deployed supplemental: PASS_NUMERIC_ONLY source_sha=f0acf5a2b1e831bc0ba88fa0ab50a84547a95887 expected=f0acf5a2b1e831bc0ba88fa0ab50a84547a95887 C:\Users\ryans\AppData\Local\Temp\rw-qwen\dev-552\docs\evidence\552-c2-supplemental
+{
+  "view": "desktop",
+  "failures": 0,
+  "world3d": "ready",
+  "rafDelta": 7,
+  "webgl": 1,
+  "crusher": {
+    "id": 7,
+    "type": "crusher",
+    "x": 9,
+    "z": 9,
+    "remaining": 0,
+    "paid": {
+      "credits": 260,
+      "scrap": 46,
+      "stone": 28
+    }
+  },
+  "screening": {
+    "id": 8,
+    "type": "screening",
+    "x": 10,
+    "z": 9,
+    "remaining": 0,
+    "paid": {
+      "credits": 230,
+      "scrap": 42,
+      "stone": 22
+    }
+  },
+  "adjacent": true,
+  "roadPaths": {
+    "crusher": true,
+    "screening": true
+  },
+  "machineCount": 8,
+  "onScreen": {
+    "crusher": true,
+    "screening": true,
+    "sizes": {
+      "crusher": {
+        "w": 155.9170512734206,
+        "h": 154.57450081161676
+      },
+      "screening": {
+        "w": 155.9170512734206,
+        "h": 154.57450081161676
+      }
+    }
+  },
+  "inspectors": {
+    "crusher": true,
+    "screening": true
+  },
+  "documentScroll": false,
+  "pageErrors": 0,
+  "failedRequests": 0,
+  "screenshots": [
+    "desktop-pair.png",
+    "desktop-crusher-inspector.png",
+    "desktop-screening-inspector.png",
+    "desktop-context.png"
+  ]
+}
+{
+  "view": "phone",
+  "failures": 0,
+  "world3d": "ready",
+  "rafDelta": 8,
+  "webgl": 1,
+  "crusher": {
+    "id": 7,
+    "type": "crusher",
+    "x": 9,
+    "z": 9,
+    "remaining": 0,
+    "paid": {
+      "credits": 260,
+      "scrap": 46,
+      "stone": 28
+    }
+  },
+  "screening": {
+    "id": 8,
+    "type": "screening",
+    "x": 10,
+    "z": 9,
+    "remaining": 0,
+    "paid": {
+      "credits": 230,
+      "scrap": 42,
+      "stone": 22
+    }
+  },
+  "adjacent": true,
+  "roadPaths": {
+    "crusher": true,
+    "screening": true
+  },
+  "machineCount": 8,
+  "onScreen": {
+    "crusher": true,
+    "screening": true,
+    "sizes": {
+      "crusher": {
+        "w": 125.32425754123744,
+        "h": 124.24513156711834
+      },
+      "screening": {
+        "w": 125.32425754123744,
+        "h": 124.24513156711828
+      }
+    }
+  },
+  "inspectors": {
+    "crusher": true,
+    "screening": true
+  },
+  "documentScroll": false,
+  "pageErrors": 0,
+  "failedRequests": 0,
+  "screenshots": [
+    "phone-pair.png",
+    "phone-crusher-inspector.png",
+    "phone-screening-inspector.png",
+    "phone-context.png"
+  ]
+}
