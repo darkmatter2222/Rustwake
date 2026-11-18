@@ -453,6 +453,11 @@ function deliveryCandidates(g){
   if(b.remaining>0||b.id===bank.id)continue;
   const def=BLUEPRINTS[b.type];if(!def)continue;
   for(const [id,amount] of Object.entries(b.inventory||{})){
+   // #575: a machine's own feedstock is never an "output". Hauling it to the
+   // bank only to re-deliver it as a priority-3 input burned shuttle trips on
+   // the saturated starter fleet (product ruling #567, follow-up #575). Input
+   // resupply below still tops the buffer up; produced goods still export.
+   if(def.inputs&&id in def.inputs)continue;
    if(amount>=3 && !cooled(b.id,id) && !g.vehicles.some(v=>v.job?.sourceId===b.id&&v.job?.resource===id)){
     // #567: oldest-served-first tie-break among priority-1 outputs; a pair
     // never collected (-1) outranks every previously served pair.

@@ -50,6 +50,9 @@ function mirrorCandidates(g){
   if(b.remaining>0||b.id===bank.id)continue;
   const def=BLUEPRINTS[b.type];if(!def)continue;
   for(const [id,amount] of Object.entries(b.inventory||{})){
+   // #575 MIRROR SYNC: verbatim copy of the new simulation.js guard — a
+   // machine's own feedstock (def.inputs) is never an output candidate.
+   if(def.inputs&&id in def.inputs)continue;
    if(amount>=3 && !cooled(b.id,id) && !g.vehicles.some(v=>v.job?.sourceId===b.id&&v.job?.resource===id)){
     const sv=g?.freightServedAt?.[b.id+":"+id];
     candidates.push({source:b,dest:bank,resource:id,amount:Math.min(15,Math.floor(amount)),priority:1,servedAt:Number.isFinite(sv)?sv:-1});
