@@ -1,0 +1,42 @@
+{
+  "issue": 350,
+  "source_sha": "e7a706addc116761b8142b1b33204baec0a4f831",
+  "metric": "rendered-domain motion clauses of scripts/capture-art04.mjs (pairMetrics meanAbsDiff >= 1 on unamputated clips)",
+  "started": "2026-11-18T12:48:28.942Z",
+  "controls": [
+    {
+      "id": "C4-revert-motion-clock",
+      "kind": "motion-mutation",
+      "description": "art04Pose returns the all-zero parked pose unconditionally (sim/work clocks still advance); the FIRST rendered motion clause (research dish/feed) must fail",
+      "baseSourceSha": "e7a706addc116761b8142b1b33204baec0a4f831",
+      "mutatedArt04Sha256": "292d7a966c384823ea7807b5017e423e376212d2ff64ae8a4bd3e3022636623a",
+      "expected": "FAIL",
+      "expectedError": "/MOTION_NOT_VISIBLE_IN_RENDER research/",
+      "captureExitCode": 1,
+      "reportStatus": "FAIL",
+      "errors": [
+        "Error: MOTION_NOT_VISIBLE_IN_RENDER research: {\"clocks\":[17.213,18.477],\"simFloors\":[17,18],\"clips\":[{\"file\":\"desktop-motion-research-t1.png\",\"clipCss\":{\"x\":330.2706025414126,\"y\":317.65351951946536,\"width\":163.9170441361046,\"height\":186.75107359313574},\"clamped\":false},{\"file\":\"desktop-motion-research-t2.png\",\"clipCss\":{\"x\":330.2706025414126,\"y\":317.65351951946536,\"width\":163.9170441361046,\"height\":186.75107359313574},\"clamped\":false}],\"pair\":{\"meanAbsDiff\":0.019,\"diffFractionOver24\":0,\"maxPixelDiff\":19.8}}\n    at file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-350/scripts/capture-art04.mjs:1055:15"
+      ],
+      "verdict": "FAIL",
+      "ok": true
+    },
+    {
+      "id": "C5-park-market-ambient",
+      "kind": "motion-mutation",
+      "description": "only the market beam (scale) and awning channels parked; research/fabricator still animate; the MARKET ambient pair clause must fail on its own",
+      "baseSourceSha": "e7a706addc116761b8142b1b33204baec0a4f831",
+      "mutatedArt04Sha256": "4bb838cf4012ddf0795c54228f55b48e665e9b325db2c23e35587598fb44329c",
+      "expected": "FAIL",
+      "expectedError": "/MOTION_NOT_VISIBLE_IN_RENDER market/",
+      "captureExitCode": 1,
+      "reportStatus": "FAIL",
+      "errors": [
+        "Error: MOTION_NOT_VISIBLE_IN_RENDER market: {\"clocks\":[20.763,21.976],\"simFloors\":[20,21],\"clips\":[{\"file\":\"desktop-motion-market-t1.png\",\"clipCss\":{\"x\":596.1876422050119,\"y\":459.7179859824489,\"width\":163.91704413610455,\"height\":169.77602816135982},\"clamped\":false},{\"file\":\"desktop-motion-market-t2.png\",\"clipCss\":{\"x\":596.1876422050119,\"y\":459.7179859824489,\"width\":163.91704413610455,\"height\":169.77602816135982},\"clamped\":false}],\"pair\":{\"meanAbsDiff\":0,\"diffFractionOver24\":0,\"maxPixelDiff\":0}}\n    at file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-350/scripts/capture-art04.mjs:1055:15"
+      ],
+      "verdict": "FAIL",
+      "ok": true
+    }
+  ],
+  "ok": true,
+  "status": "CONTROLS_OK"
+}
