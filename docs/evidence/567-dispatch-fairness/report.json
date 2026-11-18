@@ -1,0 +1,1082 @@
+{
+  "version": 1,
+  "issue": 567,
+  "task": "dispatch fairness — furnace output freight reaches the bank unattended on a fresh untouched yard (real production build)",
+  "build": "production-preview",
+  "source_sha": "c9af31da3498c768a8cb99e95f2255f189e93681",
+  "port": 4569,
+  "portNote": null,
+  "started": "2026-11-18T16:09:26.693Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "screenshots": [
+        "desktop-fresh-yard.png",
+        "desktop-t30.png",
+        "desktop-t60.png",
+        "desktop-t90.png",
+        "desktop-t120.png"
+      ],
+      "proof": {
+        "stamps": [
+          {
+            "label": "fresh-yard",
+            "elapsed": 1.0832000000000002,
+            "bankSteel": 20,
+            "furnaceSteel": 0,
+            "alarmIds": [],
+            "frames": 14,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 11.17485,
+                "z": 12,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              },
+              {
+                "id": 2,
+                "x": 11,
+                "z": 8.48684,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 2,
+                  "destId": 4,
+                  "phase": "toSource"
+                }
+              },
+              {
+                "id": 3,
+                "x": 12.9332,
+                "z": 12,
+                "job": {
+                  "resource": "fuel",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              }
+            ],
+            "screenshot": "desktop-fresh-yard.png"
+          },
+          {
+            "label": "t30",
+            "elapsed": 34.12810000000001,
+            "bankSteel": 20,
+            "furnaceSteel": 0,
+            "alarmIds": [],
+            "frames": 578,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 11,
+                "z": 8.902274999999971,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 2,
+                  "destId": 4,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 2,
+                "x": 11.272899999999982,
+                "z": 8,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 3,
+                "x": 9.172799999999974,
+                "z": 8,
+                "job": {
+                  "resource": "copper",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              }
+            ],
+            "screenshot": "desktop-t30.png"
+          },
+          {
+            "label": "t60",
+            "elapsed": 62.86700000000006,
+            "bankSteel": 24,
+            "furnaceSteel": 0,
+            "alarmIds": [],
+            "frames": 1044,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 12.517874999999982,
+                "z": 12,
+                "job": {
+                  "resource": "fuel",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 2,
+                "x": 11.58,
+                "z": 12,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              },
+              {
+                "id": 3,
+                "x": 8.613999999999985,
+                "z": 8,
+                "job": {
+                  "resource": "scrap",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              }
+            ],
+            "screenshot": "desktop-t60.png"
+          },
+          {
+            "label": "t90",
+            "elapsed": 91.40639999999965,
+            "bankSteel": 28,
+            "furnaceSteel": 0,
+            "alarmIds": [],
+            "frames": 1510,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 15.849924999999974,
+                "z": 12,
+                "job": {
+                  "resource": "copper",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              },
+              {
+                "id": 2,
+                "x": 11.461360000000013,
+                "z": 12,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 3,
+                "x": 8.926,
+                "z": 8,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              }
+            ],
+            "screenshot": "desktop-t90.png"
+          },
+          {
+            "label": "t120",
+            "elapsed": 123.82869999999917,
+            "bankSteel": 32,
+            "furnaceSteel": 0,
+            "alarmIds": [],
+            "frames": 2047,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 11,
+                "z": 8.045,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              },
+              {
+                "id": 2,
+                "x": 12.77058000000001,
+                "z": 8,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 3,
+                "x": 12.273399999999965,
+                "z": 12,
+                "job": {
+                  "resource": "scrap",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              }
+            ],
+            "screenshot": "desktop-t120.png"
+          }
+        ],
+        "frames": {
+          "perStamp": [
+            {
+              "label": "fresh-yard",
+              "frames": 14
+            },
+            {
+              "label": "t30",
+              "frames": 578
+            },
+            {
+              "label": "t60",
+              "frames": 1044
+            },
+            {
+              "label": "t90",
+              "frames": 1510
+            },
+            {
+              "label": "t120",
+              "frames": 2047
+            }
+          ],
+          "advancing": true
+        },
+        "motion": {
+          "stamps": 5,
+          "movedCount": 12,
+          "moved": [
+            {
+              "stamp": "t30",
+              "id": 1,
+              "from": {
+                "x": 11.17485,
+                "z": 12
+              },
+              "to": {
+                "x": 11,
+                "z": 8.902274999999971
+              }
+            },
+            {
+              "stamp": "t30",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 8.48684
+              },
+              "to": {
+                "x": 11.272899999999982,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t30",
+              "id": 3,
+              "from": {
+                "x": 12.9332,
+                "z": 12
+              },
+              "to": {
+                "x": 9.172799999999974,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t60",
+              "id": 1,
+              "from": {
+                "x": 11.17485,
+                "z": 12
+              },
+              "to": {
+                "x": 12.517874999999982,
+                "z": 12
+              }
+            },
+            {
+              "stamp": "t60",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 8.48684
+              },
+              "to": {
+                "x": 11.58,
+                "z": 12
+              }
+            },
+            {
+              "stamp": "t60",
+              "id": 3,
+              "from": {
+                "x": 12.9332,
+                "z": 12
+              },
+              "to": {
+                "x": 8.613999999999985,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t90",
+              "id": 1,
+              "from": {
+                "x": 11.17485,
+                "z": 12
+              },
+              "to": {
+                "x": 15.849924999999974,
+                "z": 12
+              }
+            },
+            {
+              "stamp": "t90",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 8.48684
+              },
+              "to": {
+                "x": 11.461360000000013,
+                "z": 12
+              }
+            },
+            {
+              "stamp": "t90",
+              "id": 3,
+              "from": {
+                "x": 12.9332,
+                "z": 12
+              },
+              "to": {
+                "x": 8.926,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t120",
+              "id": 1,
+              "from": {
+                "x": 11.17485,
+                "z": 12
+              },
+              "to": {
+                "x": 11,
+                "z": 8.045
+              }
+            },
+            {
+              "stamp": "t120",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 8.48684
+              },
+              "to": {
+                "x": 12.77058000000001,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t120",
+              "id": 3,
+              "from": {
+                "x": 12.9332,
+                "z": 12
+              },
+              "to": {
+                "x": 12.273399999999965,
+                "z": 12
+              }
+            }
+          ],
+          "assertion": "PASS"
+        },
+        "bankSteel": {
+          "series": [
+            {
+              "elapsed": 0,
+              "steel": 20,
+              "source": "INITIAL_BANK (starter baseline)"
+            },
+            {
+              "elapsed": 1.0832000000000002,
+              "steel": 20,
+              "source": "persisted save @ fresh-yard"
+            },
+            {
+              "elapsed": 34.12810000000001,
+              "steel": 20,
+              "source": "persisted save @ t30"
+            },
+            {
+              "elapsed": 62.86700000000006,
+              "steel": 24,
+              "source": "persisted save @ t60"
+            },
+            {
+              "elapsed": 91.40639999999965,
+              "steel": 28,
+              "source": "persisted save @ t90"
+            },
+            {
+              "elapsed": 123.82869999999917,
+              "steel": 32,
+              "source": "persisted save @ t120"
+            }
+          ],
+          "final": 32,
+          "elapsedAtRead": 123.82869999999917,
+          "gate": "PASS (> 20, strictly rising)",
+          "nodeComparison": {
+            "nodeFigure": 48,
+            "browserMeasured": 32,
+            "note": "rAF granularity vs 0.5s substeps — difference disclosed, equality NOT asserted"
+          }
+        },
+        "furnaceBay": {
+          "id": 4,
+          "series": [
+            {
+              "label": "fresh-yard",
+              "elapsed": 1.0832000000000002,
+              "steel": 0
+            },
+            {
+              "label": "t30",
+              "elapsed": 34.12810000000001,
+              "steel": 0
+            },
+            {
+              "label": "t60",
+              "elapsed": 62.86700000000006,
+              "steel": 0
+            },
+            {
+              "label": "t90",
+              "elapsed": 91.40639999999965,
+              "steel": 0
+            },
+            {
+              "label": "t120",
+              "elapsed": 123.82869999999917,
+              "steel": 0
+            }
+          ],
+          "max": 0,
+          "notMonotonePiling": true,
+          "note": "read-only from the persisted save; bay steel rises and falls as hauls collect output"
+        },
+        "storage4": {
+          "latched": false,
+          "alarmIdsPerStamp": [
+            {
+              "label": "fresh-yard",
+              "ids": []
+            },
+            {
+              "label": "t30",
+              "ids": []
+            },
+            {
+              "label": "t60",
+              "ids": []
+            },
+            {
+              "label": "t90",
+              "ids": []
+            },
+            {
+              "label": "t120",
+              "ids": []
+            }
+          ],
+          "note": "alarms are derived, not persisted — computed read-only from each save via src/alarms.js alarmsState"
+        },
+        "wallMs": 132153,
+        "simElapsedAtFinal": 123.82869999999917
+      },
+      "status": "PASS_NUMERIC_ONLY",
+      "errors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "screenshots": [
+        "phone-fresh-yard.png",
+        "phone-t30.png",
+        "phone-t60.png",
+        "phone-t90.png",
+        "phone-t120.png"
+      ],
+      "proof": {
+        "stamps": [
+          {
+            "label": "fresh-yard",
+            "elapsed": 3.8232,
+            "bankSteel": 20,
+            "furnaceSteel": 0,
+            "alarmIds": [],
+            "frames": 61,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 14.397799999999998,
+                "z": 12,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 2,
+                "x": 11,
+                "z": 10.940320000000002,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 2,
+                  "destId": 4,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 3,
+                "x": 13.3536,
+                "z": 12,
+                "job": {
+                  "resource": "fuel",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              }
+            ],
+            "screenshot": "phone-fresh-yard.png"
+          },
+          {
+            "label": "t30",
+            "elapsed": 32.25590000000002,
+            "bankSteel": 20,
+            "furnaceSteel": 0,
+            "alarmIds": [],
+            "frames": 532,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 11.890224999999997,
+                "z": 8,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 2,
+                "x": 11.51032000000001,
+                "z": 12,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 3,
+                "x": 8.40660000000002,
+                "z": 8,
+                "job": {
+                  "resource": "copper",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              }
+            ],
+            "screenshot": "phone-t30.png"
+          },
+          {
+            "label": "t60",
+            "elapsed": 60.52510000000025,
+            "bankSteel": 24,
+            "furnaceSteel": 0,
+            "alarmIds": [],
+            "frames": 981,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 14.067499999999985,
+                "z": 12,
+                "job": {
+                  "resource": "fuel",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              },
+              {
+                "id": 2,
+                "x": 14.481419999999973,
+                "z": 12,
+                "job": {
+                  "resource": "fuel",
+                  "sourceId": 2,
+                  "destId": 4,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 3,
+                "x": 11,
+                "z": 10.08660000000002,
+                "job": {
+                  "resource": "scrap",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              }
+            ],
+            "screenshot": "phone-t60.png"
+          },
+          {
+            "label": "t90",
+            "elapsed": 93.07409999999994,
+            "bankSteel": 28,
+            "furnaceSteel": 0,
+            "alarmIds": [],
+            "frames": 1498,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 11,
+                "z": 11.930299999999974,
+                "job": {
+                  "resource": "copper",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              },
+              {
+                "id": 2,
+                "x": 12.649940000000024,
+                "z": 8,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 3,
+                "x": 12.386600000000005,
+                "z": 8,
+                "job": {
+                  "resource": "scrap",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              }
+            ],
+            "screenshot": "phone-t90.png"
+          },
+          {
+            "label": "t120",
+            "elapsed": 121.97299999999987,
+            "bankSteel": 40,
+            "furnaceSteel": 4,
+            "alarmIds": [],
+            "frames": 1947,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 10.858800000000008,
+                "z": 8,
+                "job": {
+                  "resource": "scrap",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 2,
+                "x": 7.774259999999977,
+                "z": 8,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              },
+              {
+                "id": 3,
+                "x": 11.653599999999976,
+                "z": 8,
+                "job": {
+                  "resource": "fuel",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              }
+            ],
+            "screenshot": "phone-t120.png"
+          }
+        ],
+        "frames": {
+          "perStamp": [
+            {
+              "label": "fresh-yard",
+              "frames": 61
+            },
+            {
+              "label": "t30",
+              "frames": 532
+            },
+            {
+              "label": "t60",
+              "frames": 981
+            },
+            {
+              "label": "t90",
+              "frames": 1498
+            },
+            {
+              "label": "t120",
+              "frames": 1947
+            }
+          ],
+          "advancing": true
+        },
+        "motion": {
+          "stamps": 5,
+          "movedCount": 12,
+          "moved": [
+            {
+              "stamp": "t30",
+              "id": 1,
+              "from": {
+                "x": 14.397799999999998,
+                "z": 12
+              },
+              "to": {
+                "x": 11.890224999999997,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t30",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 10.940320000000002
+              },
+              "to": {
+                "x": 11.51032000000001,
+                "z": 12
+              }
+            },
+            {
+              "stamp": "t30",
+              "id": 3,
+              "from": {
+                "x": 13.3536,
+                "z": 12
+              },
+              "to": {
+                "x": 8.40660000000002,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t60",
+              "id": 1,
+              "from": {
+                "x": 14.397799999999998,
+                "z": 12
+              },
+              "to": {
+                "x": 14.067499999999985,
+                "z": 12
+              }
+            },
+            {
+              "stamp": "t60",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 10.940320000000002
+              },
+              "to": {
+                "x": 14.481419999999973,
+                "z": 12
+              }
+            },
+            {
+              "stamp": "t60",
+              "id": 3,
+              "from": {
+                "x": 13.3536,
+                "z": 12
+              },
+              "to": {
+                "x": 11,
+                "z": 10.08660000000002
+              }
+            },
+            {
+              "stamp": "t90",
+              "id": 1,
+              "from": {
+                "x": 14.397799999999998,
+                "z": 12
+              },
+              "to": {
+                "x": 11,
+                "z": 11.930299999999974
+              }
+            },
+            {
+              "stamp": "t90",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 10.940320000000002
+              },
+              "to": {
+                "x": 12.649940000000024,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t90",
+              "id": 3,
+              "from": {
+                "x": 13.3536,
+                "z": 12
+              },
+              "to": {
+                "x": 12.386600000000005,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t120",
+              "id": 1,
+              "from": {
+                "x": 14.397799999999998,
+                "z": 12
+              },
+              "to": {
+                "x": 10.858800000000008,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t120",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 10.940320000000002
+              },
+              "to": {
+                "x": 7.774259999999977,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t120",
+              "id": 3,
+              "from": {
+                "x": 13.3536,
+                "z": 12
+              },
+              "to": {
+                "x": 11.653599999999976,
+                "z": 8
+              }
+            }
+          ],
+          "assertion": "PASS"
+        },
+        "bankSteel": {
+          "series": [
+            {
+              "elapsed": 0,
+              "steel": 20,
+              "source": "INITIAL_BANK (starter baseline)"
+            },
+            {
+              "elapsed": 3.8232,
+              "steel": 20,
+              "source": "persisted save @ fresh-yard"
+            },
+            {
+              "elapsed": 32.25590000000002,
+              "steel": 20,
+              "source": "persisted save @ t30"
+            },
+            {
+              "elapsed": 60.52510000000025,
+              "steel": 24,
+              "source": "persisted save @ t60"
+            },
+            {
+              "elapsed": 93.07409999999994,
+              "steel": 28,
+              "source": "persisted save @ t90"
+            },
+            {
+              "elapsed": 121.97299999999987,
+              "steel": 40,
+              "source": "persisted save @ t120"
+            }
+          ],
+          "final": 40,
+          "elapsedAtRead": 121.97299999999987,
+          "gate": "PASS (> 20, strictly rising)",
+          "nodeComparison": {
+            "nodeFigure": 48,
+            "browserMeasured": 40,
+            "note": "rAF granularity vs 0.5s substeps — difference disclosed, equality NOT asserted"
+          }
+        },
+        "furnaceBay": {
+          "id": 4,
+          "series": [
+            {
+              "label": "fresh-yard",
+              "elapsed": 3.8232,
+              "steel": 0
+            },
+            {
+              "label": "t30",
+              "elapsed": 32.25590000000002,
+              "steel": 0
+            },
+            {
+              "label": "t60",
+              "elapsed": 60.52510000000025,
+              "steel": 0
+            },
+            {
+              "label": "t90",
+              "elapsed": 93.07409999999994,
+              "steel": 0
+            },
+            {
+              "label": "t120",
+              "elapsed": 121.97299999999987,
+              "steel": 4
+            }
+          ],
+          "max": 4,
+          "notMonotonePiling": true,
+          "note": "read-only from the persisted save; bay steel rises and falls as hauls collect output"
+        },
+        "storage4": {
+          "latched": false,
+          "alarmIdsPerStamp": [
+            {
+              "label": "fresh-yard",
+              "ids": []
+            },
+            {
+              "label": "t30",
+              "ids": []
+            },
+            {
+              "label": "t60",
+              "ids": []
+            },
+            {
+              "label": "t90",
+              "ids": []
+            },
+            {
+              "label": "t120",
+              "ids": []
+            }
+          ],
+          "note": "alarms are derived, not persisted — computed read-only from each save via src/alarms.js alarmsState"
+        },
+        "wallMs": 128481,
+        "simElapsedAtFinal": 121.97299999999987
+      },
+      "status": "PASS_NUMERIC_ONLY",
+      "errors": [],
+      "failedRequests": []
+    }
+  ],
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "gate": {
+    "bar": "bank steel > 20 (strictly rising from the starter 20) by sim elapsed >= 120s",
+    "nodeReference": {
+      "harness": "scripts/measure-567.mjs",
+      "bankSteelAt120s": 48,
+      "substep": "0.5s fixed"
+    },
+    "granularityDisclosure": "The browser advances at rAF granularity (dt capped 0.07s per frame); the node harness steps at fixed 0.5s substeps. Measured browser values legitimately differ from the node figure 48. The gate asserted here is the product bar (> 20, strictly rising), NOT equality with 48 — requiring 48 would be a fabricated gate."
+  },
+  "limitations": [
+    "Local production preview only (pnpm build + vite preview of dist) — the live hosted receipt is produced at release by the release engineer; this is NOT a release and NOT visual acceptance",
+    "One headless Chromium/SwiftShader run; phone view is EMULATED 390x844 dpr2 (isMobile/hasTouch), not a physical device; no physical display",
+    "Numeric proofs do not certify visual fidelity or art parity — sponsor screenshot+motion review required at G1 (#276), still owed",
+    "FRESH UNTOUCHED YARD: no seeds, no builds, no bank mutation, no speed changes, no hand-stocked inventory, no save injection. Each view is a fresh browser context with empty localStorage; the app's own createGame starter yard runs at normal speed. The fresh yard IS the default player-reachable state (product ruling)",
+    "Browser rAF granularity differs from the node harness's 0.5s substeps, so the measured bank-steel value differs from the node figure 48; the asserted gate is the product bar (> 20, strictly rising from the starter 20), and the measured number is reported as-is",
+    "Game readings come from the app's own periodic persist (SAVE_KEY, ~4.2s wall cadence) and its own fleetProbe stamp (~270ms); stamp elapsed values are therefore quantized to the persist cadence. The only page-side instrumentation is a read-only rAF frame counter",
+    "storage-4 is DERIVED, not stored: the save does not persist alarm state, so alarm ids are computed read-only from each persisted save via the pure src/alarms.js read model (alarmsState never mutates g)",
+    "This capture proves the OUTPUT-side player-visible promise that the #558 sibling harness disclosed as BLOCKED by the pre-#573 dispatch-starvation defect (0 player output jobs in 120s on both base and fix). Deterministic gate coverage lives in tests/dispatchGate567.test.mjs + tests/dispatchFairness.test.mjs and scripts/measure-567.mjs"
+  ],
+  "buildMs": 1628,
+  "buildLogTail": "rendering chunks...\ncomputing gzip size...\n\u001b[2mdist/\u001b[22m\u001b[32mindex.html                 \u001b[39m\u001b[1m\u001b[2m  0.59 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:   0.38 kB\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[35massets/index-bzrIfhZT.css  \u001b[39m\u001b[1m\u001b[2m 44.56 kB\u001b[22m\u001b[1m\u001b[22m\u001b[2m │ gzip:   9.12 kB\u001b[22m\n\u001b[2mdist/\u001b[22m\u001b[36massets/index-QRx-zA8q.js   \u001b[39m\u001b[1m\u001b[33m864.05 kB\u001b[39m\u001b[22m\u001b[2m │ gzip: 238.02 kB\u001b[22m\n\u001b[32m✓ built in 1.15s\u001b[39m",
+  "finished": "2026-11-18T16:13:49.524Z"
+}
