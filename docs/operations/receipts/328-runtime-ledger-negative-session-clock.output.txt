@@ -1,0 +1,36 @@
+# captured: node scripts/verify-session-ledger.mjs --ledger docs/operations/receipts/328-runtime-ledger-negative-session-clock.json
+# exit code: 1
+# census auto-loaded from dispatch_census.source (the genuine host census)
+{
+  "ok": false,
+  "violations": [
+    {
+      "code": "E_SESSION_CLOCK",
+      "detail": "aaceb00b9092592a2 started_at \"tbd\" does not parse as a clock"
+    },
+    {
+      "code": "E_SESSION_CLOCK",
+      "detail": "a7a0568b542c307c6 started_at \"tbd\" does not parse as a clock"
+    },
+    {
+      "code": "E_CHILD_CAP",
+      "detail": "6 children live at 2026-11-17T19:01:37.767Z > 4"
+    },
+    {
+      "code": "E_SESSION_CAP",
+      "detail": "7 sessions live at 2026-11-17T19:01:37.767Z > 5"
+    },
+    {
+      "code": "E_CHILD_CAP",
+      "detail": "5 children live at 2026-11-17T19:06:10.656Z > 4"
+    },
+    {
+      "code": "E_SESSION_CAP",
+      "detail": "6 sessions live at 2026-11-17T19:06:10.656Z > 5"
+    }
+  ],
+  "peak_children": 6,
+  "peak_sessions": 7,
+  "census_cross_check": "on"
+}
+EXIT=1

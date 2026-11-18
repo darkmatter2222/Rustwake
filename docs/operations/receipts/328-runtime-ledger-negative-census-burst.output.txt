@@ -1,0 +1,16 @@
+# captured: node scripts/verify-session-ledger.mjs --ledger docs/operations/receipts/328-runtime-ledger-negative-census-burst.json
+# exit code: 1
+# census auto-loaded from dispatch_census.source (a DERIVED census committed beside this negative)
+{
+  "ok": false,
+  "violations": [
+    {
+      "code": "E_DISPATCH_BURST",
+      "detail": "census burst at 2026-11-17T19:22:12.104Z dispatched 6 children > 4"
+    }
+  ],
+  "peak_children": 3,
+  "peak_sessions": 4,
+  "census_cross_check": "on"
+}
+EXIT=1

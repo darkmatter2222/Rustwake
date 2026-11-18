@@ -1,0 +1,24 @@
+# captured: node scripts/verify-session-ledger.mjs --ledger docs/operations/receipts/328-runtime-ledger-negative-window-shift.json
+# exit code: 1
+# census auto-loaded from dispatch_census.source (the genuine host census)
+{
+  "ok": false,
+  "violations": [
+    {
+      "code": "E_CHILD_OUTSIDE_WINDOW",
+      "detail": "aaceb00b9092592a2 started_at 2026-11-17T19:01:37.767Z precedes window.from 2026-11-17T19:12:00.000Z"
+    },
+    {
+      "code": "E_CHILD_OUTSIDE_WINDOW",
+      "detail": "a7a0568b542c307c6 started_at 2026-11-17T19:01:37.804Z precedes window.from 2026-11-17T19:12:00.000Z"
+    },
+    {
+      "code": "E_CHILD_OUTSIDE_WINDOW",
+      "detail": "affaa3a5fb522634f started_at 2026-11-17T19:01:37.839Z precedes window.from 2026-11-17T19:12:00.000Z"
+    }
+  ],
+  "peak_children": 3,
+  "peak_sessions": 4,
+  "census_cross_check": "on"
+}
+EXIT=1

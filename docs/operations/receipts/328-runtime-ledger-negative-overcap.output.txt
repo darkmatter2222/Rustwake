@@ -1,0 +1,93 @@
+{
+  "ok": false,
+  "violations": [
+    {
+      "code": "E_PRIMARY_COUNT",
+      "detail": "expected exactly 1 primary, found 2"
+    },
+    {
+      "code": "E_RECURSIVE_SPAWN",
+      "detail": "NEGATIVE-CHILD-5 spawned_by NEGATIVE-CHILD-1 is not the primary"
+    },
+    {
+      "code": "E_NO_FINISH",
+      "detail": "NEGATIVE-CHILD-6 finished without finished_at/outcome"
+    },
+    {
+      "code": "E_BROWSER_MULTIPLE",
+      "detail": "2 browser holders at 2026-11-17T12:03:00.000Z: NEGATIVE-CHILD-1,NEGATIVE-CHILD-2"
+    },
+    {
+      "code": "E_LEASE_CONFLICT",
+      "detail": "src/App.jsx held by both NEGATIVE-CHILD-1 and NEGATIVE-CHILD-2 at 2026-11-17T12:03:00.000Z"
+    },
+    {
+      "code": "E_BROWSER_MULTIPLE",
+      "detail": "2 browser holders at 2026-11-17T12:04:00.000Z: NEGATIVE-CHILD-1,NEGATIVE-CHILD-2"
+    },
+    {
+      "code": "E_LEASE_CONFLICT",
+      "detail": "src/App.jsx held by both NEGATIVE-CHILD-1 and NEGATIVE-CHILD-2 at 2026-11-17T12:04:00.000Z"
+    },
+    {
+      "code": "E_SESSION_CAP",
+      "detail": "6 sessions live at 2026-11-17T12:05:00.000Z > 5"
+    },
+    {
+      "code": "E_BROWSER_MULTIPLE",
+      "detail": "2 browser holders at 2026-11-17T12:05:00.000Z: NEGATIVE-CHILD-1,NEGATIVE-CHILD-2"
+    },
+    {
+      "code": "E_RELEASE_MULTIPLE",
+      "detail": "2 release engineers at 2026-11-17T12:05:00.000Z"
+    },
+    {
+      "code": "E_LEASE_CONFLICT",
+      "detail": "src/App.jsx held by both NEGATIVE-CHILD-1 and NEGATIVE-CHILD-2 at 2026-11-17T12:05:00.000Z"
+    },
+    {
+      "code": "E_CHILD_CAP",
+      "detail": "5 children live at 2026-11-17T12:06:00.000Z > 4"
+    },
+    {
+      "code": "E_SESSION_CAP",
+      "detail": "7 sessions live at 2026-11-17T12:06:00.000Z > 5"
+    },
+    {
+      "code": "E_BROWSER_MULTIPLE",
+      "detail": "2 browser holders at 2026-11-17T12:06:00.000Z: NEGATIVE-CHILD-1,NEGATIVE-CHILD-2"
+    },
+    {
+      "code": "E_RELEASE_MULTIPLE",
+      "detail": "2 release engineers at 2026-11-17T12:06:00.000Z"
+    },
+    {
+      "code": "E_LEASE_CONFLICT",
+      "detail": "src/App.jsx held by both NEGATIVE-CHILD-1 and NEGATIVE-CHILD-2 at 2026-11-17T12:06:00.000Z"
+    },
+    {
+      "code": "E_CHILD_CAP",
+      "detail": "6 children live at 2026-11-17T12:07:00.000Z > 4"
+    },
+    {
+      "code": "E_SESSION_CAP",
+      "detail": "8 sessions live at 2026-11-17T12:07:00.000Z > 5"
+    },
+    {
+      "code": "E_BROWSER_MULTIPLE",
+      "detail": "2 browser holders at 2026-11-17T12:07:00.000Z: NEGATIVE-CHILD-1,NEGATIVE-CHILD-2"
+    },
+    {
+      "code": "E_RELEASE_MULTIPLE",
+      "detail": "2 release engineers at 2026-11-17T12:07:00.000Z"
+    },
+    {
+      "code": "E_LEASE_CONFLICT",
+      "detail": "src/App.jsx held by both NEGATIVE-CHILD-1 and NEGATIVE-CHILD-2 at 2026-11-17T12:07:00.000Z"
+    }
+  ],
+  "peak_children": 6,
+  "peak_sessions": 8,
+  "census_cross_check": "off"
+}
+EXIT=1

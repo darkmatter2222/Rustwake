@@ -1,0 +1,240 @@
+{
+  "schema": "rustwake.session-ledger.v1",
+  "issue": 328,
+  "track": "OPS-04",
+  "runtime": "qwen-code-cli",
+  "runtime_version_note": "Installed Qwen Code host on Windows 10.0.26200; children are Agent-tool subagent sessions of this host. No OpenCode RPC, no invented transport.",
+  "host_workdir": "C:/Users/ryans/source/repos/Rustwake",
+  "main_sha": "e82caa52a3973fae92a983e11b6906489269b655",
+  "limits_source": "docs/agents/roles.json",
+  "limits": {
+    "max_model_sessions": 5,
+    "primary": "coordinator",
+    "max_children": 4
+  },
+  "window": {
+    "from": "2026-11-17T19:01:37.767Z",
+    "to": "2026-11-17T19:37:20.925Z"
+  },
+  "pr": 579,
+  "pr_note": "This receipt is itself the OPS-04 deliverable. The wave it records is the wave that produced it: the coordinator wrote the validator while the children it measures were live.",
+  "coordinator_session": "440610df-1273-4137-b6e2-ea5bd9bd70c8",
+  "sessions": [
+    {
+      "id": "440610df-1273-4137-b6e2-ea5bd9bd70c8",
+      "role": "coordinator",
+      "agent_type": "rustwake-coordinator",
+      "kind": "primary",
+      "spawned_by": null,
+      "started_at": "2026-11-17T01:06:06.252Z",
+      "started_at_basis": "LOWER BOUND, not an observation: the earliest child artifact birthtime on this host. The primary session actually began on 2026-11-16; the host exposes no session start timestamp, so the ledger uses the first observable child dispatch and declares the basis rather than inventing a clock reading.",
+      "finished_at": null,
+      "status": "running",
+      "outcome": null,
+      "leases": [],
+      "browser": false,
+      "note": "Coordinator holds no src write lease. Its OPS-04 work is confined to branch rw/328-ops04-runtime-ledger touching scripts/, tests/ and docs/ only."
+    },
+    {
+      "id": "aaceb00b9092592a2",
+      "role": "developer",
+      "agent_type": "rustwake-developer",
+      "kind": "child",
+      "spawned_by": "440610df-1273-4137-b6e2-ea5bd9bd70c8",
+      "started_at": "2026-11-17T19:01:37.767Z",
+      "started_at_basis": "artifact birthtime of aaceb00b9092592a2.output",
+      "finished_at": "2026-11-17T19:37:20.925Z",
+      "status": "finished",
+      "outcome": "PR #576 READY at 89cfe6ceed4bd25e7427e616addd83b7acdfb852; src/alarms.js severity mirrors resourceStripState; proof harness repaired (real re-drain, real remedy click, real sheet-toggle tap); 52 PNGs / 6 suites; head tests 445 (444 pass + 1 known Windows CRLF fail) vs base 442; browser lease released on finish.",
+      "issue": 566,
+      "pr": 576,
+      "leases": [
+        "src/App.jsx",
+        "src/alarms.js",
+        "src/styles.css"
+      ],
+      "browser": true,
+      "port": 4199,
+      "finished_at_basis": "host completion notification duration_ms=2143158 added to started_at; tool_uses=101",
+      "browser_released_at": "2026-11-17T19:37:20.925Z",
+      "browser_note": "held the single browser lease on port 4199 for its whole life; released at finished_at. browser stays true because the lease WAS held during the live interval."
+    },
+    {
+      "id": "a7a0568b542c307c6",
+      "role": "qa-reviewer",
+      "agent_type": "rustwake-reviewer",
+      "kind": "child",
+      "spawned_by": "440610df-1273-4137-b6e2-ea5bd9bd70c8",
+      "started_at": "2026-11-17T19:01:37.804Z",
+      "started_at_basis": "artifact birthtime of a7a0568b542c307c6.output",
+      "finished_at": "2026-11-17T19:09:10.553Z",
+      "finished_at_basis": "started_at + duration_ms 452749 from the host completion notification (the artifact itself is 0 bytes and carries no finish clock)",
+      "duration_ms": 452749,
+      "status": "finished",
+      "outcome": "ACCEPT (PASS_NUMERIC_ONLY), zero conditions, on PR #577 head 639c5ec39a24fe2eaab20d77cec4aa1095b05b9c",
+      "evidence": [
+        "https://github.com/darkmatter2222/Rustwake/pull/577#issuecomment-6958093372",
+        "https://github.com/darkmatter2222/Rustwake/issues/552#issuecomment-6958094037"
+      ],
+      "tool_uses": 30,
+      "leases": [],
+      "browser": false
+    },
+    {
+      "id": "affaa3a5fb522634f",
+      "role": "product-owner",
+      "agent_type": "rustwake-product-owner",
+      "kind": "child",
+      "spawned_by": "440610df-1273-4137-b6e2-ea5bd9bd70c8",
+      "started_at": "2026-11-17T19:01:37.839Z",
+      "started_at_basis": "artifact birthtime of affaa3a5fb522634f.output",
+      "finished_at": "2026-11-17T19:06:10.656Z",
+      "finished_at_basis": "started_at + duration_ms 272817 from the host completion notification",
+      "duration_ms": 272817,
+      "status": "finished",
+      "outcome": "ACCEPT-WITH-CONDITIONS (C1 paired economy A/B, C2 deployed-sha visual) on PR #577 head 639c5ec39a24fe2eaab20d77cec4aa1095b05b9c",
+      "evidence": [
+        "https://github.com/darkmatter2222/Rustwake/pull/577#issuecomment-6958022857",
+        "https://github.com/darkmatter2222/Rustwake/issues/552#issuecomment-6958023371"
+      ],
+      "tool_uses": 10,
+      "leases": [],
+      "browser": false
+    },
+    {
+      "id": "a69124e830650b810",
+      "role": "developer",
+      "agent_type": "rustwake-developer",
+      "kind": "child",
+      "spawned_by": "440610df-1273-4137-b6e2-ea5bd9bd70c8",
+      "started_at": "2026-11-17T19:11:24.095Z",
+      "started_at_basis": "artifact birthtime of a69124e830650b810.output",
+      "finished_at": "2026-11-17T19:20:35.015Z",
+      "finished_at_basis": "started_at + duration_ms 550920 from the host completion notification",
+      "duration_ms": 550920,
+      "status": "finished",
+      "outcome": "Discharged product C1: paired 2x2 economy A/B, post-#573 bank steel 52 (screening) vs 48 (control), no zero-delivery output pair; PR #577 marked ready at head 957576f23cdc3db02717b0b332a996390347fd4c",
+      "evidence": [
+        "https://github.com/darkmatter2222/Rustwake/pull/577#issuecomment-6958384769",
+        "https://github.com/darkmatter2222/Rustwake/issues/552#issuecomment-6958385434"
+      ],
+      "tool_uses": 35,
+      "issue": 552,
+      "pr": 577,
+      "leases": [
+        "src/content.js"
+      ],
+      "browser": false,
+      "note": "Node-side only. src/simulation.js was READ-ONLY for this child; the post-#573 variant was measured as an uncommitted working-tree experiment with byte-exact restore, ratified by coordinator comment."
+    },
+    {
+      "id": "a9ec0494c2d539dc3",
+      "role": "qa-reviewer",
+      "agent_type": "rustwake-reviewer",
+      "kind": "child",
+      "spawned_by": "440610df-1273-4137-b6e2-ea5bd9bd70c8",
+      "started_at": "2026-11-17T19:22:12.074Z",
+      "started_at_basis": "artifact birthtime of a9ec0494c2d539dc3.output",
+      "finished_at": "2026-11-17T19:25:58.151Z",
+      "finished_at_basis": "started_at + duration_ms 226077 from the host completion notification",
+      "duration_ms": 226077,
+      "status": "finished",
+      "outcome": "ACCEPT (PASS_NUMERIC_ONLY), zero new conditions; prior zero-condition ACCEPT at 639c5ec39a24fe2eaab20d77cec4aa1095b05b9c carries forward to 957576f23cdc3db02717b0b332a996390347fd4c",
+      "evidence": [
+        "https://github.com/darkmatter2222/Rustwake/pull/577#issuecomment-6958525899",
+        "https://github.com/darkmatter2222/Rustwake/issues/552#issuecomment-6958526468"
+      ],
+      "tool_uses": 16,
+      "issue": 552,
+      "pr": 577,
+      "leases": [],
+      "browser": false,
+      "note": "Delta review of PR #577 head 957576f23cdc3db02717b0b332a996390347fd4c. Read-only; own detached worktree."
+    },
+    {
+      "id": "abe14b6fae88cd389",
+      "role": "product-owner",
+      "agent_type": "rustwake-product-owner",
+      "kind": "child",
+      "spawned_by": "440610df-1273-4137-b6e2-ea5bd9bd70c8",
+      "started_at": "2026-11-17T19:22:12.104Z",
+      "started_at_basis": "artifact birthtime of abe14b6fae88cd389.output",
+      "finished_at": "2026-11-17T19:26:00.610Z",
+      "finished_at_basis": "started_at + duration_ms 228506 from the host completion notification",
+      "duration_ms": 228506,
+      "status": "finished",
+      "outcome": "ACCEPT-WITH-CONDITIONS: C1 DISCHARGED, C2 (deployed-SHA visual + train-turn harness re-run) survives as the ONE condition at 957576f23cdc3db02717b0b332a996390347fd4c",
+      "evidence": [
+        "https://github.com/darkmatter2222/Rustwake/pull/577#issuecomment-6958519680",
+        "https://github.com/darkmatter2222/Rustwake/issues/552#issuecomment-6958520226"
+      ],
+      "tool_uses": 17,
+      "issue": 552,
+      "pr": 577,
+      "leases": [],
+      "browser": false,
+      "note": "Delta product ruling on whether C1 is discharged at head 957576f23cdc3db02717b0b332a996390347fd4c. C2 visual remains owed."
+    }
+  ],
+  "observed": {
+    "children_dispatched_in_window": 6,
+    "children_finished_in_window": 6,
+    "peak_concurrent_children": 3,
+    "peak_total_sessions": 4,
+    "browser_holders_peak": 1,
+    "release_engineers_peak": 0,
+    "lease_conflicts": 0,
+    "recursive_spawns": 0,
+    "note": "peak_concurrent_children and peak_total_sessions are recomputed by scripts/verify-session-ledger.mjs, not attested."
+  },
+  "dispatch_census": {
+    "source": "docs/operations/receipts/328-dispatch-census-e82caa52.json",
+    "method": "scripts/verify-session-ledger.mjs --scan C:/Users/ryans/AppData/Local/Temp/qwen-code/C--Users-ryans-source-repos-Rustwake/440610df-1273-4137-b6e2-ea5bd9bd70c8/tasks --primary 440610df-1273-4137-b6e2-ea5bd9bd70c8; agent-shaped ids match /^[0-9a-f]{17}\\.output$/; bursts grouped within 2000 ms of birthtime; each burst records first_at (earliest dispatch) and at (latest dispatch)",
+    "artifact_count": 194,
+    "zero_byte_count": 194,
+    "first_at": "2026-11-17T01:06:06.252Z",
+    "last_at": "2026-11-17T19:22:12.104Z",
+    "max_burst": 4,
+    "bursts": 151,
+    "burst_size_histogram": {
+      "1": 116,
+      "2": 28,
+      "3": 6,
+      "4": 1
+    },
+    "primary_id": "440610df-1273-4137-b6e2-ea5bd9bd70c8",
+    "verdict": "No burst in this coordinator session's artifact store ever exceeded max_children=4.",
+    "cross_check": "scripts/verify-session-ledger.mjs --ledger <this file> auto-loads dispatch_census.source and rejects E_UNDOCUMENTED_CHILD (a census artifact dispatched inside window but absent from sessions[]) and E_NO_DISPATCH_ARTIFACT (a documented child with no census artifact). The loaded census is first verified against this summary (artifact_count, zero_byte_count, first_at, last_at, max_burst, bursts, burst_size_histogram, primary_id): any mismatch is E_CENSUS_MISMATCH, a missing summary is E_CENSUS_UNDECLARED, and an unparseable or inverted burst clock is E_CENSUS_CLOCK rather than a silent skip. E_CHILD_OUTSIDE_WINDOW rejects any documented child whose started_at precedes window.from or finished_at exceeds window.to, so narrowing the window cannot hide an omitted child. E_SESSION_CLOCK rejects any window.from, window.to, started_at or finished_at that does not parse as a clock, and clamps that session live for the whole observation (started_at to window.from, finished_at to window.to) so a garbage clock can only RAISE a measured peak, never lower it; an unparseable window bound likewise leaves this cross-check enabled rather than silently disabling the overlap test. E_DISPATCH_BURST is additionally applied to EVERY burst of the loaded census, unscoped by the window and checked before the burst-clock guard, so merging bursts into an over-cap dispatch fails even with an honestly recomputed summary, an inverted burst clock, or the burst moved outside the window. Both guarantees are regression-tested by executing them against these genuine receipts through a spawned CLI: tests/sessionLedger.test.mjs runs 62 tests, 62 passing.",
+    "host_artifact_dir": "C:/Users/ryans/AppData/Local/Temp/qwen-code/C--Users-ryans-source-repos-Rustwake/440610df-1273-4137-b6e2-ea5bd9bd70c8/tasks",
+    "scope": "Snapshot of the coordinator session's task artifact store, not a claim about every session on this host. Counts are frozen at scanned_at; later dispatches grow the store and are outside this receipt's window.",
+    "scanned_at": "2026-11-17T19:41:05.542Z"
+  },
+  "honest_limits": [
+    "Every one of the 194 child artifacts in this coordinator session's store is 0 bytes with mtime within ~50 ms of birthtime. The artifact store therefore yields dispatch START times only; per-child FINISH times are unrecoverable for earlier waves. Real finish times exist only where a host completion notification supplied duration_ms (the six finished children above). Earlier-wave durations are NOT asserted here rather than fabricated. Filed as an observability defect in docs/backlog/GAPS.md.",
+    "The 194-artifact census proves a dispatch BURST cap, which is strong evidence but not identical to a concurrency proof: a burst bounds how many children were started together, not how many were simultaneously alive. The concurrency proof is the sweep over the four sessions with observed clocks in this window (peak 3 children / 4 sessions). In this window the interval sweep peaks at 3 children / 4 total sessions, so the concurrency cap holds with one child of headroom.",
+    "Earlier-wave role attribution is not asserted. Only sessions whose agent type the coordinator dispatched directly in this window are role-labelled.",
+    "Legacy OpenCode worktrees on this host are prior-session artifacts, preserved untouched. No live foreign coordinator was observed, and this attestation covers sessions on this host only.",
+    "Cancellation, event-wait and restart-recovery clauses are exercised by the deterministic ledger tests (tests/sessionLedger.test.mjs), which fail closed on missing finish records, contradictory status and time-order inversion. The host exposes no cancellation or restart API to this session, so those clauses are validated at the ledger-contract level, not by killing a live child.",
+    "The census is broader than the ledger window: 194 session-store artifacts versus 6 children documented here. Only in-window artifacts are cross-checked, so this receipt does NOT claim to document every child ever dispatched on this host. Widening window.from to the census start would require documenting all 194, which the 0-byte artifact defect makes impossible.",
+    "The validator's clock and burst-cap hardening is proven against DERIVED negative fixtures, not against a real wave that misbehaved: no over-cap dispatch, garbage clock or merged census burst was observed on this host. The genuine census's largest burst is 4, exactly max_children, so the unscoped census cap passes on real data and is exercised only by the committed negatives (328-runtime-ledger-negative-session-clock.json against the genuine census, and 328-runtime-ledger-negative-census-burst.json against the DERIVED 328-dispatch-census-negative-burst.json). The derived census is a demonstration artifact and is never cited as a host scan."
+  ],
+  "validator": {
+    "script": "scripts/verify-session-ledger.mjs",
+    "command": "node scripts/verify-session-ledger.mjs --ledger docs/operations/receipts/328-runtime-ledger-e82caa52-pass.json",
+    "expected": {
+      "ok": true,
+      "violations": [],
+      "peak_children": 3,
+      "peak_sessions": 4
+    },
+    "test_suite": {
+      "file": "tests/sessionLedger.test.mjs",
+      "tests": 62,
+      "pass": 62,
+      "fail": 0,
+      "command": "node --test tests/sessionLedger.test.mjs",
+      "note": "Runs under the existing pnpm test glob. Includes spawned-CLI exit-1 executions of all five evasions and a spawned-CLI exit-0 control on this receipt."
+    }
+  },
+  "window_basis": "from = birthtime of the first child dispatched in this wave (aaceb00b9092592a2, 19:01:37.767Z); to = the finish of the last child of this wave (the same session, which ran longest). The window deliberately covers THIS WAVE only. dispatch_census is a snapshot of the coordinator session's whole artifact store (194 artifacts back to 01:06:06.252Z, spanning earlier waves); the undocumented-child cross-check is scoped to the window, so artifacts outside it are not asserted to be children of this ledger. Children dispatched after window.to belong to the next wave and are not claimed here. The window itself remains SELF-DECLARED: E_CHILD_OUTSIDE_WINDOW proves documented children lie inside it, but no validator can prove the window was not narrowed to exclude an inconvenient dispatch. An auditor must compare window.from against the census's first in-wave burst (here the 3-child burst at 19:01:37.767Z) and confirm every census burst from that point to window.to is documented in sessions[]."
+}
