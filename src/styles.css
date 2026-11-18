@@ -498,6 +498,16 @@ button.fleet-row{width:100%;text-align:left;color:inherit;font:inherit;cursor:po
 /* Phone portrait: dock hugs the safe bottom; sheet reserves the dock band and
    keeps a world band below the two-row HUD + camera rail (dock.js mirror). */
 @media(max-width:770px){
+ /* #559 belt-and-braces: #572 already hides the compact-width strip alert via
+    the higher-specificity .resources-strip .strip-alert{display:none} (line
+    290), which beats the base .strip-alert{display:flex} rule (line 397)
+    regardless of source order — the 667x375 wrap/occlusion defect no longer
+    reproduces on main. This same-specificity override is retained AFTER the
+    base flex rule because the cascade-order contract is test-pinned
+    (tests/alarmStripCss.test.mjs test 4): a <=770px block positioned after
+    .strip-alert{display:flex} must carry a .strip-alert{display:none}
+    override. Chip flags carry the shortage signal at compact widths. */
+ .strip-alert{display:none}
  .hud-top{padding:calc(6px + var(--sat)) calc(10px + var(--sar)) 0 calc(10px + var(--sal))}
  /* #568: phone-portrait left-rail clears the CAM-05 framed-machine band; see
     the layout rationale in the max-width:770px block above (top:156). */

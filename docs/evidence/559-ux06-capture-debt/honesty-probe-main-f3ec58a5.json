@@ -1,0 +1,69 @@
+{
+ "label": "main-f3ec58a5",
+ "root": "C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-565-main",
+ "viewport": {
+  "width": 667,
+  "height": 375
+ },
+ "started": "2026-11-18T15:00:35.688Z",
+ "seedErr": null,
+ "alarmIds": [
+  "power-brownout",
+  "road-1",
+  "road-2",
+  "road-4",
+  "road-5",
+  "road-6"
+ ],
+ "measure": {
+  "stripAlert": {
+   "x": 0,
+   "y": 0,
+   "width": 0,
+   "height": 0,
+   "display": "none"
+  },
+  "resourcesStrip": {
+   "x": 8,
+   "y": 39,
+   "width": 651,
+   "height": 44,
+   "display": "grid"
+  },
+  "hudTop": {
+   "x": 0,
+   "y": 0,
+   "width": 667,
+   "height": 83,
+   "display": "grid"
+  },
+  "alarmRail": {
+   "x": 8,
+   "y": 84,
+   "width": 647,
+   "height": 44,
+   "display": "flex"
+  },
+  "chipRoad2": {
+   "x": 334.140625,
+   "y": 84,
+   "width": 170.8125,
+   "height": 44
+  },
+  "chipCentre": {
+   "x": 419.546875,
+   "y": 106
+  },
+  "hitAtChipCentre": {
+   "tag": "STRONG",
+   "cls": "",
+   "testid": null
+  }
+ },
+ "chipClick": {
+  "ok": true
+ },
+ "detailVisible": true,
+ "pageErrors": [],
+ "finished": "2026-11-18T15:00:40.453Z"
+}
