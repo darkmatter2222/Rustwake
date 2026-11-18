@@ -1,0 +1,1672 @@
+{
+  "version": 1,
+  "issue": 567,
+  "task": "dispatch fairness — furnace output freight reaches the bank unattended on a fresh untouched yard (real production build)",
+  "mode": "hosted-live",
+  "build": "hosted-live",
+  "source_sha": "9baecedf32175110189bda4e08bbb09cf5ade855",
+  "live_url": "https://home.darkmatter2222.com/rustwake/",
+  "expected_source_sha": "9baecedf32175110189bda4e08bbb09cf5ade855",
+  "manifest_source_sha": "9baecedf32175110189bda4e08bbb09cf5ade855",
+  "harness_sha": "e9fa6e6eda65970c712b287fe69d02f39e50e206",
+  "harness_blob": "67898fe5c6ed840b39073deae28d13afa9847788",
+  "releaseCitation": {
+    "liveSha": "9baecedf32175110189bda4e08bbb09cf5ade855",
+    "receiptCommentA": 6990127018,
+    "receiptCommentB": 6990286378,
+    "note": "release chain already verified (PR 583 release Receipts A/B, live-verified at release) — cited, NOT re-verified by this capture"
+  },
+  "port": null,
+  "portNote": null,
+  "started": "2026-11-18T20:20:05.385Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "deviceScaleFactor": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "screenshots": [
+        "desktop-fresh-yard.png",
+        "desktop-t30.png",
+        "desktop-t60.png",
+        "desktop-t90.png",
+        "desktop-t120.png"
+      ],
+      "proof": {
+        "introDismissed": false,
+        "reducedMotion": {
+          "contextSetting": "reduce",
+          "canvasDataset": {
+            "rigReducedMotion": "1",
+            "art02Reduced": "1",
+            "craneReducedMotion": "1"
+          },
+          "disclosure": "reduce KEPT per capture-live precedent. src/world.js sets truck.position from sim state UNCONDITIONALLY every frame (world.js:1454); stepTruck under reduce parks only wheel spin/steer/suspension bob/beacon (world.js:736-739). Haulers therefore visibly traverse the yard under reduce; ART-02/03/04 machine channels, crane, forklift lift and drone hover park. Per-truck position deltas below are the motion evidence; decorative-channel motion review belongs to sponsor G1 (#276), still owed."
+        },
+        "stamps": [
+          {
+            "label": "fresh-yard",
+            "elapsed": 0.5710000000119213,
+            "bankSteel": 20,
+            "furnaceSteel": 0,
+            "alarmIds": [],
+            "frames": 14,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 11,
+                "z": 10,
+                "job": null
+              },
+              {
+                "id": 2,
+                "x": 11,
+                "z": 11,
+                "job": null
+              },
+              {
+                "id": 3,
+                "x": 11,
+                "z": 12,
+                "job": null
+              }
+            ],
+            "screenshot": "desktop-fresh-yard.png"
+          },
+          {
+            "label": "t30",
+            "elapsed": 32.71340000001194,
+            "bankSteel": 32,
+            "furnaceSteel": 4,
+            "alarmIds": [],
+            "frames": 512,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 7.360150000000003,
+                "z": 8,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              },
+              {
+                "id": 2,
+                "x": 12.184320000000012,
+                "z": 12,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 2,
+                  "destId": 4,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 3,
+                "x": 9.919599999999992,
+                "z": 8,
+                "job": {
+                  "resource": "copper",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              }
+            ],
+            "screenshot": "desktop-t30.png"
+          },
+          {
+            "label": "t60",
+            "elapsed": 60.915800000012204,
+            "bankSteel": 52,
+            "furnaceSteel": 4,
+            "alarmIds": [],
+            "frames": 963,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 15.394550000000024,
+                "z": 12,
+                "job": {
+                  "resource": "steel",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              },
+              {
+                "id": 2,
+                "x": 12.826580000000007,
+                "z": 8,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 2,
+                  "destId": 4,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 3,
+                "x": 11.665600000000007,
+                "z": 8,
+                "job": {
+                  "resource": "scrap",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              }
+            ],
+            "screenshot": "desktop-t60.png"
+          },
+          {
+            "label": "t90",
+            "elapsed": 92.88100000001175,
+            "bankSteel": 68,
+            "furnaceSteel": 4,
+            "alarmIds": [],
+            "frames": 1453,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 12.765375000000162,
+                "z": 12,
+                "job": {
+                  "resource": "steel",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 2,
+                "x": 8.037419999999955,
+                "z": 8,
+                "job": {
+                  "resource": "scrap",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 3,
+                "x": 11,
+                "z": 10.412999999999855,
+                "job": {
+                  "resource": "fuel",
+                  "sourceId": 2,
+                  "destId": 4,
+                  "phase": "toDest"
+                }
+              }
+            ],
+            "screenshot": "desktop-t90.png"
+          },
+          {
+            "label": "t120",
+            "elapsed": 121.17040000001144,
+            "bankSteel": 92,
+            "furnaceSteel": 4,
+            "alarmIds": [],
+            "frames": 1882,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 9.301824999999928,
+                "z": 8,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 2,
+                "x": 15.433799999999925,
+                "z": 12,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 2,
+                  "destId": 4,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 3,
+                "x": 11,
+                "z": 11.359399999999965,
+                "job": {
+                  "resource": "steel",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              }
+            ],
+            "screenshot": "desktop-t120.png"
+          }
+        ],
+        "frames": {
+          "perStamp": [
+            {
+              "label": "fresh-yard",
+              "frames": 14
+            },
+            {
+              "label": "t30",
+              "frames": 512
+            },
+            {
+              "label": "t60",
+              "frames": 963
+            },
+            {
+              "label": "t90",
+              "frames": 1453
+            },
+            {
+              "label": "t120",
+              "frames": 1882
+            }
+          ],
+          "advancing": true
+        },
+        "motion": {
+          "stamps": 5,
+          "movedCount": 12,
+          "moved": [
+            {
+              "stamp": "t30",
+              "id": 1,
+              "from": {
+                "x": 11,
+                "z": 10
+              },
+              "to": {
+                "x": 7.360150000000003,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t30",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 11
+              },
+              "to": {
+                "x": 12.184320000000012,
+                "z": 12
+              }
+            },
+            {
+              "stamp": "t30",
+              "id": 3,
+              "from": {
+                "x": 11,
+                "z": 12
+              },
+              "to": {
+                "x": 9.919599999999992,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t60",
+              "id": 1,
+              "from": {
+                "x": 11,
+                "z": 10
+              },
+              "to": {
+                "x": 15.394550000000024,
+                "z": 12
+              }
+            },
+            {
+              "stamp": "t60",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 11
+              },
+              "to": {
+                "x": 12.826580000000007,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t60",
+              "id": 3,
+              "from": {
+                "x": 11,
+                "z": 12
+              },
+              "to": {
+                "x": 11.665600000000007,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t90",
+              "id": 1,
+              "from": {
+                "x": 11,
+                "z": 10
+              },
+              "to": {
+                "x": 12.765375000000162,
+                "z": 12
+              }
+            },
+            {
+              "stamp": "t90",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 11
+              },
+              "to": {
+                "x": 8.037419999999955,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t90",
+              "id": 3,
+              "from": {
+                "x": 11,
+                "z": 12
+              },
+              "to": {
+                "x": 11,
+                "z": 10.412999999999855
+              }
+            },
+            {
+              "stamp": "t120",
+              "id": 1,
+              "from": {
+                "x": 11,
+                "z": 10
+              },
+              "to": {
+                "x": 9.301824999999928,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t120",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 11
+              },
+              "to": {
+                "x": 15.433799999999925,
+                "z": 12
+              }
+            },
+            {
+              "stamp": "t120",
+              "id": 3,
+              "from": {
+                "x": 11,
+                "z": 12
+              },
+              "to": {
+                "x": 11,
+                "z": 11.359399999999965
+              }
+            }
+          ],
+          "assertion": "PASS",
+          "perTruck": [
+            {
+              "id": 1,
+              "from": {
+                "label": "fresh-yard",
+                "x": 11,
+                "z": 10
+              },
+              "to": {
+                "label": "t120",
+                "x": 9.301824999999928,
+                "z": 8
+              },
+              "netCells": 2.623699359801966,
+              "pathCells": 21.048502226646562,
+              "maxStepCells": 8.975053390370462,
+              "netWorldUnits": 9.182947759306881,
+              "pathWorldUnits": 73.66975779326296,
+              "phaseSeries": [
+                {
+                  "label": "fresh-yard",
+                  "phase": null
+                },
+                {
+                  "label": "t30",
+                  "phase": "toSource"
+                },
+                {
+                  "label": "t60",
+                  "phase": "toSource"
+                },
+                {
+                  "label": "t90",
+                  "phase": "toDest"
+                },
+                {
+                  "label": "t120",
+                  "phase": "toDest"
+                }
+              ],
+              "transitions": [
+                {
+                  "at": "t30",
+                  "from": null,
+                  "to": "toSource"
+                },
+                {
+                  "at": "t90",
+                  "from": "toSource",
+                  "to": "toDest"
+                }
+              ],
+              "series": [
+                {
+                  "label": "fresh-yard",
+                  "elapsed": 0.5710000000119213,
+                  "x": 11,
+                  "z": 10,
+                  "phase": null,
+                  "resource": null
+                },
+                {
+                  "label": "t30",
+                  "elapsed": 32.71340000001194,
+                  "x": 7.360150000000003,
+                  "z": 8,
+                  "phase": "toSource",
+                  "resource": "iron"
+                },
+                {
+                  "label": "t60",
+                  "elapsed": 60.915800000012204,
+                  "x": 15.394550000000024,
+                  "z": 12,
+                  "phase": "toSource",
+                  "resource": "steel"
+                },
+                {
+                  "label": "t90",
+                  "elapsed": 92.88100000001175,
+                  "x": 12.765375000000162,
+                  "z": 12,
+                  "phase": "toDest",
+                  "resource": "steel"
+                },
+                {
+                  "label": "t120",
+                  "elapsed": 121.17040000001144,
+                  "x": 9.301824999999928,
+                  "z": 8,
+                  "phase": "toDest",
+                  "resource": "iron"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "from": {
+                "label": "fresh-yard",
+                "x": 11,
+                "z": 11
+              },
+              "to": {
+                "label": "t120",
+                "x": 15.433799999999925,
+                "z": 12
+              },
+              "netCells": 4.545171332304133,
+              "pathCells": 18.799142827459523,
+              "maxStepCells": 8.408711976539545,
+              "netWorldUnits": 15.908099663064467,
+              "pathWorldUnits": 65.79699989610833,
+              "phaseSeries": [
+                {
+                  "label": "fresh-yard",
+                  "phase": null
+                },
+                {
+                  "label": "t30",
+                  "phase": "toDest"
+                },
+                {
+                  "label": "t60",
+                  "phase": "toDest"
+                },
+                {
+                  "label": "t90",
+                  "phase": "toDest"
+                },
+                {
+                  "label": "t120",
+                  "phase": "toDest"
+                }
+              ],
+              "transitions": [
+                {
+                  "at": "t30",
+                  "from": null,
+                  "to": "toDest"
+                }
+              ],
+              "series": [
+                {
+                  "label": "fresh-yard",
+                  "elapsed": 0.5710000000119213,
+                  "x": 11,
+                  "z": 11,
+                  "phase": null,
+                  "resource": null
+                },
+                {
+                  "label": "t30",
+                  "elapsed": 32.71340000001194,
+                  "x": 12.184320000000012,
+                  "z": 12,
+                  "phase": "toDest",
+                  "resource": "iron"
+                },
+                {
+                  "label": "t60",
+                  "elapsed": 60.915800000012204,
+                  "x": 12.826580000000007,
+                  "z": 8,
+                  "phase": "toDest",
+                  "resource": "iron"
+                },
+                {
+                  "label": "t90",
+                  "elapsed": 92.88100000001175,
+                  "x": 8.037419999999955,
+                  "z": 8,
+                  "phase": "toDest",
+                  "resource": "scrap"
+                },
+                {
+                  "label": "t120",
+                  "elapsed": 121.17040000001144,
+                  "x": 15.433799999999925,
+                  "z": 12,
+                  "phase": "toDest",
+                  "resource": "iron"
+                }
+              ]
+            },
+            {
+              "id": 3,
+              "from": {
+                "label": "fresh-yard",
+                "x": 11,
+                "z": 12
+              },
+              "to": {
+                "label": "t120",
+                "x": 11,
+                "z": 11.359399999999965
+              },
+              "netCells": 0.6406000000000347,
+              "pathCells": 9.338856264493494,
+              "maxStepCells": 4.143339735044668,
+              "netWorldUnits": 2.2421000000001214,
+              "pathWorldUnits": 32.685996925727224,
+              "phaseSeries": [
+                {
+                  "label": "fresh-yard",
+                  "phase": null
+                },
+                {
+                  "label": "t30",
+                  "phase": "toDest"
+                },
+                {
+                  "label": "t60",
+                  "phase": "toDest"
+                },
+                {
+                  "label": "t90",
+                  "phase": "toDest"
+                },
+                {
+                  "label": "t120",
+                  "phase": "toSource"
+                }
+              ],
+              "transitions": [
+                {
+                  "at": "t30",
+                  "from": null,
+                  "to": "toDest"
+                },
+                {
+                  "at": "t120",
+                  "from": "toDest",
+                  "to": "toSource"
+                }
+              ],
+              "series": [
+                {
+                  "label": "fresh-yard",
+                  "elapsed": 0.5710000000119213,
+                  "x": 11,
+                  "z": 12,
+                  "phase": null,
+                  "resource": null
+                },
+                {
+                  "label": "t30",
+                  "elapsed": 32.71340000001194,
+                  "x": 9.919599999999992,
+                  "z": 8,
+                  "phase": "toDest",
+                  "resource": "copper"
+                },
+                {
+                  "label": "t60",
+                  "elapsed": 60.915800000012204,
+                  "x": 11.665600000000007,
+                  "z": 8,
+                  "phase": "toDest",
+                  "resource": "scrap"
+                },
+                {
+                  "label": "t90",
+                  "elapsed": 92.88100000001175,
+                  "x": 11,
+                  "z": 10.412999999999855,
+                  "phase": "toDest",
+                  "resource": "fuel"
+                },
+                {
+                  "label": "t120",
+                  "elapsed": 121.17040000001144,
+                  "x": 11,
+                  "z": 11.359399999999965,
+                  "phase": "toSource",
+                  "resource": "steel"
+                }
+              ]
+            }
+          ],
+          "vacuityNotes": []
+        },
+        "bankSteel": {
+          "series": [
+            {
+              "elapsed": 0,
+              "steel": 20,
+              "source": "INITIAL_BANK (starter baseline)"
+            },
+            {
+              "elapsed": 0.5710000000119213,
+              "steel": 20,
+              "source": "persisted save @ fresh-yard"
+            },
+            {
+              "elapsed": 32.71340000001194,
+              "steel": 32,
+              "source": "persisted save @ t30"
+            },
+            {
+              "elapsed": 60.915800000012204,
+              "steel": 52,
+              "source": "persisted save @ t60"
+            },
+            {
+              "elapsed": 92.88100000001175,
+              "steel": 68,
+              "source": "persisted save @ t90"
+            },
+            {
+              "elapsed": 121.17040000001144,
+              "steel": 92,
+              "source": "persisted save @ t120"
+            }
+          ],
+          "final": 92,
+          "elapsedAtRead": 121.17040000001144,
+          "gate": "PASS (> 20, strictly rising)",
+          "nodeComparison": {
+            "nodeFigure": 84,
+            "browserMeasured": 92,
+            "note": "rAF granularity vs 0.5s substeps — difference disclosed, equality NOT asserted"
+          }
+        },
+        "furnaceBay": {
+          "id": 4,
+          "series": [
+            {
+              "label": "fresh-yard",
+              "elapsed": 0.5710000000119213,
+              "steel": 0
+            },
+            {
+              "label": "t30",
+              "elapsed": 32.71340000001194,
+              "steel": 4
+            },
+            {
+              "label": "t60",
+              "elapsed": 60.915800000012204,
+              "steel": 4
+            },
+            {
+              "label": "t90",
+              "elapsed": 92.88100000001175,
+              "steel": 4
+            },
+            {
+              "label": "t120",
+              "elapsed": 121.17040000001144,
+              "steel": 4
+            }
+          ],
+          "max": 4,
+          "notMonotonePiling": true,
+          "note": "read-only from the persisted save; bay steel rises and falls as hauls collect output"
+        },
+        "storage4": {
+          "latched": false,
+          "alarmIdsPerStamp": [
+            {
+              "label": "fresh-yard",
+              "ids": []
+            },
+            {
+              "label": "t30",
+              "ids": []
+            },
+            {
+              "label": "t60",
+              "ids": []
+            },
+            {
+              "label": "t90",
+              "ids": []
+            },
+            {
+              "label": "t120",
+              "ids": []
+            }
+          ],
+          "note": "alarms are derived, not persisted — computed read-only from each save via src/alarms.js alarmsState"
+        },
+        "wallMs": 132684,
+        "simElapsedAtFinal": 121.17040000001144
+      },
+      "status": "PASS_NUMERIC_ONLY",
+      "errors": [],
+      "failedRequests": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "deviceScaleFactor": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "screenshots": [
+        "phone-fresh-yard.png",
+        "phone-t30.png",
+        "phone-t60.png",
+        "phone-t90.png",
+        "phone-t120.png"
+      ],
+      "proof": {
+        "introDismissed": false,
+        "reducedMotion": {
+          "contextSetting": "reduce",
+          "canvasDataset": {
+            "rigReducedMotion": "1",
+            "art02Reduced": "1",
+            "craneReducedMotion": "1"
+          },
+          "disclosure": "reduce KEPT per capture-live precedent. src/world.js sets truck.position from sim state UNCONDITIONALLY every frame (world.js:1454); stepTruck under reduce parks only wheel spin/steer/suspension bob/beacon (world.js:736-739). Haulers therefore visibly traverse the yard under reduce; ART-02/03/04 machine channels, crane, forklift lift and drone hover park. Per-truck position deltas below are the motion evidence; decorative-channel motion review belongs to sponsor G1 (#276), still owed."
+        },
+        "stamps": [
+          {
+            "label": "fresh-yard",
+            "elapsed": 3.7064999999999997,
+            "bankSteel": 20,
+            "furnaceSteel": 0,
+            "alarmIds": [],
+            "frames": 60,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 11,
+                "z": 9.550225000000001,
+                "job": {
+                  "resource": "scrap",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              },
+              {
+                "id": 2,
+                "x": 11,
+                "z": 10.480260000000001,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              },
+              {
+                "id": 3,
+                "x": 11,
+                "z": 12,
+                "job": null
+              }
+            ],
+            "screenshot": "phone-fresh-yard.png"
+          },
+          {
+            "label": "t30",
+            "elapsed": 32.488899999999994,
+            "bankSteel": 32,
+            "furnaceSteel": 4,
+            "alarmIds": [],
+            "frames": 527,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 8.597349999999974,
+                "z": 8,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 2,
+                "x": 14.08257999999997,
+                "z": 12,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 2,
+                  "destId": 4,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 3,
+                "x": 11.293399999999973,
+                "z": 8,
+                "job": {
+                  "resource": "scrap",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              }
+            ],
+            "screenshot": "phone-t30.png"
+          },
+          {
+            "label": "t60",
+            "elapsed": 60.74460000000023,
+            "bankSteel": 52,
+            "furnaceSteel": 4,
+            "alarmIds": [],
+            "frames": 971,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 14.711899999999988,
+                "z": 12,
+                "job": {
+                  "resource": "steel",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              },
+              {
+                "id": 2,
+                "x": 11.860959999999999,
+                "z": 8,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 3,
+                "x": 10.399399999999995,
+                "z": 8,
+                "job": {
+                  "resource": "copper",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              }
+            ],
+            "screenshot": "phone-t60.png"
+          },
+          {
+            "label": "t90",
+            "elapsed": 93.34709999999998,
+            "bankSteel": 68,
+            "furnaceSteel": 4,
+            "alarmIds": [],
+            "frames": 1482,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 13.019625000000097,
+                "z": 12,
+                "job": {
+                  "resource": "steel",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 2,
+                "x": 7.13625999999994,
+                "z": 8,
+                "job": {
+                  "resource": "copper",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 3,
+                "x": 11,
+                "z": 9.653799999999901,
+                "job": {
+                  "resource": "fuel",
+                  "sourceId": 2,
+                  "destId": 4,
+                  "phase": "toDest"
+                }
+              }
+            ],
+            "screenshot": "phone-t90.png"
+          },
+          {
+            "label": "t120",
+            "elapsed": 121.89599999999989,
+            "bankSteel": 88,
+            "furnaceSteel": 4,
+            "alarmIds": [],
+            "frames": 1927,
+            "vehicles": [
+              {
+                "id": 1,
+                "x": 13.039699999999993,
+                "z": 12,
+                "job": {
+                  "resource": "iron",
+                  "sourceId": 2,
+                  "destId": 4,
+                  "phase": "toDest"
+                }
+              },
+              {
+                "id": 2,
+                "x": 11,
+                "z": 9.735160000000015,
+                "job": {
+                  "resource": "steel",
+                  "sourceId": 4,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              },
+              {
+                "id": 3,
+                "x": 8.560199999999982,
+                "z": 8,
+                "job": {
+                  "resource": "scrap",
+                  "sourceId": 1,
+                  "destId": 2,
+                  "phase": "toSource"
+                }
+              }
+            ],
+            "screenshot": "phone-t120.png"
+          }
+        ],
+        "frames": {
+          "perStamp": [
+            {
+              "label": "fresh-yard",
+              "frames": 60
+            },
+            {
+              "label": "t30",
+              "frames": 527
+            },
+            {
+              "label": "t60",
+              "frames": 971
+            },
+            {
+              "label": "t90",
+              "frames": 1482
+            },
+            {
+              "label": "t120",
+              "frames": 1927
+            }
+          ],
+          "advancing": true
+        },
+        "motion": {
+          "stamps": 5,
+          "movedCount": 12,
+          "moved": [
+            {
+              "stamp": "t30",
+              "id": 1,
+              "from": {
+                "x": 11,
+                "z": 9.550225000000001
+              },
+              "to": {
+                "x": 8.597349999999974,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t30",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 10.480260000000001
+              },
+              "to": {
+                "x": 14.08257999999997,
+                "z": 12
+              }
+            },
+            {
+              "stamp": "t30",
+              "id": 3,
+              "from": {
+                "x": 11,
+                "z": 12
+              },
+              "to": {
+                "x": 11.293399999999973,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t60",
+              "id": 1,
+              "from": {
+                "x": 11,
+                "z": 9.550225000000001
+              },
+              "to": {
+                "x": 14.711899999999988,
+                "z": 12
+              }
+            },
+            {
+              "stamp": "t60",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 10.480260000000001
+              },
+              "to": {
+                "x": 11.860959999999999,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t60",
+              "id": 3,
+              "from": {
+                "x": 11,
+                "z": 12
+              },
+              "to": {
+                "x": 10.399399999999995,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t90",
+              "id": 1,
+              "from": {
+                "x": 11,
+                "z": 9.550225000000001
+              },
+              "to": {
+                "x": 13.019625000000097,
+                "z": 12
+              }
+            },
+            {
+              "stamp": "t90",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 10.480260000000001
+              },
+              "to": {
+                "x": 7.13625999999994,
+                "z": 8
+              }
+            },
+            {
+              "stamp": "t90",
+              "id": 3,
+              "from": {
+                "x": 11,
+                "z": 12
+              },
+              "to": {
+                "x": 11,
+                "z": 9.653799999999901
+              }
+            },
+            {
+              "stamp": "t120",
+              "id": 1,
+              "from": {
+                "x": 11,
+                "z": 9.550225000000001
+              },
+              "to": {
+                "x": 13.039699999999993,
+                "z": 12
+              }
+            },
+            {
+              "stamp": "t120",
+              "id": 2,
+              "from": {
+                "x": 11,
+                "z": 10.480260000000001
+              },
+              "to": {
+                "x": 11,
+                "z": 9.735160000000015
+              }
+            },
+            {
+              "stamp": "t120",
+              "id": 3,
+              "from": {
+                "x": 11,
+                "z": 12
+              },
+              "to": {
+                "x": 8.560199999999982,
+                "z": 8
+              }
+            }
+          ],
+          "assertion": "PASS",
+          "perTruck": [
+            {
+              "id": 1,
+              "from": {
+                "label": "fresh-yard",
+                "x": 11,
+                "z": 9.550225000000001
+              },
+              "to": {
+                "label": "t120",
+                "x": 13.039699999999993,
+                "z": 12
+              },
+              "netCells": 3.187753698237203,
+              "pathCells": 11.878397572279297,
+              "maxStepCells": 7.306690201623453,
+              "netWorldUnits": 11.157137943830211,
+              "pathWorldUnits": 41.57439150297754,
+              "phaseSeries": [
+                {
+                  "label": "fresh-yard",
+                  "phase": "toSource"
+                },
+                {
+                  "label": "t30",
+                  "phase": "toDest"
+                },
+                {
+                  "label": "t60",
+                  "phase": "toSource"
+                },
+                {
+                  "label": "t90",
+                  "phase": "toDest"
+                },
+                {
+                  "label": "t120",
+                  "phase": "toDest"
+                }
+              ],
+              "transitions": [
+                {
+                  "at": "t30",
+                  "from": "toSource",
+                  "to": "toDest"
+                },
+                {
+                  "at": "t60",
+                  "from": "toDest",
+                  "to": "toSource"
+                },
+                {
+                  "at": "t90",
+                  "from": "toSource",
+                  "to": "toDest"
+                }
+              ],
+              "series": [
+                {
+                  "label": "fresh-yard",
+                  "elapsed": 3.7064999999999997,
+                  "x": 11,
+                  "z": 9.550225000000001,
+                  "phase": "toSource",
+                  "resource": "scrap"
+                },
+                {
+                  "label": "t30",
+                  "elapsed": 32.488899999999994,
+                  "x": 8.597349999999974,
+                  "z": 8,
+                  "phase": "toDest",
+                  "resource": "iron"
+                },
+                {
+                  "label": "t60",
+                  "elapsed": 60.74460000000023,
+                  "x": 14.711899999999988,
+                  "z": 12,
+                  "phase": "toSource",
+                  "resource": "steel"
+                },
+                {
+                  "label": "t90",
+                  "elapsed": 93.34709999999998,
+                  "x": 13.019625000000097,
+                  "z": 12,
+                  "phase": "toDest",
+                  "resource": "steel"
+                },
+                {
+                  "label": "t120",
+                  "elapsed": 121.89599999999989,
+                  "x": 13.039699999999993,
+                  "z": 12,
+                  "phase": "toDest",
+                  "resource": "iron"
+                }
+              ]
+            },
+            {
+              "id": 2,
+              "from": {
+                "label": "fresh-yard",
+                "x": 11,
+                "z": 10.480260000000001
+              },
+              "to": {
+                "label": "t120",
+                "x": 11,
+                "z": 9.735160000000015
+              },
+              "netCells": 0.7450999999999866,
+              "pathCells": 16.972566182237955,
+              "maxStepCells": 4.724700000000059,
+              "netWorldUnits": 2.607849999999953,
+              "pathWorldUnits": 59.40398163783284,
+              "phaseSeries": [
+                {
+                  "label": "fresh-yard",
+                  "phase": "toSource"
+                },
+                {
+                  "label": "t30",
+                  "phase": "toDest"
+                },
+                {
+                  "label": "t60",
+                  "phase": "toDest"
+                },
+                {
+                  "label": "t90",
+                  "phase": "toDest"
+                },
+                {
+                  "label": "t120",
+                  "phase": "toSource"
+                }
+              ],
+              "transitions": [
+                {
+                  "at": "t30",
+                  "from": "toSource",
+                  "to": "toDest"
+                },
+                {
+                  "at": "t120",
+                  "from": "toDest",
+                  "to": "toSource"
+                }
+              ],
+              "series": [
+                {
+                  "label": "fresh-yard",
+                  "elapsed": 3.7064999999999997,
+                  "x": 11,
+                  "z": 10.480260000000001,
+                  "phase": "toSource",
+                  "resource": "iron"
+                },
+                {
+                  "label": "t30",
+                  "elapsed": 32.488899999999994,
+                  "x": 14.08257999999997,
+                  "z": 12,
+                  "phase": "toDest",
+                  "resource": "iron"
+                },
+                {
+                  "label": "t60",
+                  "elapsed": 60.74460000000023,
+                  "x": 11.860959999999999,
+                  "z": 8,
+                  "phase": "toDest",
+                  "resource": "iron"
+                },
+                {
+                  "label": "t90",
+                  "elapsed": 93.34709999999998,
+                  "x": 7.13625999999994,
+                  "z": 8,
+                  "phase": "toDest",
+                  "resource": "copper"
+                },
+                {
+                  "label": "t120",
+                  "elapsed": 121.89599999999989,
+                  "x": 11,
+                  "z": 9.735160000000015,
+                  "phase": "toSource",
+                  "resource": "steel"
+                }
+              ]
+            },
+            {
+              "id": 3,
+              "from": {
+                "label": "fresh-yard",
+                "x": 11,
+                "z": 12
+              },
+              "to": {
+                "label": "t120",
+                "x": 8.560199999999982,
+                "z": 8
+              },
+              "netCells": 4.685362743694461,
+              "pathCells": 9.611714218709693,
+              "maxStepCells": 4.010746010407538,
+              "netWorldUnits": 16.398769602930614,
+              "pathWorldUnits": 33.640999765483926,
+              "phaseSeries": [
+                {
+                  "label": "fresh-yard",
+                  "phase": null
+                },
+                {
+                  "label": "t30",
+                  "phase": "toDest"
+                },
+                {
+                  "label": "t60",
+                  "phase": "toDest"
+                },
+                {
+                  "label": "t90",
+                  "phase": "toDest"
+                },
+                {
+                  "label": "t120",
+                  "phase": "toSource"
+                }
+              ],
+              "transitions": [
+                {
+                  "at": "t30",
+                  "from": null,
+                  "to": "toDest"
+                },
+                {
+                  "at": "t120",
+                  "from": "toDest",
+                  "to": "toSource"
+                }
+              ],
+              "series": [
+                {
+                  "label": "fresh-yard",
+                  "elapsed": 3.7064999999999997,
+                  "x": 11,
+                  "z": 12,
+                  "phase": null,
+                  "resource": null
+                },
+                {
+                  "label": "t30",
+                  "elapsed": 32.488899999999994,
+                  "x": 11.293399999999973,
+                  "z": 8,
+                  "phase": "toDest",
+                  "resource": "scrap"
+                },
+                {
+                  "label": "t60",
+                  "elapsed": 60.74460000000023,
+                  "x": 10.399399999999995,
+                  "z": 8,
+                  "phase": "toDest",
+                  "resource": "copper"
+                },
+                {
+                  "label": "t90",
+                  "elapsed": 93.34709999999998,
+                  "x": 11,
+                  "z": 9.653799999999901,
+                  "phase": "toDest",
+                  "resource": "fuel"
+                },
+                {
+                  "label": "t120",
+                  "elapsed": 121.89599999999989,
+                  "x": 8.560199999999982,
+                  "z": 8,
+                  "phase": "toSource",
+                  "resource": "scrap"
+                }
+              ]
+            }
+          ],
+          "vacuityNotes": []
+        },
+        "bankSteel": {
+          "series": [
+            {
+              "elapsed": 0,
+              "steel": 20,
+              "source": "INITIAL_BANK (starter baseline)"
+            },
+            {
+              "elapsed": 3.7064999999999997,
+              "steel": 20,
+              "source": "persisted save @ fresh-yard"
+            },
+            {
+              "elapsed": 32.488899999999994,
+              "steel": 32,
+              "source": "persisted save @ t30"
+            },
+            {
+              "elapsed": 60.74460000000023,
+              "steel": 52,
+              "source": "persisted save @ t60"
+            },
+            {
+              "elapsed": 93.34709999999998,
+              "steel": 68,
+              "source": "persisted save @ t90"
+            },
+            {
+              "elapsed": 121.89599999999989,
+              "steel": 88,
+              "source": "persisted save @ t120"
+            }
+          ],
+          "final": 88,
+          "elapsedAtRead": 121.89599999999989,
+          "gate": "PASS (> 20, strictly rising)",
+          "nodeComparison": {
+            "nodeFigure": 84,
+            "browserMeasured": 88,
+            "note": "rAF granularity vs 0.5s substeps — difference disclosed, equality NOT asserted"
+          }
+        },
+        "furnaceBay": {
+          "id": 4,
+          "series": [
+            {
+              "label": "fresh-yard",
+              "elapsed": 3.7064999999999997,
+              "steel": 0
+            },
+            {
+              "label": "t30",
+              "elapsed": 32.488899999999994,
+              "steel": 4
+            },
+            {
+              "label": "t60",
+              "elapsed": 60.74460000000023,
+              "steel": 4
+            },
+            {
+              "label": "t90",
+              "elapsed": 93.34709999999998,
+              "steel": 4
+            },
+            {
+              "label": "t120",
+              "elapsed": 121.89599999999989,
+              "steel": 4
+            }
+          ],
+          "max": 4,
+          "notMonotonePiling": true,
+          "note": "read-only from the persisted save; bay steel rises and falls as hauls collect output"
+        },
+        "storage4": {
+          "latched": false,
+          "alarmIdsPerStamp": [
+            {
+              "label": "fresh-yard",
+              "ids": []
+            },
+            {
+              "label": "t30",
+              "ids": []
+            },
+            {
+              "label": "t60",
+              "ids": []
+            },
+            {
+              "label": "t90",
+              "ids": []
+            },
+            {
+              "label": "t120",
+              "ids": []
+            }
+          ],
+          "note": "alarms are derived, not persisted — computed read-only from each save via src/alarms.js alarmsState"
+        },
+        "wallMs": 128279,
+        "simElapsedAtFinal": 121.89599999999989
+      },
+      "status": "PASS_NUMERIC_ONLY",
+      "errors": [],
+      "failedRequests": []
+    }
+  ],
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "gate": {
+    "bar": "bank steel > 20 (strictly rising from the starter 20) by sim elapsed >= 120s",
+    "nodeReference": {
+      "harness": "scripts/measure-567.mjs",
+      "bankSteelAt120s": 84,
+      "substep": "0.5s fixed"
+    },
+    "granularityDisclosure": "The browser advances at rAF granularity (dt capped 0.07s per frame); the node harness steps at fixed 0.5s substeps. Measured browser values legitimately differ from the node figure 84. The gate asserted here is the product bar (> 20, strictly rising), NOT equality with 84 — requiring 84 would be a fabricated gate."
+  },
+  "limitations": [
+    "Hosted-live capture at the DEPLOYED SHA: release-manifest.json source_sha gated BEFORE any browser launch; the release chain itself is cited (PR 583 release receipts 6990127018 / 6990286378, live-verified at release), NOT re-verified here. This is NOT a release action and NOT visual acceptance",
+    "Live fresh context dismisses the first-run intro overlay (Enter the yard) if present — the ONLY UI input; no builds, no seeds, no save injection, no bank/speed/inventory mutation. The fresh starter yard already has real work (salvager, furnace with iron/fuel inputs, depot, road grid, HAULER-01/02/03), so no fixture is injected; the moved gate falsifies if the yard produced no motion",
+    "One headless Chromium/SwiftShader run; phone view is EMULATED 390x844 dpr2 (isMobile/hasTouch), not a physical device; no physical display",
+    "Numeric proofs do not certify visual fidelity or art parity — sponsor screenshot+motion review required at G1 (#276), still owed",
+    "FRESH UNTOUCHED YARD: no seeds, no builds, no bank mutation, no speed changes, no hand-stocked inventory, no save injection. Each view is a fresh browser context with empty localStorage; the app's own createGame starter yard runs at normal speed. The fresh yard IS the default player-reachable state (product ruling)",
+    "Browser rAF granularity differs from the node harness's 0.5s substeps, so the measured bank-steel value differs from the node figure 84; the asserted gate is the product bar (> 20, strictly rising from the starter 20), and the measured number is reported as-is",
+    "Game readings come from the app's own periodic persist (SAVE_KEY, ~4.2s wall cadence) and its own fleetProbe stamp (~270ms); stamp elapsed values are therefore quantized to the persist cadence. The only page-side instrumentation is a read-only rAF frame counter",
+    "storage-4 is DERIVED, not stored: the save does not persist alarm state, so alarm ids are computed read-only from each persisted save via the pure src/alarms.js read model (alarmsState never mutates g)",
+    "This capture proves the OUTPUT-side player-visible promise that the #558 sibling harness disclosed as BLOCKED by the pre-#573 dispatch-starvation defect (0 player output jobs in 120s on both base and fix). Deterministic gate coverage lives in tests/dispatchGate567.test.mjs + tests/dispatchFairness.test.mjs and scripts/measure-567.mjs"
+  ],
+  "provenanceSelfCheck": {
+    "harness_sha": "e9fa6e6eda65970c712b287fe69d02f39e50e206",
+    "harness_blob": "67898fe5c6ed840b39073deae28d13afa9847788",
+    "blobAtHarnessSha": "67898fe5c6ed840b39073deae28d13afa9847788",
+    "runningFileBlob": "67898fe5c6ed840b39073deae28d13afa9847788",
+    "trackedTreeClean": true,
+    "liveModeOccurrencesAtHarnessSha": 9,
+    "match": true
+  },
+  "finished": "2026-11-18T20:24:26.744Z"
+}
