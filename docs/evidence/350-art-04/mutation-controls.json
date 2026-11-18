@@ -1,9 +1,9 @@
 {
   "issue": 350,
-  "source_sha": "b21d5b847759948a2d4820faacb1e8a18b1579ef",
+  "source_sha": "df181678e8d20da3f1ef436476ea628424426783",
   "floor": 0.15,
   "metric": "six-rig occupancy-grid Jaccard distinctness (verbatim capture-art04.mjs computation)",
-  "started": "2026-11-17T16:42:17.127Z",
+  "started": "2026-11-18T12:40:55.766Z",
   "controls": [
     {
       "id": "C0-head-unmutated",
@@ -40,7 +40,7 @@
       "id": "C1-restore-shared-depot-market-body",
       "kind": "mutation",
       "description": "main's single kind==depot||kind==market blockout branch spliced over head's separate depot+market branches (the old world.js:179 defect)",
-      "mutatedWorldSha256": "e388699785f9807a934dbfeaad3129629e75eb9999220c673ee78f0de5ef0841",
+      "mutatedWorldSha256": "d886dac9041fe983ab985914bdaecaa54819ce1abda36d5eac19f486d3499633",
       "expected": "FAIL",
       "grid": [
         14,
@@ -73,7 +73,7 @@
       "id": "C2-clone-depot-onto-research",
       "kind": "mutation",
       "description": "depot branch condition widened to kind==depot||kind==research so both share one body",
-      "mutatedWorldSha256": "661c5146ec6b09a506c3ccbb3816a5fdcd95f288744608a37b84decb7cd715d7",
+      "mutatedWorldSha256": "120895cb46b0f1c0b5b3c8077eea8cb6bcda1fac2eb873351861f0f270cb627b",
       "expected": "FAIL",
       "grid": [
         14,
