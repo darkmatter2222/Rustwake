@@ -1,11 +1,11 @@
 {
   "status": "PASS_NUMERIC_ONLY",
   "mode": "hosted-live",
-  "source_sha": "21adb5131a8d52e997f408f4270fba8551316c80",
-  "expected_source_sha": "21adb5131a8d52e997f408f4270fba8551316c80",
-  "manifest_source_sha": "21adb5131a8d52e997f408f4270fba8551316c80",
-  "harness_sha": "2cdcc555967c0a936e824fe3a296074e051d8d09",
-  "harness_blob": "9fb834eb2d481541edadec5a09527d236aaa1fe3",
+  "source_sha": "9baecedf32175110189bda4e08bbb09cf5ade855",
+  "expected_source_sha": "9baecedf32175110189bda4e08bbb09cf5ade855",
+  "manifest_source_sha": "9baecedf32175110189bda4e08bbb09cf5ade855",
+  "harness_sha": "e9fa6e6eda65970c712b287fe69d02f39e50e206",
+  "harness_blob": "67898fe5c6ed840b39073deae28d13afa9847788",
   "port": null,
   "views": [
     {
@@ -13,25 +13,25 @@
       "status": "PASS_NUMERIC_ONLY",
       "failure": null,
       "errors": 0,
-      "finalSteel": 40,
+      "finalSteel": 92,
       "movedCount": 12,
       "perTruck": [
         {
           "id": 1,
-          "netCells": 3.206,
-          "pathCells": 16.797,
-          "phaseTransitions": 3
+          "netCells": 2.624,
+          "pathCells": 21.049,
+          "phaseTransitions": 2
         },
         {
           "id": 2,
-          "netCells": 1.181,
-          "pathCells": 9.278,
-          "phaseTransitions": 3
+          "netCells": 4.545,
+          "pathCells": 18.799,
+          "phaseTransitions": 1
         },
         {
           "id": 3,
-          "netCells": 1.805,
-          "pathCells": 11.728,
+          "netCells": 0.641,
+          "pathCells": 9.339,
           "phaseTransitions": 2
         }
       ],
@@ -42,30 +42,29 @@
       "status": "PASS_NUMERIC_ONLY",
       "failure": null,
       "errors": 0,
-      "finalSteel": 32,
+      "finalSteel": 88,
       "movedCount": 12,
       "perTruck": [
         {
           "id": 1,
-          "netCells": 3.246,
-          "pathCells": 14.391,
-          "phaseTransitions": 1
+          "netCells": 3.188,
+          "pathCells": 11.878,
+          "phaseTransitions": 3
         },
         {
           "id": 2,
-          "netCells": 0.724,
-          "pathCells": 12.558,
+          "netCells": 0.745,
+          "pathCells": 16.973,
           "phaseTransitions": 2
         },
         {
           "id": 3,
-          "netCells": 2.253,
-          "pathCells": 15.976,
-          "phaseTransitions": 1
+          "netCells": 4.685,
+          "pathCells": 9.612,
+          "phaseTransitions": 2
         }
       ],
       "vacuityNotes": []
     }
   ]
 }
-CAPTURE_EXIT=0
