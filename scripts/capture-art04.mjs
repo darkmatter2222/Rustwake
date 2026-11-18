@@ -613,6 +613,39 @@ async function clipMachine(page, fp, height, file) {
   await shot(page, file, clip);
   return {file, clipCss: clip, clamped};
 }
+// Clip to a SINGLE named pivot's declared swing envelope (schema offset +
+// swingRadius), not the whole rig. Used by the market ambient diag-extrema:
+// at the beam's +/- amplitude peaks the 2:1 awning harmonic is exactly zero
+// (sin(2*phi)=0 when sin(phi)=+/-1), so that pair isolates the small balance
+// beam. Measuring an isolated small ambient channel over the FULL-rig frame
+// dilutes its real rendered swing below the whole-frame floor (the beam region
+// itself diffs ~3.9 mean-abs; the full 163x169 rig frame only ~0.7). Clipping to
+// the pivot's own swing envelope measures the motion WHERE IT OCCURS at the SAME
+// >=1 floor — a precision fix, not a relaxation. The full-rig market motion gate
+// (desktop-motion-market-t1/t2, mutation-proven by C5) is unchanged.
+async function clipPivotSwing(page, fp, pivot, file) {
+  const rect = await canvasRect(page), cam = await pose(page);
+  const [ox, oy, oz] = pivot.offset;
+  const sx = ox * fp.base.w, sz = oz * fp.base.d;
+  const cy = Math.cos(fp.rotationY), sy = Math.sin(fp.rotationY);
+  const px = fp.pivot.x + sx * cy + sz * sy;
+  const py = oy;
+  const pz = fp.pivot.z + (-sx * sy + sz * cy);
+  const r = pivot.swingRadius;
+  let minX = Infinity, minY = Infinity, maxX = -Infinity, maxY = -Infinity;
+  for (const dx of [-r, r]) for (const dy of [-r, r]) for (const dz of [-r, r]) {
+    const p = screenOfWorld(cam, rect, px + dx, py + dy, pz + dz);
+    minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x);
+    minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y);
+  }
+  const pad = 4;
+  const clip = {x: Math.max(0, minX - pad), y: Math.max(0, minY - pad),
+    width: Math.min(maxX - minX + 2 * pad, 4000), height: Math.min(maxY - minY + 2 * pad, 4000)};
+  const clamped = minX - pad < 0 || minY - pad < 0 ||
+    maxX + pad > rect.left + rect.width || maxY + pad > rect.top + rect.height;
+  await shot(page, file, clip);
+  return {file, clipCss: clip, clamped, pivotWorld: {x: px, y: py, z: pz}, swingRadius: r};
+}
 const envOf = page => page.evaluate(() => ({
   canvasCount: document.querySelectorAll("canvas").length,
   documentScroll: Math.max(document.documentElement.scrollHeight, document.body.scrollHeight) > innerHeight + 2 ||
@@ -1056,15 +1089,22 @@ try {
       if (!(Number(openStamp.art04Door) > 0) || Number(closedStamp.art04Door) !== 0 || pair.meanAbsDiff < 1)
         throw Error("SHUTTER_MOTION_NOT_VISIBLE: " + JSON.stringify(motionDetails.depot));
     }
-    // Market ambient EXTREMA diagnostics: clip the beam at its +amp and -amp
-    // peaks (computed from the REAL seeded market id and the declared 1.3
-    // speed), proving the ambient pair renders its full swing. Regenerates
-    // desktop-motion-market-diag-peak1/peak2.png.
+    // Market ambient EXTREMA diagnostics: clip the balance beam at its +amp and
+    // -amp peaks (computed from the REAL seeded market id and the declared 1.3
+    // speed), proving the beam renders its full swing. At these peaks the 2:1
+    // awning harmonic is exactly zero (sin(2*phi)=0 when sin(phi)=+/-1), so the
+    // pair isolates the beam alone — therefore the clip is the beam's OWN declared
+    // swing envelope (clipPivotSwing, schema offset+swingRadius), not the full rig
+    // which would dilute a small ambient channel below the whole-frame floor. The
+    // >=1 mean-abs floor is unchanged; the full-rig market gate (t1/t2, C5) is
+    // separate. Regenerates desktop-motion-market-diag-peak1/peak2.png.
     {
       await zoomToWorld(page, FP.market.pivot, 2.8, .8);
       await sheetToggleTo(page, true);
-      const h = machineDescriptor("market").bounds.height;
+      const desc = machineDescriptor("market");
+      const h = desc.bounds.height;
       const framing = await frameRig(page, FP.market, h);
+      const scalePivot = desc.pivots.find(p => p.id === "scale");
       const marketId = workingSeed().buildings.find(b => b.type === "market").id;
       const M = ART04_MOTION;
       const now = Number((await pose(page)).art04MarketClock);
@@ -1081,7 +1121,7 @@ try {
         const s = await pose(page);
         const clock = Number(s.art04MarketClock);
         const file = "desktop-motion-market-diag-peak" + (i + 1) + ".png";
-        const clip = await clipMachine(page, FP.market, h, file);
+        const clip = await clipPivotSwing(page, FP.market, scalePivot, file);
         if (clip.clamped) throw Error("MOTION_CLIP_AMPUTATED market diag peak" + (i + 1) + ": " + JSON.stringify({framing, clip}));
         peaks.push({targetClock: target, clock, scaleAngle: Math.sin(clock * M.scaleSpeed + marketId) * M.scaleAmp,
           simFloor: await simFloor(), clip});
