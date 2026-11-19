@@ -501,9 +501,11 @@ function assignJob(g,v){
   const src=nearestRoad(g,c.source.x,c.source.z),dst=nearestRoad(g,c.dest.x,c.dest.z);
   const toSource=roadPath(g,start,src),toDest=roadPath(g,src,dst);
   if(!toSource||!toDest)continue;
-  // #589 join gate: never reserve freight for a route whose lane start would
-  // snap the truck into a neighbour's envelope. Defer; retry next tick.
-  if(joinBlocker(g,v,toSource)!=null)continue;
+  // #589: reserve immediately even if the lane start is currently occupied. The
+  // reservation is what storageAlarms reads to know a bay is being served; deferring
+  // it here left full bays unassigned and latched the storage-4 alarm (gate C-2).
+  // The truck instead HOLDS at the join in moveVehicle until the start is clear, so
+  // it never snaps into a neighbour's envelope, yet the bay sees a committed truck.
   const fromBank=c.source.type==="depot";
   const sourceBag=fromBank?g.bank:c.source.inventory;
   const amount=take(sourceBag,c.resource,c.amount);
@@ -693,6 +695,19 @@ function moveVehicle(g,v,seconds){
  v.waiting=false;v.blockedBy=null;
  while(remaining>0&&v.job){
   const route=j.route;
+  // #589 join hold: a freshly assigned (or phase-flipped) route starts at segment 0,
+  // progress 0, but the truck is still parked at its previous position. The first
+  // integration step would snap it onto lane.points[0]; if a neighbour occupies that
+  // start, hold here (waiting/blockedBy) WITHOUT snapping until it clears. The freight
+  // is already reserved, so the bay is honestly served; only the physical join waits.
+  if(j.segment===0&&j.progress===0){
+   const jb=joinBlocker(g,v,route);
+   if(jb!=null){
+    v.waiting=true;v.blockedBy=jb;v.waitTime=(v.waitTime||0)+seconds;
+    if(v.waitTime>=WAIT_TIMEOUT_SECONDS)rerouteAroundBlocker(g,v);
+    break;
+   }
+  }
   if(j.segment>=route.length-1){
    if(j.phase==="toSource"){
     // Join gate: the departure lane start must be clear before the phase flip
@@ -721,30 +736,33 @@ function moveVehicle(g,v,seconds){
   j.progress=progress;
   v.x=from.x+(to.x-from.x)*j.progress;v.z=from.z+(to.z-from.z)*j.progress;
   if(progress<intended-1e-9){
-   // #589 bay queue: an IDLE truck parked on the bay approach never clears (it
-   // has no job) and rerouteAroundBlocker refuses to route around the goal cell
-   // itself — measured 192 s starvation of every later delivery to that bay.
-   // Queued behind an idle blocker that is ITSELF parked at the bay (within
-   // 1 cell of the route end), with the mover within 2 cells of the end (worst
-   // starter-fleet queue: two idle trucks packed at the bay, third delivering,
-   // measured 1.343 cells), complete the ARRIVAL at the clamped position. The
-   // arrive ledger transition is position-independent and fully validated, so
-   // this skips no phase and moves no freight early. Deliberately NOT applied
-   // to pickup: the phase flip re-joins the departure lane at its start point,
-   // which for a straight-through route IS the idle blocker's parked position
-   // (measured -1.61 world overlap + reroute thrash when tried). Active
-   // blockers still queue normally (they will move).
-   const idleBlocker=others.find(u=>u.id===blockedBy&&!u.job);
-   const routeEnd=lane.points[route.length-1];
-   const bayQueued=idleBlocker&&Math.hypot(idleBlocker.x-routeEnd.x,idleBlocker.z-routeEnd.z)<=1.0;
-   if(j.phase==="toDest"&&bayQueued&&Math.hypot(v.x-routeEnd.x,v.z-routeEnd.z)<=2.0){
-    arriveCargo(g,v);return;
-   }
    v.waiting=true;v.blockedBy=blockedBy;
-   // Accumulate continuous blocked time; past the timeout, attempt a safe reroute
-   // around the blocker (bounded: one attempt per tick, separation-checked).
+   // Accumulate continuous blocked time; past the timeout, attempt recovery.
    v.waitTime=(v.waitTime||0)+seconds;
-   if(v.waitTime>=WAIT_TIMEOUT_SECONDS)rerouteAroundBlocker(g,v);
+   if(v.waitTime>=WAIT_TIMEOUT_SECONDS){
+    // #589 bay queue (last resort): an IDLE truck parked on the bay approach with
+    // no job never clears, and rerouteAroundBlocker refuses to route around the
+    // goal cell itself — measured 192 s starvation of every later delivery to that
+    // bay. Only after honest queuing proves the blocker is stuck (waitTime past the
+    // timeout) do we complete the ARRIVAL at the clamped position: the idle blocker
+    // is itself parked at the bay (within 1 cell of the route end) and the mover is
+    // within 2 cells of the end (worst starter-fleet queue: two idle trucks packed at
+    // the bay, third delivering, measured 1.343 cells). The arrive ledger transition
+    // is position-independent and fully validated, so this skips no phase and moves
+    // no freight early. Gating on the timeout keeps continuous-work yards (where idle
+    // bay blockers are dispatched and clear within a few seconds) on normal queuing —
+    // early arrival there perturbed dispatch timing and latched the storage-4 alarm
+    // (gate C-2). Deliberately NOT applied to pickup: the phase flip re-joins the
+    // departure lane at its start, which for a straight-through route IS the idle
+    // blocker's parked position (measured -1.61 world overlap + reroute thrash).
+    const idleBlocker=others.find(u=>u.id===blockedBy&&!u.job);
+    const routeEnd=lane.points[route.length-1];
+    const bayQueued=idleBlocker&&Math.hypot(idleBlocker.x-routeEnd.x,idleBlocker.z-routeEnd.z)<=1.0;
+    if(j.phase==="toDest"&&bayQueued&&Math.hypot(v.x-routeEnd.x,v.z-routeEnd.z)<=2.0){
+     arriveCargo(g,v);return;
+    }
+    rerouteAroundBlocker(g,v);
+   }
    break;
   }
   // #589 liveness guard: remaining -= advanced*len can leave an fp residue
@@ -806,6 +824,11 @@ export function advanceGame(g,seconds){
    if(!v.job&&v.cargo)returnFreight(g,v,"JOB_MISSING");
    if(!v.job)assignJob(g,v);
    if(v.job)moveVehicle(g,v,dt);
+   // #589: an idle truck is not queued. Arrival/return/cancel null the job without
+   // touching the motion flags, so a truck that early-arrived at the bay-queue
+   // timeout would otherwise keep stale waiting/blockedBy/waitTime — and that stale
+   // waitTime would fire premature recovery on its next job's first tick. Clear here.
+   if(!v.job){v.waiting=false;v.blockedBy=null;v.waitTime=0;}
    v.anim+=dt;
   }
   const rank=TIERS.findLast(t=>g.stats.produced>=t.needs);
