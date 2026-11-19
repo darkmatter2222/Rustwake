@@ -420,15 +420,25 @@ export function stepCrowd(state, plan, dt, env) {
   const dist = Math.hypot(dx, dy, dz);
   const arrived = hd < 1.0 && Math.hypot(target.x - d.x, target.y - d.y, target.z - d.z) < M.droneArriveRadius;
   if (arrived) {
-    d.x = target.x; d.z = target.z;
+    // #590 finisher: the arrival commit is ALSO step-capped. The follow gain
+    // can leave up to ~0.35 u of gap when the arrive radius triggers, and the
+    // hover bob adds up to 0.18 u on top — an unclamped snap measured 0.524 u
+    // at dt 0.016 (> maxDroneStep 0.5). Clamping the commit keeps the declared
+    // anti-teleport bound true on EVERY frame; hover still converges because
+    // the bob target moves at 0.234 u/s, far below the cap. Parked snaps are
+    // <= droneArriveRadius (0.35) so the pad park remains exact.
+    const bob = env.anchor ? Math.sin(state.elapsed * 1.3) * 0.18 : 0;
+    const sx = target.x - d.x, sy = target.y + bob - d.y, sz = target.z - d.z;
+    const sd = Math.hypot(sx, sy, sz);
+    const k = sd > M.maxDroneStep ? M.maxDroneStep / sd : 1;
+    d.x += sx * k; d.y += sy * k; d.z += sz * k;
     if (env.anchor) {
       d.mode = "hovering";
-      d.bob = Math.sin(state.elapsed * 1.3) * 0.18;
-      d.y = target.y + d.bob;
+      d.bob = bob;
       d.rotor = state.elapsed * 22;
     } else {
       d.mode = "parked";
-      d.bob = 0; d.y = target.y; d.rotor = 0;
+      d.bob = 0; d.rotor = 0;
     }
   } else {
     d.mode = "flying";
