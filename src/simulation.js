@@ -702,6 +702,13 @@ function moveVehicle(g,v,seconds){
    if(v.waitTime>=WAIT_TIMEOUT_SECONDS)rerouteAroundBlocker(g,v);
    break;
   }
+  // #589 liveness guard: remaining -= advanced*len can leave an fp residue
+  // (~1e-17) whose remaining/len rounds intended back to exactly j.progress.
+  // Then advanced===0, the blocked-break above does not fire (progress===intended),
+  // and remaining never shrinks — infinite loop. Guard on advanced, not on a
+  // remaining epsilon: remaining/len can underflow any fixed epsilon on long
+  // segments. Genuine blocking is already handled by the progress<intended break.
+  if(advanced<=0)break;
   remaining-=advanced*len;
   if(j.progress>=1-1e-8){
    // Corner turn gate: the outgoing orientation must clear every neighbour before
