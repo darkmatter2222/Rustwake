@@ -635,9 +635,11 @@ export function freightManifest(g){
 }
 // #589 deadlock recovery. A truck continuously blocked past WAIT_TIMEOUT_SECONDS
 // re-routes around its blocker's cell via obstacle BFS, then resumes on the new
-// right-hand lane. This is the guaranteed cycle-breaker: forward-only + id
-// tie-breaks can still form a mixed following/mutual wait-for cycle at a saturated
-// intersection; a bounded reroute dissolves it without starving the furnace.
+// right-hand lane. Forward-only + id tie-breaks can still form a mixed
+// following/mutual wait-for cycle at a saturated intersection; a bounded reroute
+// dissolves mid-route blocks without starving the furnace. It is NOT universal:
+// a blocker on the route's origin cell cannot be avoided (cur === avoid cell) —
+// measured limitation, docs/design/TRAFFIC.md.
 // Freight is untouched (same source/dest, same phase); only j.route changes. The
 // new lane start is separation-checked against every other truck BEFORE commit, so
 // recovery can never introduce an overlap. Returns true if a safe reroute landed.

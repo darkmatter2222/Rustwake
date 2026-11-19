@@ -57,6 +57,9 @@ const GAP = MIN_GAP_WORLD / CELL; // cells, inflated fully onto the blocker AABB
 // blocker's cell (obstacle BFS). Normal queues clear in ~1-2s, so this only fires
 // on genuine gridlock; it is bounded (one attempt per window) and never teleports
 // into another envelope (the new start is separation-checked before committing).
+// NOT a universal cycle-breaker: a blocker parked on the route's ORIGIN cell
+// cannot be routed around (cur === avoid cell), measured 0 arrivals / 60 s in a
+// constructed dry-yard join-hold — see docs/design/TRAFFIC.md limitations.
 export const WAIT_TIMEOUT_SECONDS = 10;
 
 // Right-hand lane offset (cells). MUST be consistent with the SQUARE envelope
