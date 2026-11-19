@@ -59,12 +59,16 @@ const GAP = MIN_GAP_WORLD / CELL; // cells, inflated fully onto the blocker AABB
 // into another envelope (the new start is separation-checked before committing).
 export const WAIT_TIMEOUT_SECONDS = 10;
 
-// Right-hand lane offset (cells). Chosen so opposing oriented envelopes clear:
-// 2*L = 0.5 cells = 1.75 world > width 1.2 + gap 0.3 = 1.5. Lateral reach from a
-// road centre is L + halfWide = 1.475 world (straight) / L*sqrt2 + halfLong =
-// 2.26 world (miter corner); measured starter-yard prop clearance is 5.5 world,
-// so the offset stays well inside the scenery sweep (see tests/traffic*.test.mjs).
-export const LANE_OFFSET_CELLS = 0.25;
+// Right-hand lane offset (cells). MUST be consistent with the SQUARE envelope
+// below: opposing lanes clear only if 2*L >= 2*HALF_LONG + GAP = 0.6714 cells.
+// The earlier 0.25 (2*L = 0.5) was sized for the slim oriented body and falsely
+// queued opposing traffic under the square footprint — measured permanent
+// mutual block on the depot row (1 arrival/200 s vs 4 at base). L = 0.35 gives
+// 2*L = 0.7 cells = 2.45 world, margin 0.1 world over the square requirement.
+// Lateral reach from a road centre: L + HALF_LONG = 2.25 world (straight) /
+// L*sqrt2 + HALF_LONG = 2.76 world (miter corner); the yardScenery "truck routes
+// stay clear" sweep is the gate on that reach (see tests/yardScenery.test.mjs).
+export const LANE_OFFSET_CELLS = 0.35;
 
 const EPS = 1e-9;
 const DEFAULT_HEADING = Object.freeze({x: 1, z: 0});
