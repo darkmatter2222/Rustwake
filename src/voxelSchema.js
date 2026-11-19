@@ -24,7 +24,7 @@ export const PARCEL = Object.freeze({cells: [WORLD_SIZE, WORLD_SIZE], world: [WO
 // ART-05 (#351): forklift/drone join the same canonical scale ladder; both are
 // decorative yard crew with NO simulation authority until crew systems land (#274).
 export const SCALE_REFERENCES = Object.freeze({
-  worker: {height: 1.7, width: 0.62, depth: 0.34, role: "human scale reference; decorative until crew simulation lands (#274)"},
+  worker: {height: 1.7, width: 0.62, depth: 0.34, role: "human scale reference; walks decorative alley patrols with distance-driven limbs, no economic authority (#274, #590)"},
   truck: {length: 2.05, width: 1.2, height: 1.35, role: "physical freight carrier; must fit one road cell and one loading bay"},
   forklift: {length: 1.3, width: 0.8, height: 1.1, role: "decorative yard crew at the depot bay approach; no freight authority (#274, #351)"},
   drone: {length: 1.0, width: 1.0, height: 0.3, role: "decorative survey crew hovering over a real active cycle; no freight authority (#274, #351)"},
@@ -563,8 +563,8 @@ export const RIGS = Object.freeze({
     decorative: true,
     scale: {width: 0.8, height: 1.1, length: 1.3},
     pivots: ["pivot:forks"],
-    articulation: "fork lift is a pure function of the nearest REAL freight truck's distance to the depot bay approach (<=2 units raised 0.75, >=6 units lowered 0); never carries a load mesh",
-    placement: "depot bay approach cell (machines cannot build there per gridOccupancy bayCells); visual only, never occupies a build site or road logic",
+    articulation: "drives a decorative bay-apron shuttle (velocity-bounded, yields to trucks and crew) and parks at the post when the shuttle is blocked; fork lift is a pure function of the nearest REAL freight truck's distance to the depot bay approach (<=2 units raised 0.75, >=6 units lowered 0); never carries a load mesh (#590)",
+    placement: "depot bay approach cell (machines cannot build there per gridOccupancy bayCells); hides rebuild-only if the post cell is paved or built; visual only, never occupies a build site or road logic",
     lod: {proxy: {size: [0.8, 1.1, 1.3], center: [0, 0.55, 0]}, greebleGroup: "lod:greeble"},
     budget: {maxMeshes: 28, maxTriangles: 450}
   }),
@@ -573,7 +573,7 @@ export const RIGS = Object.freeze({
     decorative: true,
     scale: {width: 1.0, height: 0.3, length: 1.0},
     pivots: ["pivot:rotor:0", "pivot:rotor:1", "pivot:rotor:2", "pivot:rotor:3"],
-    articulation: "anchors above a building whose production timer ACTUALLY advanced this frame (real active cycle); hover bob/rotor spin are decorative flight on the sim clock, parked when no cycle is active or under reduced motion",
+    articulation: "flies CONTINUOUSLY (velocity-limited follow, declared max step, cruise altitude above the tallest machine — no teleport) to anchor above a building whose production timer ACTUALLY advanced this frame (real active cycle); hover bob/rotor spin are decorative flight on the sim clock, parked on the shed roof when no cycle is active or under reduced motion (#590)",
     lod: {proxy: {size: [1.0, 0.3, 1.0], center: [0, 0.15, 0]}, greebleGroup: "lod:greeble"},
     budget: {maxMeshes: 22, maxTriangles: 400}
   }),
@@ -581,8 +581,8 @@ export const RIGS = Object.freeze({
     kind: "decorative", authority: "none — decorative yard crew (#274)",
     decorative: true,
     scale: {width: 0.62, height: 1.7, length: 0.34},
-    pivots: ["pivot:arm-l", "pivot:arm-r"],
-    articulation: "static posed scale reference; arm pivots named for future crew simulation, never driven as economic work",
+    pivots: ["pivot:arm-l", "pivot:arm-r", "pivot:leg-l", "pivot:leg-r"],
+    articulation: "walks seeded maintenance-alley patrols; limb swing is a pure function of travelled distance (freezes at dt=0 and under reduced motion); yields to the live truck envelope, the forklift and other crew; decorative only — never economic work or freight (#274, #590)",
     lod: {proxy: {size: [0.62, 1.7, 0.34], center: [0, 0.85, 0]}, greebleGroup: "lod:greeble"},
     budget: {maxMeshes: 16, maxTriangles: 250}
   })
