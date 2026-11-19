@@ -1,0 +1,48 @@
+{
+ "srcDir": "C:/Users/ryans/AppData/Local/Temp/rw-qwen/fin589b/norecovery/src",
+ "mode": "detour",
+ "seconds": 60,
+ "ticks": 120,
+ "arrivals": 0,
+ "shipments": 0,
+ "delivered": 0,
+ "conservationLeaks": 0,
+ "minGapWorld": 0.3000000034999992,
+ "minGapAtTick": 0,
+ "minPair": [
+  1,
+  2
+ ],
+ "declaredMinGap": 0.3,
+ "rerouteCommits": 0,
+ "maxRerouteDisplacementCells": 0,
+ "maxRerouteAtTick": -1,
+ "trucks": [
+  {
+   "id": 1,
+   "x": 7.329,
+   "z": 8.35,
+   "phase": "toDest",
+   "seg": 0,
+   "prog": 0.329,
+   "routeLen": 7,
+   "waiting": true,
+   "blockedBy": 2,
+   "waitTime": 60,
+   "cargo": 5
+  },
+  {
+   "id": 2,
+   "x": 8,
+   "z": 8.35,
+   "phase": null,
+   "seg": null,
+   "prog": null,
+   "routeLen": null,
+   "waiting": false,
+   "blockedBy": null,
+   "waitTime": 0,
+   "cargo": 0
+  }
+ ]
+}
