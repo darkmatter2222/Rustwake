@@ -35,7 +35,11 @@ with the crowd present vs absent (`tests/yardLife.test.mjs`, honesty gate:
   crossingPad = 1.89) — constant boundaries keep the invariant exact under
   any dt sequence (a live sqrt boundary diverges).
 - Forklift: decorative shuttle post → one cell west along the bay apron at
-  0.9 u/s, parks at FORKLIFT_POST when the shuttle is blocked. Fork lift
+  0.9 u/s. Parked vs held, per the landed `src/crowd.js`: when the shuttle
+  CORRIDOR is blocked (rebuild-time shuttle flag off) it is PARKED at
+  FORKLIFT_POST — deliberate idle. While shuttling, a truck or walker threat
+  makes it HOLD in place on the apron (clearance yield, not a park); it
+  resumes when the threat clears and never snaps back to the post. Fork lift
   remains a pure function of the nearest REAL freight truck's distance to the
   depot bay approach (≤2 u raised 0.75, ≥6 u lowered 0). Never carries a load.
 - Drone: continuous velocity-limited follow (v = min(6.5, distance × 2.2))
@@ -84,6 +88,13 @@ retreat machinery: walker–truck clearance holds exactly the 0.12 margin with
 bounded steps. Intersection yield fraction measured 0.60–0.72 of frames for
 the waiting walker (the earlier "~half" claim is corrected to this range).
 
+Post-#589 note (main `4628326daa0a2ef74a89784601976929d0d80385`): the table
+above was measured with trucks looping road cell CENTRES; trucks now follow
+the right-hand lane-offset routes of `docs/design/TRAFFIC.md`. The crowd
+reads LIVE truck world positions, so the yielding machinery is unchanged —
+a post-#592 scratch-merge re-measurement gave walker–truck clearance
+1.8127–1.9798 against the 0.12 margin (coordinator measurement).
+
 ## Visibility (rebuild-only, sceneryConflicts convention)
 
 `crowdConflicts(plan, g, sceneryPlan)` hides a segment when any of its cells
@@ -112,8 +123,11 @@ references; HEAD places 10 patrol walkers ⇒ +77 meshes / +924 triangles
 ## Accessibility
 
 prefers-reduced-motion (this.reducedMotion, ART-06 convention) holds the
-crowd: walkers/forklift keep position, drone parks on the pad, rotor/bob
-zeroed, limbs frozen. Simulation/economic timing is untouched. Proven in
+crowd: walkers/forklift keep position, and the drone HOLDS its current
+position with rotor/bob zeroed — `stepCrowd` returns early, so a mid-flight
+drone neither flies to nor snaps to the pad. Only a fresh start begins
+PARKED on DRONE_PAD (deliberate idle, no active cycle); a held mover is not
+"parked". Limbs frozen. Simulation/economic timing is untouched. Proven in
 tests/crowd.test.mjs (reduced hold + dt=0 hold, snapshot byte-equality).
 
 ## Determinism
@@ -144,3 +158,14 @@ dock.js contain no crowd import or reference (static guard test).
   is a decorative shuttle, the drone is a decorative flyer.
 - Crew have no economy authority (#274) and trucks are not manufactured
   (#280); freight stays the simulation.js ledger.
+- Parked vs held for FREIGHT trucks (#589, `docs/design/TRAFFIC.md`): a
+  clamped truck is HELD, never "parked" — it carries explicit
+  `waiting`/`blockedBy`/`waitTime` queue state and resumes from its clamped
+  progress when the blocker clears. Known unresolved limitation: a truck
+  whose route ORIGIN cell is occupied by a parked mover can wait
+  INDEFINITELY — freight is conserved, other trucks keep flowing and the
+  blocker is stated, but it is NOT repaired (mandatory recovery scope in
+  follow-up #596). The system is not universally deadlock-free: forward-only
+  yielding is acyclic only for same-direction following; perpendicular
+  crossing traffic can form a wait-for cycle, which is why bounded reroute
+  recovery exists.
