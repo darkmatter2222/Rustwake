@@ -1,0 +1,61 @@
+{
+ "srcDir": "C:/Users/ryans/AppData/Local/Temp/rw-qwen/fin589b/base/src",
+ "mode": "multi",
+ "seconds": 200,
+ "ticks": 400,
+ "arrivals": 4,
+ "shipments": 4,
+ "delivered": 47,
+ "conservationLeaks": 0,
+ "minGapWorld": -2.049999999999999,
+ "minGapAtTick": 15,
+ "minPair": [
+  2,
+  3
+ ],
+ "declaredMinGap": 0.3,
+ "rerouteCommits": 0,
+ "maxRerouteDisplacementCells": 0,
+ "maxRerouteAtTick": -1,
+ "trucks": [
+  {
+   "id": 1,
+   "x": 13,
+   "z": 8,
+   "phase": null,
+   "seg": null,
+   "prog": null,
+   "routeLen": null,
+   "waiting": false,
+   "blockedBy": null,
+   "waitTime": 0,
+   "cargo": 0
+  },
+  {
+   "id": 2,
+   "x": 13,
+   "z": 8,
+   "phase": null,
+   "seg": null,
+   "prog": null,
+   "routeLen": null,
+   "waiting": false,
+   "blockedBy": null,
+   "waitTime": 0,
+   "cargo": 0
+  },
+  {
+   "id": 3,
+   "x": 13,
+   "z": 8,
+   "phase": null,
+   "seg": null,
+   "prog": null,
+   "routeLen": null,
+   "waiting": false,
+   "blockedBy": null,
+   "waitTime": 0,
+   "cargo": 0
+  }
+ ]
+}

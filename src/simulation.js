@@ -1,5 +1,6 @@
 import {WORLD_SIZE,INITIAL_BANK,BLUEPRINTS,TIERS,RESEARCH,ROAD_KINDS,SAVE_KEY,STARTER_BUILDINGS,INITIAL_ROADS} from "./content.js";
 import {key,cellOf,inside,checkSite,buildingAt,footprintCells,normalizeRot} from "./gridOccupancy.js";
+import {laneRoute,separationClamp,turnClear,envelopeGapWorld,MIN_GAP_WORLD,WAIT_TIMEOUT_SECONDS} from "./traffic.js";
 
 export {key,cellOf,inside} from "./gridOccupancy.js";
 export {checkSite,buildingAt,footprintCells,footprintDims,bayCells,worldFootprint,terrainFor,terrainAt,ownedParcels,parcelId,surveyed,facingName,normalizeRot,SURVEY_MIN,SURVEY_MAX,ROAD_REACH,PARCEL_SIZE,PARCEL_NAMES} from "./gridOccupancy.js";
@@ -173,10 +174,14 @@ export function committedTotals(g){
 }
 export function createGame(){
  const buildings=clone(STARTER_BUILDINGS);
+ // #589: heading/waiting/blockedBy/waitTime are real motion state. heading is the
+ // last axis-aligned travel direction (envelope orientation + right-of-way geometry);
+ // waiting/blockedBy expose an honest traffic queue to the fleet panel and tests;
+ // waitTime accumulates continuous blocked seconds and drives deadlock rerouting.
  const vehicles=[
-  {id:1,name:"HAULER-01",x:11,z:10,speed:2.25,job:null,cargo:null,anim:0},
-  {id:2,name:"HAULER-02",x:11,z:11,speed:2.6,job:null,cargo:null,anim:0},
-  {id:3,name:"HAULER-03",x:11,z:12,speed:2.0,job:null,cargo:null,anim:0}
+  {id:1,name:"HAULER-01",x:11,z:10,speed:2.25,job:null,cargo:null,anim:0,heading:{x:1,z:0},waiting:false,blockedBy:null,waitTime:0},
+  {id:2,name:"HAULER-02",x:11,z:11,speed:2.6,job:null,cargo:null,anim:0,heading:{x:1,z:0},waiting:false,blockedBy:null,waitTime:0},
+  {id:3,name:"HAULER-03",x:11,z:12,speed:2.0,job:null,cargo:null,anim:0,heading:{x:1,z:0},waiting:false,blockedBy:null,waitTime:0}
  ];
  return {version:2,seed:4073,createdAt:Date.now(),lastSavedAt:Date.now(),elapsed:0,
   nextId:10,bank:{...INITIAL_BANK},buildings,roads:[...INITIAL_ROADS],vehicles,
@@ -425,15 +430,18 @@ export function nearestRoad(g,x,z){
   if(d<score){best={x:a,z:b};score=d;}}
  return score<=3?best:null;
 }
-export function roadPath(g,a,b){
+export function roadPath(g,a,b,avoid=null){
  if(!a||!b)return null;
  const start=key(a.x,a.z),end=key(b.x,b.z),set=new Set(g.roads);
  if(!set.has(start)||!set.has(end))return null;
+ // #589 deadlock recovery: an optional obstacle set (blocker cells) the BFS must
+ // route around. Backward compatible — 2-arg callers pass null and get the old
+ // shortest path. If the destination itself is avoided, no path exists (null).
  const frontier=[start],prev=new Map([[start,null]]);
  for(let i=0;i<frontier.length;i++){
   const t=frontier[i];if(t===end)break;
   const [x,z]=cellOf(t);
-  for(const [nx,nz] of neighbors(x,z)){const k=key(nx,nz);if(set.has(k)&&!prev.has(k)){prev.set(k,t);frontier.push(k);}}
+  for(const [nx,nz] of neighbors(x,z)){const k=key(nx,nz);if(set.has(k)&&!prev.has(k)&&!(avoid&&avoid.has(k))){prev.set(k,t);frontier.push(k);}}
  }
  if(!prev.has(end))return null;
  const rev=[];for(let at=end;at!==null;at=prev.get(at)){const [x,z]=cellOf(at);rev.push({x,z});}
@@ -493,6 +501,11 @@ function assignJob(g,v){
   const src=nearestRoad(g,c.source.x,c.source.z),dst=nearestRoad(g,c.dest.x,c.dest.z);
   const toSource=roadPath(g,start,src),toDest=roadPath(g,src,dst);
   if(!toSource||!toDest)continue;
+  // #589: reserve immediately even if the lane start is currently occupied. The
+  // reservation is what storageAlarms reads to know a bay is being served; deferring
+  // it here left full bays unassigned and latched the storage-4 alarm (gate C-2).
+  // The truck instead HOLDS at the join in moveVehicle until the start is clear, so
+  // it never snaps into a neighbour's envelope, yet the bay sees a committed truck.
   const fromBank=c.source.type==="depot";
   const sourceBag=fromBank?g.bank:c.source.inventory;
   const amount=take(sourceBag,c.resource,c.amount);
@@ -620,6 +633,51 @@ export function freightManifest(g){
   totals:freightTotals(g)
  };
 }
+// #589 deadlock recovery. A truck continuously blocked past WAIT_TIMEOUT_SECONDS
+// re-routes around its blocker's cell via obstacle BFS, then resumes on the new
+// right-hand lane. Forward-only + id tie-breaks can still form a mixed
+// following/mutual wait-for cycle at a saturated intersection; a bounded reroute
+// dissolves mid-route blocks without starving the furnace. It is NOT universal:
+// a blocker on the route's origin cell cannot be avoided (cur === avoid cell) —
+// measured limitation, docs/design/TRAFFIC.md.
+// Freight is untouched (same source/dest, same phase); only j.route changes. The
+// new lane start is separation-checked against every other truck BEFORE commit, so
+// recovery can never introduce an overlap. Returns true if a safe reroute landed.
+function rerouteAroundBlocker(g,v){
+ const j=v.job;if(!j||v.blockedBy==null)return false;
+ const dest=j.route[j.route.length-1];
+ const cur=nearestRoad(g,Math.round(v.x),Math.round(v.z));
+ if(!cur||!dest)return false;
+ const blocker=g.vehicles.find(u=>u.id===v.blockedBy);
+ const avoid=new Set();
+ if(blocker){const bc=nearestRoad(g,Math.round(blocker.x),Math.round(blocker.z));if(bc)avoid.add(key(bc.x,bc.z));}
+ if(avoid.has(key(dest.x,dest.z)))return false; // cannot route around the goal itself
+ const path=roadPath(g,cur,dest,avoid);
+ if(!path||path.length<2)return false;
+ const lane=laneRoute(path);
+ const start={x:lane.points[0].x,z:lane.points[0].z,heading:lane.headings[0]||v.heading};
+ // Never teleport into another envelope: require declared clearance at the new start.
+ for(const u of g.vehicles){if(u.id===v.id)continue;
+  if(envelopeGapWorld(start,u)<MIN_GAP_WORLD-1e-6)return false;}
+ j.route=path;j.segment=0;j.progress=0;
+ v.x=start.x;v.z=start.z;v.heading=start.heading;
+ v.waitTime=0;v.waiting=false;v.blockedBy=null;
+ return true;
+}
+// #589 lane-join gate. Starting a route (assignJob, pickup phase flip) snaps the
+// truck to the new lane's start point; that snap is NOT integrated motion and
+// can land inside a neighbour's envelope (measured -1.61 world overlap when a
+// mid-lane bay queue re-joined). Returns the id of the first truck whose
+// envelope would be within MIN_GAP of the join point, or null if the join is
+// clear. Callers defer the transition instead of teleporting into traffic.
+function joinBlocker(g,v,route){
+ const lane=laneRoute(route);
+ if(!lane.points.length)return null;
+ const start={x:lane.points[0].x,z:lane.points[0].z,heading:lane.headings[0]||v.heading};
+ for(const u of g.vehicles){if(u.id===v.id)continue;
+  if(envelopeGapWorld(start,u)<MIN_GAP_WORLD-1e-6)return u.id;}
+ return null;
+}
 function moveVehicle(g,v,seconds){
  const j=v.job;if(!j)return;
  // #384 disconnect guard: a severed route or vanished source returns the freight
@@ -628,23 +686,114 @@ function moveVehicle(g,v,seconds){
  const severed=r=>!Array.isArray(r)||r.some(p=>!roadSet.has(key(p.x,p.z)));
  if(severed(j.route)||severed(j.toSource)||severed(j.toDest)){returnFreight(g,v,"ROUTE_BLOCKED");return;}
  if(!g.buildings.some(b=>b.id===j.sourceId)){returnFreight(g,v,"SOURCE_MISSING");return;}
- let remaining=seconds*(v.speed||2.1)*(g.research.includes("fleet")?1.18:1);
+ // #589 separation: integrate along the right-hand lane-offset polyline and clamp
+ // progress against every other truck's swept envelope before committing. The
+ // freight guards above are unchanged; only the position integrator now reads the
+ // fleet. A clamped truck queues honestly (waiting/blockedBy) and resumes from its
+ // clamped progress when the blocker clears — no teleport, no reset, no lost cargo.
+ const speedMult=g.research.includes("fleet")?1.18:1;
+ let remaining=seconds*(v.speed||2.1)*speedMult;
+ const others=g.vehicles;
+ v.waiting=false;v.blockedBy=null;
  while(remaining>0&&v.job){
   const route=j.route;
+  // #589 join hold: a freshly assigned (or phase-flipped) route starts at segment 0,
+  // progress 0, but the truck is still parked at its previous position. The first
+  // integration step would snap it onto lane.points[0]; if a neighbour occupies that
+  // start, hold here (waiting/blockedBy) WITHOUT snapping until it clears. The freight
+  // is already reserved, so the bay is honestly served; only the physical join waits.
+  if(j.segment===0&&j.progress===0){
+   const jb=joinBlocker(g,v,route);
+   if(jb!=null){
+    v.waiting=true;v.blockedBy=jb;v.waitTime=(v.waitTime||0)+seconds;
+    if(v.waitTime>=WAIT_TIMEOUT_SECONDS)rerouteAroundBlocker(g,v);
+    break;
+   }
+  }
   if(j.segment>=route.length-1){
    if(j.phase==="toSource"){
+    // Join gate: the departure lane start must be clear before the phase flip
+    // snaps us onto it. Wait at the bay (incoming position, proven clear) until
+    // it is; an idle blocker there will itself be dispatched once its own join
+    // is clear, so the wait resolves.
+    const jb=joinBlocker(g,v,j.toDest);
+    if(jb!=null){
+     v.waiting=true;v.blockedBy=jb;v.waitTime=(v.waitTime||0)+seconds;
+     break;
+    }
     const p=pickupCargo(g,v);
     if(!p.ok){returnFreight(g,v,"PICKUP_INVALID");return;}
     continue;
    }
    arriveCargo(g,v);return;
   }
-  const from=route[j.segment],to=route[j.segment+1];
-  const capacity=1-j.progress,delta=Math.min(remaining,capacity);
-  j.progress+=delta;remaining-=delta;
+  const lane=laneRoute(route);
+  const from=lane.points[j.segment],to=lane.points[j.segment+1];
+  const hv=lane.headings[j.segment];
+  const len=lane.lengths[j.segment]||1;
+  v.heading=hv;
+  const intended=Math.min(1,j.progress+remaining/len);
+  const {progress,blockedBy}=separationClamp(v,others,from,to,hv,j.progress,intended,seconds,speedMult);
+  const advanced=progress-j.progress;
+  j.progress=progress;
   v.x=from.x+(to.x-from.x)*j.progress;v.z=from.z+(to.z-from.z)*j.progress;
-  if(j.progress>=1-1e-8){j.segment++;j.progress=0;}
+  if(progress<intended-1e-9){
+   v.waiting=true;v.blockedBy=blockedBy;
+   // Accumulate continuous blocked time; past the timeout, attempt recovery.
+   v.waitTime=(v.waitTime||0)+seconds;
+   if(v.waitTime>=WAIT_TIMEOUT_SECONDS){
+    // #589 bay queue (last resort): an IDLE truck parked on the bay approach with
+    // no job never clears, and rerouteAroundBlocker refuses to route around the
+    // goal cell itself — measured 192 s starvation of every later delivery to that
+    // bay. Only after honest queuing proves the blocker is stuck (waitTime past the
+    // timeout) do we complete the ARRIVAL at the clamped position: the idle blocker
+    // is itself parked at the bay (within 1 cell of the route end) and the mover is
+    // within 2 cells of the end (worst starter-fleet queue: two idle trucks packed at
+    // the bay, third delivering, measured 1.343 cells). The arrive ledger transition
+    // is position-independent and fully validated, so this skips no phase and moves
+    // no freight early. Gating on the timeout keeps continuous-work yards (where idle
+    // bay blockers are dispatched and clear within a few seconds) on normal queuing —
+    // early arrival there perturbed dispatch timing and latched the storage-4 alarm
+    // (gate C-2). Deliberately NOT applied to pickup: the phase flip re-joins the
+    // departure lane at its start, which for a straight-through route IS the idle
+    // blocker's parked position (measured -1.61 world overlap + reroute thrash).
+    const idleBlocker=others.find(u=>u.id===blockedBy&&!u.job);
+    const routeEnd=lane.points[route.length-1];
+    const bayQueued=idleBlocker&&Math.hypot(idleBlocker.x-routeEnd.x,idleBlocker.z-routeEnd.z)<=1.0;
+    if(j.phase==="toDest"&&bayQueued&&Math.hypot(v.x-routeEnd.x,v.z-routeEnd.z)<=2.0){
+     arriveCargo(g,v);return;
+    }
+    rerouteAroundBlocker(g,v);
+   }
+   break;
+  }
+  // #589 liveness guard: remaining -= advanced*len can leave an fp residue
+  // (~1e-17) whose remaining/len rounds intended back to exactly j.progress.
+  // Then advanced===0, the blocked-break above does not fire (progress===intended),
+  // and remaining never shrinks — infinite loop. Guard on advanced, not on a
+  // remaining epsilon: remaining/len can underflow any fixed epsilon on long
+  // segments. Genuine blocking is already handled by the progress<intended break.
+  if(advanced<=0)break;
+  remaining-=advanced*len;
+  if(j.progress>=1-1e-8){
+   // Corner turn gate: the outgoing orientation must clear every neighbour before
+   // the heading flips, else wait at the corner (incoming orientation, already
+   // proven clear by the approach clamp) until it does. Prevents the stationary
+   // heading-flip near-miss without reserving square space along the segment.
+   const ns=j.segment+1;
+   if(ns<route.length-1){
+    const tb=turnClear(v,others,{x:v.x,z:v.z},lane.headings[ns]);
+    if(tb!=null){
+     v.waiting=true;v.blockedBy=tb;
+     v.waitTime=(v.waitTime||0)+seconds;
+     if(v.waitTime>=WAIT_TIMEOUT_SECONDS)rerouteAroundBlocker(g,v);
+     break;
+    }
+   }
+   j.segment=ns;j.progress=0;
+  }
  }
+ if(!v.waiting)v.waitTime=0;
 }
 export function advanceGame(g,seconds){
  let remaining=Math.max(0,Math.min(seconds,300));
@@ -670,10 +819,18 @@ export function advanceGame(g,seconds){
     }
    }
   }
-  for(const v of g.vehicles){
+  // #589: deterministic ascending-id motion order. Right-of-way tie-breaks are
+  // already id-based (traffic.hasPriority); processing lowest id first makes the
+  // queue attribution and resume order reproducible run-to-run and save/reload.
+  for(const v of [...g.vehicles].sort((a,b)=>a.id-b.id)){
    if(!v.job&&v.cargo)returnFreight(g,v,"JOB_MISSING");
    if(!v.job)assignJob(g,v);
    if(v.job)moveVehicle(g,v,dt);
+   // #589: an idle truck is not queued. Arrival/return/cancel null the job without
+   // touching the motion flags, so a truck that early-arrived at the bay-queue
+   // timeout would otherwise keep stale waiting/blockedBy/waitTime — and that stale
+   // waitTime would fire premature recovery on its next job's first tick. Clear here.
+   if(!v.job){v.waiting=false;v.blockedBy=null;v.waitTime=0;}
    v.anim+=dt;
   }
   const rank=TIERS.findLast(t=>g.stats.produced>=t.needs);
