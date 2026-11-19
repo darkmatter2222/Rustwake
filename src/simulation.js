@@ -501,6 +501,9 @@ function assignJob(g,v){
   const src=nearestRoad(g,c.source.x,c.source.z),dst=nearestRoad(g,c.dest.x,c.dest.z);
   const toSource=roadPath(g,start,src),toDest=roadPath(g,src,dst);
   if(!toSource||!toDest)continue;
+  // #589 join gate: never reserve freight for a route whose lane start would
+  // snap the truck into a neighbour's envelope. Defer; retry next tick.
+  if(joinBlocker(g,v,toSource)!=null)continue;
   const fromBank=c.source.type==="depot";
   const sourceBag=fromBank?g.bank:c.source.inventory;
   const amount=take(sourceBag,c.resource,c.amount);
@@ -657,6 +660,20 @@ function rerouteAroundBlocker(g,v){
  v.waitTime=0;v.waiting=false;v.blockedBy=null;
  return true;
 }
+// #589 lane-join gate. Starting a route (assignJob, pickup phase flip) snaps the
+// truck to the new lane's start point; that snap is NOT integrated motion and
+// can land inside a neighbour's envelope (measured -1.61 world overlap when a
+// mid-lane bay queue re-joined). Returns the id of the first truck whose
+// envelope would be within MIN_GAP of the join point, or null if the join is
+// clear. Callers defer the transition instead of teleporting into traffic.
+function joinBlocker(g,v,route){
+ const lane=laneRoute(route);
+ if(!lane.points.length)return null;
+ const start={x:lane.points[0].x,z:lane.points[0].z,heading:lane.headings[0]||v.heading};
+ for(const u of g.vehicles){if(u.id===v.id)continue;
+  if(envelopeGapWorld(start,u)<MIN_GAP_WORLD-1e-6)return u.id;}
+ return null;
+}
 function moveVehicle(g,v,seconds){
  const j=v.job;if(!j)return;
  // #384 disconnect guard: a severed route or vanished source returns the freight
@@ -678,6 +695,15 @@ function moveVehicle(g,v,seconds){
   const route=j.route;
   if(j.segment>=route.length-1){
    if(j.phase==="toSource"){
+    // Join gate: the departure lane start must be clear before the phase flip
+    // snaps us onto it. Wait at the bay (incoming position, proven clear) until
+    // it is; an idle blocker there will itself be dispatched once its own join
+    // is clear, so the wait resolves.
+    const jb=joinBlocker(g,v,j.toDest);
+    if(jb!=null){
+     v.waiting=true;v.blockedBy=jb;v.waitTime=(v.waitTime||0)+seconds;
+     break;
+    }
     const p=pickupCargo(g,v);
     if(!p.ok){returnFreight(g,v,"PICKUP_INVALID");return;}
     continue;
@@ -695,6 +721,25 @@ function moveVehicle(g,v,seconds){
   j.progress=progress;
   v.x=from.x+(to.x-from.x)*j.progress;v.z=from.z+(to.z-from.z)*j.progress;
   if(progress<intended-1e-9){
+   // #589 bay queue: an IDLE truck parked on the bay approach never clears (it
+   // has no job) and rerouteAroundBlocker refuses to route around the goal cell
+   // itself — measured 192 s starvation of every later delivery to that bay.
+   // Queued behind an idle blocker that is ITSELF parked at the bay (within
+   // 1 cell of the route end), with the mover within 2 cells of the end (worst
+   // starter-fleet queue: two idle trucks packed at the bay, third delivering,
+   // measured 1.343 cells), complete the ARRIVAL at the clamped position. The
+   // arrive ledger transition is position-independent and fully validated, so
+   // this skips no phase and moves no freight early. Deliberately NOT applied
+   // to pickup: the phase flip re-joins the departure lane at its start point,
+   // which for a straight-through route IS the idle blocker's parked position
+   // (measured -1.61 world overlap + reroute thrash when tried). Active
+   // blockers still queue normally (they will move).
+   const idleBlocker=others.find(u=>u.id===blockedBy&&!u.job);
+   const routeEnd=lane.points[route.length-1];
+   const bayQueued=idleBlocker&&Math.hypot(idleBlocker.x-routeEnd.x,idleBlocker.z-routeEnd.z)<=1.0;
+   if(j.phase==="toDest"&&bayQueued&&Math.hypot(v.x-routeEnd.x,v.z-routeEnd.z)<=2.0){
+    arriveCargo(g,v);return;
+   }
    v.waiting=true;v.blockedBy=blockedBy;
    // Accumulate continuous blocked time; past the timeout, attempt a safe reroute
    // around the blocker (bounded: one attempt per tick, separation-checked).
