@@ -1,0 +1,1 @@
+ART-04 civic-rig production capture: PASS_NUMERIC_ONLY C:\Users\ryans\AppData\Local\Temp\rw-qwen\coord-601\art04-head-r3

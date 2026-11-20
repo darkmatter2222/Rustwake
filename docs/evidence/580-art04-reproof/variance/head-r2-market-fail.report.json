@@ -1,0 +1,2338 @@
+{
+  "version": 1,
+  "build": "production-preview",
+  "issue": 350,
+  "schema": "rustwake.voxel.geometry.v1",
+  "source_sha": "53d217ded4a0e5df10b92a87be8f8a8bb916456c",
+  "started": "2026-11-20T03:46:51.618Z",
+  "cameraHashes": {
+    "applyCamera": {
+      "expected": "f3afa5479a66b97e",
+      "actual": "f3afa5479a66b97e",
+      "ok": true
+    },
+    "stampCamera": {
+      "expected": "691b3c0a3480e97b",
+      "actual": "691b3c0a3480e97b",
+      "ok": true
+    }
+  },
+  "budgets": {
+    "depot": {
+      "meshes": 35,
+      "triangles": 410,
+      "declared": {
+        "maxMeshes": 38,
+        "maxTriangles": 460
+      },
+      "pivots": [
+        "door"
+      ],
+      "bounds": {
+        "width": 3.14,
+        "height": 2.98,
+        "depth": 3.2725
+      },
+      "pickHeight": 2.98
+    },
+    "market": {
+      "meshes": 32,
+      "triangles": 434,
+      "declared": {
+        "maxMeshes": 36,
+        "maxTriangles": 480
+      },
+      "pivots": [
+        "scale",
+        "awning"
+      ],
+      "bounds": {
+        "width": 3.045,
+        "height": 2.79,
+        "depth": 3.045
+      },
+      "pickHeight": 3.1
+    },
+    "research": {
+      "meshes": 24,
+      "triangles": 418,
+      "declared": {
+        "maxMeshes": 28,
+        "maxTriangles": 460
+      },
+      "pivots": [
+        "dish",
+        "feed"
+      ],
+      "bounds": {
+        "width": 3.09,
+        "height": 3.45,
+        "depth": 3.045
+      },
+      "pickHeight": 4.5
+    },
+    "fabricator": {
+      "meshes": 37,
+      "triangles": 494,
+      "declared": {
+        "maxMeshes": 40,
+        "maxTriangles": 540
+      },
+      "pivots": [
+        "gear",
+        "pinion",
+        "hammer"
+      ],
+      "bounds": {
+        "width": 3.045,
+        "height": 2.56,
+        "depth": 3.045
+      },
+      "pickHeight": 2.56
+    },
+    "salvager": {
+      "meshes": 29,
+      "triangles": 408,
+      "declared": {
+        "maxMeshes": 32,
+        "maxTriangles": 560
+      },
+      "pivots": [
+        "rocker"
+      ],
+      "bounds": {
+        "width": 3.045,
+        "height": 2.74,
+        "depth": 3.045
+      },
+      "pickHeight": 2.95
+    },
+    "crusher": {
+      "meshes": 45,
+      "triangles": 600,
+      "declared": {
+        "maxMeshes": 46,
+        "maxTriangles": 660
+      },
+      "pivots": [
+        "rollerA",
+        "rollerB",
+        "screen"
+      ],
+      "bounds": {
+        "width": 3.045,
+        "height": 2.51,
+        "depth": 3.045
+      },
+      "pickHeight": 2.51
+    }
+  },
+  "art04Motion": {
+    "dishSpeed": 0.5,
+    "feedAmp": 0.16,
+    "feedSpeed": 0.7,
+    "gearSpeed": 1.6,
+    "pinionSpeed": 3.2,
+    "hammerAmp": 0.45,
+    "hammerSpeed": 1.1,
+    "scaleAmp": 0.45,
+    "scaleSpeed": 1.3,
+    "awningAmp": 0.25,
+    "awningSpeed": 2.6
+  },
+  "art04Dock": {
+    "near": 2.5,
+    "far": 7,
+    "travel": 0.8
+  },
+  "distinctness3d": {
+    "grid": [
+      14,
+      20,
+      14
+    ],
+    "pairs": {
+      "depot/market": 0.1776,
+      "depot/research": 0.4805,
+      "depot/fabricator": 0.2813,
+      "depot/salvager": 0.2442,
+      "depot/crusher": 0.3178,
+      "market/research": 0.4733,
+      "market/fabricator": 0.2904,
+      "market/salvager": 0.2615,
+      "market/crusher": 0.3165,
+      "research/fabricator": 0.4909,
+      "research/salvager": 0.4819,
+      "research/crusher": 0.4668,
+      "fabricator/salvager": 0.1741,
+      "fabricator/crusher": 0.1974,
+      "salvager/crusher": 0.2349
+    },
+    "min": 0.1741,
+    "minPair": "fabricator/salvager"
+  },
+  "sites": {
+    "generator2": {
+      "x": 7,
+      "z": 14
+    },
+    "crusher": {
+      "x": 9,
+      "z": 9
+    },
+    "research": {
+      "x": 9,
+      "z": 14
+    },
+    "fabricator": {
+      "x": 13,
+      "z": 14
+    },
+    "refinery": {
+      "x": 6,
+      "z": 13
+    },
+    "foundry": {
+      "x": 17,
+      "z": 10
+    }
+  },
+  "freshLanding": [
+    {
+      "label": "desktop",
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "absent",
+        "art04Fabricator": "absent",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.000",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "parkedB": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "absent",
+        "art04Fabricator": "absent",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.000",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "parkedConstant": true,
+      "screenshot": "desktop-home-fresh.png"
+    },
+    {
+      "label": "phone",
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "absent",
+        "art04Fabricator": "absent",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.000",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "parkedB": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "absent",
+        "art04Fabricator": "absent",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.000",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "parkedConstant": true,
+      "screenshot": "phone-home-fresh.png"
+    }
+  ],
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "dpr": 1,
+      "isMobile": false,
+      "hasTouch": false,
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "absent",
+        "art04Fabricator": "absent",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.000",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "iso": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": -8.720913528304015,
+        "z": -1.8978427214115943,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 12,
+        "world3d": "ready",
+        "art04Depot": "docking",
+        "art04Market": "idle",
+        "art04Research": "working",
+        "art04Fabricator": "working",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "1.913",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "front": {
+        "yaw": 359.999989013672,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": -8.720913528304015,
+        "z": -1.8978427214115943,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 12,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "working",
+        "art04Fabricator": "working",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.084",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "final": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.7999999865254357,
+        "x": -8.720913528304015,
+        "z": -1.8978427214115943,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 12,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "working",
+        "art04Fabricator": "starved",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "8.726",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "placedGen2": {
+        "label": "desktop",
+        "type": "generator",
+        "site": {
+          "x": 7,
+          "z": 14
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 7.14 / POWER Turbine Generator × ▣ UNIT 010 · LEVEL 1 ONLINE Supplying 12 MW to the yard grid. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Local storage No cargo in this bu"
+      },
+      "placedCrusher": {
+        "label": "desktop",
+        "type": "crusher",
+        "site": {
+          "x": 9,
+          "z": 9
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 017 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle IN"
+      },
+      "placedResearch": {
+        "label": "desktop",
+        "type": "research",
+        "site": {
+          "x": 9,
+          "z": 14
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 9.14 / RESEARCH Signal Observatory × ▣ UNIT 025 · LEVEL 1 WAITING FOR INPUTS Short 2 CI — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Product"
+      },
+      "placedFabricator": {
+        "label": "desktop",
+        "type": "fabricator",
+        "site": {
+          "x": 13,
+          "z": 14
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 041 · LEVEL 1 WAITING FOR INPUTS Short 3 ST, 3 CU — trucks deliver from the depot. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Pr"
+      },
+      "placedRefinery": {
+        "label": "desktop",
+        "type": "refinery",
+        "site": {
+          "x": 6,
+          "z": 13
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 6.13 / PROCESS Fuel Refinery × ▣ UNIT 049 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell Product"
+      },
+      "placedFoundry": {
+        "label": "desktop",
+        "type": "foundry",
+        "site": {
+          "x": 17,
+          "z": 10
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 17.10 / INDUSTRY Alloy Foundry × ▣ UNIT 064 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell "
+      },
+      "clips": [
+        {
+          "file": "desktop-depot-clip.png",
+          "clipCss": {
+            "x": 836.8517253314636,
+            "y": 295.89121292091033,
+            "width": 163.91704450130726,
+            "height": 174.66278405481904
+          },
+          "clamped": false
+        },
+        {
+          "file": "desktop-market-clip.png",
+          "clipCss": {
+            "x": 541.1420594121034,
+            "y": 463.37633171295636,
+            "width": 163.91704450130726,
+            "height": 169.7760285402859
+          },
+          "clamped": false
+        },
+        {
+          "file": "desktop-research-clip.png",
+          "clipCss": {
+            "x": 385.2250149107961,
+            "y": 0,
+            "width": 163.91704450130732,
+            "height": 186.75107401182225
+          },
+          "clamped": true
+        },
+        {
+          "file": "desktop-fabricator-clip.png",
+          "clipCss": {
+            "x": 697.0591039134107,
+            "y": 199.23823253939236,
+            "width": 163.91704450130726,
+            "height": 163.86048239111403
+          },
+          "clamped": false
+        },
+        {
+          "file": "desktop-salvager-clip.png",
+          "clipCss": {
+            "x": 634.10058105287,
+            "y": 152.01030652690912,
+            "width": 163.91704450130726,
+            "height": 168.49004024698758
+          },
+          "clamped": false
+        },
+        {
+          "file": "desktop-crusher-clip.png",
+          "clipCss": {
+            "x": 790.0176255541772,
+            "y": 247.94373445032616,
+            "width": 163.91704450130715,
+            "height": 162.57449409781586
+          },
+          "clamped": false
+        }
+      ],
+      "rigPoses": {
+        "depot": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": 1.8935018121900868,
+          "z": -3.1807791458282484,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "6.062",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "market": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": 9.209529847497512,
+          "z": 15.359165648828947,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "3.023",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "research": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": 9.209529847497512,
+          "z": 15.359165648828947,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "5.919",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "fabricator": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": 9.209529847497512,
+          "z": 15.359165648828947,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "5.824",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "salvager": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": -8.720913528304015,
+          "z": -1.8978427214115943,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "4.566",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "crusher": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.7999999865254357,
+          "x": -8.720913528304015,
+          "z": -1.8978427214115943,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "5.822",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        }
+      },
+      "stampMatchesApplied": true,
+      "beforeButtonZoom": 1.15,
+      "buttonZoom": 1.7825,
+      "appliedZoom": 1.7825,
+      "screenshots": {
+        "landing": "desktop-landing.png",
+        "built": "desktop-yard-built.png",
+        "front": "desktop-yard-front.png",
+        "depotSelected": "desktop-depot-selected.png",
+        "marketSelected": "desktop-market-selected.png",
+        "researchSelected": "desktop-research-selected.png",
+        "fabricatorSelected": "desktop-fabricator-selected.png",
+        "salvagerSelected": "desktop-salvager-selected.png",
+        "crusherSelected": "desktop-crusher-selected.png"
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "canvasCount": 1,
+      "documentScroll": false
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "dpr": 2,
+      "isMobile": true,
+      "hasTouch": true,
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "absent",
+        "art04Fabricator": "absent",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "7.000",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "iso": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 2.1999127802413274,
+        "x": -7.255862071540615,
+        "z": -3.3868679862950293,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 12,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "working",
+        "art04Fabricator": "working",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "2.903",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "front": {
+        "yaw": 0.0000018310547034161573,
+        "elevation": 35.264,
+        "zoom": 2.1999127802413274,
+        "x": -7.255862071540615,
+        "z": -3.3868679862950293,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 12,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "working",
+        "art04Fabricator": "working",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "6.362",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "final": {
+        "yaw": 45.000000000000284,
+        "elevation": 35.264,
+        "zoom": 2.1999127802413274,
+        "x": -7.255862071540615,
+        "z": -3.3868679862950293,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 12,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Market": "idle",
+        "art04Research": "working",
+        "art04Fabricator": "working",
+        "art04Clock": "0.000",
+        "art04Reduced": "1",
+        "art04Door": "0.000",
+        "art04BayDist": "5.778",
+        "art04MarketLoad": "1.000",
+        "art04DepotClock": "0.000",
+        "art04MarketClock": "0.000",
+        "art04ResearchClock": "0.000",
+        "art04FabricatorClock": "0.000"
+      },
+      "placedGen2": {
+        "label": "phone",
+        "type": "generator",
+        "site": {
+          "x": 7,
+          "z": 14
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 7.14 / POWER Turbine Generator × ▣ UNIT 012 · LEVEL 1 ONLINE Supplying 12 MW to the yard grid. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Local storage No cargo in this bu"
+      },
+      "placedCrusher": {
+        "label": "phone",
+        "type": "crusher",
+        "site": {
+          "x": 9,
+          "z": 9
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 019 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle IN"
+      },
+      "placedResearch": {
+        "label": "phone",
+        "type": "research",
+        "site": {
+          "x": 9,
+          "z": 14
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 9.14 / RESEARCH Signal Observatory × ▣ UNIT 034 · LEVEL 1 WAITING FOR INPUTS Short 2 CI — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Product"
+      },
+      "placedFabricator": {
+        "label": "phone",
+        "type": "fabricator",
+        "site": {
+          "x": 13,
+          "z": 14
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 042 · LEVEL 1 WAITING FOR INPUTS Short 3 ST, 3 CU — trucks deliver from the depot. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Pr"
+      },
+      "placedRefinery": {
+        "label": "phone",
+        "type": "refinery",
+        "site": {
+          "x": 6,
+          "z": 13
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 6.13 / PROCESS Fuel Refinery × ▣ UNIT 052 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell Product"
+      },
+      "placedFoundry": {
+        "label": "phone",
+        "type": "foundry",
+        "site": {
+          "x": 17,
+          "z": 10
+        },
+        "siteStamp": {
+          "ok": "true",
+          "code": "OK",
+          "reason": ""
+        },
+        "inspectorText": "SITE 17.10 / INDUSTRY Alloy Foundry × ▣ UNIT 064 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell "
+      },
+      "clips": [
+        {
+          "file": "phone-depot-clip.png",
+          "clipCss": {
+            "x": 133.56018782518913,
+            "y": 57.46705301777598,
+            "width": 122.87962434962171,
+            "height": 130.79708152830733
+          },
+          "clamped": false
+        },
+        {
+          "file": "phone-market-clip.png",
+          "clipCss": {
+            "x": 24.737045588190938,
+            "y": 359.20737241151636,
+            "width": 122.87908413790282,
+            "height": 127.19596124732499
+          },
+          "clamped": false
+        },
+        {
+          "file": "phone-research-clip.png",
+          "clipCss": {
+            "x": 75.14623151571882,
+            "y": 239.01500912685262,
+            "width": 122.8790841379028,
+            "height": 139.70311005332363
+          },
+          "clamped": false
+        },
+        {
+          "file": "phone-fabricator-clip.png",
+          "clipCss": {
+            "x": 304.90439979152444,
+            "y": 388.53037419705754,
+            "width": 122.8790841379028,
+            "height": 122.83740939068906
+          },
+          "clamped": true
+        },
+        {
+          "file": "phone-salvager-clip.png",
+          "clipCss": {
+            "x": 247.46485772257296,
+            "y": 20.332756492784824,
+            "width": 122.8790841379028,
+            "height": 126.24844997414328
+          },
+          "clamped": false
+        },
+        {
+          "file": "phone-crusher-clip.png",
+          "clipCss": {
+            "x": 197.05567179504516,
+            "y": 272.30004965722657,
+            "width": 122.8790841379028,
+            "height": 121.88989811750736
+          },
+          "clamped": false
+        }
+      ],
+      "rigPoses": {
+        "depot": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.1999231251937914,
+          "x": 3.5213043325086657,
+          "z": -6.008567118770447,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "6.550",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "market": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.199912780241328,
+          "x": 14.12798388222334,
+          "z": 17.996977967468926,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "3.774",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "research": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.1999127802413274,
+          "x": -2.7252120992205757,
+          "z": 11.215396842121102,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "docking",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "2.216",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "fabricator": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.1999127802413274,
+          "x": -2.7252120992205757,
+          "z": 11.215396842121102,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "4.720",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "salvager": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.1999127802413274,
+          "x": -2.7252120992205757,
+          "z": 11.215396842121102,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "5.986",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "crusher": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.1999127802413274,
+          "x": -7.255862071540615,
+          "z": -3.3868679862950293,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "docking",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "1.740",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        }
+      },
+      "stampMatchesApplied": true,
+      "beforeButtonZoom": 1,
+      "buttonZoom": 1.55,
+      "appliedZoom": 1.55,
+      "screenshots": {
+        "landing": "phone-landing.png",
+        "built": "phone-yard-built.png",
+        "front": "phone-yard-front.png",
+        "depotSelected": "phone-depot-selected.png",
+        "marketSelected": "phone-market-selected.png",
+        "researchSelected": "phone-research-selected.png",
+        "fabricatorSelected": "phone-fabricator-selected.png",
+        "salvagerSelected": "phone-salvager-selected.png",
+        "crusherSelected": "phone-crusher-selected.png"
+      },
+      "pageErrors": [],
+      "failedRequests": [],
+      "canvasCount": 1,
+      "documentScroll": false
+    }
+  ],
+  "placement": [
+    {
+      "label": "desktop",
+      "type": "generator",
+      "site": {
+        "x": 7,
+        "z": 14
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 7.14 / POWER Turbine Generator × ▣ UNIT 010 · LEVEL 1 ONLINE Supplying 12 MW to the yard grid. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Local storage No cargo in this bu"
+    },
+    {
+      "label": "desktop",
+      "type": "crusher",
+      "site": {
+        "x": 9,
+        "z": 9
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 017 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle IN"
+    },
+    {
+      "label": "desktop",
+      "type": "research",
+      "site": {
+        "x": 9,
+        "z": 14
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 9.14 / RESEARCH Signal Observatory × ▣ UNIT 025 · LEVEL 1 WAITING FOR INPUTS Short 2 CI — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Product"
+    },
+    {
+      "label": "desktop",
+      "type": "fabricator",
+      "site": {
+        "x": 13,
+        "z": 14
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 041 · LEVEL 1 WAITING FOR INPUTS Short 3 ST, 3 CU — trucks deliver from the depot. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Pr"
+    },
+    {
+      "label": "desktop",
+      "type": "refinery",
+      "site": {
+        "x": 6,
+        "z": 13
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 6.13 / PROCESS Fuel Refinery × ▣ UNIT 049 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell Product"
+    },
+    {
+      "label": "desktop",
+      "type": "foundry",
+      "site": {
+        "x": 17,
+        "z": 10
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 17.10 / INDUSTRY Alloy Foundry × ▣ UNIT 064 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell "
+    },
+    {
+      "label": "phone",
+      "type": "generator",
+      "site": {
+        "x": 7,
+        "z": 14
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 7.14 / POWER Turbine Generator × ▣ UNIT 012 · LEVEL 1 ONLINE Supplying 12 MW to the yard grid. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Local storage No cargo in this bu"
+    },
+    {
+      "label": "phone",
+      "type": "crusher",
+      "site": {
+        "x": 9,
+        "z": 9
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 019 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle IN"
+    },
+    {
+      "label": "phone",
+      "type": "research",
+      "site": {
+        "x": 9,
+        "z": 14
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 9.14 / RESEARCH Signal Observatory × ▣ UNIT 034 · LEVEL 1 WAITING FOR INPUTS Short 2 CI — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Product"
+    },
+    {
+      "label": "phone",
+      "type": "fabricator",
+      "site": {
+        "x": 13,
+        "z": 14
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 042 · LEVEL 1 WAITING FOR INPUTS Short 3 ST, 3 CU — trucks deliver from the depot. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Pr"
+    },
+    {
+      "label": "phone",
+      "type": "refinery",
+      "site": {
+        "x": 6,
+        "z": 13
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 6.13 / PROCESS Fuel Refinery × ▣ UNIT 052 · LEVEL 1 WAITING FOR INPUTS Short 8 SC, 2 H₂O — trucks deliver from the depot. Power demand 3 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell Product"
+    },
+    {
+      "label": "phone",
+      "type": "foundry",
+      "site": {
+        "x": 17,
+        "z": 10
+      },
+      "siteStamp": {
+        "ok": "true",
+        "code": "OK",
+        "reason": ""
+      },
+      "inspectorText": "SITE 17.10 / INDUSTRY Alloy Foundry × ▣ UNIT 064 · LEVEL 1 WAITING FOR INPUTS Short 4 ST, 3 CU, 1 FU — trucks deliver from the depot. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 1 cell "
+    }
+  ],
+  "picking": [
+    {
+      "label": "desktop",
+      "machine": "Freight Depot",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 13.9 / LOGISTICS Freight Depot × ▣ UNIT 002 · LEVEL 1 ONLINE Support structure active — no production cycle. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Depot storage is uncapped in this build",
+      "screenshot": "desktop-depot-selected.png"
+    },
+    {
+      "label": "desktop",
+      "machine": "Trade Exchange",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 15.18 / ECONOMY Trade Exchange × ▣ UNIT 006 · LEVEL 1 ONLINE Support structure active — no production cycle. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Local storage No cargo in this building",
+      "screenshot": "desktop-market-selected.png"
+    },
+    {
+      "label": "desktop",
+      "machine": "Signal Observatory",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 9.14 / RESEARCH Signal Observatory × ▣ UNIT 025 · LEVEL 1 OPERATING Cycle 13s · level 1 · outputs scale with level. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 13s 2 C",
+      "screenshot": "desktop-research-selected.png"
+    },
+    {
+      "label": "desktop",
+      "machine": "Parts Fabricator",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 041 · LEVEL 1 OPERATING Cycle 8s · level 1 · outputs scale with level. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 8s 3 ST +",
+      "screenshot": "desktop-fabricator-selected.png"
+    },
+    {
+      "label": "desktop",
+      "machine": "Scrap Extractor",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 7.9 / HARVEST Scrap Extractor × ▣ UNIT 001 · LEVEL 1 OPERATING Cycle 3.6s · level 1 · outputs scale with level. Power demand 1 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Active alarms ▤ WARNING · BAY BACKUP",
+      "screenshot": "desktop-salvager-selected.png"
+    },
+    {
+      "label": "desktop",
+      "machine": "Crusher",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 017 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Active alarms ▤ WARNING · BAY BACKUP · ",
+      "screenshot": "desktop-crusher-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Freight Depot",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 13.9 / LOGISTICS Freight Depot × ▣ UNIT 002 · LEVEL 1 ONLINE Support structure active — no production cycle. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Depot storage is uncapped in this build",
+      "screenshot": "phone-depot-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Trade Exchange",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 15.18 / ECONOMY Trade Exchange × ▣ UNIT 006 · LEVEL 1 ONLINE Support structure active — no production cycle. Power demand 0 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Local storage No cargo in this building",
+      "screenshot": "phone-market-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Signal Observatory",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 9.14 / RESEARCH Signal Observatory × ▣ UNIT 034 · LEVEL 1 OPERATING Cycle 13s · level 1 · outputs scale with level. Power demand 4 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 13s 2 C",
+      "screenshot": "phone-research-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Parts Fabricator",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 13.14 / INDUSTRY Parts Fabricator × ▣ UNIT 042 · LEVEL 1 OPERATING Cycle 8s · level 1 · outputs scale with level. Power demand 5 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 8s 3 ST +",
+      "screenshot": "phone-fabricator-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Scrap Extractor",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 7.9 / HARVEST Scrap Extractor × ▣ UNIT 001 · LEVEL 1 OPERATING Cycle 3.6s · level 1 · outputs scale with level. Power demand 1 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Active alarms ▤ WARNING · BAY BACKUP",
+      "screenshot": "phone-salvager-selected.png"
+    },
+    {
+      "label": "phone",
+      "machine": "Crusher",
+      "footprint": "1×1",
+      "aim": "ground-center",
+      "groundCover": null,
+      "reframed": false,
+      "inspectorText": "SITE 9.9 / PROCESS Crusher × ▣ UNIT 019 · LEVEL 1 WAITING FOR INPUTS Short 10 SC — trucks deliver from the depot. Power demand 2 MW Yard grid Powered Footprint 1×1 Bay facing SOUTH ▣ Loading bay reaches a road in 2 cells Production cycle INPUT / 4s 10 SC OUTPU",
+      "screenshot": "phone-crusher-selected.png"
+    }
+  ],
+  "motion": null,
+  "dockingProof": {
+    "bayDist": 2.349,
+    "doorLift": 0.8,
+    "stamp": {
+      "yaw": 45,
+      "elevation": 35.264,
+      "zoom": 2.0000000009253482,
+      "x": -0.7619872302604265,
+      "z": 1.0033885414591777,
+      "voxelSchema": "rustwake.voxel.geometry.v1",
+      "machineCount": 12,
+      "world3d": "ready",
+      "art04Depot": "docking",
+      "art04Market": "idle",
+      "art04Research": "working",
+      "art04Fabricator": "working",
+      "art04Clock": "0.000",
+      "art04Reduced": "0",
+      "art04Door": "0.800",
+      "art04BayDist": "2.349",
+      "art04MarketLoad": "1.000",
+      "art04DepotClock": "0.000",
+      "art04MarketClock": "8.987",
+      "art04ResearchClock": "8.987",
+      "art04FabricatorClock": "8.987"
+    },
+    "screenshot": "desktop-depot-docking.png",
+    "clip": {
+      "file": "desktop-depot-docking-clip.png",
+      "clipCss": {
+        "x": 900.169120217046,
+        "y": 307.4853144520557,
+        "width": 141.6431821219952,
+        "height": 150.8538161022555
+      },
+      "clamped": false
+    },
+    "framing": {
+      "panIterations": 0,
+      "bbox": {
+        "minX": 904.169120217046,
+        "minY": 311.4853144520557,
+        "maxX": 1037.8123023390413,
+        "maxY": 454.3391305543112
+      }
+    },
+    "contract": "art04Depot docking iff nearest real truck <= ART04_DOCK.near (2.5) to the LOG-02 bay approach cell; shutter lift = depotDoorLift(distance)"
+  },
+  "contactChecks": [
+    {
+      "label": "desktop:fresh",
+      "point": {
+        "x": 720,
+        "y": 450
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "desktop:unlock",
+      "point": {
+        "x": 720,
+        "y": 450
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "desktop:starved",
+      "point": {
+        "x": 720,
+        "y": 450
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "desktop:unpowered",
+      "point": {
+        "x": 720,
+        "y": 450
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "phone:fresh",
+      "point": {
+        "x": 195,
+        "y": 422
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "phone:unlock",
+      "point": {
+        "x": 195,
+        "y": 422
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "phone:starved",
+      "point": {
+        "x": 195,
+        "y": 422
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "phone:unpowered",
+      "point": {
+        "x": 195,
+        "y": 422
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    },
+    {
+      "label": "motion",
+      "point": {
+        "x": 720,
+        "y": 450
+      },
+      "initial": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "collapsedSheet": false,
+      "final": {
+        "canvas": true,
+        "top": "canvas.world-canvas < div.world-container < div.app-shell"
+      },
+      "ok": true
+    }
+  ],
+  "motionDetails": null,
+  "homeShutterVisibility": null,
+  "sanity": null,
+  "negatives": {
+    "starved": [
+      {
+        "label": "desktop",
+        "stamps": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 11,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "starved",
+          "art04Fabricator": "starved",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "9.899",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "after": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.8000001081408596,
+          "x": 3.009523185338884,
+          "z": 5.13523555370384,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 11,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "starved",
+          "art04Fabricator": "starved",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "9.899",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "stable": true,
+        "clip": {
+          "file": "desktop-starved-fabricator-clip.png",
+          "clipCss": {
+            "x": 607.4307779167084,
+            "y": 410.4450877500759,
+            "width": 163.9170512734206,
+            "height": 163.86048916077073
+          },
+          "clamped": false
+        },
+        "screenshots": [
+          "desktop-starved-yard.png",
+          "desktop-starved-fabricator-clip.png"
+        ],
+        "pageErrors": []
+      },
+      {
+        "label": "phone",
+        "stamps": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 11,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "starved",
+          "art04Fabricator": "starved",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "9.899",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "after": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.199947064661011,
+          "x": 2.8121891592203987,
+          "z": 4.786321026493743,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 11,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "starved",
+          "art04Fabricator": "starved",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "9.899",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "stable": true,
+        "clip": {
+          "file": "phone-starved-fabricator-clip.png",
+          "clipCss": {
+            "x": 108.51769628117852,
+            "y": 396.97864165107063,
+            "width": 122.88087446466885,
+            "height": 122.83919906797729
+          },
+          "clamped": false
+        },
+        "screenshots": [
+          "phone-starved-yard.png",
+          "phone-starved-fabricator-clip.png"
+        ],
+        "pageErrors": []
+      }
+    ],
+    "unpowered": [
+      {
+        "label": "desktop",
+        "stamps": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "unpowered",
+          "art04Fabricator": "unpowered",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "9.899",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "after": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.8000001081408596,
+          "x": -5.18544986828421,
+          "z": 5.185449868284209,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "unpowered",
+          "art04Fabricator": "unpowered",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "9.899",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "stable": true,
+        "clip": {
+          "file": "desktop-unpowered-research-clip.png",
+          "clipCss": {
+            "x": 479.2488613194585,
+            "y": 312.2578610663338,
+            "width": 163.91705127342055,
+            "height": 186.75108177571076
+          },
+          "clamped": false
+        },
+        "screenshots": [
+          "desktop-unpowered-yard.png",
+          "desktop-unpowered-research-clip.png"
+        ],
+        "pageErrors": []
+      },
+      {
+        "label": "phone",
+        "stamps": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "unpowered",
+          "art04Fabricator": "unpowered",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "9.899",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "after": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 2.199947064661011,
+          "x": -4.78909767801496,
+          "z": 4.78909767801496,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "unpowered",
+          "art04Fabricator": "unpowered",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "9.899",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "stable": true,
+        "clip": {
+          "file": "phone-unpowered-research-clip.png",
+          "clipCss": {
+            "x": 3.5504420765859095,
+            "y": 319.45777034654583,
+            "width": 122.88087446466886,
+            "height": 139.70516257319588
+          },
+          "clamped": false
+        },
+        "screenshots": [
+          "phone-unpowered-yard.png",
+          "phone-unpowered-research-clip.png"
+        ],
+        "pageErrors": []
+      }
+    ],
+    "reducedMotion": [
+      {
+        "label": "desktop",
+        "stage": "fresh-landing",
+        "parkedA": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "absent",
+          "art04Fabricator": "absent",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.000",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "parkedB": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "absent",
+          "art04Fabricator": "absent",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.000",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "parkedConstant": true
+      },
+      {
+        "label": "desktop",
+        "stage": "all-rigs-live",
+        "parkedC": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.7825,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "5.913",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "parkedD": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.7825,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "2.760",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "allParkedConstant": true
+      },
+      {
+        "label": "phone",
+        "stage": "fresh-landing",
+        "parkedA": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "absent",
+          "art04Fabricator": "absent",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.000",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "parkedB": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "absent",
+          "art04Fabricator": "absent",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "7.000",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "parkedConstant": true
+      },
+      {
+        "label": "phone",
+        "stage": "all-rigs-live",
+        "parkedC": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 0.7000679294366855,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "9.389",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "parkedD": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 0.7000679294366855,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 12,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Market": "idle",
+          "art04Research": "working",
+          "art04Fabricator": "working",
+          "art04Clock": "0.000",
+          "art04Reduced": "1",
+          "art04Door": "0.000",
+          "art04BayDist": "6.962",
+          "art04MarketLoad": "1.000",
+          "art04DepotClock": "0.000",
+          "art04MarketClock": "0.000",
+          "art04ResearchClock": "0.000",
+          "art04FabricatorClock": "0.000"
+        },
+        "allParkedConstant": true
+      }
+    ],
+    "webglFailure": null
+  },
+  "legibility": {
+    "targetPx": 96,
+    "machines": {
+      "desktop:depot": {
+        "file": "desktop-depot-clip.png",
+        "width": 163,
+        "height": 174,
+        "edgeEnergy": 12.214
+      },
+      "desktop:market": {
+        "file": "desktop-market-clip.png",
+        "width": 163,
+        "height": 169,
+        "edgeEnergy": 11.159
+      },
+      "desktop:research": {
+        "file": "desktop-research-clip.png",
+        "width": 163,
+        "height": 186,
+        "edgeEnergy": 10.157
+      },
+      "desktop:fabricator": {
+        "file": "desktop-fabricator-clip.png",
+        "width": 163,
+        "height": 163,
+        "edgeEnergy": 9.56
+      },
+      "desktop:salvager": {
+        "file": "desktop-salvager-clip.png",
+        "width": 163,
+        "height": 168,
+        "edgeEnergy": 12.765
+      },
+      "desktop:crusher": {
+        "file": "desktop-crusher-clip.png",
+        "width": 163,
+        "height": 162,
+        "edgeEnergy": 11.819
+      },
+      "phone:depot": {
+        "file": "phone-depot-clip.png",
+        "width": 244,
+        "height": 260,
+        "edgeEnergy": 17.657
+      },
+      "phone:market": {
+        "file": "phone-market-clip.png",
+        "width": 244,
+        "height": 254,
+        "edgeEnergy": 7.924
+      },
+      "phone:research": {
+        "file": "phone-research-clip.png",
+        "width": 244,
+        "height": 278,
+        "edgeEnergy": 10.349
+      },
+      "phone:fabricator": {
+        "file": "phone-fabricator-clip.png",
+        "width": 170,
+        "height": 244,
+        "edgeEnergy": 7.599
+      },
+      "phone:salvager": {
+        "file": "phone-salvager-clip.png",
+        "width": 244,
+        "height": 252,
+        "edgeEnergy": 9.755
+      },
+      "phone:crusher": {
+        "file": "phone-crusher-clip.png",
+        "width": 244,
+        "height": 242,
+        "edgeEnergy": 9.313
+      }
+    },
+    "pairwise": {
+      "desktop:depot-market": {
+        "meanAbsDiff": 22.943,
+        "diffFractionOver24": 0.3689,
+        "maxPixelDiff": 143.7
+      },
+      "desktop:depot-research": {
+        "meanAbsDiff": 33.864,
+        "diffFractionOver24": 0.5353,
+        "maxPixelDiff": 161.7
+      },
+      "desktop:depot-fabricator": {
+        "meanAbsDiff": 29.839,
+        "diffFractionOver24": 0.4569,
+        "maxPixelDiff": 151.7
+      },
+      "desktop:depot-salvager": {
+        "meanAbsDiff": 26.436,
+        "diffFractionOver24": 0.4295,
+        "maxPixelDiff": 146.3
+      },
+      "desktop:depot-crusher": {
+        "meanAbsDiff": 23.801,
+        "diffFractionOver24": 0.4078,
+        "maxPixelDiff": 154.7
+      },
+      "desktop:market-research": {
+        "meanAbsDiff": 32.567,
+        "diffFractionOver24": 0.5244,
+        "maxPixelDiff": 144.2
+      },
+      "desktop:market-fabricator": {
+        "meanAbsDiff": 32.824,
+        "diffFractionOver24": 0.5595,
+        "maxPixelDiff": 145.3
+      },
+      "desktop:market-salvager": {
+        "meanAbsDiff": 20.459,
+        "diffFractionOver24": 0.3172,
+        "maxPixelDiff": 134.3
+      },
+      "desktop:market-crusher": {
+        "meanAbsDiff": 22.362,
+        "diffFractionOver24": 0.3898,
+        "maxPixelDiff": 138
+      },
+      "desktop:research-fabricator": {
+        "meanAbsDiff": 34.49,
+        "diffFractionOver24": 0.5454,
+        "maxPixelDiff": 143.7
+      },
+      "desktop:research-salvager": {
+        "meanAbsDiff": 31.645,
+        "diffFractionOver24": 0.5311,
+        "maxPixelDiff": 151.7
+      },
+      "desktop:research-crusher": {
+        "meanAbsDiff": 32.853,
+        "diffFractionOver24": 0.5191,
+        "maxPixelDiff": 151.7
+      },
+      "desktop:fabricator-salvager": {
+        "meanAbsDiff": 34.28,
+        "diffFractionOver24": 0.5829,
+        "maxPixelDiff": 139.7
+      },
+      "desktop:fabricator-crusher": {
+        "meanAbsDiff": 29.24,
+        "diffFractionOver24": 0.5101,
+        "maxPixelDiff": 144.3
+      },
+      "desktop:salvager-crusher": {
+        "meanAbsDiff": 25.482,
+        "diffFractionOver24": 0.4154,
+        "maxPixelDiff": 129.7
+      },
+      "phone:depot-market": {
+        "meanAbsDiff": 41.799,
+        "diffFractionOver24": 0.6727,
+        "maxPixelDiff": 179.6
+      },
+      "phone:depot-research": {
+        "meanAbsDiff": 49.002,
+        "diffFractionOver24": 0.6854,
+        "maxPixelDiff": 184.6
+      },
+      "phone:depot-fabricator": {
+        "meanAbsDiff": 56.434,
+        "diffFractionOver24": 0.7456,
+        "maxPixelDiff": 146.7
+      },
+      "phone:depot-salvager": {
+        "meanAbsDiff": 43.375,
+        "diffFractionOver24": 0.6327,
+        "maxPixelDiff": 193.8
+      },
+      "phone:depot-crusher": {
+        "meanAbsDiff": 44.09,
+        "diffFractionOver24": 0.7147,
+        "maxPixelDiff": 182.3
+      },
+      "phone:market-research": {
+        "meanAbsDiff": 35.782,
+        "diffFractionOver24": 0.5933,
+        "maxPixelDiff": 195
+      },
+      "phone:market-fabricator": {
+        "meanAbsDiff": 36.919,
+        "diffFractionOver24": 0.5637,
+        "maxPixelDiff": 152
+      },
+      "phone:market-salvager": {
+        "meanAbsDiff": 41.129,
+        "diffFractionOver24": 0.6098,
+        "maxPixelDiff": 193.4
+      },
+      "phone:market-crusher": {
+        "meanAbsDiff": 23.208,
+        "diffFractionOver24": 0.4123,
+        "maxPixelDiff": 136.9
+      },
+      "phone:research-fabricator": {
+        "meanAbsDiff": 39.407,
+        "diffFractionOver24": 0.5543,
+        "maxPixelDiff": 147.8
+      },
+      "phone:research-salvager": {
+        "meanAbsDiff": 50.719,
+        "diffFractionOver24": 0.6746,
+        "maxPixelDiff": 185.3
+      },
+      "phone:research-crusher": {
+        "meanAbsDiff": 34.788,
+        "diffFractionOver24": 0.5677,
+        "maxPixelDiff": 191.6
+      },
+      "phone:fabricator-salvager": {
+        "meanAbsDiff": 65.232,
+        "diffFractionOver24": 0.7906,
+        "maxPixelDiff": 152.8
+      },
+      "phone:fabricator-crusher": {
+        "meanAbsDiff": 37.126,
+        "diffFractionOver24": 0.5865,
+        "maxPixelDiff": 156.6
+      },
+      "phone:salvager-crusher": {
+        "meanAbsDiff": 46.313,
+        "diffFractionOver24": 0.6462,
+        "maxPixelDiff": 137.8
+      }
+    }
+  },
+  "status": "FAIL",
+  "errors": [
+    "Error: MOTION_NOT_VISIBLE_IN_RENDER market: {\"clocks\":[24.243,25.507],\"simFloors\":[24,25],\"clips\":[{\"file\":\"desktop-motion-market-t1.png\",\"clipCss\":{\"x\":596.1876422050119,\"y\":459.7179859824489,\"width\":163.91704413610455,\"height\":169.77602816135982},\"clamped\":false},{\"file\":\"desktop-motion-market-t2.png\",\"clipCss\":{\"x\":596.1876422050119,\"y\":459.7179859824489,\"width\":163.91704413610455,\"height\":169.77602816135982},\"clamped\":false}],\"pair\":{\"meanAbsDiff\":0.593,\"diffFractionOver24\":0.0074,\"maxPixelDiff\":144.2}}\n    at file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-580a/wt/scripts/capture-art04.mjs:1055:15"
+  ],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated (390x844 dpr2, hasTouch/isMobile) — physical handset verification remains #268/#275",
+    "Scenario yards (tier-2 unlock, working, starved, unpowered) are seeded through the real save schema; status itself is derived only by the live simulation from that state",
+    "V2 has no 2D fallback renderer; the WebGL-failure negative proves a loud failure, not a playable fallback",
+    "Numeric smoke only (PASS_NUMERIC_ONLY) — not art parity vs public/reference/approved-yard.png, not reviewer/product acceptance, not sponsor G1 approval (#276, sponsor-reserved, still owed)",
+    "The code author is not vision-capable; no art self-certification is made or implied"
+  ],
+  "previewIntegrity": {
+    "entry": "/rustwake/assets/index-DBRWiyDD.js",
+    "sha256": "192321af03978745544204ce864ff6b29df889fbeb43a1c29679508415193cb6",
+    "ok": true
+  },
+  "completed": "2026-11-20T03:50:28.907Z"
+}
