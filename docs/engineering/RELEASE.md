@@ -65,3 +65,32 @@ PR #306 merged SHA 258fce59755c4c07aabed0c6925a0757f0e4cc24. Main CI run 4378250
 
 ## Release frequency and sessions
 Promptly merge accepted PRs through one release lease to avoid an unmerged backlog. Team max = one coordinator + four rotating child model sessions. Browser automation is not a model child and should use one serialized browser process per actual release. Avoid launching local browsers in every agent. Keep complete rollback and audit history.
+
+## PR-body closing-verb hygiene (issue 587) — durable rule, all roles
+
+GitHub's closing-keyword parser is context-free. A closing verb (`close`/`closes`/`closed`/`closing`, `fix`/`fixes`/`fixed`, `resolve`/`resolves`/`resolved`/`resolving`) adjacent to an issue reference ANYWHERE in a PR description auto-closes that issue when the PR lands on the default branch — even inside a negation, a checklist item, a quoted product condition, or "next steps" prose. The prose written to prevent premature closure is precisely the string that causes it. This fired twice in this repository: the historical body line from issue 552 (PR 582, body line 4) and the checklist line from issue 567 (PR 573, body line 97). Both PRs carried the correct `Refs` convention on line 1; a second, later mention was the trigger. Both issues were reopened by the coordinator; a parser accident is not a product ruling and neither issue earned closure.
+
+Binding rule for every role:
+
+1. A closing verb must NEVER appear adjacent to an issue reference anywhere in a PR description — including negations, checklists, quoted product conditions, and "next steps" prose.
+2. Write `Refs #NNN` on body line 1. Everywhere else refer to "issue NNN" WITHOUT the `#`, or rephrase to "issue NNN stays OPEN".
+3. Brief templates must carry this rule explicitly, because the natural way to write "this PR does not close the issue" with a `#` reference is precisely the string that closes it.
+4. The same parser reads commit messages, so the rule applies there too. Keep the structurally safe subject convention `feat(NNN):` / `fix(NNN):` — parentheses never form a closing pair, and a trailing bare `(#PR)` reference has no preceding verb.
+5. Closure authority stays with product after merge + verification. Do not write "in flight" or "pending" status prose about work that has shipped; state what landed at which SHA.
+
+### Pre-merge audit — mandatory release-engineer step (part of Pipeline step 2)
+
+Before merging any PR, the release engineer runs the read-only guard against the LIVE PR body and requires zero hits:
+
+    node scripts/check-pr-body.mjs --pr <number>
+
+Equivalent file form (fetch first, then audit):
+
+    gh api repos/darkmatter2222/Rustwake/pulls/<number> --jq .body > pr-body.txt
+    node scripts/check-pr-body.mjs pr-body.txt
+
+Predicate (case-insensitive): `(close[sd]?|closing|fix(es|ed)?|resolve[sd]?|resolving)[[:space:]]*:?[[:space:]]*#[0-9]+`
+
+Exit 0 = clean; exit 1 = hits found (each reported with its line number and matched text); exit 2 = error (an empty or whitespace-only body is an error, never a vacuous pass). Any hit blocks the merge: fix the wording (a body edit does not change the head and does not void gates) or product explicitly owns the intended closure. Record the command and its exit code in the release receipt. Re-run at merge time on the live body — bodies are editable, so an earlier scan is a lower bound, not a substitute. The guard is read-only: it never edits a PR, never posts, never merges.
+
+Known limitation (disclosed): the predicate is lexical and does not model GitHub's full grammar (e.g. keyword lists or markdown emphasis between verb and reference). It is a conservative superset for the studio's convention — it may flag prose GitHub would not act on, and that is the safe direction. Falsifiable tests: `tests/prBodyHygiene.test.mjs` (both real historical offending lines are fixtures there; tracked file contents are safe — the parser reads PR descriptions and commit messages, not files). Evidence: `docs/evidence/587-prbody/`.
