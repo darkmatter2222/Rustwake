@@ -1234,9 +1234,12 @@ export function advanceGame(g,seconds){
     }
    }
   }
-  // #589: deterministic ascending-id motion order. Right-of-way tie-breaks are
-  // already id-based (traffic.hasPriority); processing lowest id first makes the
-  // queue attribution and resume order reproducible run-to-run and save/reload.
+  // #589: deterministic ascending-id motion order. The operative right-of-way
+  // mechanism is the ascending-id ordered current-envelope clamp
+  // (traffic.separationClamp): a lower-id blocker has already moved when a
+  // higher-id yielder clamps, so the id order itself breaks ties. Processing
+  // lowest id first makes the queue attribution and resume order reproducible
+  // run-to-run and save/reload.
   for(const v of [...g.vehicles].sort((a,b)=>a.id-b.id)){
    if(!v.job&&v.cargo)returnFreight(g,v,"JOB_MISSING");
    if(!v.job)assignJob(g,v);

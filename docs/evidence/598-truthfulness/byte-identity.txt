@@ -1,0 +1,67 @@
+598 truthfulness car — local measurement record (dev-598a)
+Base: 1617877f4ffe75ca6abd2fae9eb99edbf0ee781f (= live manifest source_sha)
+Branch: rw/v2-598-traffic-truthfulness, draft PR #615
+Scope: comment + dead-code only (header rewrite, simulation comment rewrite,
+dead hasPriority export + orphaned private dot helper removed, laneRoute
+docstring derived from LANE_OFFSET_CELLS). No executable statement changed.
+
+== Byte-identity vs live manifest ==
+Live manifest: https://home.darkmatter2222.com/rustwake/release-manifest.json
+(fetched with --cacert node-extra-ca.pem; source_sha 1617877f4ffe75ca6abd2fae9eb99edbf0ee781f)
+Build: pnpm build (vite) at this branch, Windows checkout.
+
+assets/index-hSr48kY1.js
+  local  sha256 ba0a92683b34b498bf626cac35ff430c9d5b30d160eb8df85e96fd084276480b  893554 bytes
+  live   sha256 ba0a92683b34b498bf626cac35ff430c9d5b30d160eb8df85e96fd084276480b  893554 bytes
+  RESULT: BYTE-IDENTICAL
+
+assets/index-bzrIfhZT.css
+  local  sha256 d4044ef916f0e21d4dbd2e2c299bf9532a9b25f51c091581e7445fd01923f015  44560 bytes
+  live   sha256 d4044ef916f0e21d4dbd2e2c299bf9532a9b25f51c091581e7445fd01923f015  44560 bytes
+  RESULT: BYTE-IDENTICAL
+
+index.html
+  local raw (CRLF checkout) sha256 cbfa800a3f50cad36b971f9a917280db6b306b9acac259a62fa4ca656daf7e51  589 bytes
+  local after CRLF->LF      sha256 0d9a15274a0b2a545af899c30c8f50e4d23553596a59389c0b7c54e311a0ba03  582 bytes
+  live                      sha256 0d9a15274a0b2a545af899c30c8f50e4d23553596a59389c0b7c54e311a0ba03  582 bytes
+  RESULT: BYTE-IDENTICAL modulo the Windows checkout CRLF artifact (7 bytes = 7 line endings)
+
+Prediction: served pixels untouched. This is a LOCAL measurement for the release
+engineer to re-verify against the real deploy after any eventual merge; it is not
+a release claim and not visual acceptance (sponsor G1 alone, Refs #276).
+
+== Test suite (local Windows, pnpm test = node --test tests/*.test.mjs) ==
+Before (main Linux baseline per coordinator): 756 tests / 756 pass / 0 fail
+After  (this branch, local Windows):          764 tests / 763 pass / 1 fail
+Delta: +8 tests, all in tests/trafficTruthfulness.test.mjs.
+Sole failure, identified BY NAME (the known Windows CRLF exclusion, green on
+ubuntu, NOT touched by this car):
+  not ok 275 - delivery-alert.yml text contract: isolation, runner, timeout, permissions, dry-run
+  location: tests/deliveryAlert.test.mjs:244
+  error: 'workflow-level permissions block present'
+
+New test TITLES (node TAP emits no filenames; CI coverage is proven by these):
+  598 truthfulness: traffic.js carries no unqualified deadlock-free or acyclic claim
+  598 truthfulness: traffic header names the crossing-cycle limit and load-bearing recovery
+  598 truthfulness: simulation motion-order comment names the ordered current-envelope clamp
+  598 truthfulness: dead hasPriority helper is gone from traffic.js and simulation.js
+  598 truthfulness: laneRoute docstring range matches LANE_OFFSET_CELLS
+  598 negative control: the OLD false deadlock-free header is REJECTED
+  598 negative control: the OLD hasPriority-as-operative comment is REJECTED
+  598 negative control: the stale L=0.25 laneRoute docstring is REJECTED
+
+Negative controls feed the SAME assertion helpers the verbatim original
+defective texts from base 1617877f and assert rejection — the positive checks
+are non-vacuous. Local run of the new file alone: 8 tests / 8 pass / 0 fail.
+
+== Dead-code confirmation ==
+Repo-wide grep for hasPriority at base (excluding node_modules/.git): exactly
+two hits — src/traffic.js:182 (definition) and src/simulation.js:1238 (comment
+citing it as operative). Zero call sites, internal or external. The private
+dot() helper's only two call sites were inside hasPriority (src/traffic.js:184,
+185), so it was removed with the function. Tie-break knowledge preserved in the
+separationClamp comment block.
+
+== GAPS ledger ==
+docs/backlog/GAPS.md rows matching '^| ': 56 before -> 57 after (+1).
+Every before-row present verbatim after (grep -vxFf: 0 missing). Diff: 1 insertion.
