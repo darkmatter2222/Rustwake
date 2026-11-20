@@ -1,0 +1,12 @@
+Issue 587 — docs/engineering/RELEASE.md append-only preservation proof
+Generated: 2026-11-20T07:16:49.418Z
+Base: 0755039974591eaddb2b2aca78aca1e1ef10a0b0
+Head: 3bdb6692575689e4c706bb6b570e425de1ff0b6e
+
+line count before: 67
+line count after:  96
+git diff --numstat 0755039974591eaddb2b2aca78aca1e1ef10a0b0..HEAD -- docs/engineering/RELEASE.md: 29	0	docs/engineering/RELEASE.md (insertions deletions — zero deletions)
+sha256 of full baseline blob:            62f251f94787a05eb7b3abcb3cb6f7a229d5e5eee43951138c4a8d9ecfc63e5d
+sha256 of first 67 lines of new blob:     62f251f94787a05eb7b3abcb3cb6f7a229d5e5eee43951138c4a8d9ecfc63e5d
+identity: PROVEN — every pre-existing line survives verbatim, nothing dropped, merged or renumbered
+sha256 of full new blob:                 5c7a260e32644e905aac53cf6ebb1af838e088d17a324d7ba202868e3705f67e

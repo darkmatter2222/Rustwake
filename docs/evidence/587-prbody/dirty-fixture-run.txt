@@ -1,0 +1,46 @@
+Issue 587 — dirty-fixture runs (guard must FAIL with correct line numbers)
+Generated: 2026-11-20T07:16:49.418Z
+Worktree head: 3bdb6692575689e4c706bb6b570e425de1ff0b6e
+Fixture contents are reproduced verbatim below. These strings are safe in a tracked file; they must never appear in a PR body or commit message.
+
+=== Fixture A: historical issue-567 checklist line at body line 97 (as in PR 573) ===
+line 1: Refs #573
+lines 2-96: plain prose filler
+line 97: - [ ] Product closes #567 on C3 deployed-SHA content evidence (not at merge)
+--- guard run ---
+  file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\dirty-historical-567.txt line 97: closes #567
+check-pr-body: FAIL file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\dirty-historical-567.txt — 1 hit(s)
+check-pr-body: 1 source(s), 1 hit(s), 0 error(s) — exit 1
+exit code: 1
+=== Fixture B: historical issue-552 evidence-only line at body line 4 (as in PR 582) ===
+line 1: Refs #552
+line 4: Evidence-only PR — no src/ changes, no GAPS.md changes, does NOT close #552 (product rules on the evidence).
+--- guard run ---
+  file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\dirty-historical-552.txt line 4: close #552
+check-pr-body: FAIL file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\dirty-historical-552.txt — 1 hit(s)
+check-pr-body: 1 source(s), 1 hit(s), 0 error(s) — exit 1
+exit code: 1
+=== Fixture C: negated closing verbs (negation does not save you) ===
+line 2: This PR does NOT close #552 and will not fix #567.
+--- guard run ---
+  file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\dirty-negation.txt line 2: close #552
+  file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\dirty-negation.txt line 2: fix #567
+check-pr-body: FAIL file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\dirty-negation.txt — 2 hit(s)
+check-pr-body: 1 source(s), 2 hit(s), 0 error(s) — exit 1
+exit code: 1
+=== Fixture D: clean line 1, dirty line 5 ===
+line 1: Refs #587
+line 5: closes #123
+--- guard run ---
+  file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\dirty-line5.txt line 5: closes #123
+check-pr-body: FAIL file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\dirty-line5.txt — 1 hit(s)
+check-pr-body: 1 source(s), 1 hit(s), 0 error(s) — exit 1
+exit code: 1
+=== Fixture E: clean contrast (Refs + bare issue NNN) ===
+Refs #587
+issue 552 stays OPEN
+--- guard run ---
+check-pr-body: PASS file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\clean-contrast.txt — 0 hits
+check-pr-body: 1 source(s), 0 hit(s), 0 error(s) — exit 0
+exit code: 0
+Non-vacuity: dirty fixtures exit 1, clean fixture exits 0 — the guard can FAIL, and the two outcomes differ.

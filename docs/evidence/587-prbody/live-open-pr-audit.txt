@@ -1,0 +1,56 @@
+Issue 587 — live audit of every currently open PR body
+Generated: 2026-11-20T07:16:49.418Z
+Worktree head: 3bdb6692575689e4c706bb6b570e425de1ff0b6e
+Repo: darkmatter2222/Rustwake
+Method: scripts/check-pr-body.mjs --pr <n> (live read-only gh api GET), cross-checked against a dumped body file and the raw grep predicate.
+Open PRs at generation time: 614, 613, 612, 608
+
+=== PR #614 (rw/587-prbody-hygiene, draft=true) — feat(587): PR-body closing-verb hygiene guard + pre-merge audit rule ===
+body bytes: 2827, body lines: 23
+--- guard --pr (live fetch) ---
+check-pr-body: PASS PR #614 — 0 hits
+check-pr-body: 1 source(s), 0 hit(s), 0 error(s) — exit 0
+exit code: 0
+--- guard on dumped body file ---
+check-pr-body: PASS file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\pr-614.txt — 0 hits
+check-pr-body: 1 source(s), 0 hit(s), 0 error(s) — exit 0
+exit code: 0
+raw grep predicate exit code: 1 (1 = no matches)
+
+=== PR #613 (rw/597-measure-rigs-portability, draft=false) — fix(597): de-hardcode measure-rigs harness target resolution ===
+body bytes: 3423, body lines: 29
+--- guard --pr (live fetch) ---
+check-pr-body: PASS PR #613 — 0 hits
+check-pr-body: 1 source(s), 0 hit(s), 0 error(s) — exit 0
+exit code: 0
+--- guard on dumped body file ---
+check-pr-body: PASS file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\pr-613.txt — 0 hits
+check-pr-body: 1 source(s), 0 hit(s), 0 error(s) — exit 0
+exit code: 0
+raw grep predicate exit code: 1 (1 = no matches)
+
+=== PR #612 (rw/611-yardlife-clock-determinism, draft=false) — test(611): deterministic yardLife honesty gate (Refs #611) ===
+body bytes: 4096, body lines: 42
+--- guard --pr (live fetch) ---
+check-pr-body: PASS PR #612 — 0 hits
+check-pr-body: 1 source(s), 0 hit(s), 0 error(s) — exit 0
+exit code: 0
+--- guard on dumped body file ---
+check-pr-body: PASS file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\pr-612.txt — 0 hits
+check-pr-body: 1 source(s), 0 hit(s), 0 error(s) — exit 0
+exit code: 0
+raw grep predicate exit code: 1 (1 = no matches)
+
+=== PR #608 (rw/596-fleet-origin-recovery, draft=true) — feat(596): depot-only fleet growth + bounded origin/pickup recovery ===
+body bytes: 4680, body lines: 78
+--- guard --pr (live fetch) ---
+check-pr-body: PASS PR #608 — 0 hits
+check-pr-body: 1 source(s), 0 hit(s), 0 error(s) — exit 0
+exit code: 0
+--- guard on dumped body file ---
+check-pr-body: PASS file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\pr-608.txt — 0 hits
+check-pr-body: 1 source(s), 0 hit(s), 0 error(s) — exit 0
+exit code: 0
+raw grep predicate exit code: 1 (1 = no matches)
+
+All open PR bodies audited live at 2026-11-20T07:16:49.418Z; see per-PR exit codes above.
