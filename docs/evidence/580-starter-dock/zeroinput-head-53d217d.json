@@ -1,0 +1,69 @@
+{
+ "srcDir": "C:\\Users\\ryans\\AppData\\Local\\Temp\\rw-qwen\\coord-601\\head-53d217d\\src",
+ "seconds": 660,
+ "steps": 2640,
+ "CELL": 3.5,
+ "depot": {
+  "id": 2,
+  "x": 13,
+  "z": 9,
+  "rot": 0
+ },
+ "bankUntouched": "BANK CHANGED BY SIM (expected: production)",
+ "bankAtStart": {
+  "credits": 1800,
+  "scrap": 220,
+  "iron": 90,
+  "copper": 45,
+  "stone": 220,
+  "fuel": 110,
+  "water": 90,
+  "steel": 20,
+  "alloy": 0,
+  "gears": 0,
+  "circuits": 0,
+  "data": 15,
+  "relics": 0,
+  "influence": 0,
+  "shards": 0,
+  "charters": 0,
+  "renown": 0
+ },
+ "tierAtStart": 0,
+ "tierEnd": 2,
+ "dockWindow": {
+  "near": 2.5,
+  "far": 7,
+  "travel": 0.8
+ },
+ "dockingSteps": 538,
+ "firstDockT": 7.25,
+ "minBayDist": 1.225,
+ "minAt": {
+  "t": 12,
+  "vehicles": [
+   {
+    "id": 1,
+    "x": 13.35,
+    "z": 10,
+    "phase": null
+   },
+   {
+    "id": 2,
+    "x": 13.35,
+    "z": 10.671,
+    "phase": "toDest"
+   },
+   {
+    "id": 3,
+    "x": 13.521,
+    "z": 11.65,
+    "phase": "toDest"
+   }
+  ]
+ },
+ "maxDoorLift": 0,
+ "delivered": 2638,
+ "shipments": 271,
+ "clause1": "PASS"
+}

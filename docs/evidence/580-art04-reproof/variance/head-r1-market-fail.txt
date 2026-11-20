@@ -1,0 +1,3 @@
+ART-04 civic-rig production capture: FAIL C:\Users\ryans\AppData\Local\Temp\rw-qwen\dev-580a\wt\docs\evidence\580-starter-dock\art04-reproof
+Error: MOTION_NOT_VISIBLE_IN_RENDER market: {"clocks":[24.174,25.44],"simFloors":[24,25],"clips":[{"file":"desktop-motion-market-t1.png","clipCss":{"x":596.1876422050119,"y":459.7179859824489,"width":163.91704413610455,"height":169.77602816135982},"clamped":false},{"file":"desktop-motion-market-t2.png","clipCss":{"x":596.1876422050119,"y":459.7179859824489,"width":163.91704413610455,"height":169.77602816135982},"clamped":false}],"pair":{"meanAbsDiff":0.926,"diffFractionOver24":0.0105,"maxPixelDiff":140.7}}
+    at file:///C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-580a/wt/scripts/capture-art04.mjs:1055:15

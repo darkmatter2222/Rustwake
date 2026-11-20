@@ -1,0 +1,466 @@
+{
+  "version": 1,
+  "build": "production-preview",
+  "issue": 580,
+  "schema": "rustwake.voxel.geometry.v1",
+  "source_sha": "53d217ded4a0e5df10b92a87be8f8a8bb916456c",
+  "started": "2026-11-20T04:07:10.670Z",
+  "cameraHashes": {
+    "applyCamera": {
+      "expected": "f3afa5479a66b97e",
+      "actual": "f3afa5479a66b97e",
+      "ok": true
+    },
+    "stampCamera": {
+      "expected": "691b3c0a3480e97b",
+      "actual": "691b3c0a3480e97b",
+      "ok": true
+    }
+  },
+  "art04Dock": {
+    "near": 2.5,
+    "far": 7,
+    "travel": 0.8
+  },
+  "starterGeometry": {
+    "depot": {
+      "x": 13,
+      "z": 9,
+      "rot": 0
+    },
+    "bayCell": {
+      "x": 13,
+      "z": 10
+    },
+    "roadCell": {
+      "x": 13,
+      "z": 8
+    },
+    "bayWorld": {
+      "x": 5.25,
+      "z": -5.25
+    },
+    "roadWorld": {
+      "x": 5.25,
+      "z": -12.25
+    },
+    "bayToRoadWorld": 7,
+    "dock": {
+      "near": 2.5,
+      "far": 7,
+      "travel": 0.8
+    },
+    "initialBank": {
+      "credits": 1800,
+      "scrap": 220,
+      "iron": 90,
+      "copper": 45,
+      "stone": 220,
+      "fuel": 110,
+      "water": 90,
+      "steel": 20,
+      "alloy": 0,
+      "gears": 0,
+      "circuits": 0,
+      "data": 15,
+      "relics": 0,
+      "influence": 0,
+      "shards": 0,
+      "charters": 0,
+      "renown": 0
+    },
+    "tier": 0,
+    "trucks": 3
+  },
+  "previewIntegrity": {
+    "entry": "/rustwake/assets/index-DBRWiyDD.js",
+    "sha256": "192321af03978745544204ce864ff6b29df889fbeb43a1c29679508415193cb6",
+    "ok": true
+  },
+  "viewports": {
+    "desktop": {
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Door": "0.000",
+        "art04BayDist": "7.000",
+        "art04Reduced": "0"
+      },
+      "home": {
+        "cam": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1.15,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Door": "0.000",
+          "art04BayDist": "7.000",
+          "art04Reduced": "0"
+        },
+        "rect": {
+          "left": 0,
+          "top": 0,
+          "width": 1440,
+          "height": 900
+        },
+        "bbox": {
+          "minX": 816.0560368068101,
+          "minY": 381.549213362362,
+          "maxX": 880.0933946780168,
+          "maxY": 450
+        },
+        "bboxFitsCanvas": true,
+        "shutterTravelPx": 8.45,
+        "rigHeightPx": 68.45
+      },
+      "contact": {
+        "label": "desktop:580-home",
+        "point": {
+          "x": 720,
+          "y": 450
+        },
+        "initial": {
+          "canvas": true,
+          "top": "canvas.world-canvas < div.world-container < div.app-shell"
+        },
+        "collapsedSheet": false,
+        "final": {
+          "canvas": true,
+          "top": "canvas.world-canvas < div.world-container < div.app-shell"
+        },
+        "ok": true
+      },
+      "watch": {
+        "samples": 62,
+        "maxDoorLift": 0.8,
+        "minBayDist": 1.225,
+        "dockingSamples": 11,
+        "shutterEverOpens": true,
+        "firstDockWallT": 7.6,
+        "screenshot": "desktop-580-home-watch.png"
+      },
+      "doorLifts": [
+        0.8,
+        0
+      ],
+      "bayDists": [
+        2.304,
+        8.011
+      ],
+      "clips": [
+        {
+          "file": "desktop-580-home-depot-open.png",
+          "clipCss": {
+            "x": 812.0560368068101,
+            "y": 377.549213362362,
+            "width": 72.03735787120672,
+            "height": 76.45078663763798
+          },
+          "clamped": false
+        },
+        {
+          "file": "desktop-580-home-depot-closed.png",
+          "clipCss": {
+            "x": 812.0560368068101,
+            "y": 377.549213362362,
+            "width": 72.03735787120672,
+            "height": 76.45078663763798
+          },
+          "clamped": false
+        }
+      ],
+      "pair": {
+        "meanAbsDiff": 3.706,
+        "diffFractionOver24": 0.0551,
+        "maxPixelDiff": 125.3
+      },
+      "shutterTravelOnScreen": true,
+      "motionDetectableAtHome": true,
+      "screenshots": {
+        "landing": "desktop-580-home-landing.png",
+        "watch": "desktop-580-home-watch.png",
+        "openFull": "desktop-580-home-open-full.png",
+        "closedFull": "desktop-580-home-closed-full.png"
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    },
+    "phone": {
+      "landing": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "voxelSchema": "rustwake.voxel.geometry.v1",
+        "machineCount": 6,
+        "world3d": "ready",
+        "art04Depot": "idle",
+        "art04Door": "0.000",
+        "art04BayDist": "7.000",
+        "art04Reduced": "0"
+      },
+      "home": {
+        "cam": {
+          "yaw": 45,
+          "elevation": 35.264,
+          "zoom": 1,
+          "x": 0,
+          "z": 0,
+          "voxelSchema": "rustwake.voxel.geometry.v1",
+          "machineCount": 6,
+          "world3d": "ready",
+          "art04Depot": "idle",
+          "art04Door": "0.000",
+          "art04BayDist": "7.000",
+          "art04Reduced": "0"
+        },
+        "rect": {
+          "left": 0,
+          "top": 0,
+          "width": 390,
+          "height": 844
+        },
+        "bbox": {
+          "minX": 273.3297536859398,
+          "minY": 366.1811942781,
+          "maxX": 325.5495894765663,
+          "maxY": 422
+        },
+        "bboxFitsCanvas": true,
+        "shutterTravelPx": 6.89,
+        "rigHeightPx": 55.82
+      },
+      "contact": {
+        "label": "phone:580-home",
+        "point": {
+          "x": 195,
+          "y": 422
+        },
+        "initial": {
+          "canvas": true,
+          "top": "canvas.world-canvas < div.world-container < div.app-shell"
+        },
+        "collapsedSheet": false,
+        "final": {
+          "canvas": true,
+          "top": "canvas.world-canvas < div.world-container < div.app-shell"
+        },
+        "ok": true
+      },
+      "watch": {
+        "samples": 63,
+        "maxDoorLift": 0.8,
+        "minBayDist": 1.274,
+        "dockingSamples": 10,
+        "shutterEverOpens": true,
+        "firstDockWallT": 7.95,
+        "screenshot": "phone-580-home-watch.png"
+      },
+      "doorLifts": [
+        0.8,
+        0
+      ],
+      "bayDists": [
+        1.753,
+        7.293
+      ],
+      "clips": [
+        {
+          "file": "phone-580-home-depot-open.png",
+          "clipCss": {
+            "x": 269.3297536859398,
+            "y": 362.1811942781,
+            "width": 60.21983579062652,
+            "height": 63.81880572189999
+          },
+          "clamped": false
+        },
+        {
+          "file": "phone-580-home-depot-closed.png",
+          "clipCss": {
+            "x": 269.3297536859398,
+            "y": 362.1811942781,
+            "width": 60.21983579062652,
+            "height": 63.81880572189999
+          },
+          "clamped": false
+        }
+      ],
+      "pair": {
+        "meanAbsDiff": 5.598,
+        "diffFractionOver24": 0.0816,
+        "maxPixelDiff": 138.7
+      },
+      "shutterTravelOnScreen": true,
+      "motionDetectableAtHome": true,
+      "screenshots": {
+        "landing": "phone-580-home-landing.png",
+        "watch": "phone-580-home-watch.png",
+        "openFull": "phone-580-home-open-full.png",
+        "closedFull": "phone-580-home-closed-full.png"
+      },
+      "pageErrors": [],
+      "failedRequests": []
+    }
+  },
+  "sanity": {
+    "fileCount": 12,
+    "minColors": 824,
+    "minSigma": 37.167,
+    "files": {
+      "desktop-580-home-closed-full.png": {
+        "colors": 28593,
+        "luminanceMean": 105.57,
+        "luminanceSigma": 42.143,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-580-home-depot-closed.png": {
+        "colors": 824,
+        "luminanceMean": 113.96,
+        "luminanceSigma": 37.167,
+        "pixels": 5472,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-580-home-depot-open.png": {
+        "colors": 903,
+        "luminanceMean": 111.15,
+        "luminanceSigma": 37.315,
+        "pixels": 5472,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-580-home-landing.png": {
+        "colors": 28118,
+        "luminanceMean": 106.2,
+        "luminanceSigma": 42.099,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-580-home-open-full.png": {
+        "colors": 28512,
+        "luminanceMean": 105.55,
+        "luminanceSigma": 42.131,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "desktop-580-home-watch.png": {
+        "colors": 28167,
+        "luminanceMean": 106.19,
+        "luminanceSigma": 42.075,
+        "pixels": 1296000,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-580-home-closed-full.png": {
+        "colors": 28953,
+        "luminanceMean": 110.86,
+        "luminanceSigma": 48.115,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-580-home-depot-closed.png": {
+        "colors": 1337,
+        "luminanceMean": 113.82,
+        "luminanceSigma": 37.654,
+        "pixels": 15120,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-580-home-depot-open.png": {
+        "colors": 1514,
+        "luminanceMean": 109.6,
+        "luminanceSigma": 38.064,
+        "pixels": 15120,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-580-home-landing.png": {
+        "colors": 28628,
+        "luminanceMean": 110.82,
+        "luminanceSigma": 48.154,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-580-home-open-full.png": {
+        "colors": 28828,
+        "luminanceMean": 110.76,
+        "luminanceSigma": 48.1,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      },
+      "phone-580-home-watch.png": {
+        "colors": 28773,
+        "luminanceMean": 110.79,
+        "luminanceSigma": 48.092,
+        "pixels": 1316640,
+        "floor": {
+          "colors": 64,
+          "sigma": 6
+        },
+        "ok": true
+      }
+    }
+  },
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone view is emulated (390x844 dpr2, hasTouch/isMobile) — physical handset verification remains #268/#275",
+    "The yard is the SHIPPED first-run starter (createGame as-is): INITIAL_BANK and tier untouched, no seed, no camera gesture — the home pose is never moved",
+    "Numeric smoke only (PASS_NUMERIC_ONLY) — not art parity vs public/reference/approved-yard.png, not reviewer/product acceptance, not sponsor G1 approval (#276, sponsor-reserved, still owed)",
+    "The code author is not vision-capable; no art self-certification is made or implied"
+  ],
+  "completed": "2026-11-20T04:08:05.312Z"
+}

@@ -1,0 +1,1 @@
+#580 starter-dock home capture: PASS_NUMERIC_ONLY C:\Users\ryans\AppData\Local\Temp\rw-qwen\dev-580a\wt\docs\evidence\580-starter-dock
