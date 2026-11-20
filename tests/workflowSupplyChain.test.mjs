@@ -153,11 +153,13 @@ test("OPS12: every uses: is pinned to the exact audited 40-hex SHA with version 
       assert.equal(comment, pin.version, `${name}: ${m[1]} must carry the human-readable version comment`);
     }
   }
-  assert.equal(count, 16, "expected 16 uses: entries (ci 3, delivery 11, alert 2)");
+  // #600 re-baseline (additive only): publish-release adds checkout + setup-node,
+  // both already-audited pins. Per-entry SHA/version assertions above unchanged.
+  assert.equal(count, 18, "expected 18 uses: entries (ci 3, delivery 13, alert 2)");
 });
 
 // --- 4. Explicit least-privilege permissions everywhere --------------------
-test("OPS12: explicit top-level permissions; only the alert job escalates; no write-all", () => {
+test("OPS12: explicit top-level permissions; only audited jobs escalate (alert, publish-release); no write-all", () => {
   assert.deepEqual(topLevelPermissions(yml("ci.yml")), { contents: "read" });
   assert.deepEqual(topLevelPermissions(yml("delivery.yml")), { contents: "read", actions: "read" });
   assert.deepEqual(topLevelPermissions(yml("delivery-alert.yml")), { contents: "read" });
@@ -169,13 +171,23 @@ test("OPS12: explicit top-level permissions; only the alert job escalates; no wr
       const jp = jobPermissions(block);
       if (name === "delivery-alert.yml" && job === "alert") {
         assert.deepEqual(jp, { issues: "write", actions: "read" }, "alert escalation is exactly issues:write + actions:read");
+      } else if (name === "delivery.yml" && job === "publish-release") {
+        // #600 re-baseline (additive only, product ruling 7029297423): the
+        // terminal publish job escalates EXACTLY job-scoped contents:write.
+        assert.deepEqual(jp, { contents: "write" }, "publish-release escalation is exactly job-scoped contents:write");
       } else {
         assert.equal(jp, null, `${name}/${job}: unexpected job-level permissions — audit before granting`);
       }
       // No blanket write grant at job level either.
       if (jp && !jp.scalar) {
         for (const [scope, level] of Object.entries(jp)) {
-          if (level === "write") assert.ok(name === "delivery-alert.yml" && job === "alert" && scope === "issues");
+          if (level === "write") {
+            assert.ok(
+              (name === "delivery-alert.yml" && job === "alert" && scope === "issues") ||
+              (name === "delivery.yml" && job === "publish-release" && scope === "contents"),
+              `${name}/${job}: write grant outside the two audited escalations`
+            );
+          }
         }
       }
     }
@@ -335,7 +347,9 @@ test("OPS12: delivery checkouts bind to the validated immutable SHA; alert pins 
   assert.match(delivery, /\[\[ "\$SOURCE_SHA" =~ \^\[a-f0-9\]\{40\}\$ \]\]/);
   assert.match(delivery, /SOURCE_SHA: \$\{\{ github\.event\.workflow_run\.head_sha \|\| github\.sha \}\}/);
   const checkouts = [...delivery.matchAll(/- uses: actions\/checkout@[0-9a-f]{40} # v4\.4\.0\n {8}with:\n((?: {10}[^\n]*\n)+)/g)];
-  assert.equal(checkouts.length, 3, "package, verify-live, hosted-browser each checkout once");
+  // #600 re-baseline (additive only): publish-release checks out once, bound to
+  // the same validated source SHA and persist-credentials: false as the rest.
+  assert.equal(checkouts.length, 4, "package, verify-live, hosted-browser, publish-release each checkout once");
   for (const c of checkouts) {
     assert.match(c[1], /persist-credentials: false/);
     assert.ok(/ref: \$\{\{ steps\.identity\.outputs\.sha \}\}/.test(c[1]) || /ref: \$\{\{ needs\.package\.outputs\.source_sha \}\}/.test(c[1]),

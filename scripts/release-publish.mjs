@@ -36,10 +36,14 @@ const REPO_SLUG = /^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/;
 export const REQUIRED_JOBS = ["package", "deploy", "verify-live", "hosted-browser"];
 export const NO_UPSTREAM_CI = "workflow_dispatch (no upstream CI run)";
 
+// A deploy receipt must never carry a visual-acceptance claim, even when a
+// commit subject itself makes one. Such phrases are neutralized, not echoed.
+const FORBIDDEN_CLAIM = /visually verified|sponsor[- ]approved|production[- ]ready|G1 (?:pass(?:ed)?|accept(?:ed|ance)?)/gi;
+
 /** Strict semver with v prefix, no leading zeros. Returns null for anything else. */
 export function parseSemver(tag) {
   if (typeof tag !== "string") return null;
-  const m = SEMVER.exec(tag);
+  const m = tag.match(SEMVER);
   if (!m) return null;
   return { major: Number(m[1]), minor: Number(m[2]), patch: Number(m[3]) };
 }
@@ -180,7 +184,7 @@ export function buildNotes({ tag, sourceSha, previousTag, commits, mainCiRun, de
       if (!c || typeof c.sha !== "string" || typeof c.subject !== "string") {
         throw new TypeError("each commit must be {sha, subject} strings");
       }
-      lines.push(`- \`${c.sha}\` ${c.subject}`);
+      lines.push(`- \`${c.sha}\` ${c.subject.replace(FORBIDDEN_CLAIM, "[claim removed]")}`);
     }
   }
   lines.push("");
