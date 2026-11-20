@@ -15,10 +15,15 @@
 //   2. Forward-only yielding with a deterministic id tie-break. A truck yields
 //      only to a truck AHEAD of it along its own heading (dot > 0). When two
 //      trucks are mutually ahead (head-on / crossing) or exactly side-by-side,
-//      the LOWER vehicle id has right of way. Following edges run downstream
-//      along a lane (acyclic); mutual conflicts are totally ordered by id; and
-//      head-on pairs never conflict at all because the lanes separate them. That
-//      is what makes the wait-for relation deadlock-free on the starter network.
+//      the LOWER vehicle id has right of way. This ORDERS conflicts; it does NOT
+//      make the wait-for relation deadlock-free. Same-direction following edges
+//      are acyclic (they run downstream along a lane), mutual conflicts are
+//      totally ordered by id, and head-on pairs are separated by the lanes — but
+//      perpendicular crossing traffic at a saturated intersection can still form
+//      a mixed following/mutual wait-for cycle: the id tie-break gives right of
+//      way, not progress (the winner can itself be blocked downstream). The
+//      bounded reroute recovery below is therefore LOAD-BEARING, not optional —
+//      see the #589 recovery block and docs/design/TRAFFIC.md.
 //
 //   3. Swept-envelope clamping. Before committing a substep the truck's progress
 //      is clamped so its real oriented envelope (2.05 x 1.2 world units, axis
@@ -106,7 +111,8 @@ const segmentHeading = (route, i) => {
 // offset waypoints, the per-segment unit headings and the per-segment lengths
 // (cells). Interior waypoints use the exact axis-aligned miter P+(r_prev+r_next)*L;
 // endpoints offset by their single adjacent heading. Segment lengths stay strictly
-// positive (1-2L .. 1+2L with L=0.25 -> 0.5 .. 1.5) so progress is well defined.
+// positive (1-2L .. 1+2L with L=LANE_OFFSET_CELLS=0.35 -> 0.3 .. 1.7, derived from
+// the constant above) so progress is well defined.
 export function laneRoute(route, offset = LANE_OFFSET_CELLS) {
   const n = route.length;
   if (n === 0) return {points: [], headings: [], lengths: []};
@@ -172,21 +178,6 @@ export function envelopeGapWorld(a, b) {
   const sepX = Math.max(eb.minX - ea.maxX, ea.minX - eb.maxX);
   const sepZ = Math.max(eb.minZ - ea.maxZ, ea.minZ - eb.maxZ);
   return Math.max(sepX, sepZ) * CELL;
-}
-
-const dot = (h, dx, dz) => h.x * dx + h.z * dz;
-
-// Does v have right of way over u? Forward-only: a truck yields to a truck ahead
-// of it. Mutually-ahead (head-on / crossing) and exactly-side-by-side conflicts
-// are broken by the LOWER vehicle id (deterministic, replay-safe).
-export function hasPriority(v, u, hv, hu) {
-  const dx = u.x - v.x, dz = u.z - v.z;
-  const vSeesU = dot(hv, dx, dz) > EPS;   // u ahead of v
-  const uSeesV = dot(hu, -dx, -dz) > EPS; // v ahead of u
-  if (vSeesU && uSeesV) return v.id < u.id; // mutual -> lower id wins
-  if (vSeesU) return false;                 // u ahead, v yields
-  if (uSeesV) return true;                  // v ahead, u yields
-  return v.id < u.id;                       // side-by-side -> lower id wins
 }
 
 // The heading a vehicle turns into at the end of its current segment, or null.
@@ -265,6 +256,14 @@ function clampAgainst(uAabb, from, to, hv, p0, p1) {
 // full speed*dt step (the earlier design) inflated following distance ~16x the
 // declared gap and gridlocked the sparse starter network (measured 92% throughput
 // loss); the ordered current-envelope clamp keeps queues tight AND separates.
+//
+// This ascending-id order IS the right-of-way tie-break (the standalone priority
+// helper that once mirrored this rule was never called and was removed in #598):
+// forward-only yielding means a truck yields to a truck AHEAD of it along its own
+// heading; mutually-ahead (head-on / crossing) and exactly-side-by-side conflicts
+// are broken by the LOWER vehicle id, because the lower-id truck integrates first
+// and the higher-id truck clamps against its committed envelope. Deterministic
+// and replay-safe.
 export function separationClamp(v, others, from, to, hv, p0, p1, dt, speedMult) {
   let limit = p1, blockedBy = null;
   for (const u of others) {
