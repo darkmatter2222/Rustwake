@@ -1,0 +1,61 @@
+{
+ "srcDir": "src",
+ "mode": "fresh",
+ "seconds": 200,
+ "ticks": 400,
+ "arrivals": 42,
+ "shipments": 81,
+ "delivered": 789,
+ "conservationLeaks": 0,
+ "minGapWorld": 0.300000002274996,
+ "minGapAtTick": 100,
+ "minPair": [
+  1,
+  2
+ ],
+ "declaredMinGap": 0.3,
+ "rerouteCommits": 0,
+ "maxRerouteDisplacementCells": 0,
+ "maxRerouteAtTick": -1,
+ "trucks": [
+  {
+   "id": 1,
+   "x": 11.5,
+   "z": 11.65,
+   "phase": "toDest",
+   "seg": 4,
+   "prog": 0.769,
+   "routeLen": 12,
+   "waiting": false,
+   "blockedBy": null,
+   "waitTime": 0,
+   "cargo": 8
+  },
+  {
+   "id": 2,
+   "x": 10.4,
+   "z": 7.65,
+   "phase": "toSource",
+   "seg": 2,
+   "prog": 0.6,
+   "routeLen": 7,
+   "waiting": false,
+   "blockedBy": null,
+   "waitTime": 0,
+   "cargo": 0
+  },
+  {
+   "id": 3,
+   "x": 7,
+   "z": 7.65,
+   "phase": "toSource",
+   "seg": 6,
+   "prog": 0,
+   "routeLen": 7,
+   "waiting": false,
+   "blockedBy": null,
+   "waitTime": 0,
+   "cargo": 0
+  }
+ ]
+}

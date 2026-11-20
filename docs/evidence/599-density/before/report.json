@@ -1,0 +1,115 @@
+{
+  "issue": 599,
+  "build": "production-preview",
+  "source_sha": "4628326daa0a2ef74a89784601976929d0d80385",
+  "started": "2026-11-20T00:02:27.293Z",
+  "views": [
+    {
+      "name": "desktop",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "stamp": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1.15,
+        "x": 0,
+        "z": 0,
+        "world3d": "ready",
+        "crewWalkers": "10",
+        "crew1Dist": "1.049",
+        "crewReducedMotion": "0",
+        "rigLod": "0"
+      },
+      "canvasRect": {
+        "left": 0,
+        "top": 0,
+        "width": 1440,
+        "height": 900
+      },
+      "projectedCellPx": 45.281,
+      "projectedWorkerHeightPx": 17.958,
+      "raf": {
+        "frames": 37,
+        "ms": 5109.8
+      },
+      "rafRate": 7.24,
+      "motion": {
+        "width": 1440,
+        "height": 900,
+        "total": 1296000,
+        "diffPixels": 16189,
+        "motionPct": 1.249,
+        "distinctColorsA": 220,
+        "distinctColorsB": 219
+      },
+      "crew1DistStart": "4.405",
+      "crew1DistEnd": "5.929",
+      "crewMoved": true,
+      "screenshots": {
+        "landing": "desktop-landing.png",
+        "motionA": "desktop-motion-a.png",
+        "motionB": "desktop-motion-b.png"
+      },
+      "pageErrors": []
+    },
+    {
+      "name": "phone",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "stamp": {
+        "yaw": 45,
+        "elevation": 35.264,
+        "zoom": 1,
+        "x": 0,
+        "z": 0,
+        "world3d": "ready",
+        "crewWalkers": "10",
+        "crew1Dist": "1.049",
+        "crewReducedMotion": "0",
+        "rigLod": "0"
+      },
+      "canvasRect": {
+        "left": 0,
+        "top": 0,
+        "width": 390,
+        "height": 844
+      },
+      "projectedCellPx": 36.925,
+      "projectedWorkerHeightPx": 14.644,
+      "raf": {
+        "frames": 38,
+        "ms": 5013.1
+      },
+      "rafRate": 7.58,
+      "motion": {
+        "width": 780,
+        "height": 1688,
+        "total": 1316640,
+        "diffPixels": 20344,
+        "motionPct": 1.545,
+        "distinctColorsA": 218,
+        "distinctColorsB": 219
+      },
+      "crew1DistStart": "4.382",
+      "crew1DistEnd": "5.805",
+      "crewMoved": true,
+      "screenshots": {
+        "landing": "phone-landing.png",
+        "motionA": "phone-motion-a.png",
+        "motionB": "phone-motion-b.png"
+      },
+      "pageErrors": []
+    }
+  ],
+  "status": "PASS_NUMERIC_ONLY",
+  "errors": [],
+  "limitations": [
+    "One headless Chromium/SwiftShader run; phone emulated; rAF rate is software-GL indicative",
+    "Numeric smoke + captures are evidence only, not sponsor G1 (Refs 276) visual approval"
+  ],
+  "completed": "2026-11-20T00:02:57.751Z"
+}
