@@ -10,11 +10,14 @@
  *
  * Upgrade semantics: advanceGame deposits outputs as n * b.level, so the
  * exact effect of the next level is +n per output. The upgrade TRANSACTION
- * is not yet wired in the simulation (LOG track lease); the inspector shows
- * the exact effect preview and an honest locked control, never a fake buy.
+ * is wired for the DEPOT ONLY (#596): upgradeDepot buys fleet capacity (one
+ * hauler per level, cap 12 at level 10), never production — the depot has no
+ * cycle, so its level scales an empty outputs object. Every other building
+ * keeps the exact effect preview and an honest locked control, never a fake
+ * buy: production upgrades are not purchasable in this build.
  */
 import {BLUEPRINTS,RESOURCE_BY_ID,TIERS} from "./content.js";
-import {powerStatus,connectedToRoad} from "./simulation.js";
+import {powerStatus,connectedToRoad,depotUpgradeCost,fleetCapOf,depotSpawnCell,DEPOT_MAX_LEVEL} from "./simulation.js";
 import {footprintDims,facingName,bayCells,worldFootprint,cellOf,ROAD_REACH} from "./gridOccupancy.js";
 import {CAMERA_LIMITS,normalizeCamera,pinGroundToPixel} from "./camera.js";
 
@@ -31,7 +34,32 @@ export function upgradeEffect(def,level){
  const delta=Object.fromEntries(Object.entries(next).map(([id,v])=>[id,v-(current[id]||0)]));
  return {level:lv,nextLevel:lv+1,current,next,delta,hasCycle:(def?.cycle||0)>0,
   available:false,
-  lockReason:"Upgrade dispatch is not wired to the simulation yet — this preview shows the exact effect, not a purchasable action."};
+  lockReason:"Production upgrades are not purchasable in this build — only the depot has a live upgrade (fleet capacity). This preview shows the exact effect of a level, not a buy action."};
+}
+
+/**
+ * #596 depot-only upgrade preview. Mirrors upgradeDepot's gates exactly
+ * (assembling / max level / funds / fleet cap / spawn clearance) against the
+ * CURRENT state, so the affordance can never promise what the transaction
+ * would reject. Pure read — never mutates g. Returns null for non-depots.
+ */
+export function depotUpgradeView(g,b){
+ if(!b||b.type!=="depot")return null;
+ const lv=Math.max(1,Math.min(DEPOT_MAX_LEVEL,levelOf(b)));
+ const cap=fleetCapOf(lv);
+ const costText=(cost)=>Object.entries(cost).map(([id,n])=>n+" "+(RESOURCE_BY_ID[id]?.unit||id)).join(", ");
+ if(b.remaining>0)return {available:false,code:"ASSEMBLING",level:lv,nextLevel:null,cap,nextCap:null,cost:null,
+  reason:"Depot is still assembling — fleet upgrades unlock once construction completes."};
+ if(lv>=DEPOT_MAX_LEVEL)return {available:false,code:"MAX_LEVEL",level:lv,nextLevel:null,cap,nextCap:null,cost:null,
+  reason:"Depot is at maximum level "+DEPOT_MAX_LEVEL+" — the fleet cap of 12 haulers is reached."};
+ const nextLevel=lv+1,cost=depotUpgradeCost(nextLevel),nextCap=fleetCapOf(nextLevel);
+ if(!fits(g?.bank,cost))return {available:false,code:"INSUFFICIENT",level:lv,nextLevel,cap,nextCap,cost,
+  reason:"Need "+costText(cost)+"."};
+ if((g?.vehicles||[]).length>=nextCap)return {available:false,code:"FLEET_FULL",level:lv,nextLevel,cap,nextCap,cost,
+  reason:"Fleet already at the level-"+nextLevel+" cap of "+nextCap+" haulers."};
+ if(!depotSpawnCell(g,b))return {available:false,code:"NO_SPACE",level:lv,nextLevel,cap,nextCap,cost,
+  reason:"No clear road cell within "+ROAD_REACH+" of the depot bay for a new hauler — clear the approach first."};
+ return {available:true,code:"OK",level:lv,nextLevel,cap,nextCap,cost,reason:null};
 }
 
 /** Mirrors removeBuilding: floor(40%) of each build material + 100% of cargo. */
@@ -120,6 +148,7 @@ export function inspectorState(g,id){
    .map(([id,n])=>({id,name:RESOURCE_BY_ID[id]?.name||id,unit:RESOURCE_BY_ID[id]?.unit||id,amount:n})),
   construction:{active:b.remaining>0,remaining:Math.max(0,Number(b.remaining)||0),total:5,cancel:cancelPreview(g,b)},
   upgrade,
+  depotUpgrade:def.id==="depot"?depotUpgradeView(g,b):null,
   dismantle:{gate,refund,entries:refundEntries(refund,def),
    recoveryNote:"Recovery returns 40% of build materials (rounded down) plus 100% of stored cargo to the depot."},
   lockedBlueprint:!TIERS.some(t=>t.unlocks.includes(b.type)&&g.tier>=t.id)};

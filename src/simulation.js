@@ -1,6 +1,6 @@
 import {WORLD_SIZE,INITIAL_BANK,BLUEPRINTS,TIERS,RESEARCH,ROAD_KINDS,SAVE_KEY,STARTER_BUILDINGS,INITIAL_ROADS} from "./content.js";
 import {key,cellOf,inside,checkSite,buildingAt,footprintCells,normalizeRot,bayCells,ROAD_REACH} from "./gridOccupancy.js";
-import {laneRoute,separationClamp,turnClear,envelopeGapWorld,MIN_GAP_WORLD,WAIT_TIMEOUT_SECONDS} from "./traffic.js";
+import {laneRoute,separationClamp,turnClear,envelopeGapWorld,MIN_GAP_WORLD,WAIT_TIMEOUT_SECONDS,ORIGIN_RECOVERY_RADIUS_CELLS} from "./traffic.js";
 
 export {key,cellOf,inside} from "./gridOccupancy.js";
 export {checkSite,buildingAt,footprintCells,footprintDims,bayCells,worldFootprint,terrainFor,terrainAt,ownedParcels,parcelId,surveyed,facingName,normalizeRot,SURVEY_MIN,SURVEY_MAX,ROAD_REACH,PARCEL_SIZE,PARCEL_NAMES} from "./gridOccupancy.js";
@@ -201,9 +201,20 @@ export function readGame(){
     view:{...fresh.view,...data.view},version:2};
   g.elapsed=Math.max(0,Math.min(1e9,Number(g.elapsed)||0));
   g.lastSavedAt=Number(g.lastSavedAt)||Date.now();
-  g.vehicles=g.vehicles.filter(v=>Number.isFinite(v.x)&&Number.isFinite(v.z));
+  g.vehicles=g.vehicles.filter(v=>Number.isFinite(v.x)&&Number.isFinite(v.z))
+   // #596: clamp the per-job sidestep budget when present; legacy saves without
+   // the field keep their exact shape (the sim reads it as (v.recoveryTries||0)).
+   .map(v=>("recoveryTries" in v)
+    ?{...v,recoveryTries:Math.max(0,Math.min(ORIGIN_RECOVERY_MAX_TRIES,Math.floor(Number(v.recoveryTries)||0)))}
+    :v);
   g.buildings=g.buildings.filter(b=>inside(b.x,b.z)&&BLUEPRINTS[b.type]).slice(0,400)
-   .map(b=>({...b,rot:normalizeRot(b.rot),paid:paidOf(b),inventory:sanitizeBag(b.inventory)}));
+   // #596: level is a persisted production multiplier AND the depot fleet-cap
+   // sink — clamp every building to 1..DEPOT_MAX_LEVEL so a tampered level can
+   // neither explode n*b.level production nor raise the cap past 12. readGame
+   // NEVER spawns trucks: a tampered high level changes the cap only, and the
+   // fleet stays exactly what the save holds (legacy level-1 saves keep 3).
+   .map(b=>({...b,rot:normalizeRot(b.rot),paid:paidOf(b),inventory:sanitizeBag(b.inventory),
+    level:Math.max(1,Math.min(DEPOT_MAX_LEVEL,Math.floor(Number(b.level)||1)))}));
  g.ledger=Array.isArray(g.ledger)?g.ledger.filter(e=>e&&typeof e==="object").slice(-64):[];
  g.freightLedger=Array.isArray(g.freightLedger)?g.freightLedger.filter(e=>e&&typeof e==="object").slice(-128):[];
  // #373: replay protection survives reload; malformed registry entries drop.
@@ -404,6 +415,115 @@ export function removeBuilding(g,id,commandId=null){
   if(cmd)recordCommand(g,{id:cmd,kind:"dismantle",ok:true,code:"OK",buildingId:b.id,refund:{...refund}});
   return {ok:true,code:"OK",refund,...(cmd?{commandId:cmd}:{})};
  }catch(err){removalRollback(g,snap);throw err;}
+}
+// ---- Fleet growth: DEPOT-ONLY level sink (#596) ----
+// The depot has no production cycle (outputs:{}, no byproduct), so its level
+// scales NOTHING in advanceGame — the n*b.level deposit loops iterate an empty
+// object. Depot level is therefore a pure CAPACITY sink: each level raises the
+// fleet cap by one hauler and spawns exactly one truck, up to 12 at level 10
+// (coherent with the #384 FLEET_CAP reload clamp). No new ledger: the cap
+// derives from the persisted b.level. Production upgrades for other buildings
+// remain unwired (their inspector preview stays honestly locked).
+export const DEPOT_MAX_LEVEL=10;
+export const FLEET_BASE=3;
+export const fleetCapOf=(level)=>{
+ const lv=Math.max(1,Math.min(DEPOT_MAX_LEVEL,Math.floor(Number(level)||1)));
+ return Math.min(FLEET_BASE+(lv-1),12);
+};
+// Cost to reach nextLevel (>=2). L2 {credits:600,steel:30}, L3
+// {credits:1100,steel:55,gears:15}; L4+ continue the same linear ladder:
+// credits 600+500*(L-2), steel 30+25*(L-2), gears 15*(L-2) from L3.
+export function depotUpgradeCost(nextLevel){
+ const L=Math.max(2,Math.floor(Number(nextLevel)||2));
+ const cost={credits:600+500*(L-2),steel:30+25*(L-2)};
+ if(L>=3)cost.gears=15*(L-2);
+ return cost;
+}
+// Pure spawn-cell read: the first road cell within ROAD_REACH of the depot bay
+// in (Manhattan distance, key) order whose centre clears EVERY live truck
+// envelope by >= MIN_GAP_WORLD. Shared by the transaction and the inspector
+// preview so the affordance can never drift from the authority. Null when no
+// cell is clear (the transaction then rejects NO_SPACE with zero spend).
+export function depotSpawnCell(g,b){
+ if(!b||b.type!=="depot")return null;
+ const bay=bayCells(b.type,b.x,b.z,b.rot||0)[0];
+ if(!bay)return null;
+ const cands=[];
+ for(const tile of (Array.isArray(g.roads)?g.roads:[])){
+  const [x,z]=cellOf(tile);
+  const d=Math.abs(x-bay.x)+Math.abs(z-bay.z);
+  if(d>ROAD_REACH)continue;
+  cands.push({x,z,d,k:key(x,z)});
+ }
+ cands.sort((p,q)=>p.d-q.d||(p.k<q.k?-1:p.k>q.k?1:0));
+ for(const c of cands){
+  const pos={x:c.x,z:c.z,heading:{x:1,z:0}};
+  let clear=true;
+  for(const u of (g.vehicles||[])){
+   if(envelopeGapWorld(pos,u)<MIN_GAP_WORLD-1e-6){clear=false;break;}
+  }
+  if(clear)return {x:c.x,z:c.z};
+ }
+ return null;
+}
+// ONE atomic, idempotent transaction in the #373/#377 discipline: kind-tagged
+// command replay ("depotUpgrade" — a build or removal id can never satisfy it),
+// full snapshot/rollback at four fault seams, exact ledger row. Every reject
+// path moves NO stock, NO level and NO fleet (reject rows are the audit trail,
+// exactly like buildAt). Spawn clearance is re-validated at commit time.
+export function upgradeDepot(g,commandId=null){
+ const cmd=commandIdOf(commandId);
+ if(cmd){
+  const prior=(Array.isArray(g.commands)?g.commands:[]).find(c=>c.id===cmd&&c.kind==="depotUpgrade");
+  if(prior)return prior.ok
+   ?{ok:true,code:"OK",duplicate:true,commandId:cmd,level:prior.level,buildingId:prior.buildingId,vehicleId:prior.vehicleId??null}
+   :{ok:false,code:prior.code,reason:prior.reason,duplicate:true,commandId:cmd};
+ }
+ const b=(g.buildings||[]).find(x=>x.type==="depot"&&x.remaining<=0);
+ const reject=(code,reason)=>{
+  recordLedger(g,{kind:"reject",type:"depot",buildingId:b?b.id:null,code,reason,cost:{},refund:{},...(cmd?{commandId:cmd}:{})});
+  if(cmd)recordCommand(g,{id:cmd,kind:"depotUpgrade",ok:false,code,reason,buildingId:b?b.id:null});
+  return {ok:false,code,reason,...(cmd?{commandId:cmd}:{})};
+ };
+ if(!b)return reject("NO_DEPOT","No completed depot to upgrade");
+ const level=Math.max(1,Math.min(DEPOT_MAX_LEVEL,Math.floor(Number(b.level)||1)));
+ if(level>=DEPOT_MAX_LEVEL)return reject("MAX_LEVEL","Depot is at maximum level "+DEPOT_MAX_LEVEL+" — fleet cap 12");
+ const nextLevel=level+1;
+ const cost=depotUpgradeCost(nextLevel);
+ if(!fits(g.bank,cost))return reject("INSUFFICIENT","Need "+Object.entries(cost).map(([id,n])=>n+" "+id).join(", "));
+ if(g.vehicles.length>=fleetCapOf(nextLevel))return reject("FLEET_FULL","Fleet already at the level-"+nextLevel+" cap of "+fleetCapOf(nextLevel));
+ const cell=depotSpawnCell(g,b);
+ if(!cell)return reject("NO_SPACE","No clear road cell within "+ROAD_REACH+" of the depot bay for a new hauler");
+ // Snapshot every field the commit touches (rings restore full CONTENTS).
+ const snap={bank:{...g.bank},level:b.level,vehicles:[...g.vehicles],
+  ledger:[...(Array.isArray(g.ledger)?g.ledger:[])],log:[...g.log],
+  commands:[...(Array.isArray(g.commands)?g.commands:[])],nextId:g.nextId};
+ try{
+  spend(g.bank,cost);
+  fault("depotUpgrade.afterSpend",{buildingId:b.id,nextLevel});
+  b.level=nextLevel;
+  fault("depotUpgrade.afterLevel",{buildingId:b.id,nextLevel});
+  const id=g.vehicles.reduce((m,v)=>Math.max(m,v.id),0)+1;
+  const speeds=[2.25,2.6,2.0];
+  const v={id,name:"HAULER-"+String(id).padStart(2,"0"),x:cell.x,z:cell.z,
+   speed:speeds[(id-1)%speeds.length],job:null,cargo:null,anim:0,
+   heading:{x:1,z:0},waiting:false,blockedBy:null,waitTime:0,recoveryTries:0};
+  g.vehicles.push(v);
+  fault("depotUpgrade.afterSpawn",{buildingId:b.id,vehicleId:id});
+  recordLedger(g,{kind:"upgrade",type:"depot",buildingId:b.id,level:nextLevel,
+   cost:{...cost},refund:{},vehicleId:id,...(cmd?{commandId:cmd}:{})});
+  fault("depotUpgrade.afterLedger",{buildingId:b.id,nextLevel});
+  pushLog(g,"Freight Depot upgraded to level "+nextLevel+" — "+v.name+" joined the fleet.");
+  if(cmd)recordCommand(g,{id:cmd,kind:"depotUpgrade",ok:true,code:"OK",buildingId:b.id,level:nextLevel,vehicleId:id,cost:{...cost}});
+  return {ok:true,code:"OK",building:b,vehicle:v,level:nextLevel,cost:{...cost},...(cmd?{commandId:cmd}:{})};
+ }catch(err){
+  for(const k of Object.keys(g.bank))if(!(k in snap.bank))delete g.bank[k];
+  Object.assign(g.bank,snap.bank);
+  b.level=snap.level;
+  g.vehicles.splice(0,g.vehicles.length,...snap.vehicles);
+  g.ledger=snap.ledger;g.log=snap.log;g.commands=snap.commands;g.nextId=snap.nextId;
+  throw err;
+ }
 }
 export function roadLine(g,a,b){
  if(!inside(a.x,a.z)||!inside(b.x,b.z))return {ok:false,reason:"Road end is outside the surveyed land"};
@@ -619,6 +739,8 @@ function assignJob(g,v){
   const amount=take(sourceBag,c.resource,c.amount);
   if(amount<=0)continue;
   v.cargo=null;
+  // #596: the origin-sidestep budget is PER JOB — a fresh dispatch starts clean.
+  v.recoveryTries=0;
   v.job={sourceId:c.source.id,destId:c.dest.id,resource:c.resource,amount,
     phase:"toSource",toSource,toDest,route:toSource,segment:0,progress:0};
   recordFreight(g,{kind:"reserve",vehicleId:v.id,sourceId:c.source.id,destId:c.dest.id,resource:c.resource,amount});
@@ -745,12 +867,81 @@ export function freightManifest(g){
 // re-routes around its blocker's cell via obstacle BFS, then resumes on the new
 // right-hand lane. Forward-only + id tie-breaks can still form a mixed
 // following/mutual wait-for cycle at a saturated intersection; a bounded reroute
-// dissolves mid-route blocks without starving the furnace. It is NOT universal:
-// a blocker on the route's origin cell cannot be avoided (cur === avoid cell) —
-// measured limitation, docs/design/TRAFFIC.md.
+// dissolves mid-route blocks without starving the furnace.
+// #596: when the normal reroute fails because the blocker sits on the mover's
+// OWN origin cell (every route from cur starts inside the blocker's envelope),
+// a BOUNDED origin sidestep may move the route origin to a nearby road cell —
+// see ORIGIN_RECOVERY_RADIUS_CELLS in traffic.js. This is bounded effort, NOT
+// universal deadlock-freedom: perpendicular crossing cycles remain possible
+// (docs/design/TRAFFIC.md limitations).
 // Freight is untouched (same source/dest, same phase); only j.route changes. The
 // new lane start is separation-checked against every other truck BEFORE commit, so
 // recovery can never introduce an overlap. Returns true if a safe reroute landed.
+// Per-job sidestep budget: at most ORIGIN_RECOVERY_MAX_TRIES origin commits per
+// job (reset by assignJob); normal reroutes are not budgeted.
+export const ORIGIN_RECOVERY_MAX_TRIES=3;
+// Shared route commit: separation-check the new lane start against EVERY other
+// envelope, then land route + position + queue flags as one unit. sidestep=true
+// additionally bounds the physical snap to R+1 cells and spends one budget try.
+const commitRecoveryRoute=(g,v,j,full,sidestep)=>{
+ const lane=laneRoute(full);
+ if(!lane.points.length)return false;
+ const start={x:lane.points[0].x,z:lane.points[0].z,heading:lane.headings[0]||v.heading};
+ // Never teleport into another envelope: require declared clearance at the new start.
+ for(const u of g.vehicles){if(u.id===v.id)continue;
+  if(envelopeGapWorld(start,u)<MIN_GAP_WORLD-1e-6)return false;}
+ if(sidestep&&Math.hypot(start.x-v.x,start.z-v.z)>ORIGIN_RECOVERY_RADIUS_CELLS+1)return false;
+ j.route=full;j.segment=0;j.progress=0;
+ v.x=start.x;v.z=start.z;v.heading=start.heading;
+ v.waitTime=0;v.waiting=false;v.blockedBy=null;
+ if(sidestep)v.recoveryTries=(v.recoveryTries||0)+1;
+ return true;
+};
+// The idle-park obstacle sweep shared by both recovery variants (#580): avoid
+// the immediate blocker's cell plus every OTHER parked idle truck's road cell.
+// A jobless truck never clears, so routing around only the immediate blocker
+// just cascades into the next idle park. Moving trucks are NOT avoided — they
+// clear. The GOAL cell is exempt: an idle park ON the destination stop is the
+// #589 bay-queue last resort's own case (timeout-gated early arrival / pickup
+// join); avoiding it here made recovery refuse forever and starved the steel
+// run (measured: starterFuelEconomy test-3 regression, 0 steel in 60 s).
+const recoveryAvoid=(g,v,roadDest)=>{
+ const avoid=new Set();
+ const blocker=g.vehicles.find(u=>u.id===v.blockedBy);
+ if(blocker){const bc=nearestRoad(g,Math.round(blocker.x),Math.round(blocker.z));if(bc)avoid.add(key(bc.x,bc.z));}
+ for(const u of g.vehicles){
+  if(u.id===v.id||u.job)continue;
+  const uc=nearestRoad(g,Math.round(u.x),Math.round(u.z));
+  if(uc&&!(uc.x===roadDest.x&&uc.z===roadDest.z))avoid.add(key(uc.x,uc.z));
+ }
+ return avoid;
+};
+// #596 bounded origin sidestep: enumerate road cells at Manhattan distance
+// 1..R from the origin in deterministic (distance, x, z) order, skip the avoid
+// set, and commit the first route whose lane start clears every envelope.
+// Caller gates: normal reroute already failed, waitTime past the timeout,
+// budget remaining. Returns true if a safe sidestep landed.
+function originSidestep(g,v,j,cur,roadDest,tail,avoid){
+ if(ORIGIN_RECOVERY_RADIUS_CELLS<=0)return false;
+ if((v.waitTime||0)<WAIT_TIMEOUT_SECONDS)return false;
+ if((v.recoveryTries||0)>=ORIGIN_RECOVERY_MAX_TRIES)return false;
+ const cands=[];
+ for(const tile of g.roads){
+  const [x,z]=cellOf(tile);
+  const d=Math.abs(x-cur.x)+Math.abs(z-cur.z);
+  if(d<1||d>ORIGIN_RECOVERY_RADIUS_CELLS||avoid.has(key(x,z)))continue;
+  cands.push({x,z,d});
+ }
+ cands.sort((p,q)=>p.d-q.d||p.x-q.x||p.z-q.z);
+ for(const s of cands){
+  const sp=roadPath(g,s,roadDest,avoid);
+  if(!sp)continue;
+  const full=sp.concat(tail);
+  if(full.length<2)continue;
+  if(commitRecoveryRoute(g,v,j,full,true))return true;
+ }
+ return false;
+}
 function rerouteAroundBlocker(g,v){
  const j=v.job;if(!j||v.blockedBy==null)return false;
  const dest=j.route[j.route.length-1];
@@ -763,36 +954,103 @@ function rerouteAroundBlocker(g,v){
  const endId=j.phase==="toSource"?j.sourceId:j.destId;
  const a=dockApproach(g,g.buildings.find(b=>b.id===endId));
  const roadDest=a?a.stop:dest;
- const blocker=g.vehicles.find(u=>u.id===v.blockedBy);
- const avoid=new Set();
- if(blocker){const bc=nearestRoad(g,Math.round(blocker.x),Math.round(blocker.z));if(bc)avoid.add(key(bc.x,bc.z));}
- // #580: also avoid every OTHER parked idle truck's road cell. A jobless truck
- // never clears, so routing around only the immediate blocker just cascades into
- // the next idle park (measured: fuel resupply re-blocked by a second idle truck
- // on the same column). One obstacle BFS around all stationary idle parks lands a
- // clean lane in a single recovery. Moving trucks are NOT avoided — they clear.
- // The GOAL cell is exempt from this sweep: an idle park ON the destination stop
- // is the #589 bay-queue last resort's own case (timeout-gated early arrival /
- // pickup join). Avoiding it here made avoid.has(roadDest) always true, so
- // recovery refused forever and the steel run starved behind a mid-route idle
- // park (measured: starterFuelEconomy test-3 regression, 0 steel in 60 s).
- for(const u of g.vehicles){
-  if(u.id===v.id||u.job)continue;
-  const uc=nearestRoad(g,Math.round(u.x),Math.round(u.z));
-  if(uc&&!(uc.x===roadDest.x&&uc.z===roadDest.z))avoid.add(key(uc.x,uc.z));
- }
+ // #596: mirror the leg's OWN terminal semantics. Recovery reroutes the ROAD leg;
+ // it must not upgrade a stop-terminated leg into a bay dock mid-job. Re-append
+ // the corridor tail ONLY when the current route actually ends ON the corridor
+ // (a dock job as dispatched). A leg terminated at the road stop — e.g. the #580
+ // clause-1 base-stop-semantics control, which strips the corridor every tick —
+ // stays stop-terminated, so recovery can never re-open the shutter there.
+ const tail=a&&key(dest.x,dest.z)!==key(a.stop.x,a.stop.z)?a.cells:[];
+ const avoid=recoveryAvoid(g,v,roadDest);
  if(avoid.has(key(roadDest.x,roadDest.z)))return false; // cannot route around the goal itself
  const path=roadPath(g,cur,roadDest,avoid);
- if(!path||(path.length<2&&!a))return false;
- const full=a?path.concat(a.cells):path;
+ if(path){
+  const full=path.concat(tail);
+  if(full.length>=2&&commitRecoveryRoute(g,v,j,full,false))return true;
+ }
+ // #596: the normal attempt failed (no path, or every route from cur starts
+ // inside a neighbour's envelope — the origin-cell case). Try the bounded
+ // sidestep; it re-checks the timeout and budget itself.
+ return originSidestep(g,v,j,cur,roadDest,tail,avoid);
+}
+// #596 pickup phase-flip recovery. The flip join-hold (moveVehicle, end of the
+// toSource route) used to set waiting/blockedBy and break with NO recovery call:
+// an idle truck parked on the departure lane start — which for a straight-through
+// route IS the source stop the mover just arrived at — held the pickup forever.
+// The #589 bay-queue early arrival is deliberately NOT applied here (it snapped
+// the flip into the blocker's envelope, measured -1.61 world overlap). Instead,
+// after honest queuing past WAIT_TIMEOUT_SECONDS, recompute j.toDest around the
+// idle parks (normal obstacle BFS first, then the bounded origin sidestep) and
+// separation-check the new departure lane start BEFORE pickupCargo copies it to
+// j.route. Route-only: the truck does not move until the flip's own join snap,
+// which is now proven clear. Freight, phase and endpoints are untouched.
+function recoverDeparture(g,v){
+ const j=v.job;
+ if(!j||j.phase!=="toSource"||v.blockedBy==null)return false;
+ if((v.waitTime||0)<WAIT_TIMEOUT_SECONDS)return false;
+ if((v.recoveryTries||0)>=ORIGIN_RECOVERY_MAX_TRIES)return false;
+ const src=g.buildings.find(b=>b.id===j.sourceId);
+ const dst=g.buildings.find(b=>b.id===j.destId);
+ if(!src||!dst)return false;
+ const roadSet=new Set(Array.isArray(g.roads)?g.roads:[]);
+ const srcA=dockApproach(g,src,roadSet),dstA=dockApproach(g,dst,roadSet);
+ // Road leg endpoints: the facing-side dock stops when the endpoint is a depot
+ // (nearestRoad(bay) resolves to the OLD anchor stop, not the live dock stop —
+ // #580), otherwise the stored toDest's first/last road cells.
+ const roadStart=srcA?srcA.stop:nearestRoad(g,Math.round(v.x),Math.round(v.z));
+ const roadDest=dstA?dstA.stop:j.toDest[j.toDest.length-1];
+ if(!roadStart||!roadDest)return false;
+ // #596: mirror the stored departure leg's OWN head/tail semantics (see
+ // rerouteAroundBlocker). Re-prepend the exit corridor / re-append the entry
+ // corridor ONLY when the current toDest actually carries them. A leg stripped
+ // to road stops stays stop-terminated, so the pickup flip's join snap can never
+ // land on a bay the leg did not already serve (#580 clause-1 control).
+ const first=j.toDest[0],last=j.toDest[j.toDest.length-1];
+ const head=srcA&&first&&key(first.x,first.z)!==key(srcA.stop.x,srcA.stop.z)?dockDeparture(srcA):[];
+ const tail=dstA&&last&&key(last.x,last.z)!==key(dstA.stop.x,dstA.stop.z)?dstA.cells:[];
+ const avoid=recoveryAvoid(g,v,roadDest);
+ if(avoid.has(key(roadDest.x,roadDest.z)))return false;
+ const path=roadPath(g,roadStart,roadDest,avoid);
+ if(path){
+  const full=head.concat(path,tail);
+  if(full.length>=2&&commitDeparture(g,v,j,full,false))return true;
+ }
+ // Origin-cell case: the departure lane start itself is occupied. Sidestep the
+ // ROAD origin (no departure corridor — the flip snap lands on the new lane
+ // start, separation-checked and displacement-bounded by commitRecoveryRoute).
+ if(ORIGIN_RECOVERY_RADIUS_CELLS<=0)return false;
+ const cands=[];
+ for(const tile of g.roads){
+  const [x,z]=cellOf(tile);
+  const d=Math.abs(x-roadStart.x)+Math.abs(z-roadStart.z);
+  if(d<1||d>ORIGIN_RECOVERY_RADIUS_CELLS||avoid.has(key(x,z)))continue;
+  cands.push({x,z,d});
+ }
+ cands.sort((p,q)=>p.d-q.d||p.x-q.x||p.z-q.z);
+ for(const s of cands){
+  const sp=roadPath(g,s,roadDest,avoid);
+  if(!sp)continue;
+  const full=sp.concat(tail);
+  if(full.length<2)continue;
+  if(commitDeparture(g,v,j,full,true))return true;
+ }
+ return false;
+}
+// Departure-route commit: unlike commitRecoveryRoute this lands j.toDest ONLY
+// (the phase is still toSource; pickupCargo copies it to j.route at the flip).
+// The truck's position is NOT touched — the flip's join snap does that, and the
+// caller re-runs joinBlocker against the new toDest before allowing the flip.
+// sidestep=true bounds the future join snap to R+1 cells from the CURRENT
+// position and spends one budget try.
+function commitDeparture(g,v,j,full,sidestep){
  const lane=laneRoute(full);
+ if(!lane.points.length)return false;
  const start={x:lane.points[0].x,z:lane.points[0].z,heading:lane.headings[0]||v.heading};
- // Never teleport into another envelope: require declared clearance at the new start.
  for(const u of g.vehicles){if(u.id===v.id)continue;
   if(envelopeGapWorld(start,u)<MIN_GAP_WORLD-1e-6)return false;}
- j.route=full;j.segment=0;j.progress=0;
- v.x=start.x;v.z=start.z;v.heading=start.heading;
- v.waitTime=0;v.waiting=false;v.blockedBy=null;
+ if(sidestep&&Math.hypot(start.x-v.x,start.z-v.z)>ORIGIN_RECOVERY_RADIUS_CELLS+1)return false;
+ j.toDest=full;
+ if(sidestep)v.recoveryTries=(v.recoveryTries||0)+1;
  return true;
 }
 // #589 lane-join gate. Starting a route (assignJob, pickup phase flip) snaps the
@@ -867,7 +1125,16 @@ function moveVehicle(g,v,seconds){
     const jb=joinBlocker(g,v,j.toDest);
     if(jb!=null){
      v.waiting=true;v.blockedBy=jb;v.waitTime=(v.waitTime||0)+seconds;
-     break;
+     // #596: bounded pickup-flip recovery. After honest queuing past the
+     // timeout, recompute the departure route around the idle parks and
+     // separation-check its lane start; only a PROVEN-clear recompute lets the
+     // flip proceed this tick. recoverDeparture gates timeout + budget itself
+     // and never moves the truck — pickupCargo's join snap does, onto the new
+     // checked start. The #589 bay-queue early arrival stays excluded from
+     // pickup (it caused the measured -1.61 world overlap at this exact flip).
+     if(recoverDeparture(g,v)&&joinBlocker(g,v,j.toDest)==null){
+      v.waiting=false;v.blockedBy=null;v.waitTime=0;
+     }else break;
     }
     const p=pickupCargo(g,v);
     if(!p.ok){returnFreight(g,v,"PICKUP_INVALID");return;}
