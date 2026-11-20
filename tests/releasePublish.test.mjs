@@ -710,3 +710,126 @@ test("NEGATIVE CONTROLS: deliberate wiring mutations MUST fail the guard", () =>
     assert.throws(() => assertPublishWiring(mutated), `guard MUST reject: ${name}`);
   }
 });
+
+// --- 8. Refs #607 audit correction: REAL endpoint error shapes ---------------
+// PR #609 finding 7031944017 proved the section-7 fixtures fabricated a 404
+// that the endpoint actually called never returns. Every POSITIVE absent-ref
+// fixture below is stderr captured live 2026-11-20 by dev-607b (read-only
+// GETs), matching the coordinator's 4/4 measurement in that finding:
+//   gh api repos/darkmatter2222/Rustwake/commits/{absent} --jq .sha
+//     => exit 1, stderr: gh: No commit found for SHA: {absent} (HTTP 422)
+//     captured for v0.3.3, v0.9.9, rw-no-such-tag-xyz, v0.0.0-deleted-probe
+//   gh api repos/darkmatter2222/Rustwake/git/ref/tags/v0.3.3 --jq .object.sha
+//     => exit 1, stderr: gh: Not Found (HTTP 404)  (a DIFFERENT endpoint)
+// The section-7 404 fixtures are preserved unchanged: 404 remains the correct
+// absent shape for git/ref/tags/{tag}. Negative controls below are deliberately
+// synthetic adversarial shapes (generic 422, bare status, wrong status), not
+// claims of capture.
+const realAbsent422 = (ref) => {
+  const e = new Error("gh api commits failed");
+  e.stderr = `gh: No commit found for SHA: ${ref} (HTTP 422)`;
+  return e;
+};
+const realRef404 = () => {
+  const e = new Error("gh api git/ref failed");
+  e.stderr = "gh: Not Found (HTTP 404)";
+  return e;
+};
+
+test("isRefMissing: REAL captured absent-ref stderr — commits/{ref} 422 (4/4 probes) and git/ref/tags 404 => true", () => {
+  for (const ref of ["v0.3.3", "v0.9.9", "rw-no-such-tag-xyz", "v0.0.0-deleted-probe"]) {
+    const err = realAbsent422(ref);
+    assert.ok(err.stderr.length > 0, "fixture stderr must be non-empty");
+    assert.equal(isRefMissing(err.stderr), true, err.stderr);
+  }
+  const e404 = realRef404();
+  assert.ok(e404.stderr.length > 0, "fixture stderr must be non-empty");
+  assert.equal(isRefMissing(e404.stderr), true, e404.stderr);
+});
+
+test("isRefMissing truth table: generic 422, bare 422, message-without-422, auth/rate/5xx/network/no-stderr => false", () => {
+  const negatives = [
+    "gh: Validation Failed (HTTP 422)", // generic 422, different message: NOT a missing ref
+    "HTTP 422: Unprocessable Entity (https://api.github.com/repos/o/r/commits/v0.3.3)",
+    "HTTP 422", // bare status marker, no message
+    "gh: (HTTP 422)",
+    "gh: No commit found for SHA: v0.3.3 (HTTP 403)", // message WITHOUT the 422 status
+    "gh: No commit found for SHA: v0.3.3 (HTTP 500)",
+    "gh: Unauthorized (HTTP 401)",
+    "gh: Forbidden (HTTP 403)",
+    "HTTP 429: rate limit exceeded",
+    "HTTP 500: Internal Server Error",
+    "HTTP 502: Bad Gateway",
+    "dial tcp: lookup api.github.com: no such host",
+    "HTTP 403: rate limit exceeded (https://api.github.com/repositories/404)", // docs URL merely contains 404
+    "", null, undefined, 42,
+  ];
+  for (const s of negatives) assert.equal(isRefMissing(s), false, JSON.stringify(s));
+});
+
+test("non-absent failures (incl. generic 422) rethrow the ORIGINAL error through the scan AND the candidate loop", () => {
+  // Verbatim composition of main()'s candidate loop + plan, so a rethrow
+  // regression in either place fails here with the identical error object.
+  const candidateLoop = (tags, resolve, sourceSha) => {
+    const next = nextVersion(tags);
+    const highest = previousVersion(tags);
+    const tagShas = {};
+    for (const t of [highest, next]) {
+      if (!t || Object.prototype.hasOwnProperty.call(tagShas, t)) continue;
+      try { tagShas[t] = resolve(t); } catch (err) {
+        if (!isRefMissing(err && err.stderr != null ? String(err.stderr) : "")) throw err;
+      }
+    }
+    return planPublication({ tags, tagShas, sourceSha });
+  };
+  const stderrs = [
+    "gh: Unauthorized (HTTP 401)",
+    "gh: Forbidden (HTTP 403)",
+    "HTTP 429: rate limit exceeded",
+    "HTTP 500: Internal Server Error",
+    "dial tcp: lookup api.github.com: no such host",
+    "gh: Validation Failed (HTTP 422)", // generic 422 must NOT be blanket-swallowed
+    undefined, // error with no stderr at all: unknown cause => abort
+  ];
+  for (const stderr of stderrs) {
+    const err = new Error("gh api failed");
+    if (stderr !== undefined) err.stderr = stderr;
+    const resolve = () => { throw err; };
+    assert.throws(
+      () => existingReleaseSha([{ tagName: "v0.1.0", isDraft: false }], SHA, resolve),
+      (e) => e === err,
+      `scan must rethrow the original error for: ${JSON.stringify(stderr)}`
+    );
+    assert.throws(
+      () => candidateLoop(REAL_TAGS, resolve, SHA),
+      (e) => e === err,
+      `candidate loop must rethrow the original error for: ${JSON.stringify(stderr)}`
+    );
+  }
+});
+
+test("NEGATIVE CONTROL: the pre-fix 404-only predicate aborts on the REAL 422 — the audited regression is reachable", () => {
+  // The exact predicate delivered at fa0a8a10 before this correction.
+  const preFixIsRefMissing = (s) => typeof s === "string" &&
+    (/\bHTTP 404\b/.test(s) || /\(404\)/.test(s) || /\b404 Not Found\b/i.test(s));
+  const err = realAbsent422(nextVersion(REAL_TAGS));
+  assert.ok(err.stderr.length > 0, "fixture stderr must be non-empty");
+  assert.equal(preFixIsRefMissing(err.stderr), false, "pre-fix predicate is blind to the real absent-tag shape");
+  assert.equal(isRefMissing(err.stderr), true, "corrected predicate accepts the real shape");
+  // The delivered candidate loop with the pre-fix predicate rethrows the
+  // identical real error object instead of leaving the absent key unset.
+  const resolve = (t) => { if (t === nextVersion(REAL_TAGS)) throw err; return OTHER_SHA; };
+  const next = nextVersion(REAL_TAGS);
+  const highest = previousVersion(REAL_TAGS);
+  const tagShas = {};
+  let caught = null;
+  try {
+    for (const t of [highest, next]) {
+      if (!t || Object.prototype.hasOwnProperty.call(tagShas, t)) continue;
+      try { tagShas[t] = resolve(t); } catch (e) {
+        if (!preFixIsRefMissing(e && e.stderr != null ? String(e.stderr) : "")) throw e;
+      }
+    }
+  } catch (e) { caught = e; }
+  assert.equal(caught, err, "pre-fix loop aborts with the identical real API error — the regression finding 7031944017 proved");
+});

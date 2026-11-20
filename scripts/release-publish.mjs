@@ -28,8 +28,12 @@
  * - Draft releases never count as published receipts (Refs #607): the
  *   listing's isDraft field is requested and filtered explicitly, so the
  *   decision is correct whether or not the listing includes drafts.
- * - An unresolvable (HTTP 404) tag on an unrelated historical release is
- *   skipped, not fatal; any other API/auth/network failure aborts (Refs #607).
+ * - An unresolvable tag on an unrelated historical release is skipped, not
+ *   fatal. Absence is proven by the endpoint's own marker: HTTP 404
+ *   (git/ref/tags/{tag}) or HTTP 422 carrying "No commit found for SHA:"
+ *   (commits/{ref} — the endpoint this script actually calls; measured live
+ *   2026-11-20, PR #609 audit 7031944017). Any other API/auth/network failure
+ *   aborts (Refs #607).
  * - Notes are a deploy receipt, never a claim of sponsor visual acceptance.
  *   G1 (Refs #276) is the only visual gate.
  */
@@ -186,15 +190,22 @@ export function tagAvailability(tag, tagTargets, liveSourceSha) {
 
 /**
  * Ref-missing classification (Refs #607 defect 2). Pure over the stderr text
- * of a failed `gh api repos/{repo}/commits/{ref}` call. ONLY an explicit
- * HTTP 404 status marker means "ref does not resolve => skip / absent".
+ * of a failed `gh api repos/{repo}/commits/{ref}` call. Measured live
+ * 2026-11-20 (PR #609 audit 7031944017, re-captured by dev-607b): the
+ * commits/{ref} endpoint answers an absent ref with HTTP 422 and the message
+ * "No commit found for SHA: <ref>" (422 in 4/4 absent probes), NOT 404.
+ * HTTP 404 is the absent-ref shape of the DIFFERENT git/ref/tags/{tag}
+ * endpoint. Both proven shapes mean "ref does not resolve => skip / absent".
+ * The 422 branch requires BOTH the status marker AND that specific message:
+ * a generic 422 (any other message) is NOT a missing ref and still aborts.
  * Auth (401/403), rate-limit (429), server (5xx) and network failures are NOT
  * missing refs: they must abort the run, never become a silent skip that
  * could publish a wrong release.
  */
 export function isRefMissing(stderrText) {
   if (typeof stderrText !== "string") return false;
-  return /\bHTTP 404\b/.test(stderrText) || /\(404\)/.test(stderrText) || /\b404 Not Found\b/i.test(stderrText);
+  if (/\bHTTP 404\b/.test(stderrText) || /\(404\)/.test(stderrText) || /\b404 Not Found\b/i.test(stderrText)) return true;
+  return /\bHTTP 422\b/.test(stderrText) && /No commit found for SHA:/.test(stderrText);
 }
 
 /**
@@ -206,8 +217,9 @@ export function isRefMissing(stderrText) {
  * CONSTRAINT (isDraft measured available 2026-11-20 by the coordinator): a
  * release counts only when isDraft !== true, so this decision is identical
  * whether or not the listing includes drafts — a draft NEVER causes a no-op.
- * A proven-404 tag on an unrelated historical release is skipped; any other
- * resolver failure rethrows (never a blanket swallow).
+ * A proven-absent tag (isRefMissing: 404, or the commits endpoint's 422
+ * "No commit found for SHA:") on an unrelated historical release is skipped;
+ * any other resolver failure rethrows (never a blanket swallow).
  */
 export function existingReleaseSha(releases, sourceSha, resolve) {
   if (!Array.isArray(releases)) throw new TypeError("releases must be an array of {tagName, isDraft}");
@@ -233,7 +245,7 @@ export function existingReleaseSha(releases, sourceSha, resolve) {
  * existingReleaseSha found NO non-draft release at sourceSha.
  *
  * `tagShas` maps tag name -> peeled SHA for the candidate tags whose
- * resolution succeeded; a missing key means absent-or-proven-404.
+ * resolution succeeded; a missing key means absent-or-proven-missing.
  *
  * - Highest semver tag resolves to sourceSha => partial-failure orphan:
  *   ADOPT it (createTag:false), never bump; range base = highest tag
@@ -381,7 +393,8 @@ function main() {
 
   // Resolve the two candidate tags: the highest existing semver tag (orphan
   // adoption, Refs #607 defect 1) and the computed next tag (immutability).
-  // A proven HTTP 404 means absent => create; any other failure aborts.
+  // A proven absent ref (isRefMissing: 404, or the commits endpoint's 422
+  // "No commit found for SHA:") means absent => create; any other failure aborts.
   const next = nextVersion(tags);
   const highest = previousVersion(tags);
   const tagShas = {};
@@ -391,7 +404,7 @@ function main() {
       tagShas[t] = resolveCached(t);
     } catch (err) {
       if (!isRefMissing(err && err.stderr != null ? String(err.stderr) : "")) throw err;
-      // Proven 404: tag absent => leave the key unset (create path).
+      // Proven absent: tag does not resolve => leave the key unset (create path).
     }
   }
   const plan = planPublication({ tags, tagShas, sourceSha });
