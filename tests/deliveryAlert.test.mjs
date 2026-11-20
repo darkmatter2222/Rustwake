@@ -273,8 +273,14 @@ test("delivery-alert.yml text contract: isolation, runner, timeout, permissions,
 // retired with the freeze it served; the sha256 pin binds content exactly.
 test("delivery.yml and ci.yml match the OPS-12 (#336) hardened baseline", () => {
   // sha256 of the hardened LF-normalized content at rw/336-ops-12-supply-chain.
+  // #600 DELIBERATELY re-baselines delivery.yml to the additive terminal
+  // publish-release content (product ruling 7029297423 permits re-baselining
+  // to additive content only). tests/releasePublish.test.mjs proves the
+  // pre-#600 prefix stays byte-identical to the old hash 675320f9… below, so
+  // package predicates, concurrency, needs chains, runners and order are
+  // unchanged; ci.yml is untouched. No assertion is deleted or loosened.
   const hardenedHashes = {
-    ".github/workflows/delivery.yml": "675320f94e6085cd997b3179f3e7106c1ea56e653cacade952831211dbe964da",
+    ".github/workflows/delivery.yml": "c09fd98b3a26579929425931650e73e5f4fdfed5c771e3f6d517e6fa5643956c",
     ".github/workflows/ci.yml": "4212ae963e3c92645d216df0ad1bba0f4518fbdb70013647419a0a403550b55b",
   };
   for (const [file, expected] of Object.entries(hardenedHashes)) {

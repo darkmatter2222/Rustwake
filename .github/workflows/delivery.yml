@@ -195,3 +195,41 @@ jobs:
           SOURCE_SHA: ${{ needs.package.outputs.source_sha }}
         run: |
           printf '### Rustwake hosted-browser smoke (OPS-09)\nSource: `%s`\n\nOne GitHub-hosted Chromium, sequential desktop + emulated phone contexts against the live site: **%s**. A failed smoke leaves this release UNVERIFIED even if the deploy receipt succeeded; the release comment must cite hosted-browser PASS from the rustwake-hosted-browser artifact.\n' "$SOURCE_SHA" "$RESULT" >> "$GITHUB_STEP_SUMMARY"
+  # Issue #600: automated release publish — additive TERMINAL leaf (binding
+  # product ruling 7029297423). Version scheme: every verified deploy auto-
+  # patch-bumps within the highest existing strict vMAJOR.MINOR.PATCH series,
+  # computed purely from the tag list (v0.1.0/v0.2.0/v0.3.0 => v0.3.1).
+  # Minor/major bumps stay product-curated. Tags are immutable at the verified
+  # live source_sha; same-SHA re-runs are no-ops; docs-only deploys still get a
+  # release labeled "No game-source changes". No if: override and no
+  # continue-on-error: default success-only needs semantics mean a failed,
+  # cancelled, timed_out or skipped delivery publishes NOTHING, and a publish
+  # failure fails the whole delivery run loudly. Serialized by the existing
+  # workflow-level concurrency group (no second group). Zero new actions;
+  # job-scoped contents: write only. Scheme doc: docs/release-versioning.md.
+  publish-release:
+    needs: [package, deploy, verify-live, hosted-browser]
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          ref: ${{ needs.package.outputs.source_sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: 22
+      - name: Publish GitHub Release at the verified live SHA
+        env:
+          GH_TOKEN: ${{ github.token }}
+          SOURCE_SHA: ${{ needs.package.outputs.source_sha }}
+          MAIN_HEAD: ${{ github.event.workflow_run.head_sha || github.sha }}
+          JOB_PACKAGE: ${{ needs.package.result }}
+          JOB_DEPLOY: ${{ needs.deploy.result }}
+          JOB_VERIFY_LIVE: ${{ needs.verify-live.result }}
+          JOB_HOSTED_BROWSER: ${{ needs.hosted-browser.result }}
+          MAIN_CI_RUN: ${{ github.event.workflow_run.html_url || 'workflow_dispatch (no upstream CI run)' }}
+        run: node scripts/release-publish.mjs
