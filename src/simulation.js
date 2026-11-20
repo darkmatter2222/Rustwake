@@ -764,10 +764,15 @@ function rerouteAroundBlocker(g,v){
  // the next idle park (measured: fuel resupply re-blocked by a second idle truck
  // on the same column). One obstacle BFS around all stationary idle parks lands a
  // clean lane in a single recovery. Moving trucks are NOT avoided — they clear.
+ // The GOAL cell is exempt from this sweep: an idle park ON the destination stop
+ // is the #589 bay-queue last resort's own case (timeout-gated early arrival /
+ // pickup join). Avoiding it here made avoid.has(roadDest) always true, so
+ // recovery refused forever and the steel run starved behind a mid-route idle
+ // park (measured: starterFuelEconomy test-3 regression, 0 steel in 60 s).
  for(const u of g.vehicles){
   if(u.id===v.id||u.job)continue;
   const uc=nearestRoad(g,Math.round(u.x),Math.round(u.z));
-  if(uc)avoid.add(key(uc.x,uc.z));
+  if(uc&&!(uc.x===roadDest.x&&uc.z===roadDest.z))avoid.add(key(uc.x,uc.z));
  }
  if(avoid.has(key(roadDest.x,roadDest.z)))return false; // cannot route around the goal itself
  const path=roadPath(g,cur,roadDest,avoid);
@@ -830,8 +835,18 @@ function moveVehicle(g,v,seconds){
     // behind a stationary park. Reroute around idle parks immediately; MOVING
     // blockers still get the timeout grace to clear. rerouteAroundBlocker is
     // separation-checked against every envelope, so this never snaps into traffic.
+    // EXCLUSION: a jobless blocker parked ON the destination endpoint cell (the
+    // depot bay for a dock job) keeps the verbatim timeout path. The implicit
+    // avoid.has(roadDest) guard does NOT cover it: nearestRoad(bay) resolves to
+    // the OLD anchor stop (measured (13,8)), not the facing-side dock stop
+    // (13,12), so an immediate reroute would snap the mover back to the stop and
+    // re-drive the corridor — perturbing the bay-queue early-arrival timing that
+    // gate C-2 (storage-4 alarm) is sensitive to. The timeout/bay-queue last
+    // resort owns the destination-bay park; this acceleration does not.
     const bu=g.vehicles.find(u=>u.id===jb);
-    if(bu&&!bu.job)rerouteAroundBlocker(g,v);
+    const end=j.route[j.route.length-1];
+    const atDestBay=bu&&!bu.job&&Math.round(bu.x)===end.x&&Math.round(bu.z)===end.z;
+    if(bu&&!bu.job&&!atDestBay)rerouteAroundBlocker(g,v);
     else if(v.waitTime>=WAIT_TIMEOUT_SECONDS)rerouteAroundBlocker(g,v);
     break;
    }
