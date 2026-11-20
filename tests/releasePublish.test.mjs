@@ -2,6 +2,9 @@
  * Issue #600 — automated release publishing: unit truth tables, tag
  * immutability, notes contract, and a static guard on the delivery.yml job
  * shape with mutation-based negative controls (Refs #600).
+ * Section 7 (Refs #607): convergent partial-failure retry (orphan adoption,
+ * honest range + src classification), 404-tolerant release scan, explicit
+ * isDraft filtering, and shell-wiring guards with mutation negative controls.
  *
  * Offline and deterministic: no network, no servers, no timers — nothing that
  * can keep the Node event loop alive (the #545 outage class). Follows the
@@ -27,8 +30,12 @@ import {
   compareSemver,
   nextVersion,
   previousVersion,
+  previousVersionBefore,
   shouldPublish,
   tagAvailability,
+  isRefMissing,
+  existingReleaseSha,
+  planPublication,
   buildNotes,
   REQUIRED_JOBS,
   NO_UPSTREAM_CI,
@@ -384,4 +391,541 @@ test("release-publish.mjs uses execFileSync only, never logs the token, import r
   assert.ok(!src.includes("--force"), "no force path for tags or releases");
   // Importing the module (this test file already did) must not have touched
   // git/gh: proven by the suite running offline with no network and no hang.
+});
+
+// --- 7. Refs #607: convergent retry, 404-tolerant scan, explicit draft filter -
+// All fixtures below are offline and deterministic. The verified live SHA is
+// the existing SHA constant; the orphan tag is DERIVED from REAL_TAGS via
+// nextVersion, never hardcoded from a remembered release count.
+const ORPHAN = nextVersion(REAL_TAGS);          // tag the failed first run created
+const RETRY_TAGS = [...REAL_TAGS, ORPHAN];      // tag list as the retry sees it
+const RETRY_COMMITS = [
+  { sha: "258fce5", subject: "feat(v2): publish Rustwake 3D sandbox foundation (#306)" },
+  { sha: "0da976d", subject: "fix(249): desktop widescreen camera fit fills remaining rectangle (#251)" },
+];
+const retryNotes = (plan, over = {}) => buildNotes({
+  tag: plan.tag,
+  sourceSha: SHA,
+  previousTag: plan.previousTag,
+  commits: RETRY_COMMITS,
+  mainCiRun: "https://github.com/darkmatter2222/Rustwake/actions/runs/44081765468",
+  deliveryRun: "https://github.com/darkmatter2222/Rustwake/actions/runs/44680907435",
+  gameSourceChanged: true, // fixture: git diff --name-only <base>..SHA -- src is non-empty
+  ...over,
+});
+const http404 = () => {
+  const e = new Error("gh api commits failed");
+  e.stderr = "gh: Not Found (HTTP 404)";
+  return e;
+};
+
+test("previousVersionBefore: highest strict semver STRICTLY BELOW the limit, numeric order", () => {
+  assert.equal(previousVersionBefore(RETRY_TAGS, ORPHAN), "v0.3.0");
+  assert.equal(previousVersionBefore(["v0.9.0", "v0.10.0", "v0.10.1"], "v0.10.1"), "v0.10.0");
+  assert.equal(previousVersionBefore(["v0.3.0", "v0.3.1", "v0.4.0"], "v0.3.1"), "v0.3.0", "tags above the limit excluded");
+  assert.equal(previousVersionBefore(["v0.3.1", "junk", "v0.3.2"], "v0.3.1"), null, "the limit itself is excluded");
+  assert.equal(previousVersionBefore([], "v0.3.1"), null);
+  assert.equal(previousVersionBefore(["junk"], "v0.3.1"), null);
+  assert.throws(() => previousVersionBefore(["v0.3.0"], "0.3.1"), TypeError);
+  assert.throws(() => previousVersionBefore(null, "v0.3.1"), TypeError);
+});
+
+test("isRefMissing: ONLY an explicit HTTP 404 marker means missing; auth/network/5xx are NOT missing", () => {
+  for (const s of [
+    "gh: Not Found (HTTP 404)",
+    "HTTP 404: Not Found (https://api.github.com/repos/o/r/commits/v0.1.0)",
+    "gh: Not Found (404)",
+  ]) assert.equal(isRefMissing(s), true, s);
+  for (const s of [
+    "gh: Unauthorized (HTTP 401)",
+    "gh: Forbidden (HTTP 403)",
+    "HTTP 429: rate limit exceeded",
+    "HTTP 500: Internal Server Error",
+    "HTTP 502: Bad Gateway",
+    "dial tcp: lookup api.github.com: no such host",
+    "HTTP 403: rate limit exceeded (https://api.github.com/repositories/404)",
+    "", null, undefined, 42,
+  ]) assert.equal(isRefMissing(s), false, JSON.stringify(s));
+});
+
+test("existingReleaseSha: unrelated deleted historical tag (404) is SKIPPED, healthy publish proceeds", () => {
+  const releases = [{ tagName: "v0.1.0", isDraft: false }, { tagName: "v0.2.0", isDraft: false }];
+  const resolve = (t) => { if (t === "v0.1.0") throw http404(); return OTHER_SHA; };
+  assert.equal(existingReleaseSha(releases, SHA, resolve), null, "404 on an unrelated tag must not abort");
+  const d = shouldPublish({ jobConclusions: allSuccess(), liveSourceSha: SHA, mainHead: SHA, existingReleaseSha: null });
+  assert.equal(d.publish, true, "the healthy deployment still publishes");
+  // A later release matching the SHA is still found despite an earlier 404.
+  const resolve2 = (t) => { if (t === "v0.1.0") throw http404(); return SHA; };
+  assert.equal(existingReleaseSha(releases, SHA, resolve2), SHA);
+  assert.throws(() => existingReleaseSha(null, SHA, resolve), TypeError);
+  assert.throws(() => existingReleaseSha(releases, SHA, null), TypeError);
+});
+
+test("existingReleaseSha: non-404 resolver failures RETHROW — never a silent skip", () => {
+  for (const stderr of [
+    "gh: Unauthorized (HTTP 401)",
+    "gh: Forbidden (HTTP 403)",
+    "HTTP 500: Internal Server Error",
+    "dial tcp: lookup api.github.com: no such host",
+    undefined, // error with no stderr at all: unknown cause => abort
+  ]) {
+    const err = new Error("gh api failed");
+    if (stderr !== undefined) err.stderr = stderr;
+    const resolve = () => { throw err; };
+    assert.throws(
+      () => existingReleaseSha([{ tagName: "v0.1.0", isDraft: false }], SHA, resolve),
+      (e) => e === err,
+      `must rethrow the original error for: ${JSON.stringify(stderr)}`
+    );
+  }
+});
+
+test("existingReleaseSha: a draft at sourceSha NEVER causes a no-op (BOTH listing branches)", () => {
+  const resolve = () => SHA;
+  // Branch A: the listing INCLUDES the draft entry => filtered out by isDraft.
+  assert.equal(existingReleaseSha([{ tagName: ORPHAN, isDraft: true }], SHA, resolve), null);
+  // Branch B: the listing EXCLUDES drafts entirely => same decision.
+  assert.equal(existingReleaseSha([], SHA, resolve), null);
+  // Either way the gate decision is PUBLISH, not a spurious silent no-op.
+  const d = shouldPublish({ jobConclusions: allSuccess(), liveSourceSha: SHA, mainHead: SHA, existingReleaseSha: null });
+  assert.equal(d.publish, true);
+  // Mixed listing: draft at SHA + published release elsewhere => still null.
+  assert.equal(existingReleaseSha(
+    [{ tagName: ORPHAN, isDraft: true }, { tagName: "v0.3.0", isDraft: false }],
+    SHA, (t) => (t === ORPHAN ? SHA : OTHER_SHA)
+  ), null);
+  // A PUBLISHED (non-draft) release at SHA still no-ops, exact reason string.
+  assert.equal(existingReleaseSha([{ tagName: "v0.3.0", isDraft: false }], SHA, resolve), SHA);
+  const noop = shouldPublish({ jobConclusions: allSuccess(), liveSourceSha: SHA, mainHead: SHA, existingReleaseSha: SHA });
+  assert.equal(noop.publish, false);
+  assert.equal(noop.reason, "no-op: a release already exists at this exact SHA (same-SHA re-run)");
+});
+
+test("existingReleaseSha: no silent truncation — a match beyond position 100 is found", () => {
+  const releases = Array.from({ length: 150 }, (_, i) => ({ tagName: `v0.0.${i + 1}`, isDraft: false }));
+  const target = releases[120].tagName;
+  const resolve = (t) => (t === target ? SHA : OTHER_SHA);
+  assert.equal(existingReleaseSha(releases, SHA, resolve), SHA, "pure scan must not cap at 100");
+  // Shell-side boundary: the listing command must request more than 100.
+  const src = read("scripts/release-publish.mjs");
+  assert.ok(src.includes('"--limit", "1000"'), "listing limit raised above the old silent 100-cap");
+});
+
+test("planPublication: no orphan => CREATE the computed tag, previousVersion is the range base", () => {
+  const plan = planPublication({ tags: REAL_TAGS, tagShas: {}, sourceSha: SHA });
+  assert.deepEqual(plan, { action: "create", tag: ORPHAN, previousTag: "v0.3.0", createTag: true });
+  // Highest tag at a DIFFERENT SHA is just history: still create, no adoption.
+  const plan2 = planPublication({ tags: RETRY_TAGS, tagShas: { [ORPHAN]: OTHER_SHA }, sourceSha: SHA });
+  assert.deepEqual(plan2, { action: "create", tag: nextVersion(RETRY_TAGS), previousTag: ORPHAN, createTag: true });
+  assert.throws(() => planPublication({ tags: null, tagShas: {}, sourceSha: SHA }), TypeError);
+  assert.throws(() => planPublication({ tags: REAL_TAGS, tagShas: null, sourceSha: SHA }), TypeError);
+  assert.throws(() => planPublication({ tags: REAL_TAGS, tagShas: {}, sourceSha: "abc" }), TypeError);
+});
+
+test("planPublication: computed tag at a DIFFERENT SHA still HARD-FAILS (immutability preserved)", () => {
+  assert.throws(
+    () => planPublication({ tags: REAL_TAGS, tagShas: { [ORPHAN]: OTHER_SHA }, sourceSha: SHA }),
+    /immutable/
+  );
+  // The unchanged tagAvailability contract still holds on its own.
+  assert.throws(() => tagAvailability(ORPHAN, { [ORPHAN]: OTHER_SHA }, SHA), /immutable/);
+});
+
+test("planPublication: partial-failure retry ADOPTS the orphan — SAME computed tag, never a bump", () => {
+  const plan = planPublication({ tags: RETRY_TAGS, tagShas: { [ORPHAN]: SHA }, sourceSha: SHA });
+  assert.equal(plan.action, "adopt");
+  assert.equal(plan.tag, ORPHAN, "the tag the failed run computed, not a bumped one");
+  assert.equal(plan.createTag, false, "no second tag POST — the orphan already exists");
+  assert.notEqual(plan.tag, nextVersion(RETRY_TAGS), "proves the retry did NOT bump past the orphan");
+  assert.equal(plan.previousTag, "v0.3.0", "range base is the tag BEFORE the adopted one");
+  assert.notEqual(plan.previousTag, plan.tag, "the adopted tag must never be its own range base");
+});
+
+test("planPublication: computed tag already at the verified SHA (stale-list race) => adopt, not bump", () => {
+  const plan = planPublication({ tags: REAL_TAGS, tagShas: { [ORPHAN]: SHA }, sourceSha: SHA });
+  assert.deepEqual(plan, { action: "adopt", tag: ORPHAN, previousTag: "v0.3.0", createTag: false });
+});
+
+test("planPublication: an orphan with NO tag below it hard-errors rather than rendering an empty range", () => {
+  assert.throws(
+    () => planPublication({ tags: ["v0.1.0"], tagShas: { "v0.1.0": SHA }, sourceSha: SHA }),
+    /honest non-empty range/
+  );
+});
+
+test("retry receipt: adopted orphan renders the REAL non-empty range and the TRUE src classification", () => {
+  const plan = planPublication({ tags: RETRY_TAGS, tagShas: { [ORPHAN]: SHA }, sourceSha: SHA });
+  const body = retryNotes(plan);
+  assert.ok(body.includes(`Range: \`v0.3.0..${SHA}\``), "range base is the tag BEFORE the adopted orphan");
+  assert.ok(body.includes("`258fce5` feat(v2): publish Rustwake 3D sandbox foundation (#306)"), "actual commit line 1");
+  assert.ok(body.includes("`0da976d` fix(249): desktop widescreen camera fit fills remaining rectangle (#251)"), "actual commit line 2");
+  assert.ok(body.includes("Classification: game-source changes included."), "TRUE classification string");
+  assert.ok(!body.includes("No game-source changes"), "FALSE label must never appear on a src-changing retry");
+  assert.ok(!body.includes("(no commits in range)"), "empty-range marker must never appear on this retry");
+  assert.ok(body.includes("NOT a visual acceptance"), "G1 disclaimer unconditional on the adoption path");
+  assert.ok(body.includes("G1 (Refs #276)"), "G1 pointer present");
+  assert.ok(body.includes(`tag \`${ORPHAN}\` resolves to this exact verified live SHA`), "adopted tag named in the receipt");
+});
+
+test("NEGATIVE CONTROL: the pre-fix range base reproduces the empty range and false label (the trap is real)", () => {
+  // Pre-fix algorithm on the retry: nextVersion bumps past the orphan and
+  // previousVersion returns the orphan itself => empty range, false label.
+  // This fixture proves the dishonest strings are reachable, so the test
+  // above is falsifiable rather than vacuous.
+  const broken = buildNotes({
+    tag: nextVersion(RETRY_TAGS),
+    sourceSha: SHA,
+    previousTag: previousVersion(RETRY_TAGS), // == ORPHAN, the defect
+    commits: [],                              // git log ORPHAN..SHA is empty
+    mainCiRun: "https://github.com/darkmatter2222/Rustwake/actions/runs/44081765468",
+    deliveryRun: "https://github.com/darkmatter2222/Rustwake/actions/runs/44680907435",
+    gameSourceChanged: false,                 // git diff ORPHAN..SHA -- src is ""
+  });
+  assert.equal(previousVersion(RETRY_TAGS), ORPHAN, "fixture really is the orphan-as-base case");
+  assert.ok(broken.includes("(no commits in range)"), "pre-fix empty-range marker");
+  assert.ok(broken.includes("No game-source changes (docs/infra/dashboard only)."), "pre-fix FALSE label");
+  assert.ok(broken.includes("NOT a visual acceptance"), "disclaimer unconditional even on the empty-range path");
+});
+
+test("a draft at the live SHA neither no-ops nor blocks orphan adoption", () => {
+  const releases = [{ tagName: ORPHAN, isDraft: true }];
+  const resolve = (t) => (t === ORPHAN ? SHA : OTHER_SHA);
+  const existing = existingReleaseSha(releases, SHA, resolve);
+  assert.equal(existing, null, "draft is not a published receipt");
+  const d = shouldPublish({ jobConclusions: allSuccess(), liveSourceSha: SHA, mainHead: SHA, existingReleaseSha: existing });
+  assert.equal(d.publish, true);
+  const plan = planPublication({ tags: RETRY_TAGS, tagShas: { [ORPHAN]: SHA }, sourceSha: SHA });
+  assert.equal(plan.action, "adopt");
+  assert.equal(plan.tag, ORPHAN);
+});
+
+test("gates preserved: an orphan at the live SHA does NOT bypass shouldPublish", () => {
+  const jobs = allSuccess();
+  jobs["verify-live"] = "failure";
+  const d = shouldPublish({ jobConclusions: jobs, liveSourceSha: SHA, mainHead: SHA, existingReleaseSha: null });
+  assert.equal(d.publish, false);
+  assert.ok(d.reason.includes("verify-live"), `reason names the blocking job: ${d.reason}`);
+  const mismatch = shouldPublish({ jobConclusions: allSuccess(), liveSourceSha: SHA, mainHead: OTHER_SHA, existingReleaseSha: null });
+  assert.equal(mismatch.publish, false);
+});
+
+test("CONVERGENCE: partial failure then re-run => exactly ONE tag, ONE release, honest receipt, then no-op", () => {
+  // Fixture remote state. This simulation composes the SAME pure functions
+  // in the SAME order as main() (scan -> shouldPublish -> resolve candidates
+  // -> planPublication -> notes -> conditional tag POST -> release create).
+  // HONEST LIMITATION: it is a pure composition, not GitHub runtime execution;
+  // the shell wiring itself is guarded by the static test below.
+  const state = {
+    tags: [...REAL_TAGS],
+    refs: { "v0.1.0": OTHER_SHA, "v0.2.0": OTHER_SHA, "v0.3.0": OTHER_SHA },
+    releases: [],
+  };
+  const runPublish = (failReleaseCreate) => {
+    const resolve = (t) => {
+      if (Object.prototype.hasOwnProperty.call(state.refs, t)) return state.refs[t];
+      throw http404();
+    };
+    const existing = existingReleaseSha(state.releases, SHA, resolve);
+    const decision = shouldPublish({ jobConclusions: allSuccess(), liveSourceSha: SHA, mainHead: SHA, existingReleaseSha: existing });
+    if (!decision.publish) return { decision, plan: null, published: false };
+    const next = nextVersion(state.tags);
+    const highest = previousVersion(state.tags);
+    const tagShas = {};
+    for (const t of [highest, next]) {
+      if (!t || Object.prototype.hasOwnProperty.call(tagShas, t)) continue;
+      try { tagShas[t] = resolve(t); } catch (err) {
+        if (!isRefMissing(err && err.stderr != null ? String(err.stderr) : "")) throw err;
+      }
+    }
+    const plan = planPublication({ tags: state.tags, tagShas, sourceSha: SHA });
+    if (plan.createTag) { state.refs[plan.tag] = SHA; state.tags.push(plan.tag); } // tag POST succeeds
+    if (failReleaseCreate) return { decision, plan, published: false };            // release create FAILS
+    state.releases.push({ tagName: plan.tag, isDraft: false });                    // release create succeeds
+    return { decision, plan, published: true };
+  };
+
+  // Run 1: tag POST succeeds, release create fails => orphan.
+  const first = runPublish(true);
+  assert.equal(first.decision.publish, true);
+  assert.equal(first.plan.action, "create");
+  assert.equal(first.plan.tag, ORPHAN);
+  assert.equal(first.published, false);
+  assert.equal(state.releases.length, 0, "orphan: tag exists, no release");
+  assert.equal(state.refs[ORPHAN], SHA);
+
+  // Run 2 (the retry): adopts the SAME tag, creates only the missing release.
+  const second = runPublish(false);
+  assert.equal(second.decision.publish, true, "retry must not silently no-op");
+  assert.equal(second.plan.action, "adopt");
+  assert.equal(second.plan.tag, first.plan.tag, "converged on the SAME computed tag");
+  assert.equal(second.plan.createTag, false, "no duplicate tag POST");
+  assert.equal(second.plan.previousTag, "v0.3.0");
+  assert.equal(state.tags.filter((t) => t === ORPHAN).length, 1, "exactly ONE tag");
+  assert.equal(state.releases.length, 1, "exactly ONE release");
+  assert.deepEqual(state.releases[0], { tagName: ORPHAN, isDraft: false });
+  assert.equal(state.refs[ORPHAN], SHA, "the one tag resolves to the verified SHA");
+  const body = retryNotes(second.plan);
+  assert.ok(body.includes(`Range: \`v0.3.0..${SHA}\``), "retry receipt has the real non-empty range");
+  assert.ok(body.includes("`258fce5` feat(v2): publish Rustwake 3D sandbox foundation (#306)"));
+  assert.ok(body.includes("Classification: game-source changes included."));
+  assert.ok(!body.includes("(no commits in range)"));
+  assert.ok(!body.includes("No game-source changes"));
+
+  // Run 3: fully published => same-SHA no-op, nothing new created.
+  const third = runPublish(false);
+  assert.equal(third.decision.publish, false);
+  assert.equal(third.decision.reason, "no-op: a release already exists at this exact SHA (same-SHA re-run)");
+  assert.equal(state.releases.length, 1);
+  assert.equal(state.tags.length, REAL_TAGS.length + 1);
+});
+
+// Static wiring guard: the shell must actually call the pure decisions above.
+function assertPublishWiring(src) {
+  assert.ok(src.includes('"--json", "tagName,isDraft"'), "isDraft field requested explicitly");
+  assert.ok(src.includes('"--limit", "1000"'), "no silent 100-release cap");
+  assert.ok(!src.includes('"--limit", "100"'), "old truncating limit removed");
+  assert.ok(src.includes("existingReleaseSha(releases, sourceSha, resolveCached)"), "existence scan is the pure draft-filtered 404-tolerant function");
+  assert.ok(src.includes("planPublication({ tags, tagShas, sourceSha })"), "plan is the pure adoption decision");
+  assert.ok(/if \(plan\.createTag\) \{/.test(src), "tag POST gated on the plan (adoption never re-POSTs)");
+  assert.ok(src.includes("shouldPublish({ jobConclusions, liveSourceSha: sourceSha, mainHead, existingReleaseSha: existingSha })"), "unchanged gate still consulted");
+  assert.ok(src.includes('if (!isRefMissing(err && err.stderr != null ? String(err.stderr) : "")) throw err;'), "candidate 404 classification is the pure predicate, not a blanket catch");
+  assert.ok(src.includes("return /\\bHTTP 422\\b/.test(stderrText) && /No commit found for SHA:/.test(stderrText);"),
+    "isRefMissing carries the live-measured commits/{ref} absent shape: 422 status AND the specific message, never a blanket 422 (audit 7031944017)");
+}
+
+test("shell wiring: listing requests isDraft, scan/plan are the pure functions, tag POST is plan-gated", () => {
+  assertPublishWiring(read("scripts/release-publish.mjs"));
+});
+
+test("NEGATIVE CONTROLS: deliberate wiring mutations MUST fail the guard", () => {
+  const real = read("scripts/release-publish.mjs");
+  const mutations = [
+    ["unconditional tag POST (re-POSTs on adoption)", (s) => s.replace("if (plan.createTag) {", "if (true) {")],
+    ["drop isDraft from the listing", (s) => s.replace('"tagName,isDraft"', '"tagName"')],
+    ["restore the silent 100 cap", (s) => s.replace('"--limit", "1000"', '"--limit", "100"')],
+    ["bypass the adoption plan", (s) => s.replace("planPublication({ tags, tagShas, sourceSha })", "({ action: \"create\", tag: nextVersion(tags), previousTag: previousVersion(tags), createTag: true })")],
+    ["blanket-swallow candidate errors", (s) => s.replace('if (!isRefMissing(err && err.stderr != null ? String(err.stderr) : "")) throw err;', "// swallowed")],
+    ["blanket-swallow ALL 422s (drop the specific-message requirement)", (s) => s.replace(" && /No commit found for SHA:/.test(stderrText)", "")],
+    ["drop the 422 absent-ref branch (restore 404-only blindness)", (s) => s.replace("return /\\bHTTP 422\\b/.test(stderrText) && /No commit found for SHA:/.test(stderrText);", "return false;")],
+  ];
+  for (const [name, mutate] of mutations) {
+    const mutated = mutate(real);
+    assert.notEqual(mutated, real, `mutation '${name}' must actually change the text`);
+    assert.throws(() => assertPublishWiring(mutated), `guard MUST reject: ${name}`);
+  }
+});
+
+// --- 8. Refs #607 audit correction: REAL endpoint error shapes ---------------
+// PR #609 finding 7031944017 proved the section-7 fixtures fabricated a 404
+// that the endpoint actually called never returns. Every POSITIVE absent-ref
+// fixture below is stderr captured live 2026-11-20 by dev-607b (read-only
+// GETs), matching the coordinator's 4/4 measurement in that finding:
+//   gh api repos/darkmatter2222/Rustwake/commits/{absent} --jq .sha
+//     => exit 1, stderr: gh: No commit found for SHA: {absent} (HTTP 422)
+//     captured for v0.3.3, v0.9.9, rw-no-such-tag-xyz, v0.0.0-deleted-probe
+//   gh api repos/darkmatter2222/Rustwake/git/ref/tags/v0.3.3 --jq .object.sha
+//     => exit 1, stderr: gh: Not Found (HTTP 404)  (a DIFFERENT endpoint)
+// The section-7 404 fixtures are preserved unchanged: 404 remains the correct
+// absent shape for git/ref/tags/{tag}. Negative controls below are deliberately
+// synthetic adversarial shapes (generic 422, bare status, wrong status), not
+// claims of capture.
+const realAbsent422 = (ref) => {
+  const e = new Error("gh api commits failed");
+  e.stderr = `gh: No commit found for SHA: ${ref} (HTTP 422)`;
+  return e;
+};
+const realRef404 = () => {
+  const e = new Error("gh api git/ref failed");
+  e.stderr = "gh: Not Found (HTTP 404)";
+  return e;
+};
+
+test("isRefMissing: REAL captured absent-ref stderr — commits/{ref} 422 (4/4 probes) and git/ref/tags 404 => true", () => {
+  for (const ref of ["v0.3.3", "v0.9.9", "rw-no-such-tag-xyz", "v0.0.0-deleted-probe"]) {
+    const err = realAbsent422(ref);
+    assert.ok(err.stderr.length > 0, "fixture stderr must be non-empty");
+    assert.equal(isRefMissing(err.stderr), true, err.stderr);
+  }
+  const e404 = realRef404();
+  assert.ok(e404.stderr.length > 0, "fixture stderr must be non-empty");
+  assert.equal(isRefMissing(e404.stderr), true, e404.stderr);
+});
+
+test("isRefMissing truth table: generic 422, bare 422, message-without-422, auth/rate/5xx/network/no-stderr => false", () => {
+  const negatives = [
+    "gh: Validation Failed (HTTP 422)", // generic 422, different message: NOT a missing ref
+    "HTTP 422: Unprocessable Entity (https://api.github.com/repos/o/r/commits/v0.3.3)",
+    "HTTP 422", // bare status marker, no message
+    "gh: (HTTP 422)",
+    "gh: No commit found for SHA: v0.3.3 (HTTP 403)", // message WITHOUT the 422 status
+    "gh: No commit found for SHA: v0.3.3 (HTTP 500)",
+    "gh: Unauthorized (HTTP 401)",
+    "gh: Forbidden (HTTP 403)",
+    "HTTP 429: rate limit exceeded",
+    "HTTP 500: Internal Server Error",
+    "HTTP 502: Bad Gateway",
+    "dial tcp: lookup api.github.com: no such host",
+    "HTTP 403: rate limit exceeded (https://api.github.com/repositories/404)", // docs URL merely contains 404
+    "", null, undefined, 42,
+  ];
+  for (const s of negatives) assert.equal(isRefMissing(s), false, JSON.stringify(s));
+});
+
+test("non-absent failures (incl. generic 422) rethrow the ORIGINAL error through the scan AND the candidate loop", () => {
+  // Verbatim composition of main()'s candidate loop + plan, so a rethrow
+  // regression in either place fails here with the identical error object.
+  const candidateLoop = (tags, resolve, sourceSha) => {
+    const next = nextVersion(tags);
+    const highest = previousVersion(tags);
+    const tagShas = {};
+    for (const t of [highest, next]) {
+      if (!t || Object.prototype.hasOwnProperty.call(tagShas, t)) continue;
+      try { tagShas[t] = resolve(t); } catch (err) {
+        if (!isRefMissing(err && err.stderr != null ? String(err.stderr) : "")) throw err;
+      }
+    }
+    return planPublication({ tags, tagShas, sourceSha });
+  };
+  const stderrs = [
+    "gh: Unauthorized (HTTP 401)",
+    "gh: Forbidden (HTTP 403)",
+    "HTTP 429: rate limit exceeded",
+    "HTTP 500: Internal Server Error",
+    "dial tcp: lookup api.github.com: no such host",
+    "gh: Validation Failed (HTTP 422)", // generic 422 must NOT be blanket-swallowed
+    undefined, // error with no stderr at all: unknown cause => abort
+  ];
+  for (const stderr of stderrs) {
+    const err = new Error("gh api failed");
+    if (stderr !== undefined) err.stderr = stderr;
+    const resolve = () => { throw err; };
+    assert.throws(
+      () => existingReleaseSha([{ tagName: "v0.1.0", isDraft: false }], SHA, resolve),
+      (e) => e === err,
+      `scan must rethrow the original error for: ${JSON.stringify(stderr)}`
+    );
+    assert.throws(
+      () => candidateLoop(REAL_TAGS, resolve, SHA),
+      (e) => e === err,
+      `candidate loop must rethrow the original error for: ${JSON.stringify(stderr)}`
+    );
+  }
+});
+
+test("NEGATIVE CONTROL: the pre-fix 404-only predicate aborts on the REAL 422 — the audited regression is reachable", () => {
+  // The exact predicate delivered at fa0a8a10 before this correction.
+  const preFixIsRefMissing = (s) => typeof s === "string" &&
+    (/\bHTTP 404\b/.test(s) || /\(404\)/.test(s) || /\b404 Not Found\b/i.test(s));
+  const err = realAbsent422(nextVersion(REAL_TAGS));
+  assert.ok(err.stderr.length > 0, "fixture stderr must be non-empty");
+  assert.equal(preFixIsRefMissing(err.stderr), false, "pre-fix predicate is blind to the real absent-tag shape");
+  assert.equal(isRefMissing(err.stderr), true, "corrected predicate accepts the real shape");
+  // The delivered candidate loop with the pre-fix predicate rethrows the
+  // identical real error object instead of leaving the absent key unset.
+  const resolve = (t) => { if (t === nextVersion(REAL_TAGS)) throw err; return OTHER_SHA; };
+  const next = nextVersion(REAL_TAGS);
+  const highest = previousVersion(REAL_TAGS);
+  const tagShas = {};
+  let caught = null;
+  try {
+    for (const t of [highest, next]) {
+      if (!t || Object.prototype.hasOwnProperty.call(tagShas, t)) continue;
+      try { tagShas[t] = resolve(t); } catch (e) {
+        if (!preFixIsRefMissing(e && e.stderr != null ? String(e.stderr) : "")) throw e;
+      }
+    }
+  } catch (e) { caught = e; }
+  assert.equal(caught, err, "pre-fix loop aborts with the identical real API error — the regression finding 7031944017 proved");
+});
+
+// Composed-path fixtures, all captured live 2026-11-20 by dev-607b (read-only):
+// tag -> peeled commit SHA via gh api repos/darkmatter2222/Rustwake/commits/{tag}
+// --jq .sha for every tag in repos/darkmatter2222/Rustwake/tags (5 tags).
+const LIVE_TAG_SHAS = {
+  "v0.1.0": "b8c829572b34d1c5f1786661007b5f328b35a153",
+  "v0.2.0": "4628326daa0a2ef74a89784601976929d0d80385",
+  "v0.3.0": "77e6442f04dce6529e3888535a73d3f75af1d9b6",
+  "v0.3.1": "5a14ff8f391170d361393b774b0c15d25ee15e61",
+  "v0.3.2": "0791dc55b37ee60ed2b308a69fa4dd002e2f9a94",
+};
+const LIVE_TAGS = Object.keys(LIVE_TAG_SHAS);
+// A REAL untagged commit: PR #609 head at the audit (fa0a8a10). No live tag
+// resolves to it — asserted against the captured map in each test below.
+const UNTAGGED_SOURCE = "fa0a8a10cbdf1b1d01a57547cd68c34f66ccba9a";
+
+test("COMPOSED healthy first publish: REAL 422 on the absent computed tag => {action:create, createTag:true}, no throw", () => {
+  // This is the test that would have caught the audited regression: it drives
+  // shouldPublish -> main()'s candidate loop (verbatim) -> planPublication
+  // with a resolver that throws the CAPTURED 422 error for the absent
+  // computed tag and returns captured real SHAs for present tags.
+  assert.ok(LIVE_TAGS.length >= 2, "fixture tag list must be non-empty");
+  assert.ok(!Object.values(LIVE_TAG_SHAS).includes(UNTAGGED_SOURCE), "source really is untagged in the captured map");
+  const next = nextVersion(LIVE_TAGS);
+  assert.equal(next, "v0.3.3", "computed next tag from the real live tag list");
+  assert.ok(!LIVE_TAGS.includes(next), "computed tag really is absent from the list");
+  const resolve = (t) => {
+    if (Object.prototype.hasOwnProperty.call(LIVE_TAG_SHAS, t)) return LIVE_TAG_SHAS[t];
+    throw realAbsent422(t); // exact captured stderr shape, ref-specific message
+  };
+  // 1) Existence scan: every historical release resolves to its own SHA,
+  //    none to the untagged source => null, no throw.
+  const releases = LIVE_TAGS.map((t) => ({ tagName: t, isDraft: false }));
+  assert.equal(existingReleaseSha(releases, UNTAGGED_SOURCE, resolve), null);
+  // 2) Gate: all four jobs success, live SHA == main head => PUBLISH.
+  const decision = shouldPublish({
+    jobConclusions: allSuccess(), liveSourceSha: UNTAGGED_SOURCE, mainHead: UNTAGGED_SOURCE, existingReleaseSha: null,
+  });
+  assert.equal(decision.publish, true);
+  assert.ok(decision.reason.length > 0, "decision reason non-empty");
+  // 3) Candidate loop, verbatim composition of main() — the code that
+  //    aborted at fa0a8a10 on this exact real error.
+  const highest = previousVersion(LIVE_TAGS);
+  assert.equal(highest, "v0.3.2");
+  const tagShas = {};
+  for (const t of [highest, next]) {
+    if (!t || Object.prototype.hasOwnProperty.call(tagShas, t)) continue;
+    try { tagShas[t] = resolve(t); } catch (err) {
+      if (!isRefMissing(err && err.stderr != null ? String(err.stderr) : "")) throw err;
+    }
+  }
+  assert.equal(tagShas[highest], LIVE_TAG_SHAS[highest], "present highest tag resolved to its captured real SHA");
+  assert.ok(!Object.prototype.hasOwnProperty.call(tagShas, next),
+    "absent computed tag left unset — proves the real 422 was thrown AND classified as absent, not skipped silently");
+  // 4) Plan: CREATE tag + release at the verified SHA, honest range base.
+  const plan = planPublication({ tags: LIVE_TAGS, tagShas, sourceSha: UNTAGGED_SOURCE });
+  assert.deepEqual(plan, { action: "create", tag: "v0.3.3", previousTag: "v0.3.2", createTag: true });
+});
+
+test("COMPOSED defect 2 with the REAL 422: deleted historical tag skipped; later match => SHA; no match => null + publish", () => {
+  // v0.0.0-deleted-probe is one of the four absent refs captured live (422).
+  const deleted = "v0.0.0-deleted-probe";
+  const releases = [
+    { tagName: deleted, isDraft: false },
+    { tagName: "v0.3.2", isDraft: false },
+  ];
+  assert.ok(releases.length === 2 && deleted.length > 0, "fixtures non-empty");
+  // Earlier unresolvable historical tag + later matching release => the SHA
+  // is returned (the skip works), and the gate then no-ops honestly.
+  const resolveMatch = (t) => {
+    if (t === deleted) throw realAbsent422(deleted);
+    return UNTAGGED_SOURCE;
+  };
+  assert.equal(existingReleaseSha(releases, UNTAGGED_SOURCE, resolveMatch), UNTAGGED_SOURCE,
+    "deleted historical tag skipped; later matching release found despite the real 422");
+  const noop = shouldPublish({
+    jobConclusions: allSuccess(), liveSourceSha: UNTAGGED_SOURCE, mainHead: UNTAGGED_SOURCE, existingReleaseSha: UNTAGGED_SOURCE,
+  });
+  assert.equal(noop.publish, false);
+  assert.equal(noop.reason, "no-op: a release already exists at this exact SHA (same-SHA re-run)");
+  // No match anywhere => null, and the healthy deployment still publishes.
+  const resolveNoMatch = (t) => {
+    if (t === deleted) throw realAbsent422(deleted);
+    return LIVE_TAG_SHAS["v0.3.2"];
+  };
+  const existing = existingReleaseSha(releases, UNTAGGED_SOURCE, resolveNoMatch);
+  assert.equal(existing, null, "skip must not abort and must not fabricate a match");
+  const d = shouldPublish({
+    jobConclusions: allSuccess(), liveSourceSha: UNTAGGED_SOURCE, mainHead: UNTAGGED_SOURCE, existingReleaseSha: existing,
+  });
+  assert.equal(d.publish, true, "healthy deployment publishes despite the deleted historical tag");
 });

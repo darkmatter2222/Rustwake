@@ -20,6 +20,20 @@
  *   main head and all four upstream jobs succeeded.
  * - Tags are immutable: an existing tag at a different SHA hard-fails; a
  *   release already at this exact SHA is a no-op success (same-SHA re-run).
+ * - Convergent retry (Refs #607): a tag at the verified SHA with NO non-draft
+ *   release is a partial-failure orphan — it is ADOPTED (release created for
+ *   it, never a version bump), and the commit range base is the highest tag
+ *   STRICTLY BELOW the adopted one, so the receipt is never empty and the
+ *   src classification is never falsely "No game-source changes".
+ * - Draft releases never count as published receipts (Refs #607): the
+ *   listing's isDraft field is requested and filtered explicitly, so the
+ *   decision is correct whether or not the listing includes drafts.
+ * - An unresolvable tag on an unrelated historical release is skipped, not
+ *   fatal. Absence is proven by the endpoint's own marker: HTTP 404
+ *   (git/ref/tags/{tag}) or HTTP 422 carrying "No commit found for SHA:"
+ *   (commits/{ref} — the endpoint this script actually calls; measured live
+ *   2026-11-20, PR #609 audit 7031944017). Any other API/auth/network failure
+ *   aborts (Refs #607).
  * - Notes are a deploy receipt, never a claim of sponsor visual acceptance.
  *   G1 (Refs #276) is the only visual gate.
  */
@@ -94,6 +108,29 @@ export function previousVersion(existingTags) {
 }
 
 /**
+ * Highest strict semver tag STRICTLY BELOW `tag` (Refs #607), or null.
+ * This is the range base when an orphan tag at the verified SHA is adopted:
+ * using the adopted tag itself would render an empty range and a false
+ * "No game-source changes" label. Non-semver tags are ignored; `tag` itself
+ * and anything above it are excluded.
+ */
+export function previousVersionBefore(existingTags, tag) {
+  if (!Array.isArray(existingTags)) {
+    throw new TypeError("existingTags must be an array of tag names");
+  }
+  const limit = parseSemver(tag);
+  if (!limit) throw new TypeError(`tag must be strict vMAJOR.MINOR.PATCH, got: ${tag}`);
+  let best = null;
+  let bestTag = null;
+  for (const t of existingTags) {
+    const v = parseSemver(t);
+    if (!v || compareSemver(v, limit) >= 0) continue;
+    if (!best || compareSemver(v, best) > 0) { best = v; bestTag = t; }
+  }
+  return bestTag;
+}
+
+/**
  * Pure publish decision. jobConclusions maps each required upstream job to
  * its conclusion string; anything !== 'success' (failure, cancelled,
  * timed_out, skipped, missing, unknown) means NO publish. liveSourceSha must
@@ -149,6 +186,108 @@ export function tagAvailability(tag, tagTargets, liveSourceSha) {
     );
   }
   return { action: "create" };
+}
+
+/**
+ * Ref-missing classification (Refs #607 defect 2). Pure over the stderr text
+ * of a failed `gh api repos/{repo}/commits/{ref}` call. Measured live
+ * 2026-11-20 (PR #609 audit 7031944017, re-captured by dev-607b): the
+ * commits/{ref} endpoint answers an absent ref with HTTP 422 and the message
+ * "No commit found for SHA: <ref>" (422 in 4/4 absent probes), NOT 404.
+ * HTTP 404 is the absent-ref shape of the DIFFERENT git/ref/tags/{tag}
+ * endpoint. Both proven shapes mean "ref does not resolve => skip / absent".
+ * The 422 branch requires BOTH the status marker AND that specific message:
+ * a generic 422 (any other message) is NOT a missing ref and still aborts.
+ * Auth (401/403), rate-limit (429), server (5xx) and network failures are NOT
+ * missing refs: they must abort the run, never become a silent skip that
+ * could publish a wrong release.
+ */
+export function isRefMissing(stderrText) {
+  if (typeof stderrText !== "string") return false;
+  if (/\bHTTP 404\b/.test(stderrText) || /\(404\)/.test(stderrText) || /\b404 Not Found\b/i.test(stderrText)) return true;
+  return /\bHTTP 422\b/.test(stderrText) && /No commit found for SHA:/.test(stderrText);
+}
+
+/**
+ * Pure release-existence scan (Refs #607 defects 2+3). `releases` is the raw
+ * listing [{tagName, isDraft}]; `resolve(tag)` returns the peeled commit SHA
+ * or throws (execFileSync-style error carrying .stderr). Returns sourceSha
+ * when a NON-DRAFT release resolves to it, else null.
+ *
+ * CONSTRAINT (isDraft measured available 2026-11-20 by the coordinator): a
+ * release counts only when isDraft !== true, so this decision is identical
+ * whether or not the listing includes drafts — a draft NEVER causes a no-op.
+ * A proven-absent tag (isRefMissing: 404, or the commits endpoint's 422
+ * "No commit found for SHA:") on an unrelated historical release is skipped;
+ * any other resolver failure rethrows (never a blanket swallow).
+ */
+export function existingReleaseSha(releases, sourceSha, resolve) {
+  if (!Array.isArray(releases)) throw new TypeError("releases must be an array of {tagName, isDraft}");
+  if (typeof resolve !== "function") throw new TypeError("resolve must be a function");
+  for (const r of releases) {
+    if (!r || typeof r.tagName !== "string") throw new TypeError("each release needs a string tagName");
+    if (r.isDraft === true) continue; // draft: not a published receipt, ignore entirely
+    let sha;
+    try {
+      sha = resolve(r.tagName);
+    } catch (err) {
+      if (isRefMissing(err && err.stderr != null ? String(err.stderr) : "")) continue; // deleted historical tag
+      throw err; // genuine API/auth/network failure: abort, do not guess
+    }
+    if (sha === sourceSha) return sourceSha;
+  }
+  return null;
+}
+
+/**
+ * Pure publication plan keyed on tag existence at the verified SHA
+ * (Refs #607 defect 1). Caller precondition: shouldPublish passed and
+ * existingReleaseSha found NO non-draft release at sourceSha.
+ *
+ * `tagShas` maps tag name -> peeled SHA for the candidate tags whose
+ * resolution succeeded; a missing key means absent-or-proven-missing.
+ *
+ * - Highest semver tag resolves to sourceSha => partial-failure orphan:
+ *   ADOPT it (createTag:false), never bump; range base = highest tag
+ *   strictly below it.
+ * - Otherwise compute nextVersion; if that tag already resolves to
+ *   sourceSha (stale-list race) => adopt it the same way; if it resolves
+ *   elsewhere => tagAvailability throws (immutability, unchanged).
+ * - Otherwise CREATE tag + release; range base = previousVersion(tags).
+ *
+ * Returns { action: "adopt"|"create", tag, previousTag, createTag }.
+ */
+export function planPublication({ tags, tagShas, sourceSha } = {}) {
+  if (!Array.isArray(tags)) throw new TypeError("tags must be an array of tag names");
+  if (!tagShas || typeof tagShas !== "object") throw new TypeError("tagShas must be an object of tag -> commit SHA");
+  if (typeof sourceSha !== "string" || !SHA40.test(sourceSha)) {
+    throw new TypeError("sourceSha must be a 40-hex lowercase SHA");
+  }
+  const highest = previousVersion(tags);
+  if (highest && tagShas[highest] === sourceSha) {
+    const previousTag = previousVersionBefore(tags, highest);
+    if (!previousTag) {
+      throw new Error(
+        `orphan tag ${highest} has no semver tag below it; cannot build an honest non-empty range (Refs #607)`
+      );
+    }
+    return { action: "adopt", tag: highest, previousTag, createTag: false };
+  }
+  const next = nextVersion(tags);
+  const targets = Object.prototype.hasOwnProperty.call(tagShas, next) ? { [next]: tagShas[next] } : {};
+  const availability = tagAvailability(next, targets, sourceSha);
+  if (availability.action === "noop") {
+    const previousTag = previousVersionBefore(tags, next);
+    if (!previousTag) {
+      throw new Error(
+        `orphan tag ${next} has no semver tag below it; cannot build an honest non-empty range (Refs #607)`
+      );
+    }
+    return { action: "adopt", tag: next, previousTag, createTag: false };
+  }
+  const previousTag = previousVersion(tags);
+  if (!previousTag) throw new Error("previous semver tag vanished from the tag list");
+  return { action: "create", tag: next, previousTag, createTag: true };
 }
 
 /**
@@ -233,50 +372,59 @@ function main() {
   const tags = gh("api", `repos/${repo}/tags`, "--paginate", "--jq", ".[].name")
     .split("\n").map((s) => s.trim()).filter(Boolean);
 
-  // Same-SHA re-run: any existing release whose tag resolves to this exact
+  // Same-SHA re-run: a NON-DRAFT release whose tag resolves to this exact
   // verified live SHA means the receipt already exists => no-op success.
-  let existingReleaseSha = null;
-  const releases = JSON.parse(gh("release", "list", "--repo", repo, "--limit", "100", "--json", "tagName"));
-  for (const r of releases) {
-    if (resolveRefSha(repo, r.tagName) === sourceSha) { existingReleaseSha = sourceSha; break; }
-  }
+  // CONSTRAINT (Refs #607): isDraft is requested and filtered explicitly, so
+  // correctness does not depend on whether the listing includes drafts.
+  // Assumption (Refs #607): gh release list paginates internally (100/page)
+  // up to --limit; 1000 is 200x the current release count and the pure scan
+  // below is truncation-free (boundary-tested), so no silent 100-cap remains.
+  const releases = JSON.parse(gh("release", "list", "--repo", repo, "--limit", "1000", "--json", "tagName,isDraft"));
+  const refCache = new Map();
+  const resolveCached = (tag) => {
+    if (!refCache.has(tag)) refCache.set(tag, resolveRefSha(repo, tag));
+    return refCache.get(tag);
+  };
+  const existingSha = existingReleaseSha(releases, sourceSha, resolveCached);
 
-  const decision = shouldPublish({ jobConclusions, liveSourceSha: sourceSha, mainHead, existingReleaseSha });
+  const decision = shouldPublish({ jobConclusions, liveSourceSha: sourceSha, mainHead, existingReleaseSha: existingSha });
   console.log(`publish decision: ${decision.publish ? "PUBLISH" : "NO-PUBLISH"} — ${decision.reason}`);
   if (!decision.publish) return;
 
+  // Resolve the two candidate tags: the highest existing semver tag (orphan
+  // adoption, Refs #607 defect 1) and the computed next tag (immutability).
+  // A proven absent ref (isRefMissing: 404, or the commits endpoint's 422
+  // "No commit found for SHA:") means absent => create; any other failure aborts.
   const next = nextVersion(tags);
-  // Immutability: if the computed tag already exists, it must resolve to this
-  // exact SHA (no-op) or we hard-fail. Never force-move a tag.
-  let tagTargets = {};
-  try {
-    tagTargets = { [next]: resolveRefSha(repo, next) };
-  } catch {
-    tagTargets = {}; // 404: tag absent => create.
+  const highest = previousVersion(tags);
+  const tagShas = {};
+  for (const t of [highest, next]) {
+    if (!t || Object.prototype.hasOwnProperty.call(tagShas, t)) continue;
+    try {
+      tagShas[t] = resolveCached(t);
+    } catch (err) {
+      if (!isRefMissing(err && err.stderr != null ? String(err.stderr) : "")) throw err;
+      // Proven absent: tag does not resolve => leave the key unset (create path).
+    }
   }
-  const availability = tagAvailability(next, tagTargets, sourceSha);
-  if (availability.action === "noop") {
-    console.log(`no-op: tag ${next} already resolves to ${sourceSha}`);
-    return;
-  }
+  const plan = planPublication({ tags, tagShas, sourceSha });
+  console.log(`publish plan: ${plan.action} tag ${plan.tag} at ${sourceSha} (range base ${plan.previousTag}, createTag=${plan.createTag})`);
 
-  const previousTag = previousVersion(tags);
-  if (!previousTag) throw new Error("previous semver tag vanished from the tag list");
   // Local clone (checkout fetch-depth: 0) carries history + tags for the range.
-  const log = git("log", "--format=%h %s", `${previousTag}..${sourceSha}`);
+  const log = git("log", "--format=%h %s", `${plan.previousTag}..${sourceSha}`);
   const commits = log === "" ? [] : log.split("\n").map((line) => {
     const sp = line.indexOf(" ");
     return { sha: line.slice(0, sp), subject: line.slice(sp + 1) };
   });
-  const gameSourceChanged = git("diff", "--name-only", `${previousTag}..${sourceSha}`, "--", "src") !== "";
+  const gameSourceChanged = git("diff", "--name-only", `${plan.previousTag}..${sourceSha}`, "--", "src") !== "";
 
   const server = env.GITHUB_SERVER_URL || "https://github.com";
   const runId = env.GITHUB_RUN_ID || "";
   if (!/^\d+$/.test(runId)) throw new Error("GITHUB_RUN_ID must be numeric");
   const notes = buildNotes({
-    tag: next,
+    tag: plan.tag,
     sourceSha,
-    previousTag,
+    previousTag: plan.previousTag,
     commits,
     mainCiRun: env.MAIN_CI_RUN || NO_UPSTREAM_CI,
     deliveryRun: `${server}/${repo}/actions/runs/${runId}`,
@@ -284,23 +432,27 @@ function main() {
   });
 
   if (process.argv.includes("--dry-run")) {
-    console.log(`[dry-run] would create tag ${next} at ${sourceSha} with notes:\n${notes}`);
+    console.log(`[dry-run] plan=${plan.action} — would ${plan.createTag ? "create tag + release" : "create release only (adopt existing tag)"} ${plan.tag} at ${sourceSha} with notes:\n${notes}`);
     return;
   }
 
-  // Create the tag via the API pointed at the verified SHA. POST fails if the
-  // ref already exists — there is no force path. Then publish the release.
-  gh("api", "--method", "POST", `repos/${repo}/git/refs`,
-    "-f", `ref=refs/tags/${next}`, "-f", `sha=${sourceSha}`);
+  // Create the tag via the API pointed at the verified SHA ONLY when the plan
+  // says it is absent. POST fails if the ref already exists — no force path.
+  // Adoption skips the POST entirely: the orphan tag already resolves to the
+  // verified SHA, so a retry converges on exactly ONE tag and ONE release.
+  if (plan.createTag) {
+    gh("api", "--method", "POST", `repos/${repo}/git/refs`,
+      "-f", `ref=refs/tags/${plan.tag}`, "-f", `sha=${sourceSha}`);
+  }
   const notesFile = path.join(fs.mkdtempSync(path.join(os.tmpdir(), "rw-release-")), "notes.md");
   try {
     fs.writeFileSync(notesFile, notes, "utf8");
-    gh("release", "create", next, "--repo", repo, "--target", sourceSha,
-      "--title", next, "--notes-file", notesFile, "--latest");
+    gh("release", "create", plan.tag, "--repo", repo, "--target", sourceSha,
+      "--title", plan.tag, "--notes-file", notesFile, "--latest");
   } finally {
     fs.rmSync(notesFile, { force: true });
   }
-  console.log(`published ${next} at ${sourceSha}: ${server}/${repo}/releases/tag/${next}`);
+  console.log(`published ${plan.tag} at ${sourceSha}: ${server}/${repo}/releases/tag/${plan.tag}`);
 }
 
 const isCli = process.argv[1] &&
