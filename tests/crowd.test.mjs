@@ -24,14 +24,14 @@ import assert from "node:assert/strict";
 import {CELL, WORLD_SIZE} from "../src/content.js";
 import {createGame, roadLine} from "../src/simulation.js";
 import {key} from "../src/gridOccupancy.js";
-import {CROWD_MOTION, crowdPlan, createCrowdState, stepCrowd, crowdConflicts, workerPose} from "../src/crowd.js";
+import {CROWD_MOTION, crowdPlan, createCrowdState, stepCrowd, crowdConflicts, workerPose, stationPose} from "../src/crowd.js";
 
 const M = CROWD_MOTION;
 const origin = (i) => (i - WORLD_SIZE / 2 + 0.5) * CELL;
 const DTS = [0.016, 0.033, 0.07, 0.05, 0.025, 0.07, 0.04]; // all <= App clamp 0.07
 const SEEDS = [4073, 1, 777, 9999, 12345, 2026, 31337];
-const R = {w: M.workerRadius, f: M.forkliftRadius, t: M.truckRadius, d: M.droneRadius};
-const Y = {w: 0.85, f: 0.55, t: 0.675}; // mover center heights for drone 3D clearance
+const R = {w: M.workerRadius, f: M.forkliftRadius, t: M.truckRadius, d: M.droneRadius, s: M.workerRadius};
+const Y = {w: 0.85, f: 0.55, t: 0.675, s: 0.85}; // mover center heights for drone 3D clearance
 
 // --- shared window harness --------------------------------------------------
 // envAt(t, dt, state, plan) -> {trucks:[{x,z}], anchor:{x,y,z,id}|null, reduced}
@@ -41,7 +41,10 @@ function runWindow(seed, seconds, envAt, planOpts) {
   const state = createCrowdState(plan);
   const met = {
     frames: 0, maxWorkerStep: 0, maxForkliftStep: 0, maxDroneStep: 0,
-    min: {ww: Infinity, fw: Infinity, tw: Infinity, ft: Infinity, dw: Infinity, df: Infinity, dt: Infinity},
+    // Refs 599: station crew ("s") join the pairwise matrix. Keys are the two
+    // class letters SORTED (f<s<t<w), so forklift-station is "fs", not "sf".
+    min: {ww: Infinity, fw: Infinity, tw: Infinity, ft: Infinity, dw: Infinity, df: Infinity, dt: Infinity,
+      sw: Infinity, fs: Infinity, st: Infinity, ss: Infinity},
     yieldFrames: 0, activeFrames: 0, droneModes: new Set()
   };
   let t = 0, fi = 0;
@@ -66,6 +69,7 @@ function runWindow(seed, seconds, envAt, planOpts) {
     const movers = [
       ...state.walkers.filter((w) => !w.hidden).map((w) => ({cls: "w", x: w.x, y: Y.w, z: w.z, r: R.w})),
       ...(state.forklift.hidden ? [] : [{cls: "f", x: state.forklift.x, y: Y.f, z: state.forklift.z, r: R.f}]),
+      ...(state.stations || []).filter((s) => !s.hidden).map((s) => ({cls: "s", x: s.x, y: Y.s, z: s.z, r: R.s})),
       ...(env.trucks || []).map((tr) => ({cls: "t", x: tr.x, y: Y.t, z: tr.z, r: R.t})),
       {cls: "d", x: d.x, y: d.y, z: d.z, r: R.d}
     ];
@@ -143,7 +147,8 @@ function assertMotionBounds(met) {
   assert.ok(met.maxDroneStep <= M.maxDroneStep + 1e-9, "drone step " + met.maxDroneStep);
 }
 function assertGroundClearance(met) {
-  for (const kk of ["ww", "fw", "tw", "ft"])
+  // Refs 599: station pairs (sw/fs/st/ss) hold the SAME declared margin.
+  for (const kk of ["ww", "fw", "tw", "ft", "sw", "fs", "st", "ss"])
     assert.ok(met.min[kk] >= M.clearanceMargin - 1e-9, kk + " clearance " + met.min[kk] + " < margin " + M.clearanceMargin);
   for (const kk of ["dw", "df", "dt"])
     assert.ok(met.min[kk] > 0, "drone clearance " + kk + " " + met.min[kk]);
@@ -157,9 +162,15 @@ test("plan + initial state are deterministic pure data; seeds differ", () => {
     assert.deepEqual(a, b);
     assert.deepEqual(a, JSON.parse(JSON.stringify(a)), "plan must be plain serializable data");
     assert.deepEqual(createCrowdState(a), createCrowdState(b));
-    assert.equal(a.walkers.length, 10, "ten walking crew");
+    // Refs 599 RE-DECLARATION (was 10): 22 walkers on 13 corridors + 8 station
+    // crew. Headcount is a declared budget, raised explicitly for the density
+    // outcome — the per-rig geometry budgets are unchanged.
+    assert.equal(a.walkers.length, 22, "twenty-two walking crew (Refs 599)");
+    assert.equal(a.stations.length, 8, "eight station crew (Refs 599)");
+    assert.equal(a.segments.length, 13, "thirteen patrol corridors (Refs 599)");
   }
   assert.notDeepEqual(crowdPlan(4073).walkers, crowdPlan(9999).walkers);
+  assert.notDeepEqual(crowdPlan(4073).stations, crowdPlan(9999).stations, "station phases must be seeded");
 });
 
 test("anti-teleport + pairwise clearance: 240 s window, real road traffic, switching anchors (7 seeds)", (t) => {
@@ -297,15 +308,15 @@ test("reduced motion and dt=0 hold every mover with zero drift", () => {
   // First reduced frame zeroes rotor/bob (decorative spin holds too); the
   // positional snapshot is taken after it so the hold comparison is exact.
   stepCrowd(state, plan, 0.07, {trucks: [{x: origin(11), z: origin(12)}], anchor, reduced: true});
-  const snapshot = JSON.stringify({walkers: state.walkers, forklift: state.forklift, drone: state.drone});
+  const snapshot = JSON.stringify({walkers: state.walkers, stations: state.stations, forklift: state.forklift, drone: state.drone});
   for (let f = 0; f < 300; f++) {
     stepCrowd(state, plan, DTS[f % DTS.length], {trucks: [{x: origin(11), z: origin(12)}], anchor, reduced: true});
     assert.equal(state.drone.rotor, 0);
     assert.equal(state.drone.bob, 0);
   }
-  assert.equal(JSON.stringify({walkers: state.walkers, forklift: state.forklift, drone: state.drone}), snapshot, "reduced motion: zero drift");
+  assert.equal(JSON.stringify({walkers: state.walkers, stations: state.stations, forklift: state.forklift, drone: state.drone}), snapshot, "reduced motion: zero drift");
   for (let f = 0; f < 100; f++) stepCrowd(state, plan, 0, {trucks: [], anchor: null, reduced: false});
-  assert.equal(JSON.stringify({walkers: state.walkers, forklift: state.forklift, drone: state.drone}), snapshot, "dt=0: zero drift");
+  assert.equal(JSON.stringify({walkers: state.walkers, stations: state.stations, forklift: state.forklift, drone: state.drone}), snapshot, "dt=0: zero drift");
   // Release resumes motion.
   stepCrowd(state, plan, 0.07, {trucks: [], anchor, reduced: false});
   assert.notEqual(JSON.stringify(state.walkers), JSON.stringify(JSON.parse(snapshot).walkers));
@@ -370,4 +381,75 @@ test("intersection right-of-way: higher-index walkers yield, lower indices never
   // Every walker still travels substantial distance — no deadlock starvation.
   const {state} = runWindow(4073, 240, (tt, dt) => ({trucks: traffic(tt, dt).trucks, anchor: null, reduced: false}));
   for (const w of state.walkers) assert.ok(w.dist > 50, "walker starved: dist " + w.dist);
+});
+
+// --- Refs 599: stationary-but-animated station crew --------------------------
+
+test("station pose: pure clock+phase, legs locked, arms work, freezes at dt=0/reduced (with negative control)", () => {
+  const zero = {legL: 0, legR: 0, armL: 0, armR: 0};
+  assert.deepEqual(stationPose(0, 1.23), zero, "dt=0 clock holds the pose");
+  assert.deepEqual(stationPose(-1, 1.23), zero, "non-positive clock holds the pose");
+  assert.deepEqual(stationPose(7.7, 1.23, true), zero, "reduced motion holds the pose");
+  const p1 = stationPose(3.1, 0.7), p2 = stationPose(3.1, 0.7), p3 = stationPose(3.6, 0.7);
+  assert.deepEqual(p1, p2, "pose is pure in (elapsed, phase)");
+  assert.notDeepEqual(p1, p3, "NEGATIVE CONTROL: arms must actually swing on the clock");
+  assert.notDeepEqual(p1, stationPose(3.1, 2.9), "seeded phase must change the pose");
+  assert.equal(p1.legL, 0); assert.equal(p1.legR, 0, "station crew never walk");
+  assert.ok(Math.abs(p1.armL) > 1e-3, "arms must be mid-swing at this phase");
+  // Every plan station phase is finite and the pose stays bounded for all time.
+  for (const seed of SEEDS) {
+    for (const st of crowdPlan(seed).stations) {
+      assert.ok(Number.isFinite(st.phase));
+      for (const t of [0.016, 1, 60, 3600]) {
+        const p = stationPose(t, st.phase);
+        assert.ok(Math.abs(p.armL) <= 0.35 + 1e-9 && Math.abs(p.armR) <= 0.25 + 1e-9, "arm swing bounded");
+      }
+    }
+  }
+});
+
+test("station seed clearance: createCrowdState relaxes every walker off every station hard radius (7 seeds)", () => {
+  const hardR = 2 * M.workerRadius + M.clearanceMargin; // seed-time relax radius
+  let worst = Infinity;
+  for (const seed of SEEDS) {
+    const plan = crowdPlan(seed), state = createCrowdState(plan);
+    assert.equal(state.stations.length, 8);
+    for (const st of state.stations) assert.equal(st.hidden, false, "fresh stations visible");
+    for (const w of state.walkers) for (const st of state.stations) {
+      const gap = Math.hypot(w.x - st.x, w.z - st.z) - hardR;
+      assert.ok(gap >= -1e-9, `seed ${seed}: walker inside station hard radius (${gap})`);
+      worst = Math.min(worst, gap);
+    }
+  }
+  assert.ok(worst > 0.1, "relax must leave real slack, worst gap " + worst);
+});
+
+test("station visibility: fresh hides none; dismantled anchor hides its tender; paving the cell hides it", () => {
+  const g = createGame();
+  const plan = crowdPlan(g.seed);
+  const fresh = crowdConflicts(plan, g, null);
+  assert.deepEqual(fresh.stations, plan.stations.map(() => false), "fresh save: all 8 stations visible");
+  // Dismantle the salvager -> only its tender hides (anchor-machine rule).
+  const g2 = createGame();
+  g2.buildings = g2.buildings.filter((b) => b.type !== "salvager");
+  const conf2 = crowdConflicts(plan, g2, null);
+  assert.equal(conf2.stations[0], true, "dismantled salvager hides salvager-tender");
+  assert.deepEqual(conf2.stations.slice(1), plan.stations.slice(1).map(() => false), "other tenders unaffected");
+  // Pave the salvager-tender cell (6,9) -> hidden by the road rule.
+  const g3 = createGame();
+  g3.tier = 2;
+  g3.bank = Object.fromEntries(Object.keys(g3.bank).map((k) => [k, 1e9]));
+  assert.equal(roadLine(g3, {x: 6, z: 9}, {x: 6, z: 9}).ok, true);
+  const conf3 = crowdConflicts(plan, g3, null);
+  assert.equal(conf3.stations[0], true, "paved station cell hides the tender");
+  // Volumetric dressing reaching the standing radius hides it too.
+  const st0 = plan.stations[0];
+  const vols = {props: [{x: st0.x, z: st0.z, w: 1.5, d: 1.5}], rubble: []};
+  assert.equal(crowdConflicts(plan, createGame(), vols).stations[0], true, "volumetric prop hides the station");
+  // Hidden stations are skipped as threats and never drift.
+  const state = createCrowdState(plan);
+  state.stations[0].hidden = true;
+  const before = JSON.stringify(state.stations[0]);
+  for (let f = 0; f < 100; f++) stepCrowd(state, plan, 0.07, {trucks: [], anchor: null, reduced: false});
+  assert.equal(JSON.stringify(state.stations[0]), before, "hidden station frozen");
 });

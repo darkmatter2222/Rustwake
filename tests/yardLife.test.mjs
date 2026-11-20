@@ -83,7 +83,9 @@ test("plan defaults agree with world.js FORKLIFT_POST / DRONE_PAD", (t) => {
   assert.equal(a.forklift.post.z, FORKLIFT_POST.z);
   assert.equal(a.forklift.post.rotY, FORKLIFT_POST.rotY);
   assert.deepEqual({x: a.pad.x, y: a.pad.y, z: a.pad.z}, {x: DRONE_PAD.x, y: DRONE_PAD.y, z: DRONE_PAD.z});
-  assert.equal(a.walkers.length, 10);
+  // Refs 599 RE-DECLARATION (was 10): 22 walkers + 8 station crew.
+  assert.equal(a.walkers.length, 22);
+  assert.equal(a.stations.length, 8);
 });
 
 test("anti-teleport BEFORE/AFTER on real anchors: base drone fails the same bound HEAD passes", (t) => {
@@ -137,7 +139,7 @@ test("honesty gate: economy output byte-identical with crowd present vs absent",
   const plan = crowdPlan(DEFAULT_YARD_SEED, {forkliftPost: FORKLIFT_POST, dronePad: DRONE_PAD});
   const state = createCrowdState(plan);
   let prevTimers = new Map();
-  let minTw = Infinity, frames = 0, manifestChecks = 0;
+  let minTw = Infinity, minSw = Infinity, minFs = Infinity, frames = 0, manifestChecks = 0;
   const seconds = 300;
   let simT = 0, i = 0;
   while (simT < seconds) {
@@ -163,6 +165,16 @@ test("honesty gate: economy output byte-identical with crowd present vs absent",
       const c = dist2(w, p) - (M.workerRadius + M.truckRadius);
       if (c < minTw) minTw = c;
     }
+    // Refs 599: station crew are hard threats — measure walker/forklift vs
+    // every non-hidden station on the SAME live-sim fixture.
+    for (const st of state.stations) {
+      if (st.hidden) continue;
+      for (const w of state.walkers) {
+        if (w.hidden) continue;
+        minSw = Math.min(minSw, dist2(w, st) - 2 * M.workerRadius);
+      }
+      if (!state.forklift.hidden) minFs = Math.min(minFs, dist2(state.forklift, st) - (M.workerRadius + M.forkliftRadius));
+    }
     simT += dt; i++; frames++;
   }
   assert.equal(JSON.stringify(freightManifest(gA)), JSON.stringify(freightManifest(gB)));
@@ -173,10 +185,13 @@ test("honesty gate: economy output byte-identical with crowd present vs absent",
   assert.ok(state.walkers.every((w) => w.dist > 20), "crew must have walked");
   assert.ok(state.drone.mode !== "parked" || state.drone.targetId !== "none", "drone must have flown");
   assert.ok(minTw >= M.clearanceMargin - 1e-9, `walker-truck clearance ${minTw} below margin`);
+  assert.ok(minSw >= M.clearanceMargin - 1e-9, `walker-station clearance ${minSw} below margin`);
+  assert.ok(minFs >= M.clearanceMargin - 1e-9, `forklift-station clearance ${minFs} below margin`);
   t.diagnostic("MEASURED " + JSON.stringify({
     frames, manifestChecks, produced: gB.stats.produced,
     walkerDist: state.walkers.map((w) => +w.dist.toFixed(2)),
     droneMode: state.drone.mode, minWalkerTruckClearance: minTw,
+    minWalkerStationClearance: minSw, minForkliftStationClearance: minFs,
     freightTotals: freightTotals(gB)
   }));
 });
@@ -195,7 +210,7 @@ test("static guard: economy modules never import or reference the crowd", (t) =>
   assert.ok(!/advanceGame|freightManifest|assignJob|moveVehicle/.test(crowd), "crowd.js must not call economy functions");
 });
 
-test("rig budgets measured from real geometry; worker count-identical to base; scene delta = 7 walkers", (t) => {
+test("rig budgets measured from real geometry; worker count-identical to base; scene delta = 27 crew rigs (Refs 599)", (t) => {
   const worker = countRig(createWorker());
   const baseWorker = countRig(baseWorkerRig());
   const forklift = countRig(createForklift());
@@ -210,11 +225,15 @@ test("rig budgets measured from real geometry; worker count-identical to base; s
   // #590 added pivot GROUPS, not geometry: per-worker counts unchanged vs base.
   assert.deepEqual(worker, baseWorker, "worker mesh/triangle counts must equal the base rig");
   // Base makeTerrain placed 3 static workers (956a4706:src/world.js loop over
-  // [[13,9,...],[15,18,...],[7,9,...]]); HEAD places 10 patrol walkers.
-  const delta = {meshes: (10 - 3) * worker.meshes, triangles: (10 - 3) * worker.triangles};
+  // [[13,9,...],[15,18,...],[7,9,...]]). Refs 599 RE-DECLARED scene delta:
+  // 22 patrol walkers + 8 station crew = 30 canonical worker rigs ⇒ +27 rigs
+  // = +297 meshes / +3564 triangles (was +7 rigs / +77 / +924 at 10 walkers).
+  // This is an EXPLICIT headcount-driven re-declaration, not a raised per-rig
+  // budget: worker/forklift/drone RIGS budgets above are unchanged.
+  const delta = {meshes: (22 + 8 - 3) * worker.meshes, triangles: (22 + 8 - 3) * worker.triangles};
   t.diagnostic("MEASURED sceneDelta " + JSON.stringify(delta));
-  assert.equal(delta.meshes, 7 * baseWorker.meshes);
-  assert.equal(delta.triangles, 7 * baseWorker.triangles);
+  assert.equal(delta.meshes, 27 * baseWorker.meshes);
+  assert.equal(delta.triangles, 27 * baseWorker.triangles);
 });
 
 test("applyWorkerPose drives real joint transforms from travelled distance", (t) => {
@@ -267,9 +286,14 @@ test("source wiring: world.js feeds live trucks/anchor/reduced to stepCrowd; sta
   assert.ok(src.includes("const truckPts=g.vehicles.map(v=>({x:origin(v.x),z:origin(v.z)}))"),
     "truck envelope must come from the LIVE vehicle positions");
   assert.ok(src.includes("applyWorkerPose(w,wk.dist,this.reducedMotion)"), "limbs must be distance-driven");
-  for (const stamp of ["cd.crewWalkers", "cd.forkliftDist", "cd.droneX", "cd.crewReducedMotion"]) {
+  for (const stamp of ["cd.crewWalkers", "cd.forkliftDist", "cd.droneX", "cd.crewReducedMotion",
+    "cd.crewStations", "cd.crewStation1Arm"]) {
     assert.ok(src.includes(stamp), `additive dataset stamp ${stamp} missing`);
   }
+  // Refs 599: station crew limbs are driven by the sim clock + seeded phase
+  // through the SAME reduced-motion flag as the walkers.
+  assert.ok(src.includes("applyStationPose(w,this.crewState.elapsed,st.phase,this.reducedMotion)"),
+    "station poses must use the sim clock and the reduced-motion flag");
   // Authority strings unchanged: decorative crew never claims simulation work.
   const schema = readFileSync(root + "voxelSchema.js", "utf8");
   const authorityHits = schema.match(/none — decorative yard crew \(#274\)/g) || [];

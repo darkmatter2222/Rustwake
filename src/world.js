@@ -9,8 +9,8 @@ export {ART03_MOTION,ART03_TYPES,art03Pose,art03Advance,machineStatus,smokePuff}
 import {ART04_TYPES,ART04_STATUS_LIGHT,art04Advance,art04Pose,art04HotMaterial,depotDoorLift} from "./art04.js";
 export {ART04_MOTION,ART04_TYPES,ART04_DOCK,art04Pose,art04Advance,bayApproachDistance,depotDoorLift} from "./art04.js";
 // #590: pure decorative yard-crew simulation (no freight/economy authority).
-import {CROWD_MOTION,crowdPlan,createCrowdState,stepCrowd,crowdConflicts,workerPose} from "./crowd.js";
-export {CROWD_MOTION,crowdPlan,createCrowdState,stepCrowd,crowdConflicts,workerPose} from "./crowd.js";
+import {CROWD_MOTION,crowdPlan,createCrowdState,stepCrowd,crowdConflicts,workerPose,stationPose} from "./crowd.js";
+export {CROWD_MOTION,crowdPlan,createCrowdState,stepCrowd,crowdConflicts,workerPose,stationPose} from "./crowd.js";
 
 const EDGE=WORLD_SIZE*CELL;
 const origin=(i)=>(i-WORLD_SIZE/2+.5)*CELL;
@@ -885,6 +885,13 @@ export function applyWorkerPose(g,dist,reduced=false){
  g.userData.armL.rotation.x=p.armL;g.userData.armR.rotation.x=p.armR;
  g.userData.walkDist=dist;
 }
+// #599: station-crew pose from the sim clock + seeded phase (legs locked, arms
+// work). Same canonical worker rig; freezes at dt=0 / reduced motion.
+export function applyStationPose(g,elapsed,phase,reduced=false){
+ const p=stationPose(elapsed,phase,reduced);
+ g.userData.legL.rotation.x=p.legL;g.userData.legR.rotation.x=p.legR;
+ g.userData.armL.rotation.x=p.armL;g.userData.armR.rotation.x=p.armR;
+}
 function seeded(seed){let s=seed>>>0;return ()=>{s=(Math.imul(s,1664525)+1013904223)>>>0;return s/4294967296;};}
 // ---------------------------------------------------------------------------
 // ART-07 (#353): inhabited salvage-yard terrain. Pure deterministic plan +
@@ -1268,7 +1275,7 @@ export class LivingWorld{
   const ground=new THREE.Mesh(new THREE.PlaneGeometry(1800,1800),mat("#2e3b38"));
   ground.rotation.x=-Math.PI/2;ground.position.y=-.42;ground.receiveShadow=true;this.scene.add(ground);
   // ART-05 (#351): decorative yard crew state (no freight authority, #274).
-  this.crewWorkers=[];this.forklift=null;this.drone=null;this.crewTimers=new Map();this.droneAnchorId="none";
+  this.crewWorkers=[];this.crewStations=[];this.forklift=null;this.drone=null;this.crewTimers=new Map();this.droneAnchorId="none";
   this.terrainSeed=DEFAULT_YARD_SEED;this.sceneryPlan=null;this.sceneryBuild=null;this.sceneryHidden={props:[],rubble:[]};
   // #590: decorative crew plan/state (pure data; economy never reads it).
   this.crewPlan=null;this.crewState=null;this.crewHidden={segments:[],forklift:false,shuttle:true};
@@ -1294,13 +1301,17 @@ export class LivingWorld{
   this.terrainSeed=Number(seed)>>>0;
   this.sceneryPlan=yardSceneryPlan(this.terrainSeed);
   this.sceneryBuild=buildScenery(this.scenery,this.sceneryPlan);
-  // #590: ten walking crew on the maintenance alleys replace the three static
-  // scale references. Same canonical 1.7-unit worker rig; positions/headings
-  // come from the pure seeded crowd plan and advance in update() via stepCrowd.
+  // #590/#599: walking crew on the maintenance alleys + perimeter corridors,
+  // plus stationary-but-animated station crew at the machines/depot/market.
+  // Same canonical 1.7-unit worker rig; positions/headings come from the pure
+  // seeded crowd plan and advance in update() via stepCrowd / stationPose.
   this.crewPlan=crowdPlan(this.terrainSeed,{forkliftPost:FORKLIFT_POST,dronePad:DRONE_PAD});
   this.crewState=createCrowdState(this.crewPlan);
   for(const wk of this.crewState.walkers){
    const w=createWorker();w.position.set(wk.x,0,wk.z);w.rotation.y=wk.heading;this.scenery.add(w);this.crewWorkers.push(w);
+  }
+  for(const st of this.crewState.stations){
+   const w=createWorker();w.position.set(st.x,0,st.z);w.rotation.y=st.heading;this.scenery.add(w);this.crewStations.push(w);
   }
   this.stampScenery();
  }
@@ -1310,7 +1321,7 @@ export class LivingWorld{
  rebuildScenery(seed){
   if(this.sceneryBuild){this.sceneryBuild.rubbleMesh.dispose();this.sceneryBuild.decalMesh.dispose();}
   this.scenery.clear();
-  this.crewWorkers=[];
+  this.crewWorkers=[];this.crewStations=[];
   this.makeTerrain(seed);
   if(this.forklift)this.scenery.add(this.forklift);
   if(this.drone)this.scenery.add(this.drone);
@@ -1393,6 +1404,13 @@ export class LivingWorld{
    this.crewWorkers[i].visible=!hidden;
    this.crewState.walkers[i].hidden=hidden;
   }
+  // #599: station crew visibility is rebuild-only too (cell paved/built, anchor
+  // machine dismantled, or volumetric dressing reaches the standing radius).
+  for(let i=0;i<this.crewStations.length;i++){
+   const hidden=!!crewConf.stations[i];
+   this.crewStations[i].visible=!hidden;
+   this.crewState.stations[i].hidden=hidden;
+  }
   this.crewState.forklift.hidden=crewConf.forklift;
   this.crewState.forklift.shuttle=crewConf.shuttle;
   if(this.forklift)this.forklift.visible=!crewConf.forklift;
@@ -1400,7 +1418,7 @@ export class LivingWorld{
   const d=this.renderer.domElement.dataset;
   d.voxelSchema=SCHEMA_ID;d.machineCount=String(g.buildings.length);
   d.sceneryHidden=String(conflicts.props.length+conflicts.rubble.length);
-  d.crewHidden=String(crewConf.segments.filter(Boolean).length+(crewConf.forklift?1:0));
+  d.crewHidden=String(crewConf.segments.filter(Boolean).length+(crewConf.forklift?1:0)+(crewConf.stations||[]).filter(Boolean).length);
  }
  // ART-07 (#353): cell surface for ghost decals — visible scenery top, plus
  // paved road slabs and legally placed machines (their schema pick height), so
@@ -1535,6 +1553,13 @@ export class LivingWorld{
    applyWorkerPose(w,wk.dist,this.reducedMotion);
    applyRigLod(w,lodTier);
   }
+  // #599: station crew stand at their fixed posts; arms work on the sim clock
+  // (frozen at dt=0 / reduced motion). Position/heading never change here.
+  for(let i=0;i<this.crewStations.length;i++){
+   const w=this.crewStations[i],st=this.crewState.stations[i];
+   applyStationPose(w,this.crewState.elapsed,st.phase,this.reducedMotion);
+   applyRigLod(w,lodTier);
+  }
   // Forklift: drives the bay-apron shuttle (parks at the post when blocked);
   // fork lift still responds only to the nearest real truck's distance to POST.
   const fs=this.crewState.forklift;
@@ -1612,6 +1637,11 @@ export class LivingWorld{
   // crewReducedMotion proves the accessibility hold. All decorative (#274).
   const leadW=this.crewState.walkers.find(w=>!w.hidden)||this.crewState.walkers[0];
   cd.crewWalkers=String(this.crewState.walkers.filter(w=>!w.hidden).length);
+  // #599: additive station-crew observability — visible headcount and the lead
+  // station's arm angle prove the standing population is animated, not static.
+  cd.crewStations=String(this.crewState.stations.filter(s=>!s.hidden).length);
+  const leadS=this.crewState.stations.find(s=>!s.hidden)||this.crewState.stations[0];
+  cd.crewStation1Arm=leadS?stationPose(this.crewState.elapsed,leadS.phase,this.reducedMotion).armL.toFixed(3):"0.000";
   cd.crew1Dist=leadW?leadW.dist.toFixed(3):"0.000";
   cd.crew1X=leadW?leadW.x.toFixed(3):"0.000";
   cd.crew1Z=leadW?leadW.z.toFixed(3):"0.000";
