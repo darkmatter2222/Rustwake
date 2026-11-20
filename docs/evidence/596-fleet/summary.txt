@@ -1,0 +1,131 @@
+#596 FLEET GROWTH + BOUNDED ORIGIN/PICKUP RECOVERY — base-vs-head evidence
+==========================================================================
+Refs #596, Refs #589, Refs #592, Refs #280, Refs #514. Numeric evidence only.
+NO visual acceptance is claimed here. G1 on issue 276 is the sponsor's call on
+the DEPLOYED build and remains OWED. Issue 596 stays OPEN (closure = product).
+
+Revisions
+---------
+BASE = origin/main 63b9f40546ef675e4789f9c1672bfab99bcf5811 (= live v0.3.4).
+  Already has #589 separation; still 3 hardcoded trucks; NO origin recovery.
+  Extracted with `git archive 63b9f405 src` (the #592 convention). Re-measured
+  here from scratch — #592's published numbers are sanity references only.
+HEAD = PR #608 code head 40becd4d2e585265aab431770793d8d1fe27876f src/ (FROZEN;
+  implemented by dev-596a/dev-596c). The evidence commit is a child of this head.
+RULER = the HEAD checkout's traffic.js envelopeGapWorld for BOTH revisions
+  (sha256 f6b26b9c11fd5110d28949f46f9bac9773f411b9e6060937261d73ddeb2b7a5c),
+  exactly as #592. MIN_GAP_WORLD = 0.3. CELL = 3.5 world/cell.
+Ruler-drift proof: ruler-proof.txt + ruler-proof-*.json (byte-identical legacy
+  modes, main script vs extended script, on BOTH base and head src).
+
+Constants: MIN_GAP_WORLD 0.3, WAIT_TIMEOUT_SECONDS 10,
+ORIGIN_RECOVERY_RADIUS_CELLS 3, ORIGIN_RECOVERY_MAX_TRIES 3, ROAD_REACH 3,
+FLEET_CAP 12, fleetCapOf(level) = min(3 + (level - 1), 12), CELL 3.5.
+
+1) HIGHER DENSITY (fleet mode = multi fixture + idle trucks spawned at
+   deterministic clear road cells, IDENTICAL construction in both revisions;
+   depot level set directly — depot outputs {} so level scales no production).
+   200 s, 0.5 s substep. minGapWorld sampled EVERY tick over ALL pairs.
+
+   fixture      fleet  arrivals  delivered  minGapWorld   minPair  leaks  reroutes  recoveryCommits  maxWait(s)  waitingEnd  us/step(mean)
+   multi-base     3       4         47       0.3000000035  [2,3]    0       0          0              0           0          n/a
+   multi-head     3       4         47       0.3000000035  [2,3]    0       0          0              0           0          n/a
+   fleet-l1-base  3       4         47       0.3000000035  [2,3]    0       0          0              0           0          50.299
+   fleet-l1-head  3       4         47       0.3000000035  [2,3]    0       0          0              0           0          55.762
+   fleet-l4-base  6       3         42       0.3000000035  [2,3]    0       0          0            179.5         1         154.782
+   fleet-l4-head  6       4         47       0.3000000035  [2,3]    0       1          1              0           0         105.139
+   fleet-l10-base 12      3         42       0.3000000035  [2,3]    0       0          0            179.5         1         298.481
+   fleet-l10-head 12      4         47       0.3000000035  [2,3]    0       1          1              0           0         183.763
+
+   CRITICAL SPONSOR-COMPLAINT ANSWER: minGapWorld stays 0.3000000035 (>= the
+   declared 0.3) at 3, 6 AND 12 trucks in BOTH revisions. A higher fleet does
+   NOT reintroduce overlap — NO negative gap at density, NO regression against
+   the G1 REJECT complaint. (0.3000000035 is the lane-envelope clearance floor
+   the separation clamp holds; the tiny +3.5e-9 is float representation.)
+
+   STARVATION / THROUGHPUT: at L4 and L10 the BASE starves one truck —
+   fleet-l4-base truck id4 waits 179.5 s of 200 s, blockedBy 5, phase toSource,
+   still waiting at end; throughput drops to 3 arrivals / 42 delivered. HEAD
+   dissolves that hold with exactly ONE bounded sidestep commit (recoveryCommits
+   1, rerouteCommits 1), restores 4 arrivals / 47 delivered, maxWait 0,
+   waitingEnd 0. Head sidestep displacement 2.0303940504246953 cells =
+   7.106379 world, within the structural R+1 = 4-cell bound. Conservation
+   leaks 0 every tick in every fixture.
+
+2) TIMING — O(n^2) pairwise clamp (#514, still OPEN) quantified, not asserted.
+   Mean microseconds per 0.5 s advanceGame step (wall clock, process.hrtime):
+     3 trucks:  base 50.299 us  / head 55.762 us
+     6 trucks:  base 154.782 us / head 105.139 us
+    12 trucks:  base 298.481 us / head 183.763 us
+   Cost grows super-linearly with fleet size (the pairwise envelope clamp is
+   O(n^2); #514 spatial partition remains the honest open optimization). Head is
+   cheaper than base at density here because base carries a permanently waiting
+   truck that re-clamps every tick while head recovers and clears the queue.
+   These are single-run wall-clock means on this machine, not a benchmark suite;
+   they quantify the growth shape, not a hard perf budget.
+
+3) ORIGIN-CELL RECOVERY (origin mode = B1 dry-yard join-hold fixture: mover id1
+   at the salvager bay (7,9), idle jobless blocker id2 on the origin lane cell
+   (7,8.35)). 60 s.
+
+   fixture            arrivals  delivered  minGapWorld   recoveryCommits  reroutes  maxWait  blockedBy(mover)  waitTime(mover)  maxDisp(cells / world)
+   origin-base          0         0        0.2250000000      0              0        60        2                60               0 / 0
+   origin-head          1         5        0.2250000000      1              1         0        null             0                1.680029761641144 / 5.880104
+   origin-norecovery    0         0        0.2250000000      0              0        60        2                60               0 / 0
+
+   The 0.225-world mover/blocker pair is the PRE-EXISTING sub-gap park pair in
+   this constructed fixture — HELD, not repaired (TRAFFIC.md limitation 3). It
+   is present at tick 0 in base, head AND norecovery; it is NOT a density
+   regression and NOT introduced by this car. Post-commit separation in the
+   recovery test is pinned >= MIN_GAP_WORLD (B1/B5).
+   Head recovers: exactly 1 sidestep commit at t=10 s (timeout-gated), 1 arrival,
+   5 scrap credited once, displacement 1.680029761641144 cells = 5.880104 world
+   (<= R+1 = 4 cells). Base never moves: mover frozen at (7,9), waitTime 60,
+   blockedBy 2, route unchanged, 0 arrivals.
+
+4) NEGATIVE CONTROLS (a control that passes both ways is not evidence)
+   origin-norecovery.json: HEAD src with WAIT_TIMEOUT_SECONDS patched 10 -> 1e9
+   (the detour-norecovery pattern), ruler still HEAD envelopeGapWorld. Reproduces
+   the base stall EXACTLY: 0 arrivals, 0 delivered, recoveryCommits 0, reroutes 0,
+   mover waitTime 60, blockedBy 2, waiting at end. So the head recovery is what
+   dissolves the hold, not the fixture.
+   origin-control-failure.txt: a scratch probe replicating the B1 head assertion
+   (tests/trafficOriginRecovery.test.mjs line 271) run against that norecovery src
+   FAILS with the actual assertion text:
+       AssertionError [ERR_ASSERTION]: head dissolves the origin hold
+       0 !== 1   (actual 0, expected 1, operator strictEqual)
+   probe exit 1; stdout 46 bytes ("norecovery arrivals=0 waitTime=60 blockedBy=2");
+   failure txt 387 bytes (non-empty, non-vacuous). The recovery test's own
+   base-materialized control (B1/B8 against base 0791dc55) asserts the same stall
+   in CI; this probe additionally proves the head-recovery assertion fails when
+   the fix is reverted via the timeout disable.
+
+Honesty boundaries
+------------------
+* Bounded effort, NOT universal deadlock-freedom. The original acyclicity claim
+  was FALSE and was corrected. Perpendicular crossing traffic can still form a
+  wait-for cycle: test B9 pins a 3-truck ring that STILL deadlocks at head
+  (0 arrivals, blockedBy cycle, all waiting, budget exhausted at 3). Recovery
+  spends at most ORIGIN_RECOVERY_MAX_TRIES=3 tries per job, reset by assignJob.
+* No visual acceptance. Numbers are not pixels. G1 (#276) on the deployed build
+  is the sponsor's call and remains OWED; no browser/preview/dev server was run.
+* #280 sequencing: this car is a CAPACITY sink only (depot level raises the fleet
+  cap and spawns one truck per level via upgradeDepot). Truck MANUFACTURING
+  (issue 280) stays sequenced BEHIND this capacity sink and is NOT duplicated
+  here — no per-truck build cost, no manufacturing ledger, no production from the
+  depot (outputs {}, B2 tripwire). 280 will add the manufacturing mechanic on top
+  of the cap this car establishes.
+* src/ FROZEN at 40becd4d; no gate weakened. The #580 clause-1 base-stop-semantics
+  control (dockingSteps stays 0) and the C-2 dispatch-timing gate are preserved
+  (B7 asserts dockingSteps 0 with recovery active, including the 660 s strip
+  control).
+
+Reproduce
+---------
+node scripts/measure-589-traffic.mjs <srcDir> 200 multi
+node scripts/measure-589-traffic.mjs <srcDir> 200 fleet 4      # 6 trucks
+node scripts/measure-589-traffic.mjs <srcDir> 200 fleet 10     # 12 trucks (cap)
+node scripts/measure-589-traffic.mjs <srcDir> 60 origin
+node scripts/measure-589-traffic.mjs <srcDir> 200 multi "" timing   # add us/step
+Base srcDir = git archive 63b9f405 src; head srcDir = PR head src. Ruler is always
+the HEAD checkout's traffic.js. Full suite: pnpm test (node --test tests/*.test.mjs).

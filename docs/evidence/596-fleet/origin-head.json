@@ -1,0 +1,58 @@
+{
+ "srcDir": "C:/Users/ryans/AppData/Local/Temp/rw-qwen/dev-596d/wt/src",
+ "mode": "origin",
+ "seconds": 60,
+ "ticks": 120,
+ "arrivals": 1,
+ "shipments": 1,
+ "delivered": 5,
+ "conservationLeaks": 0,
+ "minGapWorld": 0.2250000000000023,
+ "minGapAtTick": 0,
+ "minPair": [
+  1,
+  2
+ ],
+ "declaredMinGap": 0.3,
+ "rerouteCommits": 1,
+ "maxRerouteDisplacementCells": 1.680029761641144,
+ "maxRerouteAtTick": 19,
+ "trucks": [
+  {
+   "id": 1,
+   "x": 13.35,
+   "z": 10,
+   "phase": null,
+   "seg": null,
+   "prog": null,
+   "routeLen": null,
+   "waiting": false,
+   "blockedBy": null,
+   "waitTime": 0,
+   "cargo": 0
+  },
+  {
+   "id": 2,
+   "x": 7,
+   "z": 8.35,
+   "phase": null,
+   "seg": null,
+   "prog": null,
+   "routeLen": null,
+   "waiting": false,
+   "blockedBy": null,
+   "waitTime": 0,
+   "cargo": 0
+  }
+ ],
+ "fleetLevel": null,
+ "fleetSize": 2,
+ "fleetCap": null,
+ "cellWorld": 3.5,
+ "stepMicrosecondsMean": 87.367,
+ "stepMicrosecondsTotal": 10484,
+ "recoveryCommits": 1,
+ "maxRerouteDisplacementWorld": 5.880104,
+ "maxWaitTime": 0,
+ "trucksWaitingAtEnd": 0
+}
