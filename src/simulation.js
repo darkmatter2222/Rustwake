@@ -511,19 +511,24 @@ function deliveryCandidates(g){
 // the bay inclusive, or null when no facing-side stop / a machine blocks the
 // corridor. Pure read of live geometry — re-derived every guard pass so a
 // blocked or vanished corridor severs the route honestly (ROUTE_BLOCKED).
-export function dockApproach(g,b){
+// roadSet (optional): the caller's per-pass Set of road keys. Hot guard passes
+// build it ONCE and share it across every dockApproach call in the pass.
+export function dockApproach(g,b,roadSet){
  if(!b||b.type!=="depot")return null;
  const bay=bayCells(b.type,b.x,b.z,b.rot||0)[0];
  if(!bay)return null;
- const fx=bay.x-b.x,fz=bay.z-b.z; // 1x1 depot: bay = anchor + facing
+ const fx=bay.x-b.x,fz=bay.z-b.z; // 1x1 depot: bay = anchor + facing (unit axis)
  if(fx===0&&fz===0)return null;
- let stop=null,bestD=Infinity;
- for(const tile of g.roads){
-  const [a,c]=cellOf(tile);
-  const aligned=fx!==0?(c===bay.z&&(a-bay.x)*fx>0):(a===bay.x&&(c-bay.z)*fz>0);
-  if(!aligned)continue;
-  const d=Math.abs(a-bay.x)+Math.abs(c-bay.z);
-  if(d<=ROAD_REACH&&d<bestD){stop={x:a,z:c};bestD=d;}
+ const roads=roadSet||new Set(Array.isArray(g.roads)?g.roads:[]);
+ // Alignment forces every candidate onto the facing-axis ray from the bay, so
+ // Manhattan distance EQUALS the ray offset: probing d=1..ROAD_REACH in order
+ // and taking the first asphalt hit is exactly the old "nearest aligned road
+ // within ROAD_REACH" full scan — at most ROAD_REACH Set membership tests, no
+ // per-tile cellOf split/alloc (the full scan cost ~3x base advanceGame).
+ let stop=null;
+ for(let d=1;d<=ROAD_REACH;d++){
+  const x=bay.x+fx*d,z=bay.z+fz*d;
+  if(roads.has(key(x,z))){stop={x,z};break;}
  }
  if(!stop)return null;
  const cells=[];
@@ -555,7 +560,7 @@ export function routeSevered(g,j){
  for(const id of [j.sourceId,j.destId]){
   const b=buildings.find(x=>x.id===id);
   if(!b){gone=true;continue;}
-  const a=dockApproach(g,b);
+  const a=dockApproach(g,b,roadSet);
   if(a){dock.add(key(a.bay.x,a.bay.z));for(const p of a.cells)dock.add(key(p.x,p.z));}
  }
  // Vanished endpoint: exempt a stored tail that is a straight, contiguous,
@@ -584,13 +589,15 @@ export function routeSevered(g,j){
 // source bag exactly once and are held against the job, NOT yet onboard.
 function assignJob(g,v){
  const vx=Math.round(v.x),vz=Math.round(v.z);
+ // #580 perf: one road-key Set per dispatch pass, shared by every dock probe.
+ const roadSet=new Set(Array.isArray(g.roads)?g.roads:[]);
  // #580: a truck idle ON a depot bay departs along that bay's corridor.
  let exitA=null;
- for(const b of g.buildings){const a=dockApproach(g,b);if(a&&a.bay.x===vx&&a.bay.z===vz){exitA=a;break;}}
+ for(const b of g.buildings){const a=dockApproach(g,b,roadSet);if(a&&a.bay.x===vx&&a.bay.z===vz){exitA=a;break;}}
  const start=exitA?exitA.stop:nearestRoad(g,vx,vz);
  const candidates=deliveryCandidates(g);
  for(const c of candidates){
-  const srcA=dockApproach(g,c.source),dstA=dockApproach(g,c.dest);
+  const srcA=dockApproach(g,c.source,roadSet),dstA=dockApproach(g,c.dest,roadSet);
   const src=srcA?srcA.stop:nearestRoad(g,c.source.x,c.source.z);
   const dst=dstA?dstA.stop:nearestRoad(g,c.dest.x,c.dest.z);
   const roadToSrc=roadPath(g,start,src),roadToDest=roadPath(g,src,dst);

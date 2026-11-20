@@ -41,7 +41,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
  createGame,advanceGame,persist,readGame,buildAt,freightTotals,
- dockApproach,routeSevered,nearestRoad,roadPath
+ dockApproach,routeSevered,nearestRoad,roadPath,buildingAt
 } from "../src/simulation.js";
 import {INITIAL_BANK,CELL,SAVE_KEY,footprintOf} from "../src/content.js";
 import {bayCells,ROAD_REACH,key} from "../src/gridOccupancy.js";
@@ -503,4 +503,84 @@ test("save compatibility: placed depots never move/rotate; bay-park state reload
   assert.equal(rv.job.sourceId,2);
   assert.deepEqual(rv.job.toDest[0],a.bay,"departs along the corridor, pickup in place — no migration needed");
  }finally{delete globalThis.localStorage;}
+});
+
+test("perf guard: supplied roadSet => dockApproach never iterates g.roads, and equals the old full scan exactly",()=>{
+ // Deterministic regression guard for the coordinator-measured ~3x advanceGame
+ // slowdown at c62f0b89 (PR #603 comment 7029173754): dockApproach's full-road
+ // scan decoded EVERY tile with cellOf (string split + array alloc) per call.
+ // The ray-probe rewrite (alignment forces candidates onto the facing-axis ray,
+ // so Manhattan distance == ray offset) must, when given the caller's per-pass
+ // roadSet, perform ZERO iterations of g.roads while returning the EXACT result
+ // of the old scan. Non-timing by design: an iteration counter is deterministic
+ // on any CI, where wall-clock assertions would be flaky.
+ // Reference: the pre-optimization full scan, verbatim semantics.
+ const fullScan=(g,b)=>{
+  if(!b||b.type!=="depot")return null;
+  const bay=bayCells(b.type,b.x,b.z,b.rot||0)[0];
+  if(!bay)return null;
+  const fx=bay.x-b.x,fz=bay.z-b.z;
+  if(fx===0&&fz===0)return null;
+  let stop=null,bestD=Infinity;
+  for(const tile of g.roads){
+   const [a,c]=tile.split(",").map(Number);
+   const aligned=fx!==0?(c===bay.z&&(a-bay.x)*fx>0):(a===bay.x&&(c-bay.z)*fz>0);
+   if(!aligned)continue;
+   const d=Math.abs(a-bay.x)+Math.abs(c-bay.z);
+   if(d<=ROAD_REACH&&d<bestD){stop={x:a,z:c};bestD=d;}
+  }
+  if(!stop)return null;
+  const cells=[];
+  let x=stop.x,z=stop.z;
+  while(x!==bay.x||z!==bay.z){x-=fx;z-=fz;cells.push({x,z});}
+  if(cells.some(p=>buildingAt(g,p.x,p.z)))return null;
+  return {id:b.id,bay,stop,cells};
+ };
+ // Array whose iterator counts every full-scan pass over it.
+ const counting=roads=>{
+  const arr=[...roads];let n=0;
+  arr[Symbol.iterator]=function(){n++;return Array.prototype[Symbol.iterator].call(this);};
+  return {arr,count:()=>n};
+ };
+ for(let rot=0;rot<4;rot++){
+  const b={id:1,type:"depot",x:10,z:10,rot,level:1,remaining:0,inventory:{},timer:0};
+  const bay=bayCells("depot",10,10,rot)[0];
+  const f={x:bay.x-10,z:bay.z-10}; // unit facing axis
+  const ray=d=>key(bay.x+f.x*d,bay.z+f.z*d);
+  const offAxis=key(bay.x+f.z,bay.z+f.x); // perpendicular neighbour: never aligned
+  const geometries=[
+   [ray(1),ray(2),ray(3),offAxis],        // nearest aligned wins
+   [ray(2),ray(3),offAxis],               // gap at d=1
+   [ray(3),offAxis],                      // farthest legal stop
+   [ray(ROAD_REACH+1),offAxis],           // beyond ROAD_REACH -> null
+   [offAxis],                             // no aligned road -> null
+   [ray(1),ray(2),ray(3),offAxis,"block"] // machine on the corridor -> null
+  ];
+  for(const geo of geometries){
+   const tiles=geo.filter(r=>r!=="block");
+   const buildings=[b];
+   if(geo.includes("block"))buildings.push({id:2,type:"salvager",x:bay.x,z:bay.z,rot:0,level:1,remaining:0,inventory:{},timer:0});
+   const g={roads:tiles,buildings};
+   const expected=fullScan(g,b);
+   const roadSet=new Set(tiles); // built from the plain array, before the swap
+   const c=counting(tiles);
+   g.roads=c.arr;
+   // Instrument sanity: the OLD scan genuinely iterates the counting array.
+   assert.deepEqual(fullScan(g,b),expected);
+   assert.ok(c.count()>0,"instrument works: the old full scan iterates g.roads");
+   const before=c.count();
+   const actual=dockApproach(g,b,roadSet);
+   assert.deepEqual(actual,expected,"rot "+rot+" roads ["+tiles.join(" ")+"]: ray probe must equal the old full scan exactly");
+   assert.equal(c.count(),before,"supplied roadSet: dockApproach must NOT iterate g.roads (full-scan regression guard)");
+  }
+ }
+ // Absent roadSet the function builds its own Set once — still exactly the old
+ // scan's result on the live starter yard (and on a corridor-blocked variant).
+ const live=createGame();
+ const lb=live.buildings.find(x=>x.id===2);
+ assert.deepEqual(dockApproach(live,lb),fullScan(live,lb));
+ const la=dockApproach(live,lb);
+ live.buildings.push({id:90,type:"salvager",x:la.cells[0].x,z:la.cells[0].z,rot:0,level:1,remaining:0,inventory:{},timer:0});
+ assert.equal(dockApproach(live,lb),null);
+ assert.equal(fullScan(live,lb),null);
 });

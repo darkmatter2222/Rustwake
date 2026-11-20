@@ -93,13 +93,16 @@ export function fleetState(g){
  if(!g)return {kind:"loading"};
  const vehicles=Array.isArray(g.vehicles)?g.vehicles:[];
  const buildings=Array.isArray(g.buildings)?g.buildings:[];
+ // #580 perf: one road-key Set per read-model pass, shared by every dock probe
+ // (candidate legs + each idle truck's exit scan) — never per building.
+ const roadSet=new Set(Array.isArray(g.roads)?g.roads:[]);
  const waiting=waitingLoads(g);
  // Pre-resolve candidate road legs once (shared by every idle truck). #580:
  // mirror assignJob's dock-aware stop selection exactly — a depot endpoint stops
  // at its facing-side aligned road stop (dockApproach), not nearestRoad(anchor).
  const candidateLegs=waiting.map(c=>{
   const src=buildings.find(b=>b.id===c.sourceId),dst=buildings.find(b=>b.id===c.destId);
-  const srcA=src?dockApproach(g,src):null,dstA=dst?dockApproach(g,dst):null;
+  const srcA=src?dockApproach(g,src,roadSet):null,dstA=dst?dockApproach(g,dst,roadSet):null;
   const srcRoad=srcA?srcA.stop:(src?nearestRoad(g,src.x,src.z):null);
   const dstRoad=dstA?dstA.stop:(dst?nearestRoad(g,dst.x,dst.z):null);
   return {...c,srcRoad,dstRoad,
@@ -133,7 +136,7 @@ export function fleetState(g){
    // that bay's facing-side stop, so its reachability matches the sim exactly.
    const vx=Math.round(v.x),vz=Math.round(v.z);
    let exitA=null;
-   for(const b of buildings){const a=dockApproach(g,b);if(a&&a.bay.x===vx&&a.bay.z===vz){exitA=a;break;}}
+   for(const b of buildings){const a=dockApproach(g,b,roadSet);if(a&&a.bay.x===vx&&a.bay.z===vz){exitA=a;break;}}
    const start=exitA?exitA.stop:nearestRoad(g,vx,vz);
    let stuck=null,state="idle",stateLabel="Available for dispatch",tone="muted",
     detail="Idle at "+v.x.toFixed(1)+","+v.z.toFixed(1)+" — dispatch assigns the next reachable load automatically.";
