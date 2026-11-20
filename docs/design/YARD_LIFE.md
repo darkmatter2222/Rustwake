@@ -1,8 +1,12 @@
 # #590 yard life — walking crew, forklift shuttle, continuous drone
 
-Decorative yard-crew simulation for the V2 isometric sandbox. Ten walking
-crew on the maintenance alleys, a forklift shuttling the depot bay apron, and
-a drone that flies continuously to the machine actually cycling. All motion
+Decorative yard-crew simulation for the V2 isometric sandbox. Refs 599
+re-declared the population: 22 walking crew on 13 corridors (the six original
+maintenance alleys + seven road-adjacent perimeter corridors) plus 8
+stationary-but-animated station crew (salvager tender, depot queue ×3, furnace
+tender, generator tender, crane tender, market clerk), a forklift shuttling
+the depot bay apron, and a drone that flies continuously to the machine
+actually cycling. All motion
 is pure seeded data (`src/crowd.js` — no THREE, no timers, no DOM); world.js
 consumes the poses. No external models or textures; the canonical 1.7-unit
 worker rig is unchanged geometry with added hip pivots.
@@ -15,11 +19,22 @@ with the crowd present vs absent (`tests/yardLife.test.mjs`, honesty gate:
 
 ## Motion model (src/crowd.js CROWD_MOTION)
 
-- Walkers ping-pong along six seeded maintenance-alley segments (the
-  yardSceneryPlan alleys: z=10 and z=14 for x 6..18 skipping the x=11 road,
-  x=8 for z 9..16 skipping the z=12 road). Speed 1.15 u/s ±8% per-seed jitter.
+- Walkers ping-pong along 13 seeded segments: the six original
+  yardSceneryPlan alleys (z=10 and z=14 for x 6..18 skipping the x=11 road,
+  x=8 for z 9..16 skipping the z=12 road) plus seven Refs 599 perimeter
+  corridors (north z=7, south z=18, east x=20, west x=4) on road-adjacent pad
+  cells that volumetric dressing never hides on any seed (probe:
+  scripts/probe-599-density.mjs, 7 seeds). The new corridors create zero new
+  centerline crossings. Speed 1.15 u/s ±8% per-seed jitter.
   Shared segments use opposite lanes (offset 0.6; lane gap 1.2 > the 1.12
   hard pair diameter + margin), so crew pass without overlap.
+- Station crew (Refs 599) stand at fixed posts facing their anchor machine;
+  legs locked, arms swing on the sim clock via `stationPose(elapsed, phase)`
+  (seeded AFTER the walkers so walker determinism is untouched). They freeze
+  at dt=0 / reduced motion exactly like walkers. They are HARD separation
+  threats to walkers and the forklift (crew yields, never the reverse), and
+  hide rebuild-only when their cell is paved/built, their anchor machine is
+  dismantled, or volumetric dressing reaches the standing radius.
 - Limb swing is a pure function of travelled distance (`workerPose`:
   strideFreq 7.5 rad/u, legSwing 0.5, armSwing 0.4, legs/arms opposite phase).
   Constant distance ⇒ frozen limbs: dt=0 and prefers-reduced-motion hold the
@@ -67,15 +82,27 @@ tests/yardLife.test.mjs: real production anchors):
 Ground pairs measured center-distance minus summed radii; drone pairs in 3D.
 7 seeds × 240 s with three trucks looping the real road centerlines:
 
+Refs 599 re-measured at 22 walkers + 8 stations (scripts/measure-599-crowd.mjs,
+7 seeds × 240 s, same roadTraffic/anchorScript fixtures; margin 0.12):
+
 | pair | min clearance |
 | --- | --- |
 | walker–walker | 0.200 |
-| walker–truck | 1.813–1.980 |
-| forklift–truck | 0.856 |
+| walker–truck | 1.203–1.800 |
+| forklift–truck | 0.855 |
 | forklift–walker | 3.512–3.863 |
 | drone–walker | 3.203–3.238 |
 | drone–forklift | 5.531 |
 | drone–truck | 3.075 |
+| station–walker | 1.900 |
+| station–forklift | 4.732 |
+| station–truck | 1.800 |
+| station–station | 2.500 |
+
+On the LIVE-sim honesty-gate fixture (real freight trucks, 300 s, default
+seed) the worst walker–truck clearance is 0.575 (both north single-walker
+corridors, lane 0) — above the 0.12 margin; walker–station 1.900,
+forklift–station 4.732 on the same fixture.
 
 Legal roads never come within ~2.9 u of a visible patrol path (lane offset
 0.6), so truck/forklift yielding is defensive depth on the starter yard. A
@@ -92,9 +119,11 @@ circumscribed AABB reaches the corridor. Bay aprons are NOT blockers —
 walkers intentionally cross them (machines cannot build on bays). The
 forklift hides when its post cell is paved/built or a volumetric prop reaches
 the post; the shuttle flag parks it when the corridor is blocked. Hidden
-walkers freeze (no drift). On a fresh save with the REAL yardSceneryPlan
-nothing is hidden (measured: all six segments visible, post visible, shuttle
-open). Applied only in rebuild(), never per-frame.
+walkers freeze (no drift). Station crew hide when their cell is paved/built,
+their anchor machine is dismantled, or volumetric dressing reaches the
+standing radius. On a fresh save with the REAL yardSceneryPlan nothing is
+hidden (measured: all 13 segments and all 8 stations visible, post visible,
+shuttle open; 7-seed probe). Applied only in rebuild(), never per-frame.
 
 ## Budgets (measured from real THREE geometry, tests/yardLife.test.mjs)
 
@@ -105,9 +134,12 @@ open). Applied only in rebuild(), never per-frame.
 | drone | 19 | 308 | 22 / 400 |
 
 The worker rig is count-identical to the base fixture (pivot GROUPS add no
-geometry). Scene delta vs base: base makeTerrain placed 3 static scale
-references; HEAD places 10 patrol walkers ⇒ +77 meshes / +924 triangles
-(7 × 11 / 7 × 132). Budgets are invariants — none were raised.
+geometry). Scene delta vs base RE-DECLARED for Refs 599: base makeTerrain
+placed 3 static scale references; HEAD places 22 patrol walkers + 8 station
+crew = 30 worker rigs ⇒ +297 meshes / +3564 triangles (27 × 11 / 27 × 132).
+Prior declaration at 10 walkers was +77 / +924 (7 × 11 / 7 × 132). The rise
+is headcount-driven and explicit; per-rig budgets are invariants — none were
+raised.
 
 ## Accessibility
 
@@ -125,15 +157,20 @@ dock.js contain no crowd import or reference (static guard test).
 
 ## Test map
 
-- tests/crowd.test.mjs — 11 tests: plan determinism, anti-teleport +
-  clearance (7 seeds × 240 s), base-drone negative control, adversarial
-  vertical ascent (250 phases × 4 dt), truck-yield stress, locomotion +
-  limbs, trajectory determinism, reduced/dt=0 hold, frozen-env no-mutation,
-  visibility, crossing right-of-way.
-- tests/yardLife.test.mjs — 8 tests: plan/placement agreement, base-vs-HEAD
-  anti-teleport on real anchors, economy byte-identity honesty gate, economy
-  static guard, measured rig budgets + base worker parity, joint transforms,
-  real-scenery visibility, source wiring guards.
+- tests/crowd.test.mjs — 14 tests: plan determinism (22 walkers / 8 stations
+  / 13 segments re-declared), anti-teleport + clearance incl. station pairs
+  (7 seeds × 240 s), base-drone negative control, adversarial vertical ascent
+  (250 phases × 4 dt), truck-yield stress, locomotion + limbs, trajectory
+  determinism, reduced/dt=0 hold (stations in snapshot), frozen-env
+  no-mutation, visibility, crossing right-of-way, station pose purity +
+  freeze (negative control), station seed clearance, station visibility
+  (dismantle / paving / volumetric).
+- tests/yardLife.test.mjs — 8 tests: plan/placement agreement (22/8
+  re-declared), base-vs-HEAD anti-teleport on real anchors, economy
+  byte-identity honesty gate (now also measures walker/forklift–station
+  clearance on the live fixture), economy static guard, measured rig budgets
+  + base worker parity + re-declared +27-rig scene delta, joint transforms,
+  real-scenery visibility, source wiring guards (incl. station stamps).
 - tests/yardScenery.test.mjs — 19 tests green (alleys/terrain unchanged).
 
 ## Limitations (honest scope)

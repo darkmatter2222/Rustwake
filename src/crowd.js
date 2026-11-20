@@ -64,13 +64,48 @@ export const CROWD_MOTION = Object.freeze({
 // centers). Alleys come from yardSceneryPlan: z=10 & z=14 for x 6..18 (skip
 // the x=11 road), x=8 for z 9..16 (skip the z=12 road). The z=10 east segment
 // starts at cell 14 so walkers never cross the forklift shuttle apron.
+//
+// #599 (G1 "I want to see more stuff"): seven road-adjacent perimeter corridors
+// spread patrols across the north/south/east/west edges so no large empty region
+// remains on first arrival. They sit on cells terrainFor() grades to pad because
+// they neighbour a road (road 4-neighbours are always rock-free), so volumetric
+// dressing never hides them on ANY seed (probe: scripts/probe-599-density.mjs).
+// Indices 0..5 are the original alleys — preserved so existing crossing pairs and
+// visibility tests stay valid. The new corridors create ZERO new centerline
+// crossings (none intersect the alleys or each other).
 const SEGMENT_DEFS = Object.freeze([
   {id: "alley-z10-w", x0: 6,  z0: 10, x1: 10, z1: 10, walkers: 2},
   {id: "alley-z10-e", x0: 14, z0: 10, x1: 18, z1: 10, walkers: 2},
   {id: "alley-z14-w", x0: 6,  z0: 14, x1: 10, z1: 14, walkers: 2},
   {id: "alley-z14-e", x0: 12, z0: 14, x1: 18, z1: 14, walkers: 2},
   {id: "alley-x8-n",  x0: 8,  z0: 9,  x1: 8,  z1: 11, walkers: 1},
-  {id: "alley-x8-s",  x0: 8,  z0: 13, x1: 8,  z1: 16, walkers: 1}
+  {id: "alley-x8-s",  x0: 8,  z0: 13, x1: 8,  z1: 16, walkers: 1},
+  {id: "north-z7-w",  x0: 6,  z0: 7,  x1: 10, z1: 7,  walkers: 1},
+  {id: "north-z7-e",  x0: 12, z0: 7,  x1: 13, z1: 7,  walkers: 1},
+  {id: "south-z18-w", x0: 6,  z0: 18, x1: 10, z1: 18, walkers: 2},
+  {id: "south-z18-m", x0: 12, z0: 18, x1: 13, z1: 18, walkers: 2},
+  {id: "south-z18-e", x0: 16, z0: 18, x1: 18, z1: 18, walkers: 2},
+  {id: "east-x20",    x0: 20, z0: 9,  x1: 20, z1: 16, walkers: 2},
+  {id: "west-x4",     x0: 4,  z0: 9,  x1: 4,  z1: 16, walkers: 2}
+]);
+
+// #599: stationary-but-animated station crew. Each tends a real starter machine
+// (or queues at the depot / clerks the market). Position is fixed; limbs swing on
+// the sim clock via stationPose(), freezing at dt=0 / reduced motion. They are
+// HARD separation threats to walkers and the forklift (never the reverse — crew
+// yields to station crew just as it yields to lower-index walkers). A station
+// hides when its cell becomes road/footprint, volumetric dressing reaches it, or
+// its anchor machine is dismantled. There is no scale house in V2 content; the
+// depot queue + market clerk are the honest standing-population substitutes.
+const STATION_DEFS = Object.freeze([
+  {id: "salvager-tender",  x: 6,  z: 9,  building: "salvager"},
+  {id: "depot-queue-1",    x: 14, z: 9,  building: "depot"},
+  {id: "depot-queue-2",    x: 15, z: 9,  building: "depot"},
+  {id: "depot-queue-3",    x: 16, z: 9,  building: "depot"},
+  {id: "furnace-tender",   x: 17, z: 13, building: "furnace"},
+  {id: "generator-tender", x: 6,  z: 16, building: "generator"},
+  {id: "crane-tender",     x: 14, z: 7,  building: "crane"},
+  {id: "market-clerk",     x: 14, z: 18, building: "market"}
 ]);
 
 function seeded(seed) {
@@ -148,7 +183,16 @@ export function crowdPlan(seed, opts = {}) {
     crossings.push(c);
     crossingMap[i + ":" + j] = c;
   }
-  return {seed: s, segments, walkers, forklift, pad: {x: pad.x, y: pad.y, z: pad.z}, crossings, crossingMap};
+  // #599: station crew face their anchor machine; phase is seeded AFTER the
+  // walkers so existing walker phases/determinism are untouched.
+  const stations = STATION_DEFS.map((def) => {
+    const anchor = STARTER_BUILDINGS.find((b) => b.type === def.building);
+    const x = origin(def.x), z = origin(def.z);
+    const heading = Math.atan2(origin(anchor.x) - x, origin(anchor.z) - z);
+    return {id: def.id, x, z, heading, phase: rand() * Math.PI * 2,
+      cell: [def.x, def.z], building: def.building, anchor: [anchor.x, anchor.z]};
+  });
+  return {seed: s, segments, walkers, stations, forklift, pad: {x: pad.x, y: pad.y, z: pad.z}, crossings, crossingMap};
 }
 
 // Hard center distance for walker-walker clearance (physical radius + margin
@@ -242,10 +286,38 @@ export function createCrowdState(plan) {
     }
     if (!moved) break;
   }
+  // #599: station crew are fixed threats — relax walkers off any station they
+  // were seeded inside, along their own segment, so frame zero already clears
+  // the hard radius the step loop enforces.
+  const stations = (plan.stations || []).map((st) => ({
+    id: st.id, x: st.x, z: st.z, heading: st.heading, phase: st.phase,
+    cell: st.cell, building: st.building, anchor: st.anchor, hidden: false
+  }));
+  for (let pass = 0; pass < 12; pass++) {
+    let moved = false;
+    for (const w of walkers) {
+      const seg = plan.segments[w.seg];
+      for (const st of stations) {
+        if (Math.hypot(w.x - st.x, w.z - st.z) >= hardR + 0.05) continue;
+        const tryS = (v) => {
+          const cs = Math.min(seg.len, Math.max(0, v));
+          const p = walkerPos(seg, cs, w.lane);
+          return {cs, d: Math.hypot(st.x - p.x, st.z - p.z), p};
+        };
+        const plus = tryS(w.s + hardR + 0.1), minus = tryS(w.s - hardR - 0.1);
+        const best = plus.d >= minus.d ? plus : minus;
+        if (best.d <= Math.hypot(w.x - st.x, w.z - st.z) + 1e-9) continue;
+        w.s = best.cs; w.x = best.p.x; w.z = best.p.z;
+        moved = true;
+      }
+    }
+    if (!moved) break;
+  }
   const f = plan.forklift;
   return {
     elapsed: 0,
     walkers,
+    stations,
     forklift: {s: 0, dir: -1, dist: 0, x: f.ax, z: f.az, heading: f.post.rotY, hidden: false, shuttle: true},
     drone: {x: plan.pad.x, y: plan.pad.y, z: plan.pad.z, mode: "parked", rotor: 0, bob: 0, targetId: "none"}
   };
@@ -343,6 +415,11 @@ export function stepCrowd(state, plan, dt, env) {
       const f = state.forklift;
       threats.push({x: f.x, z: f.z, r: M.forkliftRadius + M.workerRadius + M.clearanceMargin});
     }
+    // #599: stationary station crew are hard threats at the walker hard radius.
+    for (const st of state.stations || []) {
+      if (st.hidden) continue;
+      threats.push({x: st.x, z: st.z, r: hardR});
+    }
     // Cross-segment walkers: lower indices resolved first (right-of-way).
     // At a shared crossing, once the lower walker is within the lookahead we
     // wait against a CONSTANT interval centered on the intersection instead
@@ -386,6 +463,11 @@ export function stepCrowd(state, plan, dt, env) {
       for (const w of state.walkers) {
         if (w.hidden) continue;
         threats.push({x: w.x, z: w.z, r: M.workerRadius + M.forkliftRadius + M.clearanceMargin});
+      }
+      // #599: the forklift yields to station crew too (lowest priority).
+      for (const st of state.stations || []) {
+        if (st.hidden) continue;
+        threats.push({x: st.x, z: st.z, r: M.workerRadius + M.forkliftRadius + M.clearanceMargin});
       }
       const s = resolveClearance(cand.s, fl, 0, threats);
       const ds = Math.min(M.forkliftSpeed * dt, Math.max(-M.forkliftSpeed * dt, s - prev));
@@ -467,6 +549,15 @@ export function workerPose(dist, reduced = false) {
   };
 }
 
+// #599: pure station-crew pose from the sim clock + seeded phase. Station crew
+// stand still (legs locked) and work with their arms; the pose freezes when the
+// clock is constant (dt=0) or under reduced motion, exactly like walkerPose.
+export function stationPose(elapsed, phase, reduced = false) {
+  if (reduced || !(elapsed > 0)) return {legL: 0, legR: 0, armL: 0, armR: 0};
+  const swing = Math.sin(elapsed * 2.2 + phase);
+  return {legL: 0, legR: 0, armL: swing * 0.35, armR: -swing * 0.25};
+}
+
 // --- rebuild-only visibility conflicts -------------------------------------
 // blocked = roads + machine footprints (NOT bays: walkers cross bay aprons).
 // Volumetric scenery (props + rubble taller than a flush decal) blocks a
@@ -496,5 +587,13 @@ export function crowdConflicts(plan, g, sceneryPlan) {
   }
   const forklift = postCellBlocked || postVolumetric;
   const shuttle = !forklift && !corridorBlocked(fl, M.forkliftRadius);
-  return {segments, forklift, shuttle};
+  // #599: a station hides when its cell is paved/built, its anchor machine is
+  // gone (dismantled), or volumetric dressing reaches its standing radius.
+  const stations = (plan.stations || []).map((st) => {
+    if (blocked.has(key(st.cell[0], st.cell[1]))) return true;
+    if (!g.buildings.some((b) => b.type === st.building && b.x === st.anchor[0] && b.z === st.anchor[1])) return true;
+    for (const v of vols) if (Math.hypot(v.x - st.x, v.z - st.z) < v.r + M.workerRadius + M.clearanceMargin) return true;
+    return false;
+  });
+  return {segments, forklift, shuttle, stations};
 }

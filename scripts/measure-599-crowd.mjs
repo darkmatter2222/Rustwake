@@ -35,7 +35,10 @@ function anchorScript() {
   return (t) => ({trucks: [], anchor: targets[Math.floor(t / 20) % targets.length], reduced: false});
 }
 
-const KEYS = ["ww", "fw", "tw", "ft", "dw", "df", "dt", "sw", "sf", "st", "ss"];
+// Keys are the two class letters SORTED (d<f<s<t<w): forklift-station is "fs".
+// (The original "sf" entry never matched the sorted key and silently skipped
+// the forklift-station pair — fixed so the pair is actually measured.)
+const KEYS = ["ww", "fw", "tw", "ft", "dw", "df", "dt", "sw", "fs", "st", "ss"];
 const perSeed = [];
 const agg = Object.fromEntries(KEYS.map(k => [k, Infinity]));
 let walkers = 0, stations = 0, segments = 0, maxWorkerStep = 0, locomotion = 0;
