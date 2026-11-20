@@ -75,6 +75,28 @@ function truckEnv(g) {
   return g.vehicles.map((v) => Object.freeze({x: origin(v.x), z: origin(v.z)}));
 }
 
+// Refs #611: createGame() stamps createdAt/lastSavedAt from Date.now()
+// (src/simulation.js:186). Two back-to-back constructions can straddle a
+// millisecond tick, diverging the fixtures BEFORE frame 0 and flaking the
+// honesty gate below. Freeze the wall clock around construction ONLY so both
+// fixtures observe the same millisecond; restore in finally. The 300-second
+// loop runs on the REAL clock — advanceGame never reads Date.now (measured:
+// the only wall-clock reads in simulation.js are createGame/readGame/persist),
+// so construction is the sole nondeterminism. No field is excluded and the
+// byte-identity assertion is unchanged: the FULL serialized state is compared.
+function createHonestyPair() {
+  const realNow = Date.now;
+  const frozenMillis = realNow();
+  Date.now = () => frozenMillis;
+  try {
+    const gA = createGame(); // crowd ABSENT
+    const gB = createGame(); // crowd PRESENT (stepped from deep-frozen env)
+    return [gA, gB];
+  } finally {
+    Date.now = realNow;
+  }
+}
+
 test("plan defaults agree with world.js FORKLIFT_POST / DRONE_PAD", (t) => {
   const a = crowdPlan(DEFAULT_YARD_SEED);
   const b = crowdPlan(DEFAULT_YARD_SEED, {forkliftPost: FORKLIFT_POST, dronePad: DRONE_PAD});
@@ -134,8 +156,9 @@ test("anti-teleport BEFORE/AFTER on real anchors: base drone fails the same boun
 });
 
 test("honesty gate: economy output byte-identical with crowd present vs absent", (t) => {
-  const gA = createGame(); // crowd ABSENT
-  const gB = createGame(); // crowd PRESENT (stepped from deep-frozen env)
+  // Refs #611: both fixtures constructed under one frozen millisecond; the
+  // simulation loop below runs on the real clock.
+  const [gA, gB] = createHonestyPair();
   const plan = crowdPlan(DEFAULT_YARD_SEED, {forkliftPost: FORKLIFT_POST, dronePad: DRONE_PAD});
   const state = createCrowdState(plan);
   let prevTimers = new Map();
@@ -194,6 +217,54 @@ test("honesty gate: economy output byte-identical with crowd present vs absent",
     minWalkerStationClearance: minSw, minForkliftStationClearance: minFs,
     freightTotals: freightTotals(gB)
   }));
+});
+
+test("Refs 611 regression: forced 1 ms construction skew cannot flake the honesty gate", (t) => {
+  const realNow = Date.now;
+  let skewCalls = 0;
+  // Worst-case clock: EVERY Date.now() call advances 1 ms, so a tick is
+  // guaranteed between (and within) the two constructions.
+  Date.now = () => realNow() + (++skewCalls);
+  let gA, gB;
+  try {
+    // Non-vacuity of the skew itself: unfrozen constructions really diverge.
+    const rawA = createGame();
+    const rawB = createGame();
+    assert.notEqual(rawA.createdAt, rawB.createdAt, "forced skew must tick between constructions");
+    assert.notEqual(JSON.stringify(rawA), JSON.stringify(rawB), "forced skew must break unfrozen byte-identity");
+    // The remedy: frozen construction observes ONE millisecond despite the skew.
+    [gA, gB] = createHonestyPair();
+    assert.equal(gA.createdAt, gB.createdAt, "frozen construction must equalise createdAt");
+    assert.equal(gA.lastSavedAt, gB.lastSavedAt, "frozen construction must equalise lastSavedAt");
+    assert.equal(JSON.stringify(gA), JSON.stringify(gB), "frame 0 must be byte-identical under forced skew");
+  } finally {
+    Date.now = realNow;
+  }
+  assert.equal(Date.now, realNow, "clock must be restored after construction");
+  // The loop runs on the REAL clock: advanceGame must not read the wall clock.
+  let frames = 0;
+  for (let i = 0; i < 600; i++) {
+    const dt = DTS[i % DTS.length];
+    advanceGame(gA, dt);
+    advanceGame(gB, dt);
+    assert.equal(JSON.stringify(gA), JSON.stringify(gB), `skew regression diverged at frame ${i}`);
+    frames++;
+  }
+  assert.ok(gA.stats.produced > 0, "economy must have run in the skew regression");
+  t.diagnostic("MEASURED " + JSON.stringify({skewCalls, frames, produced: gA.stats.produced}));
+});
+
+test("Refs 611 non-vacuity: a genuine economy perturbation still fails the byte-identity gate", () => {
+  const [gA, gB] = createHonestyPair();
+  assert.equal(JSON.stringify(gA), JSON.stringify(gB), "fixtures must start byte-identical");
+  // Perturb ONE economy field (a produced total) on ONE fixture. The SAME
+  // full-state byte-identity assertion used by the honesty gate must throw:
+  // a gate that cannot fail is not evidence.
+  gB.stats.produced += 1;
+  assert.throws(
+    () => assert.equal(JSON.stringify(gA), JSON.stringify(gB), "game state diverged at frame 0 (t=0.000)"),
+    /game state diverged at frame 0/
+  );
 });
 
 test("static guard: economy modules never import or reference the crowd", (t) => {
