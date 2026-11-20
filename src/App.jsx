@@ -3,7 +3,7 @@ import {LivingWorld} from "./world.js";
 import {createCameraInput} from "./cameraInput.js";
 import {zoomAtPixel} from "./camera.js";
 import {RESOURCES,RESOURCE_BY_ID,BUILDINGS,BLUEPRINTS,RESEARCH,TIERS,CELL,WORLD_SIZE,amount} from "./content.js";
-import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,cancelConstruction,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt,checkSite,buildingAt,footprintDims,facingName,cancelFreight,freightTotals,ROAD_REACH} from "./simulation.js";
+import {readGame,createGame,resetGame,persist,advanceGame,snapshot,buildAt,roadLine,removeBuilding,cancelConstruction,powerStatus,unlocked,connectedToRoad,canAfford,sell,researchAt,checkSite,buildingAt,footprintDims,facingName,cancelFreight,freightTotals,upgradeDepot,ROAD_REACH} from "./simulation.js";
 import {inspectorState,machineScreenRect,panelPlacement,transitionCamera,readUxSettings,writeUxSettings} from "./inspector.js";
 import {resourceStripState,readStripSettings,writeStripSettings} from "./resourceStrip.js";
 import {alarmsState,alarmsForBuilding,readAlarmSettings,writeAlarmSettings} from "./alarms.js";
@@ -169,7 +169,7 @@ function DrawPanel({mode,g,selectedId,setSelectedId,buildId,setBuildId,buildRot,
 /* UX-04 (#362): the inspector is a pure read model over the authoritative
    simulation (src/inspector.js). It never spends, forks or fabricates economy
    state; refund previews are unit-tested against the real transactions. */
-function InspectorPanel({g,selectedId,ux,onUx,onClose,onRemove,onCancel,confirmId,setConfirmId,openBtnRef,confirmBtnRef,obscured,onFocus,openBuild,alarms,onAlarmAction}){
+function InspectorPanel({g,selectedId,ux,onUx,onClose,onRemove,onCancel,onUpgradeDepot,confirmId,setConfirmId,openBtnRef,confirmBtnRef,obscured,onFocus,openBuild,alarms,onAlarmAction}){
  if(selectedId==null)return <Card title="Inspector" eyebrow="SELECTION / EMPTY" onClose={onClose} className="inspector-panel">
   <p className="panel-sub" data-testid="inspector-empty">No machine selected. Tap any structure in the yard to read its status, recipe, cargo, bay connectivity and recovery options.</p>
   <button className="rotate-button" onClick={openBuild}>Open construct catalog</button>
@@ -182,7 +182,7 @@ function InspectorPanel({g,selectedId,ux,onUx,onClose,onRemove,onCancel,confirmI
   <p className="panel-sub text-warn" role="alert" data-testid="inspector-error">{s.reason}</p>
   <button className="rotate-button" onClick={onClose}>Back to the yard</button>
  </Card>;
- const {def,status,bay,recipe,stock,construction,upgrade,dismantle,level,site,power}=s;
+ const {def,status,bay,recipe,stock,construction,upgrade,depotUpgrade,dismantle,level,site,power}=s;
  const confirming=confirmId===selectedId;
  const openConfirm=()=>{setConfirmId(selectedId);};
  // The opener button unmounts while the confirm block is shown; focus the
@@ -240,15 +240,36 @@ function InspectorPanel({g,selectedId,ux,onUx,onClose,onRemove,onCancel,confirmI
   </>}
   <h3 className="panel-section">Local storage</h3>
   <div className="inventory-list inventory-list--short">{stock.length?stock.map(e=><div key={e.id}><strong>{e.name}</strong><span>{amount(e.amount)} {e.unit}</span></div>):<p className="panel-sub">No cargo in this building.</p>}</div>
-  <h3 className="panel-section">Upgrade effect</h3>
-  <div className="upgrade-preview" data-testid="upgrade-effect">
-   {upgrade.hasCycle
-    ?<><div><small>LEVEL {upgrade.level} NOW</small><span>{toMoney(upgrade.current)}</span></div>
-       <div><small>LEVEL {upgrade.nextLevel} NEXT</small><span>{toMoney(upgrade.next)}</span></div></>
-    :<p className="panel-sub">Support structure — no production cycle to scale.</p>}
-  </div>
-  <button className="upgrade-button" data-testid="upgrade-locked" disabled aria-describedby="upgrade-lock-reason">Upgrade — locked</button>
-  <p className="panel-footnote" id="upgrade-lock-reason">{upgrade.lockReason}</p>
+  {/* #596 B1: the depot's level is a FLEET-CAPACITY sink, not production — it
+      gets its own honest affordance (depot-upgrade) wired to the real
+      upgradeDepot transaction. Every OTHER building keeps the verbatim locked
+      preview below: production upgrades are not purchasable in this build. */}
+  {def.id==="depot"&&depotUpgrade
+   ?<>
+     <h3 className="panel-section">Fleet capacity</h3>
+     <div className="upgrade-preview" data-testid="depot-capacity-effect">
+      <div><small>LEVEL {depotUpgrade.level} NOW</small><span>{depotUpgrade.cap} hauler{depotUpgrade.cap===1?"":"s"}</span></div>
+      {depotUpgrade.nextLevel!=null&&<div><small>LEVEL {depotUpgrade.nextLevel} NEXT</small><span>{depotUpgrade.nextCap} haulers</span></div>}
+     </div>
+     <p className="panel-sub">Depot level buys fleet capacity, not production — the depot has no production cycle to scale. Each level adds one hauler, up to 12 at level 10.</p>
+     <button className="upgrade-button" data-testid="depot-upgrade" disabled={!depotUpgrade.available}
+      onClick={()=>onUpgradeDepot()}>
+      {depotUpgrade.available?"Upgrade depot — "+toMoney(depotUpgrade.cost)
+       :depotUpgrade.code==="MAX_LEVEL"?"Depot at max level":"Upgrade depot — locked"}
+     </button>
+     {depotUpgrade.reason&&<p className="panel-footnote" data-testid="depot-upgrade-reason">{depotUpgrade.reason}</p>}
+    </>
+   :<>
+     <h3 className="panel-section">Upgrade effect</h3>
+     <div className="upgrade-preview" data-testid="upgrade-effect">
+      {upgrade.hasCycle
+       ?<><div><small>LEVEL {upgrade.level} NOW</small><span>{toMoney(upgrade.current)}</span></div>
+          <div><small>LEVEL {upgrade.nextLevel} NEXT</small><span>{toMoney(upgrade.next)}</span></div></>
+       :<p className="panel-sub">Support structure — no production cycle to scale.</p>}
+     </div>
+     <button className="upgrade-button" data-testid="upgrade-locked" disabled aria-describedby="upgrade-lock-reason">Upgrade — locked</button>
+     <p className="panel-footnote" id="upgrade-lock-reason">{upgrade.lockReason}</p>
+    </>}
   <h3 className="panel-section">Dismantle</h3>
   {!dismantle.gate.allowed
    ?<><button className="danger-button" disabled data-testid="dismantle-blocked">Dismantle unavailable</button>
@@ -641,6 +662,14 @@ export default function App(){
   refresh();
  },[notify,refresh]);
  const onCancel=useCallback((id)=>{const r=cancelConstruction(gameRef.current,id);notify(r.ok?"Construction canceled — materials refunded":r.reason);if(r.ok){setSelectedId(null);setMode("select");}refresh();},[notify,refresh]);
+ /* #596: the depot upgrade is the ONLY live level transaction — fleet capacity,
+    never production. The simulation re-validates funds, cap and spawn clearance
+    at commit; the UI only reports the authoritative outcome. */
+ const onUpgradeDepot=useCallback(()=>{
+  const r=upgradeDepot(gameRef.current);
+  notify(r.ok?"Depot upgraded to level "+r.level+" — "+r.vehicle.name+" joined the fleet":r.reason);
+  refresh();
+ },[notify,refresh]);
  // CAM-05 (#341): Home/Recenter is the ONLY refit. It restores the approved
  // isometric overview through the same pure policy and stamps synchronously
  // via the public setView/applyCamera path (#307 hashes untouched).
@@ -895,7 +924,7 @@ export default function App(){
       ?<InspectorPanel g={data} selectedId={selectedId} ux={ux} onUx={onUx}
         confirmId={confirmId} setConfirmId={setConfirmId} openBtnRef={openBtnRef} confirmBtnRef={confirmBtnRef}
         obscured={obscured} onFocus={()=>updatePlacement(true,true)} openBuild={()=>choose("build")}
-        onRemove={onRemove} onCancel={onCancel} onClose={closeSheet}
+        onRemove={onRemove} onCancel={onCancel} onUpgradeDepot={onUpgradeDepot} onClose={closeSheet}
         alarms={alarmState} onAlarmAction={onAlarmAction}/>
       :mode==="fleet"
       ?<FleetPanel g={data} focusId={fleetFocus} setFocusId={setFleetFocus}

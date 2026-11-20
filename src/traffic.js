@@ -57,10 +57,22 @@ const GAP = MIN_GAP_WORLD / CELL; // cells, inflated fully onto the blocker AABB
 // blocker's cell (obstacle BFS). Normal queues clear in ~1-2s, so this only fires
 // on genuine gridlock; it is bounded (one attempt per window) and never teleports
 // into another envelope (the new start is separation-checked before committing).
-// NOT a universal cycle-breaker: a blocker parked on the route's ORIGIN cell
-// cannot be routed around (cur === avoid cell), measured 0 arrivals / 60 s in a
-// constructed dry-yard join-hold — see docs/design/TRAFFIC.md limitations.
+// NOT a universal cycle-breaker: perpendicular crossing cycles at saturated
+// intersections remain possible — see docs/design/TRAFFIC.md limitations.
 export const WAIT_TIMEOUT_SECONDS = 10;
+
+// Bounded origin-cell sidestep (#596). A blocker parked on the mover's OWN
+// origin lane cell cannot be avoided by any route that starts there (every
+// candidate lane start lands inside the blocker's envelope — measured 0
+// arrivals / 60 s in the constructed dry-yard join-hold). After the normal
+// obstacle-BFS reroute fails AND the mover has honestly queued past
+// WAIT_TIMEOUT_SECONDS, recovery may SIDE-STEP the origin: enumerate road
+// cells at Manhattan distance 1..R from the origin, route from the first one
+// whose lane start clears every envelope, and snap the mover there (at most
+// R+1 cells of displacement). Route-only: freight, phase and endpoints are
+// untouched. R=0 disables the sidestep entirely (the pre-#596 behaviour, used
+// as the negative control). This is bounded effort, NOT deadlock-freedom.
+export const ORIGIN_RECOVERY_RADIUS_CELLS = 3;
 
 // Right-hand lane offset (cells). MUST be consistent with the SQUARE envelope
 // below: opposing lanes clear only if 2*L >= 2*HALF_LONG + GAP = 0.6714 cells.

@@ -1,0 +1,40 @@
+#596 RULER-DRIFT PROOF (mandatory, non-vacuous) — Refs #596, Refs #589, Refs #592
+=================================================================================
+Claim: extending scripts/measure-589-traffic.mjs with fleet/origin modes and
+microseconds/step timing did NOT change the four pre-existing modes' results.
+
+Method
+------
+* main's UNMODIFIED script extracted from origin/main
+  63b9f40546ef675e4789f9c1672bfab99bcf5811 via `git show <sha>:scripts/...`
+  (8086 bytes; sha256 2ed520ff7feb15f266678c95c5b825577da20147895e4dbbddff94daa6bbc068).
+* extended script sha256 b9181defe4ad738f5e5d094b45de28eef62967ff8e2c347cef85e2b5b2602a01.
+* Both scripts resolve their gap ruler from <scriptDir>/../src/traffic.js. To
+  give the main script the SAME ruler as the extended one, it was placed at
+  scratch/proof-main/scripts/ with scratch/proof-main/src = a copy of HEAD src
+  (traffic.js sha256 f6b26b9c11fd5110d28949f46f9bac9773f411b9e6060937261d73ddeb2b7a5c
+  in BOTH locations). The simulation under test comes from the srcDir argument,
+  identical for both runs.
+* Fixture: multi, 200 s. New output fields are gated behind the new modes or an
+  explicit argv[6]=="timing" opt-in, so multi with no extra args emits the
+  pre-existing field set only. No pre-existing field was renamed or reordered.
+
+Result — HEAD src (C:/.../dev-596d/wt/src), multi 200
+-----------------------------------------------------
+  ruler-proof-main-multi-head.json      1000 bytes  stderr 0 bytes
+  ruler-proof-extended-multi-head.json  1000 bytes  stderr 0 bytes
+  cmp: BYTE-IDENTICAL
+  sha256 (both) 7d1749e66fd954edcf13aa53c85227f10382ef3efeb251aed1c89e202129d2ad
+
+Result — BASE src (git archive 63b9f405 src), multi 200
+-------------------------------------------------------
+  ruler-proof-main-multi-base.json  1010 bytes  stderr 0 bytes
+  multi-base.json (extended)        1010 bytes  stderr 0 bytes
+  cmp: BYTE-IDENTICAL
+  sha256 (both) 251d1b5ca767bca0f5296f396fa6578edf0f15c81aea0734792b8612bc522601
+
+Non-vacuity: every stdout JSON is non-empty (1000/1010 bytes) and every paired
+stderr is 0 bytes (clean exit, no loader error). A difference here would mean the
+ruler drifted and every number in the car would be incomparable; there is none.
+The pre-existing fields are byte-identical, not merely "compared field-by-field"
+— no timing fields leak into the four legacy modes without the opt-in.
