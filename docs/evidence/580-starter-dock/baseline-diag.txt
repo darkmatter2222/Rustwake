@@ -1,0 +1,8 @@
+CELL 3.5 starter depot {"id":2,"x":13,"z":9,"rot":0}
+rot 0 bay {"x":13,"z":10} nearestRoad {"x":13,"z":8} stop-to-bay world dist 7.000 docks? false
+rot 1 bay {"x":14,"z":9} nearestRoad {"x":13,"z":8} stop-to-bay world dist 4.950 docks? false
+rot 2 bay {"x":13,"z":8} nearestRoad {"x":13,"z":8} stop-to-bay world dist 0.000 docks? true
+rot 3 bay {"x":12,"z":9} nearestRoad {"x":13,"z":8} stop-to-bay world dist 4.950 docks? false
+steps 960 dockingSteps 0 minBayDist 5.7750 at {"t":6,"vehicles":[{"id":1,"x":7.51,"z":7.65,"phase":"toSource"},{"id":2,"x":8.18,"z":7.65,"phase":"toSource"},{"id":3,"x":11.35,"z":10,"phase":"toSource"}]}
+trace [{"t":0,"dist":7,"trucks":[[1,11,10,"idle"],[2,11,11,"idle"],[3,11,12,"idle"]]},{"t":30,"dist":6.941,"trucks":[[1,10.56,8.35,"toDest"],[2,14.1,11.65,"toDest"],[3,10.5,7.65,"toSource"]]},{"t":60,"dist":8.728,"trucks":[[1,12.17,12.35,"toDest"],[2,7.8,7.65,"toSource"],[3,10.5,7.65,"toSource"]]},{"t":90,"dist":5.775,"trucks":[[1,13,8.35,"idle"],[2,12.7,12.35,"toSource"],[3,13.5,11.65,"toSource"]]},{"t":120,"dist":6.714,"trucks":[[1,10.88,8.35,"toDest"],[2,11.35,11.15,"toDest"],[3,11.35,9.02,"toSource"]]},{"t":150,"dist":6.034,"trucks":[[1,8.88,8.35,"toDest"],[2,8.2,8.35,"toDest"],[3,13.5,11.65,"toDest"]]},{"t":180,"dist":5.775,"trucks":[[1,12.44,7.65,"toDest"],[2,12.98,8.35,"toDest"],[3,11.48,8.35,"toDest"]]},{"t":210,"dist":5.788,"trucks":[[1,12.89,8.35,"toDest"],[2,7.15,7.65,"toSource"],[3,12,7.65,"toDest"]]}]
+CONCLUSION: docking NEVER fires in the shipped starter yard (min dist 5.775 > near 2.5)
