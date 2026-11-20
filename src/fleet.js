@@ -6,7 +6,8 @@
  * nothing here mutates game state, dispatches jobs or writes a second fleet
  * ledger. Every panel value is the simulation's own job field:
  *
- *  - route        = v.job.route / toSource / toDest (roadPath cells)
+ *  - route        = v.job.route / toSource / toDest (roadPath cells + the #580
+ *                   live depot approach corridor tail onto the LOG-02 bay)
  *  - source/dest  = v.job.sourceId / destId resolved against g.buildings
  *  - reserved     = v.job.amount while phase==="toSource" (assignJob already
  *                   take()s the units from the source bag — #384 LOG-04)
@@ -33,7 +34,7 @@
  * path — #307 applyCamera/stampCamera invariants are never rewritten.
  */
 import {BLUEPRINTS,RESOURCE_BY_ID,CELL,WORLD_SIZE} from "./content.js";
-import {inside,key,nearestRoad,roadPath} from "./simulation.js";
+import {inside,nearestRoad,roadPath,dockApproach,routeSevered} from "./simulation.js";
 import {pinGroundToPixel} from "./camera.js";
 import {classifyViewport,sheetTop,dockBottomOffset,sheetMaxHeight} from "./dock.js";
 
@@ -92,13 +93,15 @@ export function fleetState(g){
  if(!g)return {kind:"loading"};
  const vehicles=Array.isArray(g.vehicles)?g.vehicles:[];
  const buildings=Array.isArray(g.buildings)?g.buildings:[];
- const roadSet=new Set(Array.isArray(g.roads)?g.roads:[]);
- const severed=r=>!Array.isArray(r)||r.some(p=>!roadSet.has(key(p.x,p.z)));
  const waiting=waitingLoads(g);
- // Pre-resolve candidate road legs once (shared by every idle truck).
+ // Pre-resolve candidate road legs once (shared by every idle truck). #580:
+ // mirror assignJob's dock-aware stop selection exactly — a depot endpoint stops
+ // at its facing-side aligned road stop (dockApproach), not nearestRoad(anchor).
  const candidateLegs=waiting.map(c=>{
   const src=buildings.find(b=>b.id===c.sourceId),dst=buildings.find(b=>b.id===c.destId);
-  const srcRoad=src?nearestRoad(g,src.x,src.z):null,dstRoad=dst?nearestRoad(g,dst.x,dst.z):null;
+  const srcA=src?dockApproach(g,src):null,dstA=dst?dockApproach(g,dst):null;
+  const srcRoad=srcA?srcA.stop:(src?nearestRoad(g,src.x,src.z):null);
+  const dstRoad=dstA?dstA.stop:(dst?nearestRoad(g,dst.x,dst.z):null);
   return {...c,srcRoad,dstRoad,
    destLeg:!!(srcRoad&&dstRoad&&roadPath(g,srcRoad,dstRoad))};
  });
@@ -126,7 +129,12 @@ export function fleetState(g){
    // 2) Idle: the simulation holds no job for this truck (dispatch, cancel,
    //    blockage return and reconcile all land here). Derive the honest
    //    stuck reason from the same candidate/path rules assignJob uses.
-   const start=nearestRoad(g,Math.round(v.x),Math.round(v.z));
+   // #580: mirror assignJob's exit — a truck idle ON a depot bay departs from
+   // that bay's facing-side stop, so its reachability matches the sim exactly.
+   const vx=Math.round(v.x),vz=Math.round(v.z);
+   let exitA=null;
+   for(const b of buildings){const a=dockApproach(g,b);if(a&&a.bay.x===vx&&a.bay.z===vz){exitA=a;break;}}
+   const start=exitA?exitA.stop:nearestRoad(g,vx,vz);
    let stuck=null,state="idle",stateLabel="Available for dispatch",tone="muted",
     detail="Idle at "+v.x.toFixed(1)+","+v.z.toFixed(1)+" — dispatch assigns the next reachable load automatically.";
    if(candidateLegs.length>0){
@@ -156,7 +164,9 @@ export function fleetState(g){
   // 3a) Blocked: the exact moveVehicle guards. The sim returns this freight
   //     to its source on the next tick — the panel says so, never "hauling".
   let stuckCode=null;
-  if(severed(j.route)||severed(j.toSource)||severed(j.toDest))stuckCode="ROUTE_BLOCKED";
+  // #580: routeSevered is moveVehicle's own guard (shared, dock-aware) — the
+  // panel's ROUTE_BLOCKED is exactly what the sim applies next tick.
+  if(routeSevered(g,j))stuckCode="ROUTE_BLOCKED";
   else if(source.missing)stuckCode="SOURCE_MISSING";
   else if(dest.missing)stuckCode="DEST_MISSING";
   if(stuckCode){

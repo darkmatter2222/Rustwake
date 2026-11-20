@@ -1,5 +1,5 @@
 import {WORLD_SIZE,INITIAL_BANK,BLUEPRINTS,TIERS,RESEARCH,ROAD_KINDS,SAVE_KEY,STARTER_BUILDINGS,INITIAL_ROADS} from "./content.js";
-import {key,cellOf,inside,checkSite,buildingAt,footprintCells,normalizeRot} from "./gridOccupancy.js";
+import {key,cellOf,inside,checkSite,buildingAt,footprintCells,normalizeRot,bayCells,ROAD_REACH} from "./gridOccupancy.js";
 import {laneRoute,separationClamp,turnClear,envelopeGapWorld,MIN_GAP_WORLD,WAIT_TIMEOUT_SECONDS} from "./traffic.js";
 
 export {key,cellOf,inside} from "./gridOccupancy.js";
@@ -492,15 +492,116 @@ function deliveryCandidates(g){
  // output first. Insertion order still breaks exact ties (deterministic).
  return candidates.sort((a,b)=>b.priority-a.priority||(a.servedAt??-1)-(b.servedAt??-1));
 }
+// ---- ART-04 bay-approach docking (#580) ----
+// The depot shutter is a pure function of the REAL truck-to-bay distance
+// (src/art04.js ART04_DOCK near 2.5 / far 7 / travel 0.8). Freight used to stop
+// at nearestRoad(ANCHOR): for the starter depot (13,9) rot 0 that is (13,8),
+// two cells NORTH of the south bay (13,10) — 7 world away, measured 0 docking
+// steps / 240 sim-s, so the shutter honestly never opened. Rotating the starter
+// depot is not an available remedy: tests/vehicleRigs.test.mjs pins
+// FORKLIFT_POST.bayCell to the live rot-0 starter bay, and that post is hardcoded
+// in world.js/crowd.js (fenced under #599). The remedy is stop semantics: a depot
+// job chooses the facing-side aligned road stop within ROAD_REACH of the bay and
+// drives a final OFF-ROAD leg along the free corridor onto the LOG-02 bay
+// approach cell itself. The parked truck's right-hand lane offset leaves it
+// ~1.225 world from the bay center (<= near 2.5), so depotDoorLift opens on real
+// proximity. No dock constant changes, no timer/ambient fallback, no geometry
+// moves; non-depot machines keep their measured curbside stops (#567/#585).
+// Returns {id, bay, stop, cells} where cells runs from just after the stop to
+// the bay inclusive, or null when no facing-side stop / a machine blocks the
+// corridor. Pure read of live geometry — re-derived every guard pass so a
+// blocked or vanished corridor severs the route honestly (ROUTE_BLOCKED).
+export function dockApproach(g,b){
+ if(!b||b.type!=="depot")return null;
+ const bay=bayCells(b.type,b.x,b.z,b.rot||0)[0];
+ if(!bay)return null;
+ const fx=bay.x-b.x,fz=bay.z-b.z; // 1x1 depot: bay = anchor + facing
+ if(fx===0&&fz===0)return null;
+ let stop=null,bestD=Infinity;
+ for(const tile of g.roads){
+  const [a,c]=cellOf(tile);
+  const aligned=fx!==0?(c===bay.z&&(a-bay.x)*fx>0):(a===bay.x&&(c-bay.z)*fz>0);
+  if(!aligned)continue;
+  const d=Math.abs(a-bay.x)+Math.abs(c-bay.z);
+  if(d<=ROAD_REACH&&d<bestD){stop={x:a,z:c};bestD=d;}
+ }
+ if(!stop)return null;
+ const cells=[];
+ let x=stop.x,z=stop.z;
+ while(x!==bay.x||z!==bay.z){x-=fx;z-=fz;cells.push({x,z});}
+ if(cells.some(p=>buildingAt(g,p.x,p.z)))return null;
+ return {id:b.id,bay,stop,cells};
+}
+// Departure leg: bay -> ... -> just before the stop (roadPath resumes AT the
+// stop). Lets a truck parked on the bay drive out instead of snapping ~2 cells
+// back to the road on its next join.
+const dockDeparture=a=>[{x:a.bay.x,z:a.bay.z},...a.cells.slice(0,-1).reverse()];
+// #580 shared route-severance guard — the SINGLE source of truth for moveVehicle
+// AND the UX-05 fleet read model (src/fleet.js), whose contract is "stuck reason =
+// the EXACT guard moveVehicle applies next tick". A route cell is legitimate iff
+// it is asphalt OR part of a LIVE depot approach corridor of this job's endpoints.
+// When an endpoint building has VANISHED, its stored straight tail stays exempt
+// (geometrically validated below) so the missing-building guards — not
+// ROUTE_BLOCKED — yield the honest SOURCE_MISSING / DEST_MISSING reason and the
+// truck still drives the freight home. A machine blocking a live corridor makes
+// dockApproach null, dropping the exemption and severing exactly like a removed
+// road. Pure read of live state; never mutates g.
+export function routeSevered(g,j){
+ if(!j)return true;
+ const roadSet=new Set(Array.isArray(g.roads)?g.roads:[]);
+ const buildings=Array.isArray(g.buildings)?g.buildings:[];
+ const dock=new Set();
+ let gone=false;
+ for(const id of [j.sourceId,j.destId]){
+  const b=buildings.find(x=>x.id===id);
+  if(!b){gone=true;continue;}
+  const a=dockApproach(g,b);
+  if(a){dock.add(key(a.bay.x,a.bay.z));for(const p of a.cells)dock.add(key(p.x,p.z));}
+ }
+ // Vanished endpoint: exempt a stored tail that is a straight, contiguous,
+ // axis-aligned run anchored at a road cell. Bounded + geometric — a tampered
+ // bend or gap still severs, and the missing-building guard returns the freight.
+ if(gone){
+  for(const r of [j.route,j.toSource,j.toDest]){
+   if(!Array.isArray(r)||r.length<2)continue;
+   let i=r.length-1;
+   while(i>=0&&!roadSet.has(key(r[i].x,r[i].z)))i--;
+   if(i<0||i===r.length-1)continue;
+   const anchor=r[i],end=r[r.length-1];
+   const dx=Math.sign(end.x-anchor.x),dz=Math.sign(end.z-anchor.z);
+   if((dx!==0&&dz!==0)||(dx===0&&dz===0))continue;
+   let ok=true;
+   for(let k=i+1;k<r.length;k++){
+    if(r[k].x!==anchor.x+dx*(k-i)||r[k].z!==anchor.z+dz*(k-i)){ok=false;break;}
+   }
+   if(ok)for(let k=i+1;k<r.length;k++)dock.add(key(r[k].x,r[k].z));
+  }
+ }
+ const sev=r=>!Array.isArray(r)||r.some(p=>!roadSet.has(key(p.x,p.z))&&!dock.has(key(p.x,p.z)));
+ return sev(j.route)||sev(j.toSource)||sev(j.toDest);
+}
 // RESERVE transition (#384): source stock -> reserved load. The units leave the
 // source bag exactly once and are held against the job, NOT yet onboard.
 function assignJob(g,v){
- const start=nearestRoad(g,Math.round(v.x),Math.round(v.z));
+ const vx=Math.round(v.x),vz=Math.round(v.z);
+ // #580: a truck idle ON a depot bay departs along that bay's corridor.
+ let exitA=null;
+ for(const b of g.buildings){const a=dockApproach(g,b);if(a&&a.bay.x===vx&&a.bay.z===vz){exitA=a;break;}}
+ const start=exitA?exitA.stop:nearestRoad(g,vx,vz);
  const candidates=deliveryCandidates(g);
  for(const c of candidates){
-  const src=nearestRoad(g,c.source.x,c.source.z),dst=nearestRoad(g,c.dest.x,c.dest.z);
-  const toSource=roadPath(g,start,src),toDest=roadPath(g,src,dst);
-  if(!toSource||!toDest)continue;
+  const srcA=dockApproach(g,c.source),dstA=dockApproach(g,c.dest);
+  const src=srcA?srcA.stop:nearestRoad(g,c.source.x,c.source.z);
+  const dst=dstA?dstA.stop:nearestRoad(g,c.dest.x,c.dest.z);
+  const roadToSrc=roadPath(g,start,src),roadToDest=roadPath(g,src,dst);
+  if(!roadToSrc||!roadToDest)continue;
+  // Already parked at the source bay: a single-cell route picks up in place
+  // (no out-and-back through the stop). Otherwise prepend the exit corridor
+  // when parked on a bay, and append the entry corridor for a depot endpoint.
+  const sameSrc=srcA&&exitA&&srcA.id===exitA.id;
+  const toSource=sameSrc?[{x:srcA.bay.x,z:srcA.bay.z}]
+   :(exitA?dockDeparture(exitA):[]).concat(roadToSrc,srcA?srcA.cells:[]);
+  const toDest=(srcA?dockDeparture(srcA):[]).concat(roadToDest,dstA?dstA.cells:[]);
   // #589: reserve immediately even if the lane start is currently occupied. The
   // reservation is what storageAlarms reads to know a bay is being served; deferring
   // it here left full bays unassigned and latched the storage-4 alarm (gate C-2).
@@ -648,18 +749,36 @@ function rerouteAroundBlocker(g,v){
  const dest=j.route[j.route.length-1];
  const cur=nearestRoad(g,Math.round(v.x),Math.round(v.z));
  if(!cur||!dest)return false;
+ // #580: a dock job's route ends on the OFF-ROAD bay cell. roadPath only walks
+ // asphalt, so route to the facing-side dock STOP and re-append the live corridor
+ // tail; otherwise recovery could never fire for a depot job (measured: the fuel
+ // resupply join-held 60 s behind an idle truck because roadPath(bay)===null).
+ const endId=j.phase==="toSource"?j.sourceId:j.destId;
+ const a=dockApproach(g,g.buildings.find(b=>b.id===endId));
+ const roadDest=a?a.stop:dest;
  const blocker=g.vehicles.find(u=>u.id===v.blockedBy);
  const avoid=new Set();
  if(blocker){const bc=nearestRoad(g,Math.round(blocker.x),Math.round(blocker.z));if(bc)avoid.add(key(bc.x,bc.z));}
- if(avoid.has(key(dest.x,dest.z)))return false; // cannot route around the goal itself
- const path=roadPath(g,cur,dest,avoid);
- if(!path||path.length<2)return false;
- const lane=laneRoute(path);
+ // #580: also avoid every OTHER parked idle truck's road cell. A jobless truck
+ // never clears, so routing around only the immediate blocker just cascades into
+ // the next idle park (measured: fuel resupply re-blocked by a second idle truck
+ // on the same column). One obstacle BFS around all stationary idle parks lands a
+ // clean lane in a single recovery. Moving trucks are NOT avoided — they clear.
+ for(const u of g.vehicles){
+  if(u.id===v.id||u.job)continue;
+  const uc=nearestRoad(g,Math.round(u.x),Math.round(u.z));
+  if(uc)avoid.add(key(uc.x,uc.z));
+ }
+ if(avoid.has(key(roadDest.x,roadDest.z)))return false; // cannot route around the goal itself
+ const path=roadPath(g,cur,roadDest,avoid);
+ if(!path||(path.length<2&&!a))return false;
+ const full=a?path.concat(a.cells):path;
+ const lane=laneRoute(full);
  const start={x:lane.points[0].x,z:lane.points[0].z,heading:lane.headings[0]||v.heading};
  // Never teleport into another envelope: require declared clearance at the new start.
  for(const u of g.vehicles){if(u.id===v.id)continue;
   if(envelopeGapWorld(start,u)<MIN_GAP_WORLD-1e-6)return false;}
- j.route=path;j.segment=0;j.progress=0;
+ j.route=full;j.segment=0;j.progress=0;
  v.x=start.x;v.z=start.z;v.heading=start.heading;
  v.waitTime=0;v.waiting=false;v.blockedBy=null;
  return true;
@@ -682,9 +801,9 @@ function moveVehicle(g,v,seconds){
  const j=v.job;if(!j)return;
  // #384 disconnect guard: a severed route or vanished source returns the freight
  // (reserved OR onboard, never both) to its source exactly once, with a log line.
- const roadSet=new Set(g.roads);
- const severed=r=>!Array.isArray(r)||r.some(p=>!roadSet.has(key(p.x,p.z)));
- if(severed(j.route)||severed(j.toSource)||severed(j.toDest)){returnFreight(g,v,"ROUTE_BLOCKED");return;}
+ // #580: routeSevered is the shared dock-aware guard, also used verbatim by the
+ // fleet read model so the panel's stuck reason equals this guard exactly.
+ if(routeSevered(g,j)){returnFreight(g,v,"ROUTE_BLOCKED");return;}
  if(!g.buildings.some(b=>b.id===j.sourceId)){returnFreight(g,v,"SOURCE_MISSING");return;}
  // #589 separation: integrate along the right-hand lane-offset polyline and clamp
  // progress against every other truck's swept envelope before committing. The
@@ -706,7 +825,14 @@ function moveVehicle(g,v,seconds){
    const jb=joinBlocker(g,v,route);
    if(jb!=null){
     v.waiting=true;v.blockedBy=jb;v.waitTime=(v.waitTime||0)+seconds;
-    if(v.waitTime>=WAIT_TIMEOUT_SECONDS)rerouteAroundBlocker(g,v);
+    // #580: a JOBLESS blocker parked on the join point never clears on its own
+    // (no load to dispatch it), so waiting the full timeout just starves the job
+    // behind a stationary park. Reroute around idle parks immediately; MOVING
+    // blockers still get the timeout grace to clear. rerouteAroundBlocker is
+    // separation-checked against every envelope, so this never snaps into traffic.
+    const bu=g.vehicles.find(u=>u.id===jb);
+    if(bu&&!bu.job)rerouteAroundBlocker(g,v);
+    else if(v.waitTime>=WAIT_TIMEOUT_SECONDS)rerouteAroundBlocker(g,v);
     break;
    }
   }
