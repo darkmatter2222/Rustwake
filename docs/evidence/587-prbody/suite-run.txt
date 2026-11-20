@@ -1,0 +1,17 @@
+Issue 587 — full local suite receipt (pnpm test = node --test tests/*.test.mjs)
+Generated: 2026-11-20T07:16:49.418Z
+Worktree head at suite run: 12bacef616e3f61d8ed89e812c07441fe3d8cd29 (guard + tests commit; docs and evidence commits do not touch code)
+Platform: Windows (Git Bash), Node v22.18.0
+
+not ok 275 - delivery-alert.yml text contract: isolation, runner, timeout, permissions, dry-run
+# tests 727
+# suites 0
+# pass 726
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 18531.2009
+SUITE_EXIT=1
+
+Sole failure identified BY NAME: "delivery-alert.yml text contract: isolation, runner, timeout, permissions, dry-run", assertion "workflow-level permissions block present" (tests/deliveryAlert.test.mjs:244, assertion :254) — the sanctioned Windows-only CRLF artifact, pre-existing on clean main. The re-baselined OPS-12 test in the same file ("delivery.yml and ci.yml match the OPS-12 (#336) hardened baseline") PASSES. No workflow or gate was edited. Linux CI is authoritative for the full green run.

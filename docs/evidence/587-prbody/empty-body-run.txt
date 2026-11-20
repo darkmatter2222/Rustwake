@@ -1,0 +1,14 @@
+Issue 587 — empty-body runs (must be an ERROR, never a vacuous pass)
+Generated: 2026-11-20T07:16:49.418Z
+Worktree head: 3bdb6692575689e4c706bb6b570e425de1ff0b6e
+
+=== Fixture: zero-byte body ===
+--- guard run ---
+check-pr-body: ERROR file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\empty.txt — empty or whitespace-only body; an empty-vs-empty check is a vacuous PASS and is rejected
+check-pr-body: 1 source(s), 0 hit(s), 1 error(s) — exit 2
+exit code: 2
+=== Fixture: whitespace-only body (spaces, tab, newlines) ===
+--- guard run ---
+check-pr-body: ERROR file C:\Users\ryans\AppData\Local\Temp\rw-587-ev-Ar7CFF\whitespace.txt — empty or whitespace-only body; an empty-vs-empty check is a vacuous PASS and is rejected
+check-pr-body: 1 source(s), 0 hit(s), 1 error(s) — exit 2
+exit code: 2
