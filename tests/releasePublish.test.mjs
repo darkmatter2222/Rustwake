@@ -689,6 +689,8 @@ function assertPublishWiring(src) {
   assert.ok(/if \(plan\.createTag\) \{/.test(src), "tag POST gated on the plan (adoption never re-POSTs)");
   assert.ok(src.includes("shouldPublish({ jobConclusions, liveSourceSha: sourceSha, mainHead, existingReleaseSha: existingSha })"), "unchanged gate still consulted");
   assert.ok(src.includes('if (!isRefMissing(err && err.stderr != null ? String(err.stderr) : "")) throw err;'), "candidate 404 classification is the pure predicate, not a blanket catch");
+  assert.ok(src.includes("return /\\bHTTP 422\\b/.test(stderrText) && /No commit found for SHA:/.test(stderrText);"),
+    "isRefMissing carries the live-measured commits/{ref} absent shape: 422 status AND the specific message, never a blanket 422 (audit 7031944017)");
 }
 
 test("shell wiring: listing requests isDraft, scan/plan are the pure functions, tag POST is plan-gated", () => {
@@ -703,6 +705,8 @@ test("NEGATIVE CONTROLS: deliberate wiring mutations MUST fail the guard", () =>
     ["restore the silent 100 cap", (s) => s.replace('"--limit", "1000"', '"--limit", "100"')],
     ["bypass the adoption plan", (s) => s.replace("planPublication({ tags, tagShas, sourceSha })", "({ action: \"create\", tag: nextVersion(tags), previousTag: previousVersion(tags), createTag: true })")],
     ["blanket-swallow candidate errors", (s) => s.replace('if (!isRefMissing(err && err.stderr != null ? String(err.stderr) : "")) throw err;', "// swallowed")],
+    ["blanket-swallow ALL 422s (drop the specific-message requirement)", (s) => s.replace(" && /No commit found for SHA:/.test(stderrText)", "")],
+    ["drop the 422 absent-ref branch (restore 404-only blindness)", (s) => s.replace("return /\\bHTTP 422\\b/.test(stderrText) && /No commit found for SHA:/.test(stderrText);", "return false;")],
   ];
   for (const [name, mutate] of mutations) {
     const mutated = mutate(real);
@@ -832,4 +836,96 @@ test("NEGATIVE CONTROL: the pre-fix 404-only predicate aborts on the REAL 422 �
     }
   } catch (e) { caught = e; }
   assert.equal(caught, err, "pre-fix loop aborts with the identical real API error — the regression finding 7031944017 proved");
+});
+
+// Composed-path fixtures, all captured live 2026-11-20 by dev-607b (read-only):
+// tag -> peeled commit SHA via gh api repos/darkmatter2222/Rustwake/commits/{tag}
+// --jq .sha for every tag in repos/darkmatter2222/Rustwake/tags (5 tags).
+const LIVE_TAG_SHAS = {
+  "v0.1.0": "b8c829572b34d1c5f1786661007b5f328b35a153",
+  "v0.2.0": "4628326daa0a2ef74a89784601976929d0d80385",
+  "v0.3.0": "77e6442f04dce6529e3888535a73d3f75af1d9b6",
+  "v0.3.1": "5a14ff8f391170d361393b774b0c15d25ee15e61",
+  "v0.3.2": "0791dc55b37ee60ed2b308a69fa4dd002e2f9a94",
+};
+const LIVE_TAGS = Object.keys(LIVE_TAG_SHAS);
+// A REAL untagged commit: PR #609 head at the audit (fa0a8a10). No live tag
+// resolves to it — asserted against the captured map in each test below.
+const UNTAGGED_SOURCE = "fa0a8a10cbdf1b1d01a57547cd68c34f66ccba9a";
+
+test("COMPOSED healthy first publish: REAL 422 on the absent computed tag => {action:create, createTag:true}, no throw", () => {
+  // This is the test that would have caught the audited regression: it drives
+  // shouldPublish -> main()'s candidate loop (verbatim) -> planPublication
+  // with a resolver that throws the CAPTURED 422 error for the absent
+  // computed tag and returns captured real SHAs for present tags.
+  assert.ok(LIVE_TAGS.length >= 2, "fixture tag list must be non-empty");
+  assert.ok(!Object.values(LIVE_TAG_SHAS).includes(UNTAGGED_SOURCE), "source really is untagged in the captured map");
+  const next = nextVersion(LIVE_TAGS);
+  assert.equal(next, "v0.3.3", "computed next tag from the real live tag list");
+  assert.ok(!LIVE_TAGS.includes(next), "computed tag really is absent from the list");
+  const resolve = (t) => {
+    if (Object.prototype.hasOwnProperty.call(LIVE_TAG_SHAS, t)) return LIVE_TAG_SHAS[t];
+    throw realAbsent422(t); // exact captured stderr shape, ref-specific message
+  };
+  // 1) Existence scan: every historical release resolves to its own SHA,
+  //    none to the untagged source => null, no throw.
+  const releases = LIVE_TAGS.map((t) => ({ tagName: t, isDraft: false }));
+  assert.equal(existingReleaseSha(releases, UNTAGGED_SOURCE, resolve), null);
+  // 2) Gate: all four jobs success, live SHA == main head => PUBLISH.
+  const decision = shouldPublish({
+    jobConclusions: allSuccess(), liveSourceSha: UNTAGGED_SOURCE, mainHead: UNTAGGED_SOURCE, existingReleaseSha: null,
+  });
+  assert.equal(decision.publish, true);
+  assert.ok(decision.reason.length > 0, "decision reason non-empty");
+  // 3) Candidate loop, verbatim composition of main() — the code that
+  //    aborted at fa0a8a10 on this exact real error.
+  const highest = previousVersion(LIVE_TAGS);
+  assert.equal(highest, "v0.3.2");
+  const tagShas = {};
+  for (const t of [highest, next]) {
+    if (!t || Object.prototype.hasOwnProperty.call(tagShas, t)) continue;
+    try { tagShas[t] = resolve(t); } catch (err) {
+      if (!isRefMissing(err && err.stderr != null ? String(err.stderr) : "")) throw err;
+    }
+  }
+  assert.equal(tagShas[highest], LIVE_TAG_SHAS[highest], "present highest tag resolved to its captured real SHA");
+  assert.ok(!Object.prototype.hasOwnProperty.call(tagShas, next),
+    "absent computed tag left unset — proves the real 422 was thrown AND classified as absent, not skipped silently");
+  // 4) Plan: CREATE tag + release at the verified SHA, honest range base.
+  const plan = planPublication({ tags: LIVE_TAGS, tagShas, sourceSha: UNTAGGED_SOURCE });
+  assert.deepEqual(plan, { action: "create", tag: "v0.3.3", previousTag: "v0.3.2", createTag: true });
+});
+
+test("COMPOSED defect 2 with the REAL 422: deleted historical tag skipped; later match => SHA; no match => null + publish", () => {
+  // v0.0.0-deleted-probe is one of the four absent refs captured live (422).
+  const deleted = "v0.0.0-deleted-probe";
+  const releases = [
+    { tagName: deleted, isDraft: false },
+    { tagName: "v0.3.2", isDraft: false },
+  ];
+  assert.ok(releases.length === 2 && deleted.length > 0, "fixtures non-empty");
+  // Earlier unresolvable historical tag + later matching release => the SHA
+  // is returned (the skip works), and the gate then no-ops honestly.
+  const resolveMatch = (t) => {
+    if (t === deleted) throw realAbsent422(deleted);
+    return UNTAGGED_SOURCE;
+  };
+  assert.equal(existingReleaseSha(releases, UNTAGGED_SOURCE, resolveMatch), UNTAGGED_SOURCE,
+    "deleted historical tag skipped; later matching release found despite the real 422");
+  const noop = shouldPublish({
+    jobConclusions: allSuccess(), liveSourceSha: UNTAGGED_SOURCE, mainHead: UNTAGGED_SOURCE, existingReleaseSha: UNTAGGED_SOURCE,
+  });
+  assert.equal(noop.publish, false);
+  assert.equal(noop.reason, "no-op: a release already exists at this exact SHA (same-SHA re-run)");
+  // No match anywhere => null, and the healthy deployment still publishes.
+  const resolveNoMatch = (t) => {
+    if (t === deleted) throw realAbsent422(deleted);
+    return LIVE_TAG_SHAS["v0.3.2"];
+  };
+  const existing = existingReleaseSha(releases, UNTAGGED_SOURCE, resolveNoMatch);
+  assert.equal(existing, null, "skip must not abort and must not fabricate a match");
+  const d = shouldPublish({
+    jobConclusions: allSuccess(), liveSourceSha: UNTAGGED_SOURCE, mainHead: UNTAGGED_SOURCE, existingReleaseSha: existing,
+  });
+  assert.equal(d.publish, true, "healthy deployment publishes despite the deleted historical tag");
 });
