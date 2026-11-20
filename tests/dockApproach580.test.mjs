@@ -6,9 +6,15 @@
 // lift stays a pure function of the real nearest-truck bay distance (#274).
 //
 // Negative controls (each named test FAILS at the pre-fix base 77e6442):
-//  - "docking fires": base measures dockingSteps 0 / minBayDist 5.775 over the
-//    same 960-step window (scripts/diag-dock-reach.mjs, docs/evidence/580-
-//    starter-dock/baseline-diag.txt) — the shutter never opens.
+//  - "docking fires (stocked bank)": base measures dockingSteps 0 / minBayDist
+//    5.775 over the same 960-step window (scripts/diag-dock-reach.mjs, docs/
+//    evidence/580-starter-dock/baseline-diag.txt) — the shutter never opens.
+//  - "clause 1 zero input": base measures dockingSteps 0 / minBayDist 5.775 /
+//    firstDockT null over 2640 steps / 660 sim-s with INITIAL_BANK and tier
+//    UNTOUCHED (scripts/diag-dock-zeroinput.mjs). The in-test negative control
+//    replays the same zero-input sim with the depot corridor tail stripped
+//    every tick (base stop semantics: freight stops at the road stop, never
+//    drives onto the bay) and must measure 0 docking steps.
 //  - "corridor tail": base routes end at the anchor stop (13,8), 7 world from
 //    the bay — the tail/corridor assertions cannot hold.
 //  - "bay-parked departure": base trucks park at the road stop, never on the
@@ -129,9 +135,11 @@ test("dock contract: 4 types x 4 rotations — depot corridors are straight/live
  }
 });
 
-test("docking fires: fresh starter yard, zero input, real sim — shutter opens inside the declared 240s window",()=>{
- // Exact replica of scripts/diag-dock-reach.mjs: stocked bank so freight jobs
- // flow, tier 2, 960 steps dt 0.25 / 240 sim-s. NEGATIVE CONTROL: at base
+test("docking fires (stocked bank, tier 2): diag-dock-reach replica, real sim — shutter opens inside the declared 240s window",()=>{
+ // Exact replica of scripts/diag-dock-reach.mjs: STOCKED bank so freight jobs
+ // flow, tier 2, 960 steps dt 0.25 / 240 sim-s. This is NOT the clause-1
+ // zero-input case (see the next test); the measured-12 firstDockT annotation
+ // belongs to THIS stocked-bank condition only. NEGATIVE CONTROL: at base
  // 77e6442 this measures dockingSteps 0 / minBayDist 5.7750 (shutter closed
  // for the entire run); the assertions below cannot pass there.
  const g=createGame();
@@ -149,8 +157,67 @@ test("docking fires: fresh starter yard, zero input, real sim — shutter opens 
  }
  assert.ok(dockingSteps>0,"dockingSteps must be > 0 (base: 0)");
  assert.ok(minDist<=ART04_DOCK.near,"minBayDist "+minDist.toFixed(4)+" must be <= near 2.5 (base: 5.7750)");
- assert.ok(firstDockT!==null&&firstDockT<=60,"first docking at t="+firstDockT+" must land within 60 sim-s (measured 12)");
+ assert.ok(firstDockT!==null&&firstDockT<=60,"first docking at t="+firstDockT+" must land within 60 sim-s (measured 12 under THIS stocked-bank/tier-2 condition)");
  assert.ok(depotDoorLift(minDist)>0,"the real nearest-truck distance commands a non-zero shutter lift");
+});
+
+test("clause 1 zero input: fresh starter yard, INITIAL_BANK and tier UNTOUCHED — real sim docks inside the declared 660s window",()=>{
+ // Acceptance clause 1 proper: createGame() exactly as shipped — no bank
+ // mutation, no tier mutation (tier stays 0), 2640 steps dt 0.25 / 660 sim-s.
+ // Instrument: scripts/diag-dock-zeroinput.mjs. Measured at fix head:
+ // dockingSteps 538, minBayDist 1.225, firstDockT 7.25 sim-s. Declared window:
+ // first dock <= 30 sim-s inside the 660 sim-s run.
+ // NEGATIVE CONTROL (base 77e6442f, same probe): dockingSteps 0, minBayDist
+ // 5.775, firstDockT null — the assertions below cannot pass there. The
+ // in-test control below replays base stop semantics dynamically.
+ const g=createGame();
+ assert.deepEqual(g.bank,INITIAL_BANK,"zero input: the shipped INITIAL_BANK is untouched");
+ assert.equal(g.tier,0,"zero input: tier stays 0 — no mutation");
+ const depot=building(g,2);
+ let minDist=Infinity,dockingSteps=0,firstDockT=null;
+ const dt=0.25;
+ for(let t=0;t<660;t+=dt){
+  advanceGame(g,dt);
+  assert.equal(g.vehicles.length,3,"createGame still ships exactly 3 trucks — fleet growth is #596, not this PR");
+  const {distance}=bayApproachDistance(g,depot);
+  if(distance<minDist)minDist=distance;
+  if(distance<=ART04_DOCK.near){dockingSteps++;if(firstDockT===null)firstDockT=t;}
+ }
+ assert.ok(dockingSteps>0,"dockingSteps must be > 0 (base zero-input: 0)");
+ assert.ok(minDist<=ART04_DOCK.near,"minBayDist "+minDist.toFixed(4)+" must be <= near 2.5 (base zero-input: 5.775)");
+ assert.ok(firstDockT!==null&&firstDockT<=30,"first docking at t="+firstDockT+" must land within 30 sim-s (measured 7.25)");
+ assert.ok(depotDoorLift(minDist)>0,"the real nearest-truck distance commands a non-zero shutter lift");
+ // ---- In-test negative control: base stop semantics, same zero-input sim ----
+ // Base routes stop at the road stop and NEVER drive the off-road corridor
+ // onto the bay. Replay that here by stripping the live depot corridor from
+ // every job leg after each tick — the entry tail AND the dockDeparture head
+ // prefix (all remaining cells are asphalt, so routeSevered stays false and
+ // freight still flows). The truck then parks at the road stop ~5.775 world
+ // from the bay — outside near 2.5 — exactly the base measurement. A widened
+ // ART04_DOCK window or a fake/ambient docking path would make this control
+ // dock and FAIL the test.
+ const c=createGame();
+ assert.deepEqual(c.bank,INITIAL_BANK);
+ assert.equal(c.tier,0);
+ const cDepot=building(c,2);
+ const ca=dockApproach(c,cDepot);
+ const corridor=new Set(ca.cells.map(p=>key(p.x,p.z)));
+ const strip=leg=>{
+  if(!Array.isArray(leg))return;
+  while(leg.length&&corridor.has(key(leg[leg.length-1].x,leg[leg.length-1].z)))leg.pop();
+  while(leg.length&&corridor.has(key(leg[0].x,leg[0].z)))leg.shift();
+ };
+ let cMin=Infinity,cDocking=0,cFirst=null;
+ for(let t=0;t<660;t+=dt){
+  advanceGame(c,dt);
+  for(const v of c.vehicles){if(!v.job)continue;strip(v.job.route);strip(v.job.toSource);strip(v.job.toDest);}
+  const {distance}=bayApproachDistance(c,cDepot);
+  if(distance<cMin)cMin=distance;
+  if(distance<=ART04_DOCK.near){cDocking++;if(cFirst===null)cFirst=t;}
+ }
+ assert.equal(cDocking,0,"base stop semantics (no corridor tail): dockingSteps must be 0 (base probe measured 0)");
+ assert.equal(cFirst,null,"base stop semantics: firstDockT must be null — never docks");
+ assert.ok(cMin>ART04_DOCK.near,"base stop semantics minBayDist "+cMin.toFixed(4)+" must stay > near 2.5 (base probe measured 5.775)");
 });
 
 test("shutter drive stays pure distance (#274): no timer, no ambient fallback, no fake docking",()=>{
